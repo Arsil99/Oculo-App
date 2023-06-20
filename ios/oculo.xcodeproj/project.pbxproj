@@ -12,7 +12,6 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		18C412AB2A40271D0000EFCD /* hermes.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18C412AA2A40271D0000EFCD /* hermes.xcframework */; };
 		7699B88040F8A987B510C191 /* libPods-oculo-oculoTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-oculo-oculoTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -61,7 +60,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				18C412AB2A40271D0000EFCD /* hermes.xcframework in Frameworks */,
 				0C80B921A6F3F58F76C31292 /* libPods-oculo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
