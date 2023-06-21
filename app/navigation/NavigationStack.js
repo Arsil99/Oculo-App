@@ -25,6 +25,7 @@ import Profile from "@screens/Profile";
 import BottomTabBar from "./BottomTabBar";
 import Login from "@screens/Login";
 import ForgetPassword from "@screens/ForgetPassword";
+import ResetPassword from "@screens/ResetPassword";
 
 const intitialNotificationState = {
   notification: null,
@@ -205,6 +206,11 @@ function App() {
           <Stack.Screen
             name="Login"
             component={Login}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ResetPassword"
+            component={ResetPassword}
             options={{ headerShown: false }}
           />
           <Stack.Screen
