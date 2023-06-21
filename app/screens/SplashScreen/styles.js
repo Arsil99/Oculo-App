@@ -5,7 +5,7 @@ const nWidth = Dimensions.get('screen').width;
 const IOS = Platform.OS === 'ios';
 export default StyleSheet.create({
   container: {
-    backgroundColor: BaseColors.primary,
+    backgroundColor: BaseColors.white,
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
