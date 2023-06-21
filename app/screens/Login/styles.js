@@ -23,6 +23,7 @@ export default StyleSheet.create({
     color: BaseColors.primary,
   },
   signinbutton: {
+    marginTop: 30,
     height: 55,
     width: "100%",
   },

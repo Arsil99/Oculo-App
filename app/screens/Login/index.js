@@ -129,15 +129,13 @@ const Login = ({ navigation }) => {
             </Text>
           </TouchableOpacity>
           <View style={styles.btnContainer}>
-            <View>
-              <Button
-                shape="round"
-                title={"Login"}
-                style={styles.signinbutton}
-                onPress={validation}
-                // loading={loader}
-              />
-            </View>
+            <Button
+              shape="round"
+              title={"Login"}
+              style={styles.signinbutton}
+              onPress={validation}
+              // loading={loader}
+            />
             {Platform.OS === "ios" ? (
               <TouchableOpacity activeOpacity={0.7}>
                 <Image source={Images.faceid} resizeMode="contain" />

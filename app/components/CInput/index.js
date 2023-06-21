@@ -13,7 +13,8 @@ import {
 import { BaseColors } from "@config/theme";
 import styles from "./styles";
 import Icon from "react-native-vector-icons/FontAwesome";
-import Icon1 from "react-native-vector-icons/MaterialCommunityIcons";
+import Icon1 from "react-native-vector-icons/Feather";
+import Icon2 from "react-native-vector-icons/MaterialCommunityIcons";
 import Search from "react-native-vector-icons/Feather";
 import BaseSetting from "@config/setting";
 
@@ -287,7 +288,7 @@ class CInput extends Component {
                       alignItems: "center",
                     }}
                   >
-                    <Icon1
+                    <Icon2
                       name={this.state.key}
                       style={{ fontSize: 25, color: BaseColors.primary }}
                     />

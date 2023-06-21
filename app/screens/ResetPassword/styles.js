@@ -18,8 +18,8 @@ export default StyleSheet.create({
     justifyContent: "flex-start",
   },
   forgotPasswordTextStyle: {
+    fontSize: 17,
     marginTop: 10,
-    marginBottom: 30,
     color: BaseColors.primary,
   },
   sendemail: {

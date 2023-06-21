@@ -81,17 +81,6 @@ const ResetPassword = ({ navigation }) => {
             errorText={emailErrObj.msg}
           />
 
-          <TouchableOpacity
-            style={{ alignItems: "flex-end" }}
-            activeOpacity={0.7}
-          >
-            <Text
-              style={styles.forgotPasswordTextStyle}
-              onPress={() => navigation.navigate("ForgetPassword")}
-            >
-              Forget Password?
-            </Text>
-          </TouchableOpacity>
           <View style={styles.btnContainer}>
             <Button
               shape="round"
@@ -101,6 +90,13 @@ const ResetPassword = ({ navigation }) => {
               // loading={loader}
             />
           </View>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Login")}
+            style={{ alignItems: "center" }}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.forgotPasswordTextStyle}>Login</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

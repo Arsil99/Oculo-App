@@ -1,6 +1,6 @@
 import logo from "../assets/Images/logo.png";
-import oculo from "../assets/Images/oculo.png";
-import faceid from "../assets/Images/faceid.png";
+import oculo from "../assets/images/oculo.png";
+import faceid from "../assets/images/faceid.png";
 
 /**
  * Exports Image Paths
