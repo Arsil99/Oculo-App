@@ -5,8 +5,8 @@ const baseUrl = devMode
   : 'https://jointroops.com/api/';
 
 const BaseSetting = {
-  name: 'jointroops',
-  displayName: 'jointroops',
+  name: 'oculo',
+  displayName: 'oculo',
   appVersionCode: '1',
   stripeKey:
     'pk_test_51LUNEAJ3MbCXRvepo5YEabpEZATKZv1ci3u3SEW7FW4N4moKnu0gxrOgqK5DQCX5N1xNYvRJfSiuWoyJYy7K74gw00kcTXSt8T',
