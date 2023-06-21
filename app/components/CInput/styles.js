@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   commonInputTextSty: {
     height: "100%",
     fontSize: 12,
-    fontFamily: FontFamily.medium,
+    fontFamily: FontFamily.regular,
     paddingLeft: 10,
     color: BaseColors.primary,
   },
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     paddingBottom: 12,
     marginTop: -5,
-    fontFamily: FontFamily.medium,
+    fontFamily: FontFamily.regular,
     fontSize: 14,
   },
 });

@@ -77,7 +77,6 @@ function App() {
   };
 
   const appTheme = lightTheme;
-  console.log("app theme ====>>>>> ", appTheme);
 
   const Stack = createStackNavigator();
   const Tab = createBottomTabNavigator();
@@ -191,18 +190,18 @@ function App() {
           <Stack.Screen
             name="SplashScreen"
             component={SplashScreen}
-            options={{ headerShown: false }}
+            options={{ headerShown: false, animationEnabled: false }}
           />
           <Stack.Screen
             name="Home"
             component={BottomTabsNavigator}
             options={{ headerShown: false }}
           />
-          <Stack.Screen
+          {/* <Stack.Screen
             name="Events"
             component={BottomTabsNavigator}
             options={{ headerShown: false }}
-          />
+          /> */}
           <Stack.Screen
             name="Login"
             component={Login}

@@ -12,14 +12,14 @@ export default StyleSheet.create({
     flexDirection: "row",
   },
   labelTxt: {
-    fontFamily: FontFamily.medium,
+    fontFamily: FontFamily.regular,
     fontSize: 14,
     color: BaseColors.black,
     textTransform: "capitalize",
     marginRight: 3,
   },
   astrick: {
-    fontFamily: FontFamily.medium,
+    fontFamily: FontFamily.regular,
     color: BaseColors.red,
     position: "absolute",
     top: -3,

@@ -1,9 +1,13 @@
+import logo from "../assets/Images/logo.png";
+import oculo from "../assets/Images/oculo.png";
+import faceid from "../assets/Images/faceid.png";
+
 /**
  * Exports Image Paths
  * @function Images
  */
 export const Images = {
-  logo: require("../assets/Images/logo.png"),
-  oculo: require("../assets/images/oculo.png"),
-  faceid: require("../assets/images/faceid.png"),
+  logo,
+  oculo,
+  faceid,
 };

@@ -44,7 +44,7 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
               style={{
                 color: isFocused ? BaseColors.primary : "#585858",
                 fontSize: 12,
-                fontFamily: FontFamily.medium,
+                fontFamily: FontFamily.regular,
               }}
             >
               <AIcon size={26} color={tabIconColor} name="home" />
@@ -64,7 +64,7 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
               style={{
                 color: isFocused ? BaseColors.primary : "#585858",
                 fontSize: 12,
-                fontFamily: FontFamily.medium,
+                fontFamily: FontFamily.regular,
               }}
             >
               <AIcon size={26} color={tabIconColor} name="calendar" />
@@ -84,7 +84,7 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
               style={{
                 color: isFocused ? BaseColors.primary : "#585858",
                 fontSize: 12,
-                fontFamily: FontFamily.medium,
+                fontFamily: FontFamily.regular,
               }}
             >
               <IIcon
@@ -109,7 +109,7 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
               style={{
                 color: isFocused ? BaseColors.primary : "#585858",
                 fontSize: 12,
-                fontFamily: FontFamily.medium,
+                fontFamily: FontFamily.regular,
               }}
             >
               <View>
@@ -216,7 +216,7 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
             <Text
               style={{
                 color: isFocused ? BaseColors.primary : BaseColors.msgColor,
-                fontFamily: FontFamily.semiBold,
+                fontFamily: FontFamily.bold,
                 fontSize: 11,
                 marginVertical: 3,
               }}
@@ -232,8 +232,7 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
           position: "absolute",
           bottom: 0,
         }}
-      >
-      </View>
+      ></View>
     </View>
   );
 }
