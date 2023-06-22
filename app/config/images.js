@@ -8,4 +8,7 @@ export const Images = {
   faceid: require("../assets/Images/faceid.png"),
   avatar: require("../assets/Images/avatar.png"),
   demoSummary: require("../assets/Images/demoSummary.png"),
+  graph1: require("../assets/Images/graph1.png"),
+  emoji1: require("../assets/Images/emoji1.png"),
+  down: require("../assets/Images/down.png"),
 };

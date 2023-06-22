@@ -4,7 +4,7 @@ import { BaseColors } from "@config/theme";
 export default StyleSheet.create({
   main: {
     flex: 1,
-    backgroundColor: BaseColors.white,
+    backgroundColor: BaseColors.lightBg,
     alignItems: "center",
   },
 });

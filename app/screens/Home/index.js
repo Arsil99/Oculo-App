@@ -8,6 +8,7 @@ import Button from "@components/Button";
 import CardList from "@components/CardList";
 import HeaderBar from "@components/HeaderBar";
 import { logout } from "@utils/CommonFunction";
+import Milestones from "@components/Milestones";
 export default function Home({ navigation }) {
   const switchOptions = [
     { id: "summary", name: "Summary" },
@@ -77,7 +78,7 @@ export default function Home({ navigation }) {
         </View>
       ) : (
         <View style={styles.detailsArea}>
-          <Text>coming soon</Text>
+          <Milestones />
         </View>
       )}
     </View>

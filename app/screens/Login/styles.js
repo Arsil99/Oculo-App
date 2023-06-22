@@ -33,13 +33,4 @@ export default StyleSheet.create({
     marginTop: 30,
     height: 55,
   },
-  socialBtnContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: BaseColors.backgroundPlaceholder,
-    marginBottom: 8,
-    paddingVertical: 8,
-    borderRadius: 5,
-  },
 });

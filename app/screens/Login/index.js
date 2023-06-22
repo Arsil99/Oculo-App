@@ -82,11 +82,7 @@ const Login = ({ navigation }) => {
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.contentView}>
-          <Image
-            source={Images.oculo}
-            resizeMode="contain"
-            style={styles.img}
-          />
+          <Image source={Images.logo} resizeMode="contain" style={styles.img} />
         </View>
         <View style={styles.inputcontainer}>
           <LabeledInput
