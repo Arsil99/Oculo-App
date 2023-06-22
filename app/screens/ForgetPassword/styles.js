@@ -18,11 +18,11 @@ export default StyleSheet.create({
     justifyContent: "flex-start",
   },
   forgotPasswordTextStyle: {
+    fontSize: 17,
     marginTop: 10,
-    marginBottom: 30,
     color: BaseColors.primary,
   },
-  save: {
+  sendemail: {
     height: 55,
     width: "100%",
   },
@@ -32,16 +32,7 @@ export default StyleSheet.create({
     marginTop: 30,
   },
   img: {
-    marginTop: 40,
+    marginTop: 30,
     height: 55,
-  },
-  socialBtnContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: BaseColors.backgroundPlaceholder,
-    marginBottom: 8,
-    paddingVertical: 8,
-    borderRadius: 5,
   },
 });

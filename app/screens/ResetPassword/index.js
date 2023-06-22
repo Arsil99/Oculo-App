@@ -1,54 +1,74 @@
-import {
-  View,
-  Text,
-  KeyboardAvoidingView,
-  ScrollView,
-  Image,
-  Keyboard,
-} from "react-native";
+import { View, KeyboardAvoidingView, ScrollView, Image } from "react-native";
 import React, { useEffect, useState } from "react";
 import styles from "./styles";
 import LabeledInput from "@components/LabeledInput";
 import Button from "@components/Button";
 import { Images } from "@config";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import BaseSetting from "@config/setting";
-import { Platform } from "react-native";
 
-const ResetPassword = ({ navigation }) => {
+const ResetPassword = () => {
   const IOS = Platform.OS === "ios";
-  const [email, setEmail] = useState();
-  const [emailErrObj, setEmailErrObj] = useState({ error: false, msg: "" });
+  const [setpassword, setSetpassword] = useState("");
+  const [retypepassword, setRetypepassword] = useState("");
+  const [passErrObj, setPassErrObj] = useState({ error: false, msg: "" });
+  const [RetypepassErrObj, setRetypepassErrObj] = useState({
+    error: false,
+    msg: "",
+  });
   const [btnLoader, setBtnLoader] = useState(false);
 
   useEffect(() => {
-    setEmailErrObj({ error: false, msg: "" });
+    setPassErrObj({ error: false, msg: "" });
+    setRetypepassErrObj({ error: false, msg: "" });
   }, []);
-  let emailRegex = BaseSetting?.emailRegex;
+
   function validation() {
     let valid = true;
 
-    // validate email
-    if (email == "") {
+    // validate pass
+    if (setpassword == "") {
       valid = false;
-      setEmailErrObj({
+      setPassErrObj({
         error: true,
-        msg: "Please enter email",
+        msg: "Please enter password",
       });
-    } else if (!emailRegex.test(email)) {
+    } else if (setpassword.length < 8) {
       valid = false;
-      setEmailErrObj({
+      setPassErrObj({
         error: true,
-        msg: "Please enter valid email",
+        msg: "Password length must be of 8-15",
       });
     } else {
-      setEmailErrObj({
+      setPassErrObj({
         error: false,
         msg: "",
       });
     }
 
-    // validate password
+    // validate retypepassword
+    if (retypepassword == "") {
+      valid = false;
+      setRetypepassErrObj({
+        error: true,
+        msg: "Please enter retype password",
+      });
+    } else if (retypepassword.length < 8) {
+      valid = false;
+      setRetypepassErrObj({
+        error: true,
+        msg: "Password length must be of 8-15",
+      });
+    } else if (retypepassword !== setpassword) {
+      valid = false;
+      setRetypepassErrObj({
+        error: true,
+        msg: "Retype password  must  same as setpassword ",
+      });
+    } else {
+      setRetypepassErrObj({
+        error: false,
+        msg: "",
+      });
+    }
   }
   return (
     <KeyboardAvoidingView
@@ -69,34 +89,43 @@ const ResetPassword = ({ navigation }) => {
         </View>
         <View style={styles.inputcontainer}>
           <LabeledInput
-            Label={"EMAIL"}
-            mailicon
-            placeholder={"Enter Email"}
-            value={email}
+            Label={"Set Password"}
+            keyicon
+            placeholder={"Enter Password"}
+            eyePassword
+            value={setpassword}
             onChangeText={(val) => {
-              setEmail(val);
-              setEmailErrObj({ error: false, msg: "" });
+              setSetpassword(val);
+              setPassErrObj({ error: false, msg: "" });
             }}
-            showError={emailErrObj.error}
-            errorText={emailErrObj.msg}
+            showError={passErrObj.error}
+            errorText={passErrObj.msg}
+          />
+
+          <LabeledInput
+            Label={"Retype Password"}
+            LabledInputStyle={{ marginTop: 20 }}
+            keyicon
+            value={retypepassword}
+            placeholder={"Retype Password"}
+            eyePassword
+            onChangeText={(val) => {
+              setRetypepassword(val);
+              setPassErrObj({ error: false, msg: "" });
+            }}
+            showError={RetypepassErrObj.error}
+            errorText={RetypepassErrObj.msg}
           />
 
           <View style={styles.btnContainer}>
             <Button
               shape="round"
-              title={"Send Email"}
-              style={styles.sendemail}
+              title={"Save"}
+              style={styles.save}
               onPress={validation}
               // loading={loader}
             />
           </View>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Login")}
-            style={{ alignItems: "center" }}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.forgotPasswordTextStyle}>Login</Text>
-          </TouchableOpacity>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

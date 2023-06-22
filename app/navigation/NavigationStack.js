@@ -24,8 +24,8 @@ import Notification from "@screens/Notification";
 import Profile from "@screens/Profile";
 import BottomTabBar from "./BottomTabBar";
 import Login from "@screens/Login";
-import ForgetPassword from "@screens/ForgetPassword";
 import ResetPassword from "@screens/ResetPassword";
+import ForgetPassword from "@screens/ForgetPassword";
 
 const intitialNotificationState = {
   notification: null,
