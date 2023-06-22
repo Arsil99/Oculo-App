@@ -166,16 +166,16 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
         const isFocused = state.index === index;
         const onPress = () => {
           if (index === 0) {
-            homeAnimRef.current.swing(1000);
+            homeAnimRef.current.zoomIn(300);
           }
           if (index === 1) {
-            eventAnimRef.current.swing(1000);
+            eventAnimRef.current.zoomIn(300);
           }
           if (index === 2) {
-            notifyAnimRef.current.swing(1000);
+            notifyAnimRef.current.zoomIn(300);
           }
           if (index === 3) {
-            profileAnimRef.current.swing(1000);
+            profileAnimRef.current.zoomIn(300);
           }
           navigation.navigate(route.name);
         };
