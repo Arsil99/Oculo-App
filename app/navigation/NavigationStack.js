@@ -197,11 +197,6 @@ function App() {
             component={BottomTabsNavigator}
             options={{ headerShown: false }}
           />
-          {/* <Stack.Screen
-            name="Events"
-            component={BottomTabsNavigator}
-            options={{ headerShown: false }}
-          /> */}
           <Stack.Screen
             name="Login"
             component={Login}
