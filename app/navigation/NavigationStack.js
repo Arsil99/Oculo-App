@@ -26,6 +26,7 @@ import BottomTabBar from "./BottomTabBar";
 import Login from "@screens/Login";
 import ResetPassword from "@screens/ResetPassword";
 import ForgetPassword from "@screens/ForgetPassword";
+import OTP from "@screens/OTP";
 
 const intitialNotificationState = {
   notification: null,
@@ -210,6 +211,11 @@ function App() {
           <Stack.Screen
             name="ForgetPassword"
             component={ForgetPassword}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="OTP"
+            component={OTP}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
