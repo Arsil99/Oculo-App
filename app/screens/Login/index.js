@@ -117,17 +117,21 @@ const Login = ({ navigation }) => {
             errorText={passErrObj.msg}
           />
 
-          <TouchableOpacity
-            style={{ alignItems: "flex-end" }}
-            activeOpacity={0.7}
+          <View
+            style={{
+              marginTop: 6,
+              alignItems: "flex-end",
+            }}
           >
-            <Text
-              style={styles.forgotPasswordTextStyle}
+            <TouchableOpacity
+              activeOpacity={0.7}
               onPress={() => navigation.navigate("ForgetPassword")}
             >
-              Forget password?
-            </Text>
-          </TouchableOpacity>
+              <Text style={styles.forgotPasswordTextStyle}>
+                Forget password?
+              </Text>
+            </TouchableOpacity>
+          </View>
           <View style={styles.btnContainer}>
             <Button
               shape="round"

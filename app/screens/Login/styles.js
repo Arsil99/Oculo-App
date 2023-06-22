@@ -18,20 +18,16 @@ export default StyleSheet.create({
     justifyContent: "flex-start",
   },
   forgotPasswordTextStyle: {
-    marginTop: 10,
-    marginBottom: 30,
     color: BaseColors.primary,
   },
   signinbutton: {
-    marginTop: 30,
-    height: 55,
-    width: "100%",
+    width: IOS ? "80%" : "100%",
   },
   btnContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     flexDirection: "row",
+    // backgroundColor: "pink",
+    marginTop: 40,
   },
   img: {
     marginTop: 30,
