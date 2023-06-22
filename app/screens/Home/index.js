@@ -6,6 +6,8 @@ import TabSwitch from "@components/TabSwitch";
 import Button from "@components/Button";
 
 import CardList from "@components/CardList";
+import HeaderBar from "@components/HeaderBar";
+import { logout } from "@utils/CommonFunction";
 export default function Home({ navigation }) {
   const switchOptions = [
     { id: "summary", name: "Summary" },
@@ -47,12 +49,16 @@ export default function Home({ navigation }) {
       {activeTab?.id === "summary" ? (
         <View style={styles.summaryArea}>
           {/* MAP IN SUMMARY */}
-          <View>
+          <TouchableOpacity
+            onPress={() => {
+              logout();
+            }}
+          >
             <Image
               source={Images.demoSummary}
               style={{ height: 320, width: 320 }}
             />
-          </View>
+          </TouchableOpacity>
           <View style={styles.summaryText}>
             <Text style={[styles.descText, { marginTop: 15 }]}>Baseline</Text>
             <Text style={styles.descText}>

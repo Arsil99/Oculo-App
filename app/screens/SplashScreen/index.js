@@ -1,14 +1,23 @@
 import React, { useEffect } from "react";
-import { StatusBar, View, Text, Image } from "react-native";
 import styles from "./styles";
+import { StatusBar, View, Text, Image } from "react-native";
 import { Images } from "@config";
+import * as Animatable from "react-native-animatable";
+import { useSelector } from "react-redux";
 
 const SplashScreen = ({ navigation }) => {
+  const { userData } = useSelector((state) => state.auth);
+
   useEffect(() => {
     setTimeout(() => {
-      navigation.replace("Home");
-    }, 2000);
+      if (userData) {
+        navigation.replace("Home");
+      } else {
+        navigation.replace("Login");
+      }
+    }, 3000);
   }, []);
+
   return (
     <>
       <StatusBar

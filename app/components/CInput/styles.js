@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: FontFamily.regular,
     paddingLeft: 10,
-    color: BaseColors.black90,
+    color: BaseColors.black,
   },
   commonInputHeaderText: {
     backgroundColor: "#0000",

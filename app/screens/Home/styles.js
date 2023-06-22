@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import { BaseColors, FontFamily } from "@config/theme";
+const IOS = Platform.OS === "ios";
 
 export default StyleSheet.create({
   main: {
@@ -8,11 +9,12 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   topBar: {
-    marginVertical: 10,
+    marginBottom: 10,
     width: "100%",
     alignItems: "center",
     padding: 10,
     flexDirection: "row",
+    marginTop: IOS ? 55 : 30,
   },
   title: {
     paddingHorizontal: 15,
