@@ -1,23 +1,21 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
-import styles from "./styles";
-import { Images } from "@config";
-import TabSwitch from "@components/TabSwitch";
-import Button from "@components/Button";
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import styles from './styles';
+import { Images } from '@config';
+import TabSwitch from '@components/TabSwitch';
+import Button from '@components/Button';
 
-import CardList from "@components/CardList";
-import HeaderBar from "@components/HeaderBar";
-import { logout } from "@utils/CommonFunction";
-import Milestones from "@components/Milestones";
+import { logout } from '@utils/CommonFunction';
+import Milestones from '@components/Milestones';
 export default function Home({ navigation }) {
   const switchOptions = [
-    { id: "summary", name: "Summary" },
-    { id: "details", name: "Details" },
+    { id: 'summary', name: 'Summary' },
+    { id: 'details', name: 'Details' },
   ];
 
   const [activeTab, setActiveTab] = useState({
-    id: "summary",
-    name: "Summary",
+    id: 'summary',
+    name: 'Summary',
   });
 
   return (
@@ -41,13 +39,13 @@ export default function Home({ navigation }) {
       <TabSwitch
         tabs={switchOptions}
         activeTab={activeTab}
-        onTabChange={(currentTab) => {
+        onTabChange={currentTab => {
           setActiveTab(currentTab);
         }}
       />
 
       {/* ACTIVE TAB AREA */}
-      {activeTab?.id === "summary" ? (
+      {activeTab?.id === 'summary' ? (
         <View style={styles.summaryArea}>
           {/* MAP IN SUMMARY */}
           <TouchableOpacity
@@ -70,7 +68,7 @@ export default function Home({ navigation }) {
 
           <Button
             shape="round"
-            title={"Request Another Baseline"}
+            title={'Request Another Baseline'}
             style={styles.requestBtn}
             // onPress={validation}
             // loading={loader}

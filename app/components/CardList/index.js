@@ -1,25 +1,25 @@
-import { View, Text, TouchableOpacity, Image } from "react-native";
-import React from "react";
-import Icon from "react-native-vector-icons/AntDesign";
-import PropTypes from "prop-types";
-import styles from "./styles";
-export default function CardList({ image, date, status, assessment }) {
+import { View, Text, TouchableOpacity, Image } from 'react-native';
+import React from 'react';
+import Icon from 'react-native-vector-icons/AntDesign';
+import PropTypes from 'prop-types';
+import styles from './styles';
+export default function CardList({ image, data, status, assessment, onPress }) {
   return (
-    <TouchableOpacity style={styles.main}>
+    <TouchableOpacity style={styles.main} onPress={onPress}>
       <View style={styles.container}>
         <View style={styles.insideBox}>
           <View>
             <Image source={image} style={styles.imgStyle} />
           </View>
           <View style={{ marginHorizontal: 10 }}>
-            <Text style={{ fontSize: 17 }}>{date}</Text>
+            <Text style={{ fontSize: 17 }}>{data}</Text>
             <View style={styles.statusBox}>
-              <TouchableOpacity style={styles.chipBox}>
+              <View style={styles.chipBox}>
                 <Text>{status}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.chipBox}>
+              </View>
+              <View style={styles.chipBox}>
                 <Text>{assessment}</Text>
-              </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
@@ -33,14 +33,14 @@ export default function CardList({ image, date, status, assessment }) {
 
 CardList.propTypes = {
   image: PropTypes.string,
-  date: PropTypes.string,
+  data: PropTypes.string,
   status: PropTypes.string,
   assessment: PropTypes.string,
 };
 CardList.defaultProps = {
-  assessment: "",
-  status: "",
-  image: "",
+  assessment: '',
+  status: '',
+  image: '',
   onPress: () => {},
-  date: "",
+  data: '',
 };

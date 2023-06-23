@@ -1,11 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import { Animated, TouchableOpacity, Text, View } from "react-native";
-import { BaseColors } from "@config/theme";
-import { useSelector } from "react-redux";
-import { styles } from "./styles";
-import BaseSetting from "@config/setting";
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { Animated, TouchableOpacity, Text, View } from 'react-native';
+import { BaseColors } from '@config/theme';
+import { styles } from './styles';
+import BaseSetting from '@config/setting';
 
 /**
  * Component for TabSwitch
@@ -13,6 +12,7 @@ import BaseSetting from "@config/setting";
  */
 export default function TabSwitch(props) {
   const {
+    insideTab,
     tabSize,
     subTabSize,
     tabs,
@@ -21,17 +21,15 @@ export default function TabSwitch(props) {
     isRTL = false,
   } = props;
 
-  const { darkmode } = useSelector((state) => state.auth);
-
   const activeTabIndex = props.tabs.findIndex(
-    (tab) => tab.id === props.activeTab.id
+    tab => tab.id === props.activeTab.id,
   );
 
   const [translateValue] = useState(
-    new Animated.Value((isRTL ? -1 : 1) * (1 + activeTabIndex * tabSize + 20))
+    new Animated.Value((isRTL ? -1 : 1) * (1 + activeTabIndex * tabSize + 20)),
   );
 
-  const setspring = (index) => {
+  const setspring = index => {
     Animated.spring(translateValue, {
       toValue: (isRTL ? -1 : 1) * (1 + index * subTabSize),
       velocity: 10,
@@ -40,14 +38,22 @@ export default function TabSwitch(props) {
   };
 
   useEffect(() => {
-    // if (!fromDrawer) {
     setspring(activeTabIndex);
-    // }
+
   }, [activeTab]);
 
   const renderTabData = () => {
     return (
-      <View style={{ ...styles.wrapper, width: tabSize }}>
+      <View
+        style={[
+          { ...styles.wrapper, width: tabSize },
+          {
+            borderRadius: insideTab ? 50 : 0,
+
+            backgroundColor: insideTab ? BaseColors.lightBg : null,
+          },
+        ]}
+      >
         <Animated.View
           style={[
             styles.slider,
@@ -57,11 +63,14 @@ export default function TabSwitch(props) {
                   translateX: translateValue,
                 },
               ],
-              // backgroundColor: activeTab && BaseColors.secondary,
               marginLeft: -5,
               width: subTabSize,
-              borderBottomWidth: 4,
-              borderBottomColor: BaseColors.secondary,
+              borderBottomWidth: !insideTab ? 4 : 0,
+              borderRadius: insideTab ? 50 : 0,
+              borderBottomColor: insideTab
+                ? BaseColors.orange
+                : BaseColors.secondary,
+              backgroundColor: insideTab ? BaseColors.orange : null,
             },
           ]}
         />
@@ -71,17 +80,12 @@ export default function TabSwitch(props) {
             activeOpacity={0.8}
             onPress={() => {
               onTabChange(obj);
-              // if (fromDrawer) {
-              //   setspring(index);
-              // }
-              // console.log('===> ~ onPress', obj);
-              // return obj;
+
             }}
             style={{
               ...styles.tab,
               width: subTabSize,
-              // borderBottomColor: from && BaseColors.primary,
-              // borderBottomWidth: from && 1,
+
             }}
           >
             <Text
@@ -90,7 +94,9 @@ export default function TabSwitch(props) {
                 {
                   color:
                     activeTabIndex === index
-                      ? BaseColors.secondary
+                      ? insideTab
+                        ? BaseColors.white
+                        : BaseColors.secondary
                       : BaseColors.msgColor,
                 },
               ]}
@@ -112,15 +118,17 @@ TabSwitch.propTypes = {
   tabSize: PropTypes.number,
   subTabSize: PropTypes.number,
   activeTab: PropTypes.object,
+  insideTab: PropTypes.bool,
 };
 
 TabSwitch.defaultProps = {
   tabs: [
-    { id: "1", name: "tab 1" },
-    { id: "2", name: "tab 2" },
+    { id: '1', name: 'tab 1' },
+    { id: '2', name: 'tab 2' },
   ],
   onTabChange: () => {},
   tabSize: BaseSetting.nWidth - 40,
   subTabSize: BaseSetting.nWidth * 0.47,
   activeTab: {},
+  insideTab: false,
 };

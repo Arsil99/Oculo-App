@@ -1,39 +1,40 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useMemo, useReducer, useEffect } from "react";
-import { Platform } from "react-native";
-import { useDispatch } from "react-redux";
+import React, { useState, useMemo, useReducer, useEffect } from 'react';
+import { Platform } from 'react-native';
+import { useDispatch } from 'react-redux';
 import {
   NavigationContainer,
   DarkTheme,
   DefaultTheme,
-} from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { EventRegister } from "react-native-event-listeners";
-import SplashScreen from "@screens/SplashScreen";
-import { NotificationContext, NoInternet } from "@components";
-import RemotePushController from "@components/Common/RemotePushController";
-import notificationReducer from "@redux/reducers/notificationReducer";
-import { store } from "@redux/store/configureStore";
-import AuthAction from "@redux/reducers/auth/actions";
-import { BaseColors, DarkBaseColor } from "@config/theme";
-import { navigationRef } from "./NavigationService";
-import Home from "@screens/Home";
-import Events from "@screens/Events";
-import Notification from "@screens/Notification";
-import Profile from "@screens/Profile";
-import BottomTabBar from "./BottomTabBar";
-import Login from "@screens/Login";
-import ResetPassword from "@screens/ResetPassword";
-import ForgetPassword from "@screens/ForgetPassword";
-import OTP from "@screens/OTP";
+} from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { EventRegister } from 'react-native-event-listeners';
+import SplashScreen from '@screens/SplashScreen';
+import { NotificationContext, NoInternet } from '@components';
+import RemotePushController from '@components/Common/RemotePushController';
+import notificationReducer from '@redux/reducers/notificationReducer';
+import { store } from '@redux/store/configureStore';
+import AuthAction from '@redux/reducers/auth/actions';
+import { BaseColors, DarkBaseColor } from '@config/theme';
+import { navigationRef } from './NavigationService';
+import Home from '@screens/Home';
+import Events from '@screens/Events';
+import Notification from '@screens/Notification';
+import Profile from '@screens/Profile';
+import BottomTabBar from './BottomTabBar';
+import Login from '@screens/Login';
+import ResetPassword from '@screens/ResetPassword';
+import ForgetPassword from '@screens/ForgetPassword';
+import OTP from '@screens/OTP';
+import EventDetails from '@screens/EventDetails';
 
 const intitialNotificationState = {
   notification: null,
   openedNotification: null,
   countOfNotification: 0,
 };
-const IOS = Platform.OS === "ios";
+const IOS = Platform.OS === 'ios';
 
 function App() {
   const dispatch = useDispatch();
@@ -41,7 +42,7 @@ function App() {
 
   const [Notifystate, dispatchState] = useReducer(
     notificationReducer,
-    intitialNotificationState
+    intitialNotificationState,
   );
   const notiValue = useMemo(() => {
     return { Notifystate, dispatchState };
@@ -59,11 +60,11 @@ function App() {
 
   useEffect(() => {
     const eventListener = EventRegister.addEventListener(
-      "changeAppTheme",
-      (data) => {
+      'changeAppTheme',
+      data => {
         setdarkApp(data);
         dispatch(setDarkmode(data));
-      }
+      },
     );
     return () => {
       EventRegister.removeEventListener(eventListener);
@@ -149,8 +150,8 @@ function App() {
   const BottomTabsNavigator = () => {
     return (
       <Tab.Navigator
-        initialRouteName={"HomeStackNavigator"}
-        tabBar={(props) => <BottomTabBar {...props} />}
+        initialRouteName={'HomeStackNavigator'}
+        tabBar={props => <BottomTabBar {...props} />}
       >
         <Tab.Screen
           name="HomeStackNavigator"
@@ -181,7 +182,7 @@ function App() {
       <RemotePushController />
       <NavigationContainer ref={navigationRef} theme={appTheme}>
         <Stack.Navigator
-          initialRouteName={"SplashScreen"}
+          initialRouteName={'SplashScreen'}
           detachInactiveScreens={IOS ? true : false}
           screenOptions={{
             animationEnabled: true,
@@ -196,6 +197,11 @@ function App() {
           <Stack.Screen
             name="Home"
             component={BottomTabsNavigator}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="EventDetails"
+            component={EventDetails}
             options={{ headerShown: false }}
           />
           <Stack.Screen

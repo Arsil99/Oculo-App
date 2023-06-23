@@ -1,32 +1,31 @@
-import BaseSetting from "@config/setting";
-import { BaseColors, FontFamily } from "@config/theme";
-import { Platform, StyleSheet } from "react-native";
+import BaseSetting from '@config/setting';
+import { BaseColors, FontFamily } from '@config/theme';
+import { Platform, StyleSheet } from 'react-native';
 
 const tabWidth = 80;
-const IOS = Platform.OS === "ios";
+const IOS = Platform.OS === 'ios';
 export const styles = StyleSheet.create({
   wrapper: {
     height: BaseSetting.nHeight * 0.06,
-    alignSelf: "center",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    position: "relative",
+    alignSelf: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
     backgroundColor: BaseColors.white,
-    overflow: "hidden",
-    borderBottomWidth: 1,
+    overflow: 'hidden',
     borderColor: BaseColors.black20,
   },
   slider: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     bottom: 0,
     left: 0,
     backgroundColor: BaseColors.white,
     color: BaseColors.secondary,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
@@ -36,8 +35,8 @@ export const styles = StyleSheet.create({
   },
   tab: {
     width: tabWidth,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   tabText: {
     fontFamily: FontFamily.bold,

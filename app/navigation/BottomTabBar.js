@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useRef, useState } from "react";
+import React, { useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -7,14 +7,14 @@ import {
   StyleSheet,
   Dimensions,
   Animated,
-} from "react-native";
-import AIcon from "react-native-vector-icons/AntDesign";
-import IIcon from "react-native-vector-icons/Ionicons";
-import * as Animatable from "react-native-animatable";
-import { BaseColors, BaseStyles, FontFamily } from "@config/theme";
+} from 'react-native';
+import AIcon from 'react-native-vector-icons/AntDesign';
+import IIcon from 'react-native-vector-icons/Ionicons';
+import * as Animatable from 'react-native-animatable';
+import { BaseColors, BaseStyles, FontFamily } from '@config/theme';
 
 export default function BottomTabBar({ state, descriptors, navigation }) {
-  const totalWidth = Dimensions.get("window").width;
+  const totalWidth = Dimensions.get('window').width;
   const tabWidth = totalWidth / state.routes.length;
   const [translateValue] = useState(new Animated.Value(tabWidth * 2 - 7));
   const homeAnimRef = useRef();
@@ -31,18 +31,18 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
   const getIcons = (label, isFocused, index) => {
     const tabIconColor = isFocused ? BaseColors.primary : BaseColors.msgColor;
     switch (label) {
-      case "HomeStackNavigator":
+      case 'HomeStackNavigator':
         return (
           <Animatable.View
             useNativeDriver
             ref={homeAnimRef}
             style={{
-              alignItems: "center",
+              alignItems: 'center',
             }}
           >
             <Text
               style={{
-                color: isFocused ? BaseColors.primary : "#585858",
+                color: isFocused ? BaseColors.primary : '#585858',
                 fontSize: 12,
                 fontFamily: FontFamily.regular,
               }}
@@ -51,18 +51,18 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
             </Text>
           </Animatable.View>
         );
-      case "EventsStackNavigator":
+      case 'EventsStackNavigator':
         return (
           <Animatable.View
             useNativeDriver
             ref={eventAnimRef}
             style={{
-              alignItems: "center",
+              alignItems: 'center',
             }}
           >
             <Text
               style={{
-                color: isFocused ? BaseColors.primary : "#585858",
+                color: isFocused ? BaseColors.primary : '#585858',
                 fontSize: 12,
                 fontFamily: FontFamily.regular,
               }}
@@ -71,18 +71,18 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
             </Text>
           </Animatable.View>
         );
-      case "NotificationStackNavigator":
+      case 'NotificationStackNavigator':
         return (
           <Animatable.View
             useNativeDriver
             ref={notifyAnimRef}
             style={{
-              alignItems: "center",
+              alignItems: 'center',
             }}
           >
             <Text
               style={{
-                color: isFocused ? BaseColors.primary : "#585858",
+                color: isFocused ? BaseColors.primary : '#585858',
                 fontSize: 12,
                 fontFamily: FontFamily.regular,
               }}
@@ -96,18 +96,18 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
           </Animatable.View>
         );
 
-      case "ProfileStackNavigator":
+      case 'ProfileStackNavigator':
         return (
           <Animatable.View
             useNativeDriver
             ref={profileAnimRef}
             style={{
-              alignItems: "center",
+              alignItems: 'center',
             }}
           >
             <Text
               style={{
-                color: isFocused ? BaseColors.primary : "#585858",
+                color: isFocused ? BaseColors.primary : '#585858',
                 fontSize: 12,
                 fontFamily: FontFamily.regular,
               }}
@@ -122,20 +122,20 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
   };
   const getIconsName = (label, isFocused) => {
     switch (label) {
-      case "HomeStackNavigator":
-        return "Home";
-      case "EventsStackNavigator":
-        return "Event";
-      case "NotificationStackNavigator":
-        return "Notification";
-      case "ProfileStackNavigator":
-        return "Profile";
+      case 'HomeStackNavigator':
+        return 'Home';
+      case 'EventsStackNavigator':
+        return 'Event';
+      case 'NotificationStackNavigator':
+        return 'Notification';
+      case 'ProfileStackNavigator':
+        return 'Profile';
     }
   };
   return (
     <View
       style={{
-        flexDirection: "row",
+        flexDirection: 'row',
       }}
     >
       <Animated.View
@@ -147,8 +147,8 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
                 translateX: translateValue,
               },
             ],
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: 'center',
+            justifyContent: 'center',
           },
         ]}
       >
@@ -194,8 +194,8 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
               paddingBottom: 10,
               FontFamily: FontFamily.bold,
               height: 70,
-              justifyContent: "center",
-              alignItems: "center",
+              justifyContent: 'center',
+              alignItems: 'center',
               backgroundColor: BaseColors.white,
               borderTopColor: BaseColors.borderColor,
               paddingTop: 5,
@@ -206,8 +206,8 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
             <View
               style={{
                 flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
+                justifyContent: 'center',
+                alignItems: 'center',
                 backgroundColor: BaseColors.white,
               }}
             >
@@ -229,7 +229,7 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
       <View
         style={{
           zIndex: 0,
-          position: "absolute",
+          position: 'absolute',
           bottom: 0,
         }}
       ></View>
@@ -238,9 +238,9 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
 }
 const styles = StyleSheet.create({
   tabBarStyle: {
-    flexDirection: "row",
+    flexDirection: 'row',
     backgroundColor: BaseColors.whiteSmoke,
-    textAlign: "center",
+    textAlign: 'center',
     ...BaseStyles.shadow,
   },
   iconContainer: {
@@ -248,8 +248,8 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingBottom: 10,
     height: 60,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   tabName: {
     color: BaseColors.backRed,

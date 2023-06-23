@@ -1,39 +1,39 @@
-import { BaseColors, FontFamily } from "@config/theme";
-import { Platform, StyleSheet } from "react-native";
-const IOS = Platform.OS === "ios";
+import { BaseColors, FontFamily } from '@config/theme';
+import { Platform, StyleSheet } from 'react-native';
+const IOS = Platform.OS === 'ios';
 
 export default StyleSheet.create({
   main: {
     paddingHorizontal: 20,
     marginBottom: 20,
-    marginTop: IOS ? 55 : 30,
-    width: "100%",
+    marginTop: IOS ? 55 : 15,
+    width: '100%',
   },
   contentBox: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   imageCon: {
-    width: "10%",
-    justifyContent: "center",
-    alignItems: "center",
+    width: '10%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headerTextCon: {
     flex: 1,
-    position: "absolute",
+    position: 'absolute',
     right: 0,
-    justifyContent: "center",
+    justifyContent: 'center',
     left: 50,
   },
   headerTextCenter: {
     left: 0,
-    alignItems: "center",
+    alignItems: 'center',
   },
   headerText: {
     fontFamily: FontFamily.bold,
     color: BaseColors.textColor,
-    textTransform: "capitalize",
+    textTransform: 'capitalize',
     fontSize: 18,
   },
   GreatingsText: {
@@ -46,9 +46,9 @@ export default StyleSheet.create({
     height: 52,
     width: 52,
     borderRadius: 50,
-    overflow: "hidden",
-    justifyContent: "center",
-    alignItems: "center",
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
     borderWidth: 2,
     borderColor: BaseColors.primary,
     padding: 2,
