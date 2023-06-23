@@ -1,45 +1,25 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
-import styles from "./styles";
-import Icon from "react-native-vector-icons/AntDesign";
-import { Images } from "@config";
-import BaseSetting from "@config/setting";
-import { BaseColors } from "@config/theme";
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, Switch } from 'react-native';
+import PropTypes from 'prop-types';
+import styles from './styles';
+import Icon from 'react-native-vector-icons/AntDesign';
+import { BaseColors } from '@config/theme';
+import { logout } from '@utils/CommonFunction';
 
-const ProfileDetailcard = ({ navigation, maintitle, data }) => {
-  const SettingItem = [
-    {
-      id: "1",
-      leftIcon: "user",
-      title: "First Name",
-      righttitle: "Andy",
-    },
-    {
-      id: "2",
-      leftIcon: "user",
-      title: "Last Name",
-      righttitle: "Anderson",
-    },
-    {
-      id: "3",
-      leftIcon: "calendar",
-      title: "Date of Birth",
-      righttitle: "27-04-1998",
-    },
-    {
-      id: "4",
-      leftIcon: "man",
-      title: "Gender",
-      righttitle: "Male",
-    },
-  ];
-
+export default function ProfileDetailcard({
+  navigation,
+  maintitle,
+  data,
+  onPress,
+}) {
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   return (
     <View style={styles.container}>
       <View
         style={{
-          alignItems: "flex-start",
+          alignItems: 'flex-start',
           marginHorizontal: 20,
         }}
       >
@@ -52,6 +32,7 @@ const ProfileDetailcard = ({ navigation, maintitle, data }) => {
             <TouchableOpacity
               key={item?.id}
               activeOpacity={0.7}
+              onPress={() => (item?.title === 'Sign Out' ? logout() : null)}
               style={[
                 styles.settingItem,
                 index === 0
@@ -60,7 +41,7 @@ const ProfileDetailcard = ({ navigation, maintitle, data }) => {
                       borderTopWidth: 0.7,
                       borderColor: BaseColors.borderColor,
                     },
-                index === SettingItem.length - 1
+                index === data.length - 1
                   ? {
                       borderBottomLeftRadius: 12,
                       borderBottomRightRadius: 12,
@@ -70,15 +51,15 @@ const ProfileDetailcard = ({ navigation, maintitle, data }) => {
             >
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                 }}
               >
                 <View
                   style={{
                     width: 20,
                     marginRight: 20,
-                    alignItems: "center",
+                    alignItems: 'center',
                   }}
                 >
                   <Icon
@@ -93,7 +74,21 @@ const ProfileDetailcard = ({ navigation, maintitle, data }) => {
               </View>
 
               <View>
-                <Text style={styles.settingItemText}>{item.righttitle}</Text>
+                <Text style={styles.settingItemText}>
+                  {item?.switch ? (
+                    <Switch
+                      trackColor={{ false: '#767577', true: '#81b0ff' }}
+                      thumbColor={
+                        isEnabled ? BaseColors.primary : BaseColors.offWhite
+                      }
+                      ios_backgroundColor="#3e3e3e"
+                      onValueChange={toggleSwitch}
+                      value={isEnabled}
+                    />
+                  ) : (
+                    item.righttitle
+                  )}
+                </Text>
               </View>
             </TouchableOpacity>
           );
@@ -101,5 +96,14 @@ const ProfileDetailcard = ({ navigation, maintitle, data }) => {
       </View>
     </View>
   );
+}
+
+ProfileDetailcard.propTypes = {
+  maintitle: PropTypes.string,
+  data: PropTypes.string,
 };
-export default ProfileDetailcard;
+ProfileDetailcard.defaultProps = {
+  maintitle: '',
+  onPress: () => {},
+  data: '',
+};

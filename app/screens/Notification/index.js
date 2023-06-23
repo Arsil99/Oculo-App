@@ -4,6 +4,7 @@ import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
 import CardList from '@components/CardList';
 import { Images } from '@config';
+
 export default function Notification({ navigation }) {
   return (
     <View style={styles.main}>
