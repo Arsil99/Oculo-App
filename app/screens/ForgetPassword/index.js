@@ -4,55 +4,97 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Image,
-  Keyboard,
-} from "react-native";
-import React, { useEffect, useState } from "react";
-import styles from "./styles";
-import LabeledInput from "@components/LabeledInput";
-import Button from "@components/Button";
-import { Images } from "@config";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import BaseSetting from "@config/setting";
-import { Platform } from "react-native";
+} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import styles from './styles';
+import LabeledInput from '@components/LabeledInput';
+import Button from '@components/Button';
+import { Images } from '@config';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import BaseSetting from '@config/setting';
+import { Platform } from 'react-native';
+import { getApiData } from '@utils/apiHelper';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
 const ForgetPassword = ({ navigation }) => {
-  const IOS = Platform.OS === "ios";
+  const IOS = Platform.OS === 'ios';
+  const emailRegex = BaseSetting?.emailRegex;
+
   const [email, setEmail] = useState();
-  const [emailErrObj, setEmailErrObj] = useState({ error: false, msg: "" });
-  const [btnLoader, setBtnLoader] = useState(false);
+  const [loader, setLoader] = useState(false);
+
+  const [emailErrObj, setEmailErrObj] = useState({ error: false, msg: '' });
 
   useEffect(() => {
-    setEmailErrObj({ error: false, msg: "" });
+    setEmailErrObj({ error: false, msg: '' });
   }, []);
-  let emailRegex = BaseSetting?.emailRegex;
+
+  // generate OTP
+  const generateOTP = async () => {
+    setLoader(true);
+    let endPoints = BaseSetting.endpoints.generateOtp;
+    const params = {
+      email: email,
+    };
+    try {
+      const resp = await getApiData(endPoints, 'POST', params, {}, false);
+      if (resp?.status) {
+        Toast.show({
+          text1: resp?.message.toString(),
+          type: 'success',
+        });
+        navigation.navigate('OTP', {
+          email: email,
+          from: 'forget',
+        });
+      } else {
+        Toast.show({
+          text1: resp?.message,
+          type: 'error',
+        });
+      }
+      setLoader(false);
+    } catch (error) {
+      Toast.show({
+        text1: error?.toString(),
+        type: 'error',
+      });
+      console.log('ERRRRR', error);
+      setLoader(false);
+    }
+  };
+
   function validation() {
     let valid = true;
 
     // validate email
-    if (email == "") {
+    if (email == '') {
       valid = false;
       setEmailErrObj({
         error: true,
-        msg: "Please enter email",
+        msg: 'Please enter email',
       });
     } else if (!emailRegex.test(email)) {
       valid = false;
       setEmailErrObj({
         error: true,
-        msg: "Please enter valid email",
+        msg: 'Please enter valid email',
       });
     } else {
       setEmailErrObj({
         error: false,
-        msg: "",
+        msg: '',
       });
     }
 
-    // validate password
+    if (valid) {
+      generateOTP();
+    }
   }
+
   return (
     <KeyboardAvoidingView
-      behavior={IOS ? "padding" : "height"}
+      behavior={IOS ? 'padding' : 'height'}
       style={styles.container}
     >
       <ScrollView
@@ -65,13 +107,13 @@ const ForgetPassword = ({ navigation }) => {
         </View>
         <View style={styles.inputcontainer}>
           <LabeledInput
-            Label={"EMAIL"}
+            Label={'EMAIL'}
             mailicon
-            placeholder={"Enter Email"}
+            placeholder={'Enter Email'}
             value={email}
-            onChangeText={(val) => {
+            onChangeText={val => {
               setEmail(val);
-              setEmailErrObj({ error: false, msg: "" });
+              setEmailErrObj({ error: false, msg: '' });
             }}
             showError={emailErrObj.error}
             errorText={emailErrObj.msg}
@@ -80,15 +122,15 @@ const ForgetPassword = ({ navigation }) => {
           <View style={styles.btnContainer}>
             <Button
               shape="round"
-              title={"Send Email"}
+              title={'Send Email'}
               style={styles.sendemail}
               onPress={validation}
-              // loading={loader}
+              loading={loader}
             />
           </View>
           <TouchableOpacity
-            onPress={() => navigation.navigate("Login")}
-            style={{ alignItems: "center" }}
+            onPress={() => navigation.goBack()}
+            style={{ alignItems: 'center' }}
             activeOpacity={0.7}
           >
             <Text style={styles.forgotPasswordTextStyle}>Login</Text>

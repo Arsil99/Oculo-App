@@ -12,6 +12,9 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		18CE09AE2A431EB200B16FAA /* Europa-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18CE09AB2A431EB200B16FAA /* Europa-Regular.ttf */; };
+		18CE09AF2A431EB200B16FAA /* Europa-Light.woff2.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18CE09AC2A431EB200B16FAA /* Europa-Light.woff2.ttf */; };
+		18CE09B02A431EB200B16FAA /* Europa-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18CE09AD2A431EB200B16FAA /* Europa-Bold.ttf */; };
 		7699B88040F8A987B510C191 /* libPods-oculo-oculoTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-oculo-oculoTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -37,6 +40,9 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = oculo/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = oculo/main.m; sourceTree = "<group>"; };
 		18C412AA2A40271D0000EFCD /* hermes.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = hermes.xcframework; path = "Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework"; sourceTree = "<group>"; };
+		18CE09AB2A431EB200B16FAA /* Europa-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Europa-Regular.ttf"; path = "../android/app/src/main/assets/Fonts/Europa-Regular.ttf"; sourceTree = "<group>"; };
+		18CE09AC2A431EB200B16FAA /* Europa-Light.woff2.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Europa-Light.woff2.ttf"; path = "../android/app/src/main/assets/Fonts/Europa-Light.woff2.ttf"; sourceTree = "<group>"; };
+		18CE09AD2A431EB200B16FAA /* Europa-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Europa-Bold.ttf"; path = "../android/app/src/main/assets/Fonts/Europa-Bold.ttf"; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-oculo-oculoTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-oculo-oculoTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B4392A12AC88292D35C810B /* Pods-oculo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-oculo.debug.xcconfig"; path = "Target Support Files/Pods-oculo/Pods-oculo.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-oculo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-oculo.release.xcconfig"; path = "Target Support Files/Pods-oculo/Pods-oculo.release.xcconfig"; sourceTree = "<group>"; };
@@ -118,6 +124,9 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				18CE09AD2A431EB200B16FAA /* Europa-Bold.ttf */,
+				18CE09AC2A431EB200B16FAA /* Europa-Light.woff2.ttf */,
+				18CE09AB2A431EB200B16FAA /* Europa-Regular.ttf */,
 				13B07FAE1A68108700A75B9A /* oculo */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* oculoTests */,
@@ -244,6 +253,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18CE09AE2A431EB200B16FAA /* Europa-Regular.ttf in Resources */,
+				18CE09AF2A431EB200B16FAA /* Europa-Light.woff2.ttf in Resources */,
+				18CE09B02A431EB200B16FAA /* Europa-Bold.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 			);

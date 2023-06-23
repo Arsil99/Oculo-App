@@ -1,13 +1,34 @@
-import { View, Text, StyleSheet, Image } from "react-native";
-import React, { useRef } from "react";
-import OTPInputView from "@twotalltotems/react-native-otp-input";
-import styles from "./styles";
-import Button from "@components/Button";
-import { Images } from "@config";
-export default function OTP() {
+import { View, Text, Image, TextInput } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import OTPInputView from '@twotalltotems/react-native-otp-input';
+import styles from './styles';
+import Button from '@components/Button';
+import { Images } from '@config';
+import { getApiData } from '@utils/apiHelper';
+import BaseSetting from '@config/setting';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import Authentication from '@redux/reducers/auth/actions';
+import { useDispatch } from 'react-redux';
+import { isEmpty } from 'lodash';
+
+export default function OTP({ navigation, route }) {
+  const email = route?.params?.email || '';
+  const from = route?.params?.from || '';
+  const dispatch = useDispatch();
+
+  const { setUserData, setAccessToken } = Authentication;
+  const [code, setcode] = useState(false);
+  const [loader, setLoader] = useState(false);
+
+  useEffect(() => {
+    if (!isEmpty(code)) {
+      verifyOTP();
+    }
+  }, [code]);
+
   const renderInputField = (index, isSelected) => {
     const inputStyle = {
-      color: "red",
+      color: 'red',
       // Add other styles as needed
     };
 
@@ -19,15 +40,57 @@ export default function OTP() {
       />
     );
   };
+
+  // verify OTP
+  const verifyOTP = async () => {
+    setLoader(true);
+    let endPoints = BaseSetting.endpoints.verifyOtp;
+    const params = {
+      email: email,
+      type: from === 'tfa' ? 'tfa' : 'forgot-password',
+      otp: code,
+    };
+    try {
+      const resp = await getApiData(endPoints, 'POST', params, {}, false);
+      if (resp?.status) {
+        if (from === 'tfa') {
+          dispatch(setUserData(resp?.data?.personal_info));
+          dispatch(setAccessToken(resp?.data?.auth_token));
+          navigation.reset({
+            routes: [{ name: 'Home' }],
+          });
+        } else {
+          navigation.navigate('ResetPassword', {
+            from: 'forget',
+            token: resp?.data?.otp_token,
+          });
+        }
+      } else {
+        Toast.show({
+          text1: resp?.message,
+          type: 'error',
+        });
+      }
+      setLoader(false);
+    } catch (error) {
+      Toast.show({
+        text1: error?.toString(),
+        type: 'error',
+      });
+      console.log('ERRRRR', error);
+      setLoader(false);
+    }
+  };
+
   return (
     <View style={styles.main}>
-      <View style={{ alignItems: "center" }}>
+      <View style={{ alignItems: 'center' }}>
         <Image
           source={Images.logo}
           style={{ marginBottom: 25, marginTop: -5 }}
         />
         <Text style={{ fontSize: 18 }}>Code has sent to</Text>
-        <Text style={{ fontSize: 18 }}>str**99@gmail.com</Text>
+        <Text style={{ fontSize: 18 }}>{email}</Text>
       </View>
       <View style={{ height: 100, marginVertical: 25 }}>
         <OTPInputView
@@ -38,19 +101,19 @@ export default function OTP() {
           autoFocusOnLoad
           codeInputFieldStyle={styles.underlineStyleBase}
           codeInputHighlightStyle={styles.underlineStyleHighLighted}
-          onCodeFilled={(code) => {
-            console.log(`Code is ${code}, you are good to go!`);
+          onCodeFilled={code => {
+            setcode(code);
           }}
-          inputTextStyle={{ color: "red" }}
+          inputTextStyle={{ color: 'red' }}
           renderInputField={renderInputField}
         />
       </View>
       <Button
         shape="round"
-        title={"Verify OTP"}
+        title={'Verify OTP'}
         style={styles.otpBtn}
-        // onPress={validation}
-        // loading={loader}
+        onPress={verifyOTP}
+        loading={loader}
       />
     </View>
   );
