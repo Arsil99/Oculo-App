@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, Switch, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
@@ -7,13 +7,15 @@ import TabSwitch from '@components/TabSwitch';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { BaseColors } from '@config/theme';
 import ProfileHistory from '@components/ProfileHistory';
+import { logout } from '@utils/CommonFunction';
 export default function Profile({ navigation }) {
   const switchOptions = [
     { id: 'detail', name: 'Detail' },
     { id: 'history', name: 'History' },
     { id: 'account', name: 'Account' },
   ];
-
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const [activeTab, setActiveTab] = useState({
     id: 'detail',
     name: 'Detail',
@@ -55,7 +57,7 @@ export default function Profile({ navigation }) {
       id: '2',
       leftIcon: 'mail',
       title: 'Patient Email',
-      righttitle: 'Andyanderson@gmail.com',
+      righttitle: 'Anderson@gmail.com',
     },
     {
       id: '3',
@@ -67,7 +69,7 @@ export default function Profile({ navigation }) {
       id: '4',
       leftIcon: 'mail',
       title: 'Guardian email',
-      righttitle: 'Parceyanderson@gmail.com',
+      righttitle: 'demo@gmail.com',
     },
   ];
 
@@ -115,13 +117,69 @@ export default function Profile({ navigation }) {
       righttitle: <Icon name="right" size={15} />,
     },
   ];
+  const InfoCard = ({ data, mainTitle }) => {
+    return (
+      <View style={styles.settigCon}>
+        <View style={styles.mainTitleStyle}>
+          <Text style={styles.titleText}>{mainTitle}</Text>
+        </View>
+        {data?.map((item, index) => {
+          return (
+            <TouchableOpacity
+              key={item?.id}
+              activeOpacity={0.7}
+              onPress={() =>
+                item?.title === 'Sign Out' ? logout() : console.log(item)
+              }
+              style={[
+                styles.settingItem,
+                index === 0 ? styles.topBorder : styles.otherBorder,
+                index === data.length - 1 ? styles.radiusDesign : null,
+              ]}
+            >
+              <View style={styles.cardContainer}>
+                <View style={styles.innerCard}>
+                  <Icon
+                    name={item.leftIcon}
+                    size={15}
+                    color={BaseColors.black90}
+                  />
+                </View>
+                <View>
+                  <Text style={styles.settingItemText}>{item.title}</Text>
+                </View>
+              </View>
+
+              <View>
+                <Text style={styles.righttitletext}>
+                  {item?.switch ? (
+                    <Switch
+                      trackColor={{ false: '#767577', true: '#81b0ff' }}
+                      thumbColor={
+                        isEnabled ? BaseColors.primary : BaseColors.offWhite
+                      }
+                      ios_backgroundColor="#3e3e3e"
+                      onValueChange={toggleSwitch}
+                      value={isEnabled}
+                    />
+                  ) : (
+                    item.righttitle
+                  )}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    );
+  };
   return (
     <View style={styles.main}>
       <HeaderBar HeaderText={'Profile'} HeaderCenter />
 
       {/* SWITCH TAB */}
 
-      <View style={{ backgroundColor: BaseColors.white }}>
+      <View style={styles.tabBox}>
         <TabSwitch
           threePack
           tabs={switchOptions}
@@ -132,30 +190,16 @@ export default function Profile({ navigation }) {
         />
       </View>
       {activeTab?.id === 'detail' ? (
-        <View style={{ width: '100%', alignItems: 'center' }}>
-          <ProfileDetailcard
-            maintitle={'Patient Information'}
-            data={patientdata}
-          />
-          <ProfileDetailcard
-            maintitle={'Contact Information'}
-            data={contactdata}
-          />
+        <View style={styles.cardOuter}>
+          <InfoCard data={patientdata} mainTitle={'Patient Information'} />
+          <InfoCard data={contactdata} mainTitle={'Contact Information'} />
         </View>
       ) : activeTab?.id === 'history' ? (
         <ProfileHistory />
       ) : (
-        <View style={{ alignItems: 'center', width: '100%' }}>
-          <ProfileDetailcard
-            maintitle={'Settings'}
-            data={settings}
-            onPress={item => console.log(item)}
-          />
-          <ProfileDetailcard
-            maintitle={'Legal & Regulatory'}
-            data={legal}
-            onPress={item => console.log(item)}
-          />
+        <View style={styles.cardOuter}>
+          <InfoCard data={settings} mainTitle={'Settings'} />
+          <InfoCard data={legal} mainTitle={'Legal & Regulatory'} />
         </View>
       )}
     </View>
