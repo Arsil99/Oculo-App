@@ -18,6 +18,19 @@ export default StyleSheet.create({
     borderTopWidth: 0.7,
     borderColor: BaseColors.borderColor,
   },
+  genderBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 10,
+    borderColor: BaseColors.black20,
+    borderWidth: 1,
+    marginTop: 10,
+  },
+  genderIcon: {
+    width: '15%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   settingItem: {
     backgroundColor: 'white',
     height: 50,
@@ -44,6 +57,14 @@ export default StyleSheet.create({
     alignItems: 'flex-start',
     marginBottom: 15,
   },
+  customGender: {
+    backgroundColor: BaseColors.white,
+    height: 50,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    width: '85%',
+  },
   cardOuter: { width: fullWidth, alignItems: 'center', paddingHorizontal: 20 },
   titleText: {
     fontSize: 20,
@@ -60,6 +81,7 @@ export default StyleSheet.create({
     fontFamily: FontFamily.regular,
     color: BaseColors.black90,
   },
+  alignSetup: { width: '100%', alignItems: 'center' },
   righttitletext: {
     fontWeight: '400',
     lineHeight: 24,
@@ -67,5 +89,48 @@ export default StyleSheet.create({
     fontFamily: FontFamily.regular,
     color: BaseColors.textColor,
   },
+  dateTitle: { color: BaseColors.black, marginBottom: 10 },
+  dateBox: {
+    backgroundColor: BaseColors.white,
+    borderColor: BaseColors.black20,
+    borderWidth: 1,
+    height: 50,
+    borderRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+  },
   leftImagem: { height: 20, width: 22 },
+  editContainer: {
+    backgroundColor: BaseColors.white,
+    width: '100%',
+    padding: 10,
+    borderRadius: 10,
+  },
+  // screen: {
+  //   flex: 1,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   backgroundColor: '#F2F5FB',
+  // },
+  headertext: {
+    fontSize: 20,
+    color: BaseColors.black,
+  },
+  text: {
+    fontSize: 16,
+    color: BaseColors.black,
+  },
+  picker: {
+    marginVertical: 30,
+    borderRadius: 10,
+    color: BaseColors.black,
+    width: '100%',
+    borderColor: BaseColors.black20,
+    borderWidth: 1,
+  },
+  genderTitle: {
+    marginTop: 8,
+    color: BaseColors.black,
+  },
 });

@@ -48,11 +48,7 @@ export default function Home({ navigation }) {
       {activeTab?.id === 'summary' ? (
         <View style={styles.summaryArea}>
           {/* MAP IN SUMMARY */}
-          <TouchableOpacity
-            onPress={() => {
-              logout();
-            }}
-          >
+          <TouchableOpacity>
             <Image
               source={Images.demoSummary}
               style={{ height: 320, width: 320 }}

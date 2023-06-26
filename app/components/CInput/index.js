@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import _ from "lodash";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import _ from 'lodash';
 import {
   Animated,
   View,
@@ -9,16 +9,16 @@ import {
   Text,
   Platform,
   TouchableOpacity,
-} from "react-native";
-import { BaseColors } from "@config/theme";
-import styles from "./styles";
-import Icon from "react-native-vector-icons/FontAwesome";
-import Icon1 from "react-native-vector-icons/Feather";
-import Icon2 from "react-native-vector-icons/MaterialCommunityIcons";
-import Search from "react-native-vector-icons/Feather";
-import BaseSetting from "@config/setting";
+} from 'react-native';
+import { BaseColors } from '@config/theme';
+import styles from './styles';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon1 from 'react-native-vector-icons/Feather';
+import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
+import Search from 'react-native-vector-icons/Feather';
+import BaseSetting from '@config/setting';
 
-const IOS = Platform.OS === "ios";
+const IOS = Platform.OS === 'ios';
 
 class CInput extends Component {
   constructor(props) {
@@ -27,15 +27,15 @@ class CInput extends Component {
       focused: false,
       TopValue: new Animated.Value(IOS ? 20 : 18),
       HrOpacity: new Animated.Value(0),
-      phone: "phone",
-      mail: "mail",
-      key: "key",
-      eye: "eye-slash",
-      user: "user",
-      envelope: "envelope",
-      search: "search",
-      lock: "lock",
-      onOff: "off",
+      phone: 'phone',
+      mail: 'mail',
+      key: 'key',
+      eye: 'eye-slash',
+      user: 'user',
+      envelope: 'envelope',
+      search: 'search',
+      lock: 'lock',
+      onOff: 'off',
       secureTextEntry: true,
     };
   }
@@ -94,7 +94,7 @@ class CInput extends Component {
     }
   }
 
-  handlePicker = (val) => {
+  handlePicker = val => {
     const { countryValue, editable } = this.props;
     if (countryValue && editable) {
       countryValue(val);
@@ -117,6 +117,8 @@ class CInput extends Component {
       inputContainerStyle,
       prBorder,
       editable,
+      usericon,
+      phoneicon,
       mailicon,
       keyicon,
       eyePassword,
@@ -130,7 +132,7 @@ class CInput extends Component {
       blackPlaceholder,
       errorText,
       darkCode = false,
-      autoCapitalize = "none",
+      autoCapitalize = 'none',
       limitedText = false,
     } = this.props;
     const FORTAB = false;
@@ -152,12 +154,12 @@ class CInput extends Component {
             changeViewWidthSty,
           ]}
         >
-          {headerTitle !== "" ? (
+          {headerTitle !== '' ? (
             <Animated.View
               style={{
                 height: 1.5,
                 // backgroundColor: BaseColors.primary,
-                position: "absolute",
+                position: 'absolute',
                 top: 0,
                 paddingHorizontal: headerTitle.length * 4 + 2,
                 left: 5,
@@ -167,7 +169,7 @@ class CInput extends Component {
             />
           ) : null}
 
-          {headerTitle !== "" ? (
+          {headerTitle !== '' ? (
             <Animated.Text
               allowFontScaling={false}
               numberOfLines={1}
@@ -177,12 +179,12 @@ class CInput extends Component {
                 {
                   paddingHorizontal: 5,
                   marginTop: IOS ? 0 : 5,
-                  position: "absolute",
+                  position: 'absolute',
                   top: value ? (IOS ? 2 : 0) : TopValue,
                   left: 5,
                   fontSize: 12,
                   opacity: focused || value ? 1 : 1,
-                  backgroundColor: "#0000",
+                  backgroundColor: '#0000',
                   zIndex: 5,
                   color: blackPlaceholder
                     ? BaseColors.greyColor
@@ -194,7 +196,7 @@ class CInput extends Component {
               {isRequired ? (
                 <Text
                   allowFontScaling={false}
-                  style={{ color: "red", fontSize: 25 }}
+                  style={{ color: 'red', fontSize: 25 }}
                 >
                   *
                 </Text>
@@ -205,10 +207,10 @@ class CInput extends Component {
             style={[
               prBorder ? styles.prBorderSetup : styles.mainViewSty,
               {
-                borderColor: focused ? "#000" : BaseColors.borderColor,
+                borderColor: focused ? '#000' : BaseColors.borderColor,
                 // height: textArea ? teaxArea : normalText,
-                justifyContent: textArea ? "flex-start" : "center",
-                backgroundColor: !editable && !textArea ? "#e5e5e5" : "",
+                justifyContent: textArea ? 'flex-start' : 'center',
+                backgroundColor: !editable && !textArea ? '#e5e5e5' : '',
               },
               inputContainerStyle,
             ]}
@@ -255,21 +257,53 @@ class CInput extends Component {
             <View style={{ flex: 1 }}>
               <View
                 style={{
-                  width: "85%",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignItems: "center",
+                  width: '85%',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   marginHorizontal: 15,
                 }}
               >
+                {phoneicon ? (
+                  <TouchableOpacity
+                    style={{
+                      width: 50,
+                      textAlign: 'center',
+                      marginLeft: 5,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Icon1
+                      name={this.state.phone}
+                      style={{ fontSize: 25, color: BaseColors.primary }}
+                    />
+                  </TouchableOpacity>
+                ) : null}
+                {usericon ? (
+                  <TouchableOpacity
+                    style={{
+                      width: 50,
+                      textAlign: 'center',
+                      marginLeft: 5,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Icon1
+                      name={this.state.user}
+                      style={{ fontSize: 25, color: BaseColors.primary }}
+                    />
+                  </TouchableOpacity>
+                ) : null}
                 {mailicon ? (
                   <TouchableOpacity
                     style={{
                       width: 50,
-                      textAlign: "center",
+                      textAlign: 'center',
                       marginLeft: 5,
-                      justifyContent: "center",
-                      alignItems: "center",
+                      justifyContent: 'center',
+                      alignItems: 'center',
                     }}
                   >
                     <Icon1
@@ -282,10 +316,10 @@ class CInput extends Component {
                   <TouchableOpacity
                     style={{
                       width: 50,
-                      textAlign: "center",
+                      textAlign: 'center',
 
-                      justifyContent: "center",
-                      alignItems: "center",
+                      justifyContent: 'center',
+                      alignItems: 'center',
                     }}
                   >
                     <Icon2
@@ -300,7 +334,7 @@ class CInput extends Component {
                   secureTextEntry={
                     eyePassword ? this.state.secureTextEntry : false
                   }
-                  ref={(o) => {
+                  ref={o => {
                     this.input = o;
                   }}
                   placeholderTextColor={
@@ -315,7 +349,7 @@ class CInput extends Component {
                   selectionColor={BaseColors.selection}
                   style={[
                     styles.commonInputTextSty,
-                    textArea ? { textAlignVertical: "top" } : null,
+                    textArea ? { textAlignVertical: 'top' } : null,
                     {
                       paddingLeft:
                         _.isObject(phone) && !_.isEmpty(phone)
@@ -324,7 +358,7 @@ class CInput extends Component {
                           ? 20
                           : 10,
                     },
-                    { width: eyePassword || isSearch ? "86%" : "100%" },
+                    { width: eyePassword || isSearch ? '86%' : '100%' },
                     { fontSize: 15, maxHeight: BaseSetting.nHeight * 0.2 },
 
                     inputStyle,
@@ -337,7 +371,7 @@ class CInput extends Component {
                   blurOnSubmit={true}
                   multiline={textArea}
                   numberOfLines={textArea ? 5 : 1}
-                  returnKeyType={"next"}
+                  returnKeyType={'next'}
                   placeholder={placeholder}
                   underlineColorAndroid="#0000"
                   onFocus={() => this.onFocus()}
@@ -348,16 +382,16 @@ class CInput extends Component {
                 {eyePassword ? (
                   <TouchableOpacity
                     style={{
-                      textAlign: "center",
+                      textAlign: 'center',
                       marginLeft: 10,
-                      justifyContent: "center",
-                      alignItems: "center",
+                      justifyContent: 'center',
+                      alignItems: 'center',
                     }}
                     onPress={() =>
                       this.setState({
-                        eye: this.state.eye === "eye" ? "eye-slash" : "eye",
-                        onOff: this.state.eye === "off" ? "on" : "off",
-                        lock: this.state.lock === "lock" ? "unlock" : "lock",
+                        eye: this.state.eye === 'eye' ? 'eye-slash' : 'eye',
+                        onOff: this.state.eye === 'off' ? 'on' : 'off',
+                        lock: this.state.lock === 'lock' ? 'unlock' : 'lock',
                         secureTextEntry: !this.state.secureTextEntry,
                       })
                     }
@@ -371,12 +405,12 @@ class CInput extends Component {
                 {userIcon && (
                   <TouchableOpacity
                     style={{
-                      textAlign: "center",
+                      textAlign: 'center',
                       // paddingTop: IOS ? 15 : 20,
                       marginLeft: -30,
                       paddingRight: 15,
-                      justifyContent: "center",
-                      alignItems: "center",
+                      justifyContent: 'center',
+                      alignItems: 'center',
                     }}
                   >
                     <Icon
@@ -388,12 +422,12 @@ class CInput extends Component {
                 {envelope && (
                   <TouchableOpacity
                     style={{
-                      textAlign: "center",
+                      textAlign: 'center',
                       // paddingTop: IOS ? 15 : 20,
                       marginLeft: -32,
                       paddingRight: 15,
-                      justifyContent: "center",
-                      alignItems: "center",
+                      justifyContent: 'center',
+                      alignItems: 'center',
                     }}
                   >
                     <Icon
@@ -405,12 +439,12 @@ class CInput extends Component {
                 {lock && (
                   <TouchableOpacity
                     style={{
-                      textAlign: "center",
+                      textAlign: 'center',
                       // paddingTop: IOS ? 15 : 20,
                       marginLeft: -30,
                       paddingRight: 15,
-                      justifyContent: "center",
-                      alignItems: "center",
+                      justifyContent: 'center',
+                      alignItems: 'center',
                     }}
                   >
                     <Icon
@@ -422,10 +456,10 @@ class CInput extends Component {
                 {isSearch && (
                   <TouchableOpacity
                     style={{
-                      textAlign: "center",
+                      textAlign: 'center',
                       paddingTop: 15,
-                      justifyContent: "center",
-                      alignItems: "center",
+                      justifyContent: 'center',
+                      alignItems: 'center',
                       marginBottom: IOS ? 4 : 0,
                     }}
                   >
@@ -435,7 +469,7 @@ class CInput extends Component {
                         borderRadius: 30,
                       }}
                     >
-                      <Search name={"search"} style={styles.search} />
+                      <Search name={'search'} style={styles.search} />
                     </View>
                   </TouchableOpacity>
                 )}
@@ -482,17 +516,17 @@ CInput.defaultProps = {
   onFocus: null,
   onBlur: null,
   datePicker: false,
-  format: "DD-MM-YYYY",
+  format: 'DD-MM-YYYY',
   onSubmitEditing: null,
   onChangeText: null,
-  placeholder: "",
+  placeholder: '',
   textArea: false,
   black: false,
   disable: false,
-  mode: "date",
-  headerTitle: "",
+  mode: 'date',
+  headerTitle: '',
   datePickerMainViewStyle: null,
-  fieldIconName: "",
+  fieldIconName: '',
   inputContainerStyle: {},
   editable: true,
   phone: {},
