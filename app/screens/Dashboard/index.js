@@ -38,7 +38,7 @@ const Dashboard = () => {
   };
   return (
     <ScrollView
-      contentContainerStyle={{ flexGrow: 1 }}
+      contentContainerStyle={{ flexGrow: 1, backgroundColor: BaseColors.white }}
       showsVerticalScrollIndicator={false}
     >
       <HeaderBar HeaderText={'Event Aug 3'} HeaderCenter backPress />

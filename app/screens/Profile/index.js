@@ -13,6 +13,7 @@ import TabSwitch from '@components/TabSwitch';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { BaseColors } from '@config/theme';
 import ProfileHistory from '@components/ProfileHistory';
+import ProfilehistoryButton from '@components/ProfilehistoryButton';
 import { logout } from '@utils/CommonFunction';
 import LabeledInput from '@components/LabeledInput';
 import { isEmpty, isNull } from 'lodash';
@@ -274,7 +275,11 @@ export default function Profile({ navigation }) {
               key={item?.id}
               activeOpacity={0.7}
               onPress={() =>
-                item?.title === 'Sign Out' ? logout() : console.log(item)
+                item?.title === 'Sign Out'
+                  ? logout()
+                  : item?.title === 'Change Password'
+                  ? navigation.navigate('ResetPassword')
+                  : console.log(item)
               }
               style={[
                 styles.settingItem,
@@ -318,6 +323,7 @@ export default function Profile({ navigation }) {
       </View>
     );
   };
+
   return (
     <View style={styles.main}>
       <HeaderBar
@@ -557,7 +563,9 @@ export default function Profile({ navigation }) {
           </View>
         </ScrollView>
       ) : activeTab?.id === 'history' ? (
-        editHistory ? null : (
+        editHistory ? (
+          <ProfilehistoryButton />
+        ) : (
           <ProfileHistory />
         )
       ) : (
