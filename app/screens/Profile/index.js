@@ -2,7 +2,6 @@ import { View, Text, Switch, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
-import ProfileDetailcard from '@components/ProfileDetailcard';
 import TabSwitch from '@components/TabSwitch';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { BaseColors } from '@config/theme';

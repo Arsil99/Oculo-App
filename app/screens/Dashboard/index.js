@@ -10,38 +10,28 @@ import HeaderBar from '@components/HeaderBar';
 
 const Dashboard = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const data = [1, 1, 1, 1, 1];
+  const data = [
+    { color: BaseColors.secondary, name: 'None' },
+    { color: BaseColors.mild, name: 'Mild' },
+    { color: BaseColors.moderate, name: 'Moderate' },
+    { color: BaseColors.Intense, name: 'Severe' },
+    { color: BaseColors.Severe, name: 'Intense' },
+  ];
 
   const planData = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
   const renderItem = ({ item }) => {
     return (
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-around',
-          marginHorizontal: 20,
-          marginTop: 10,
-        }}
-      >
-        <View
-          style={{
-            width: 80,
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}
-        >
+      <View style={styles.flatlistcontainer}>
+        <View style={styles.flatlistmaincontainer}>
           <View
             style={[
               {
-                backgroundColor: BaseColors.secondary,
-                width: 10,
-                height: 10,
-                borderRadius: 5,
+                backgroundColor: item.color,
               },
+              styles.colorcontainer,
             ]}
-          ></View>
-          <Text style={styles.lighttext}>None</Text>
+          />
+          <Text style={styles.lighttext}>{item.name}</Text>
         </View>
       </View>
     );
@@ -56,15 +46,7 @@ const Dashboard = () => {
         <Image source={Images.emoji5} resizeMode="contain" />
         <Text style={styles.headtext}>Headache</Text>
       </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-around',
-          marginHorizontal: 20,
-          marginTop: 30,
-        }}
-      >
+      <View style={styles.subheaderContainer}>
         <View>
           <Text style={styles.text}>Baseline</Text>
           <Text style={[styles.number, { color: BaseColors.secondary }]}>
@@ -73,39 +55,32 @@ const Dashboard = () => {
         </View>
         <View>
           <Text style={styles.text}>Highest</Text>
-          <Text style={[styles.number, { color: '#CE3932' }]}>5</Text>
+          <Text style={[styles.number, { color: BaseColors.Severe }]}>5</Text>
         </View>
         <View>
           <Text style={styles.text}>Recent</Text>
-          <Text style={[styles.number, { color: '#EE6A49' }]}>4</Text>
+          <Text style={[styles.number, { color: BaseColors.Intense }]}>4</Text>
         </View>
       </View>
 
       <View style={styles.imageView}>
-        <Image source={Images.graph} resizeMode="contain" />
+        <Image
+          source={Images.graph}
+          resizeMode="contain"
+          style={{ width: '90%' }}
+        />
       </View>
       <FlatList
         renderItem={renderItem}
         data={data}
         keyExtractor={item => item.index}
         contentContainerStyle={styles.listContainer}
-        columnWrapperStyle={{
-          width: '100%',
-        }}
+        columnWrapperStyle={styles.columnwrapperstyle}
         numColumns={3}
         showsVerticalScrollIndicator={false}
       />
 
-      <View
-        style={{
-          flex: 2,
-          flexDirection: 'row',
-          width: '80%',
-          alignItems: 'flex-start',
-          justifyContent: 'space-between',
-          alignSelf: 'center',
-        }}
-      >
+      <View style={styles.dotwithbordercontainer}>
         {planData.map((item, index) => {
           return (
             <TouchableOpacity
@@ -135,7 +110,7 @@ const Dashboard = () => {
                         ? BaseColors.primary
                         : BaseColors.black20,
                   },
-                  styles.month,
+                  styles.dot,
                 ]}
               >
                 <View
