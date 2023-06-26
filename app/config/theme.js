@@ -4,7 +4,7 @@ export const BaseColors = {
   textLighBlue: '#3CC4DB80',
   lightPink: '#FFF9FC',
   lightWhite: '#F3F3F3',
-  textColor: '#3B3B3B',
+  textColor: '#3B3C3F',
   msgColor: '#676767',
   lightYellow: '#FFFCF2',
   orange: '#EE6A49',

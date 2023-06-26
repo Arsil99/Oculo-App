@@ -1,13 +1,13 @@
-import { Images } from "@config";
-import { CustomIcon } from "@config/LoadIcons";
-import React from "react";
-import { View, Text, Image } from "react-native";
-import styles from "./styles";
+import { Images } from '@config';
+import { CustomIcon } from '@config/LoadIcons';
+import React from 'react';
+import { View, Text, Image } from 'react-native';
+import styles from './styles';
 
 const Details = ({ iconName, text, number, iconColor, numberColor }) => {
   return (
     <View style={styles.container}>
-      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <View style={{ height: 50, width: 100 }}>
           <Text style={styles.text}>{text}</Text>
         </View>
@@ -16,8 +16,8 @@ const Details = ({ iconName, text, number, iconColor, numberColor }) => {
       </View>
       <View
         style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
+          flexDirection: 'row',
+          justifyContent: 'space-between',
         }}
       >
         <View>
@@ -29,9 +29,9 @@ const Details = ({ iconName, text, number, iconColor, numberColor }) => {
         </View>
         <View
           style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
             paddingRight: 5,
           }}
         >

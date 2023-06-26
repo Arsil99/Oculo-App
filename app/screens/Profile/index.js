@@ -6,6 +6,7 @@ import ProfileDetailcard from '@components/ProfileDetailcard';
 import TabSwitch from '@components/TabSwitch';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { BaseColors } from '@config/theme';
+import ProfileHistory from '@components/ProfileHistory';
 export default function Profile({ navigation }) {
   const switchOptions = [
     { id: 'detail', name: 'Detail' },
@@ -141,7 +142,9 @@ export default function Profile({ navigation }) {
             data={contactdata}
           />
         </View>
-      ) : activeTab?.id === 'history' ? null : (
+      ) : activeTab?.id === 'history' ? (
+        <ProfileHistory />
+      ) : (
         <View style={{ alignItems: 'center', width: '100%' }}>
           <ProfileDetailcard
             maintitle={'Settings'}

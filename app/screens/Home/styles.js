@@ -1,19 +1,19 @@
-import { StyleSheet } from "react-native";
-import { BaseColors, FontFamily } from "@config/theme";
-const IOS = Platform.OS === "ios";
+import { StyleSheet } from 'react-native';
+import { BaseColors, FontFamily } from '@config/theme';
+const IOS = Platform.OS === 'ios';
 
 export default StyleSheet.create({
   main: {
     flex: 1,
     backgroundColor: BaseColors.white,
-    alignItems: "center",
+    alignItems: 'center',
   },
   topBar: {
     marginBottom: 10,
-    width: "100%",
-    alignItems: "center",
+    width: '100%',
+    alignItems: 'center',
     padding: 10,
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: IOS ? 55 : 30,
   },
   title: {
@@ -28,30 +28,30 @@ export default StyleSheet.create({
   },
   summaryArea: {
     flex: 1,
-    width: "100%",
+    width: '100%',
     flexGrow: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   summaryText: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   descText: {
-    textAlign: "center",
+    textAlign: 'center',
     marginVertical: 5,
     fontSize: 17,
   },
   requestBtn: {
     marginTop: 15,
-    width: "80%",
+    width: '80%',
   },
   detailsArea: {
     flex: 1,
-    width: "100%",
+    width: '100%',
     flexGrow: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: BaseColors.lightBg,
   },
 });

@@ -15,7 +15,7 @@ const SplashScreen = ({ navigation }) => {
       duration: 1500,
     }).start();
     setTimeout(() => {
-      if (!isEmpty(userData)) {
+      if (isEmpty(userData)) {
         navigation.replace('Home');
       } else {
         navigation.replace('Login');

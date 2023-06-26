@@ -67,6 +67,7 @@ export default function Home({ navigation }) {
           </View>
 
           <Button
+            onPress={() => navigation.navigate('Dashboard')}
             shape="round"
             title={'Request Another Baseline'}
             style={styles.requestBtn}

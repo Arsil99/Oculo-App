@@ -74,7 +74,7 @@ export default function ProfileDetailcard({
               </View>
 
               <View>
-                <Text style={styles.settingItemText}>
+                <Text style={styles.righttitletext}>
                   {item?.switch ? (
                     <Switch
                       trackColor={{ false: '#767577', true: '#81b0ff' }}

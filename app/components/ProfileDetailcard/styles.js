@@ -1,19 +1,19 @@
-import { StyleSheet } from "react-native";
-import { BaseColors, FontFamily } from "@config/theme";
-import BaseSetting from "@config/setting";
+import { StyleSheet } from 'react-native';
+import { BaseColors, FontFamily } from '@config/theme';
+import BaseSetting from '@config/setting';
 
 export default StyleSheet.create({
   container: {
     marginTop: 20,
     backgroundColor: BaseColors.blueLight,
     paddingBottom: 20,
-    width: "100%",
+    width: '100%',
     marginHorizontal: 20,
   },
   imgcontainer: {
     height: BaseSetting.nHeight / 4,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   profileimage: {
     width: 100,
@@ -31,32 +31,39 @@ export default StyleSheet.create({
     marginHorizontal: 20,
   },
   settingItem: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     height: 50,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingHorizontal: 20,
   },
   titleText: {
     fontSize: 20,
-    fontWeight: "700",
-    textAlign: "center",
+    fontWeight: '700',
+    textAlign: 'center',
     lineHeight: 30,
     fontFamily: FontFamily.bold,
     color: BaseColors.black,
   },
   settingItemText: {
-    fontWeight: "400",
+    fontWeight: '400',
     lineHeight: 24,
-    textAlign: "center",
+    textAlign: 'center',
     fontFamily: FontFamily.regular,
     color: BaseColors.black90,
   },
+  righttitletext: {
+    fontWeight: '400',
+    lineHeight: 24,
+    textAlign: 'center',
+    fontFamily: FontFamily.regular,
+    color: BaseColors.textColor,
+  },
   leftImagem: { height: 20, width: 22 },
   deletecontainer: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginVertical: 10,
     paddingVertical: 10,
   },
@@ -66,7 +73,7 @@ export default StyleSheet.create({
     fontFamily: FontFamily.medium,
   },
   modalText: {
-    textAlign: "center",
+    textAlign: 'center',
     fontFamily: FontFamily.semiBold,
     color: BaseColors.secondary,
     fontSize: 18,
@@ -74,11 +81,11 @@ export default StyleSheet.create({
     marginBottom: 40,
   },
   btnCon: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   btnStyle: {
-    flexBasis: "47%",
+    flexBasis: '47%',
   },
 });

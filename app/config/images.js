@@ -11,4 +11,6 @@ export const Images = {
   graph1: require("../assets/Images/graph1.png"),
   emoji1: require("../assets/Images/emoji1.png"),
   down: require("../assets/Images/down.png"),
+  emoji5: require("../assets/Images/emoji5.png"),
+  graph: require("../assets/Images/graph.png"),
 };
