@@ -93,6 +93,7 @@ export default function Profile({ navigation }) {
       title: 'Change Password',
       righttitle: <Icon name="right" size={15} />,
       switch: false,
+      navto: 'ResetPassword',
     },
     {
       id: '2',
@@ -100,6 +101,7 @@ export default function Profile({ navigation }) {
       title: 'Notifications settings',
       righttitle: <Icon name="right" size={15} />,
       switch: false,
+      navto: 'NotificationSettings',
     },
     {
       id: '3',
@@ -122,12 +124,14 @@ export default function Profile({ navigation }) {
       leftIcon: 'key',
       title: 'Terms of Services',
       righttitle: <Icon name="right" size={15} />,
+      navto: 'TermsofServices',
     },
     {
       id: '2',
-      leftIcon: 'Privacy Policy',
-      title: 'Notifications settings',
+      leftIcon: 'unknowfile1',
+      title: 'Privacy Policy',
       righttitle: <Icon name="right" size={15} />,
+      navto: 'PrivacyPolicy',
     },
   ];
   const [editProfile, setEditProfile] = useState(false);
@@ -277,9 +281,7 @@ export default function Profile({ navigation }) {
               onPress={() =>
                 item?.title === 'Sign Out'
                   ? logout()
-                  : item?.title === 'Change Password'
-                  ? navigation.navigate('ResetPassword')
-                  : console.log(item)
+                  : navigation.navigate(item.navto)
               }
               style={[
                 styles.settingItem,
