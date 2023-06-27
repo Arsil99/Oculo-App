@@ -29,6 +29,9 @@ import ForgetPassword from '@screens/ForgetPassword';
 import OTP from '@screens/OTP';
 import EventDetails from '@screens/EventDetails';
 import Dashboard from '@screens/Dashboard';
+import PrivacyPolicy from '@screens/PrivacyPolicy';
+import TermsofServices from '@screens/TermsofServices';
+import NotificationSettings from '@screens/NotificationSettings';
 
 const intitialNotificationState = {
   notification: null,
@@ -164,6 +167,7 @@ function App() {
           component={EventsStackNavigator}
           options={{ headerShown: false, gestureEnabled: false }}
         />
+
         <Tab.Screen
           name="NotificationStackNavigator"
           component={NotificationStackNavigator}
@@ -218,6 +222,21 @@ function App() {
           <Stack.Screen
             name="ForgetPassword"
             component={ForgetPassword}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PrivacyPolicy"
+            component={PrivacyPolicy}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TermsofServices"
+            component={TermsofServices}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="NotificationSettings"
+            component={NotificationSettings}
             options={{ headerShown: false }}
           />
           <Stack.Screen
