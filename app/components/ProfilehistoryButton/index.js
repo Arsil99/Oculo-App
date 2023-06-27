@@ -1,4 +1,3 @@
-import Button from '@components/Button';
 import { BaseColors } from '@config/theme';
 import React from 'react';
 import { useState } from 'react';
@@ -7,31 +6,57 @@ import { ScrollView } from 'react-native-gesture-handler';
 import styles from './styles';
 
 export default function ProfilehistoryButton() {
-  const data = [
+  const [items, setItems] = useState([
     {
+      id: 1,
       title: 'Do you have a Headache/Migraine disorder?	',
       subtitle: 'Yes',
+      selectedButton: 1,
     },
     {
+      id: 2,
       title: 'Do you have any learning disabilities such as ADHD/ADD, etc.?	',
       subtitle: 'Yes',
+      selectedButton: 1,
     },
     {
+      id: 3,
       title:
         'Have you previously been diagnosed with a concussion/head injury?	',
       subtitle: 'No',
+      selectedButton: 1,
     },
     {
+      id: 4,
       title: 'If yes, how many concussions have been diagnosed?',
       subtitle: '02',
+      selectedButton: 1,
     },
     {
+      id: 5,
       title: 'If yes, what was the length of time you went through treatment?',
       subtitle: '6 weeks',
+      selectedButton: 1,
     },
-    { title: 'If yes, how long did recovery take?', subtitle: '32 weeks' },
-  ];
+    {
+      id: 6,
+      title: 'If yes, how long did recovery take?',
+      subtitle: '32 weeks',
+      selectedButton: 1,
+    },
+  ]);
 
+  const handleButtonPress = (itemId, buttonIndex) => {
+    setItems(prevItems => {
+      const updatedItems = prevItems.map(item => {
+        if (item.id === itemId) {
+          return { ...item, selectedButton: buttonIndex };
+        }
+        return item;
+      });
+      return updatedItems;
+    });
+  };
   return (
     <View style={styles.container}>
       <View style={styles.maincontainer}>
@@ -42,19 +67,68 @@ export default function ProfilehistoryButton() {
           style={styles.scrollcontainer}
           showsVerticalScrollIndicator={false}
         >
-          {data?.map((item, index) => {
+          {items?.map((item, index) => {
             return (
               <View>
                 <Text style={[styles.questionText]}>{item.title}</Text>
                 <View style={styles.buttoncontainer}>
                   <TouchableOpacity
-                    style={styles.yesbutton}
+                    onPress={() => handleButtonPress(item.id, 1)}
+                    style={[
+                      {
+                        backgroundColor:
+                          item.selectedButton === 1
+                            ? BaseColors.secondary
+                            : null,
+                      },
+                      styles.yesbutton,
+                    ]}
                     activeOpacity={0.7}
                   >
-                    <Text style={styles.yesText}>Yes</Text>
+                    <Text
+                      style={
+                        ([styles.yesText],
+                        {
+                          color:
+                            item.selectedButton === 1
+                              ? BaseColors.white
+                              : BaseColors.textColor,
+                        })
+                      }
+                    >
+                      Yes
+                    </Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.nobutton} activeOpacity={0.7}>
-                    <Text style={styles.noText}>No</Text>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={() => handleButtonPress(item.id, 2)}
+                    style={[
+                      {
+                        backgroundColor:
+                          item.selectedButton === 2
+                            ? BaseColors.secondary
+                            : null,
+                        color:
+                          item.selectedButton === 2
+                            ? BaseColors.white
+                            : BaseColors.textColor,
+                      },
+                      styles.nobutton,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.noText,
+                        {
+                          color:
+                            item.selectedButton === 2
+                              ? BaseColors.white
+                              : BaseColors.textColor,
+                        },
+                      ]}
+                    >
+                      No
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>

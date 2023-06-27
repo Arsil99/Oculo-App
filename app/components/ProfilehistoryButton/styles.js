@@ -73,7 +73,7 @@ export default StyleSheet.create({
   },
   yesbutton: {
     paddingHorizontal: 30,
-    backgroundColor: BaseColors.secondary,
+
     height: 34,
     borderRadius: 18,
     alignItems: 'center',
