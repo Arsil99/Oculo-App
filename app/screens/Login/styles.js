@@ -1,7 +1,7 @@
-import { Dimensions, Platform, StyleSheet } from "react-native";
-import { BaseColors, FontFamily } from "@config/theme";
+import { Dimensions, Platform, StyleSheet } from 'react-native';
+import { BaseColors, FontFamily } from '@config/theme';
 
-const IOS = Platform.OS === "ios";
+const IOS = Platform.OS === 'ios';
 export default StyleSheet.create({
   container: {
     flex: 1,
@@ -10,22 +10,23 @@ export default StyleSheet.create({
   },
   contentView: {
     flex: 0.35,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   inputcontainer: {
     flex: 0.4,
-    justifyContent: "flex-start",
+    justifyContent: 'flex-start',
   },
   forgotPasswordTextStyle: {
     color: BaseColors.primary,
   },
   signinbutton: {
-    width: IOS ? "80%" : "100%",
+    width: IOS ? '80%' : '100%',
+    elevation: 2,
   },
   btnContainer: {
-    justifyContent: "space-between",
-    flexDirection: "row",
+    justifyContent: 'space-between',
+    flexDirection: 'row',
     // backgroundColor: "pink",
     marginTop: 40,
   },

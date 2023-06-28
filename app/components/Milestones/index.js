@@ -1,87 +1,87 @@
-import React from "react";
-import { View, FlatList } from "react-native";
-import { BaseColors } from "@config/theme";
-import styles from "./styles";
-import _ from "lodash";
-import { Images } from "@config";
-import Details from "@components/Details";
+import React from 'react';
+import { View, FlatList } from 'react-native';
+import { BaseColors } from '@config/theme';
+import styles from './styles';
+import _ from 'lodash';
+import { Images } from '@config';
+import Details from '@components/Details';
 
 const Milestones = ({ navigation, route }) => {
   const data = [
     {
-      id: "1",
+      id: '1',
       image: Images.content,
-      text: "Headache",
-      number: "4",
+      text: 'Headache',
+      number: '4',
       color: BaseColors.checkcircle,
     },
     {
-      id: "2",
+      id: '2',
       image: Images.contentpending,
-      text: "Sensitivity to Noise",
-      number: "6",
+      text: 'Sensitivity to Noise',
+      number: '6',
       color: BaseColors.primary,
       imagecolor: BaseColors.primary,
     },
     {
-      id: "3",
+      id: '3',
       image: Images.content,
-      text: "Ongoing",
-      number: "2",
+      text: 'Ongoing',
+      number: '2',
       color: BaseColors.checkcircle,
       imagecolor: BaseColors.yellowStarColor,
     },
     {
-      id: "4",
+      id: '4',
       image: Images.content,
-      text: "New Milestones",
-      number: "4",
+      text: 'New Milestones',
+      number: '4',
       color: BaseColors.yellowStarColor,
     },
     {
-      id: "5",
+      id: '5',
       image: Images.content,
-      text: "Not Started",
-      number: "6",
+      text: 'Not Started',
+      number: '6',
       color: BaseColors.secondary,
       imagecolor: BaseColors.cardDescColor,
     },
     {
-      id: "6",
+      id: '6',
       image: Images.content,
-      text: "Cancelled",
-      number: "2",
+      text: 'Cancelled',
+      number: '2',
       color: BaseColors.darkorang,
       imagecolor: BaseColors.darkorang,
     },
     {
-      id: "1",
+      id: '1',
       image: Images.content,
-      text: "Headache",
-      number: "4",
+      text: 'Headache',
+      number: '4',
       color: BaseColors.checkcircle,
     },
     {
-      id: "2",
+      id: '2',
       image: Images.contentpending,
-      text: "Sensitivity to Noise",
-      number: "6",
+      text: 'Sensitivity to Noise',
+      number: '6',
       color: BaseColors.primary,
       imagecolor: BaseColors.primary,
     },
     {
-      id: "3",
+      id: '3',
       image: Images.content,
-      text: "Ongoing",
-      number: "2",
+      text: 'Ongoing',
+      number: '2',
       color: BaseColors.checkcircle,
       imagecolor: BaseColors.yellowStarColor,
     },
     {
-      id: "4",
+      id: '4',
       image: Images.content,
-      text: "New Milestones",
-      number: "4",
+      text: 'New Milestones',
+      number: '4',
       color: BaseColors.yellowStarColor,
     },
   ];
@@ -103,17 +103,17 @@ const Milestones = ({ navigation, route }) => {
   return (
     <View
       style={{
-        backgroundColor: "white",
+        backgroundColor: 'white',
       }}
     >
       <FlatList
         renderItem={renderItem}
         data={data}
-        keyExtractor={(item) => item.index}
+        keyExtractor={item => item.index}
         contentContainerStyle={styles.listContainer}
         columnWrapperStyle={{
-          justifyContent: "space-between",
-          width: "100%",
+          justifyContent: 'space-between',
+          width: '100%',
         }}
         numColumns={2}
         showsVerticalScrollIndicator={false}

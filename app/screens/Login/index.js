@@ -17,6 +17,7 @@ import { useDispatch } from 'react-redux';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { getApiData } from '@utils/apiHelper';
 import Authentication from '@redux/reducers/auth/actions';
+import { BaseColors } from '@config/theme';
 
 const Login = ({ navigation }) => {
   const { setUserData, setAccessToken } = Authentication;
@@ -46,7 +47,6 @@ const Login = ({ navigation }) => {
     };
     try {
       const resp = await getApiData(endPoints, 'POST', params, {}, false);
-      console.log('resp======>', resp);
       if (resp?.status) {
         if (resp?.data?.check_data?.is_password_set === 0) {
           navigation.navigate('ResetPassword', {
@@ -187,6 +187,10 @@ const Login = ({ navigation }) => {
         </View>
         <View style={styles.inputcontainer}>
           <LabeledInput
+            changeViewWidthSty={{
+              elevation: 2,
+              backgroundColor: BaseColors.white,
+            }}
             Label={'EMAIL'}
             mailicon
             placeholder={'Enter Email'}
@@ -200,6 +204,10 @@ const Login = ({ navigation }) => {
           />
 
           <LabeledInput
+            changeViewWidthSty={{
+              elevation: 2,
+              backgroundColor: BaseColors.white,
+            }}
             LabledInputStyle={{ marginTop: 20 }}
             Label={'Password'}
             keyicon

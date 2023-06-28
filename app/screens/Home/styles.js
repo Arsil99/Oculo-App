@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { BaseColors, FontFamily } from '@config/theme';
 const IOS = Platform.OS === 'ios';
 
