@@ -1,13 +1,13 @@
-import { BaseColors } from "@config/theme";
+import { BaseColors } from '@config/theme';
 
-const { StyleSheet } = require("react-native");
+const { StyleSheet } = require('react-native');
 
 const styles = StyleSheet.create({
   main: {
     backgroundColor: BaseColors.lightBg,
     flex: 1,
     padding: 30,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   borderStyleBase: {
     width: 30,
@@ -21,7 +21,6 @@ const styles = StyleSheet.create({
   underlineStyleBase: {
     width: 40,
     height: 40,
-    borderWidth: 0,
     borderWidth: 1,
     borderColor: BaseColors.primary,
     color: BaseColors.textColor,

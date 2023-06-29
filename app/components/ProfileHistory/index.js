@@ -1,33 +1,32 @@
+import BaseSetting from '@config/setting';
+import { getApiDataProgress } from '@utils/apiHelper';
 import React from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import styles from './styles';
 
 export default function ProfileHistory() {
-  const data = [
-    {
-      title: 'Do you have a Headache/Migraine disorder?	',
-      subtitle: 'Yes',
-    },
-    {
-      title: 'Do you have any learning disabilities such as ADHD/ADD, etc.?	',
-      subtitle: 'Yes',
-    },
-    {
-      title:
-        'Have you previously been diagnosed with a concussion/head injury?	',
-      subtitle: 'No',
-    },
-    {
-      title: 'If yes, how many concussions have been diagnosed?',
-      subtitle: '02',
-    },
-    {
-      title: 'If yes, what was the length of time you went through treatment?',
-      subtitle: '6 weeks',
-    },
-    { title: 'If yes, how long did recovery take?', subtitle: '32 weeks' },
-  ];
+  const [questionList, setQuestionList] = useState([]);
+
+  useEffect(() => {
+    QuestionListAPI();
+  }, []);
+
+  const QuestionListAPI = async () => {
+    const endPoint = BaseSetting.endpoints.question;
+    try {
+      const res = await getApiDataProgress(endPoint, 'GET');
+      if (res?.status) {
+        setQuestionList(res?.data);
+      } else {
+        setQuestionList([]);
+      }
+    } catch (error) {
+      console.log('📌 ⏩ file: index.js:24 ⏩ LangListAPI ⏩ error:', error);
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={styles.maincontainer}>
@@ -38,11 +37,11 @@ export default function ProfileHistory() {
           style={styles.scrollcontainer}
           showsVerticalScrollIndicator={false}
         >
-          {data?.map((item, index) => {
+          {questionList?.map((item, index) => {
             return (
-              <View>
-                <Text style={styles.questionText}>{item.title}</Text>
-                <Text style={styles.subtitleText}>{item.subtitle}</Text>
+              <View key={index}>
+                <Text style={styles.questionText}>{item.question}</Text>
+                <Text style={styles.subtitleText}>Yes</Text>
               </View>
             );
           })}

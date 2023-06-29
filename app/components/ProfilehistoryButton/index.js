@@ -1,62 +1,49 @@
+import BaseSetting from '@config/setting';
 import { BaseColors } from '@config/theme';
-import React from 'react';
+import { getApiDataProgress } from '@utils/apiHelper';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import styles from './styles';
 
 export default function ProfilehistoryButton() {
-  const [items, setItems] = useState([
-    {
-      id: 1,
-      title: 'Do you have a Headache/Migraine disorder?	',
-      subtitle: 'Yes',
-      selectedButton: 1,
-    },
-    {
-      id: 2,
-      title: 'Do you have any learning disabilities such as ADHD/ADD, etc.?	',
-      subtitle: 'Yes',
-      selectedButton: 1,
-    },
-    {
-      id: 3,
-      title:
-        'Have you previously been diagnosed with a concussion/head injury?	',
-      subtitle: 'No',
-      selectedButton: 1,
-    },
-    {
-      id: 4,
-      title: 'If yes, how many concussions have been diagnosed?',
-      subtitle: '02',
-      selectedButton: 1,
-    },
-    {
-      id: 5,
-      title: 'If yes, what was the length of time you went through treatment?',
-      subtitle: '6 weeks',
-      selectedButton: 1,
-    },
-    {
-      id: 6,
-      title: 'If yes, how long did recovery take?',
-      subtitle: '32 weeks',
-      selectedButton: 1,
-    },
-  ]);
+  const [questionList, setQuestionList] = useState([]);
+  useEffect(() => {
+    QuestionListAPI();
+  }, []);
 
-  const handleButtonPress = (itemId, buttonIndex) => {
-    setItems(prevItems => {
-      const updatedItems = prevItems.map(item => {
-        if (item.id === itemId) {
-          return { ...item, selectedButton: buttonIndex };
-        }
-        return item;
-      });
-      return updatedItems;
-    });
+  const QuestionListAPI = async () => {
+    const endPoint = BaseSetting.endpoints.question;
+    try {
+      const res = await getApiDataProgress(endPoint, 'GET');
+      if (res?.status) {
+        setQuestionList(res?.data);
+      } else {
+        setQuestionList([]);
+      }
+    } catch (error) {
+      console.log('📌 ⏩ file: index.js:24 ⏩ LangListAPI ⏩ error:', error);
+    }
   };
+
+  const handleButtonPress = (itemId, buttonType) => {
+    const updatedData = questionList.map(item => {
+      if (item.id === itemId) {
+        return {
+          ...item,
+          buttonColor: buttonType,
+        };
+      }
+      return item;
+    });
+    setQuestionList(updatedData);
+    const postData = {
+      itemId: itemId,
+      buttonType: buttonType,
+    };
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.maincontainer}>
@@ -67,19 +54,19 @@ export default function ProfilehistoryButton() {
           style={styles.scrollcontainer}
           showsVerticalScrollIndicator={false}
         >
-          {items?.map((item, index) => {
-            return (
-              <View>
-                <Text style={[styles.questionText]}>{item.title}</Text>
+          <View>
+            {questionList.map(item => (
+              <View key={item.id}>
+                <Text style={[styles.questionText]}>{item.question}</Text>
                 <View style={styles.buttoncontainer}>
                   <TouchableOpacity
-                    onPress={() => handleButtonPress(item.id, 1)}
+                    onPress={() => handleButtonPress(item.id, 'Yes')}
                     style={[
                       {
                         backgroundColor:
-                          item.selectedButton === 1
+                          item.buttonColor === 'Yes'
                             ? BaseColors.secondary
-                            : null,
+                            : BaseColors.white,
                       },
                       styles.yesbutton,
                     ]}
@@ -90,7 +77,7 @@ export default function ProfilehistoryButton() {
                         ([styles.yesText],
                         {
                           color:
-                            item.selectedButton === 1
+                            item.buttonColor === 'Yes'
                               ? BaseColors.white
                               : BaseColors.textColor,
                         })
@@ -99,41 +86,38 @@ export default function ProfilehistoryButton() {
                       Yes
                     </Text>
                   </TouchableOpacity>
+
                   <TouchableOpacity
-                    activeOpacity={0.7}
-                    onPress={() => handleButtonPress(item.id, 2)}
+                    onPress={() => handleButtonPress(item.id, 'No')}
                     style={[
                       {
                         backgroundColor:
-                          item.selectedButton === 2
+                          item.buttonColor === 'No'
                             ? BaseColors.secondary
-                            : null,
-                        color:
-                          item.selectedButton === 2
-                            ? BaseColors.white
-                            : BaseColors.textColor,
+                            : BaseColors.white,
                       },
                       styles.nobutton,
                     ]}
+                    activeOpacity={0.7}
                   >
                     <Text
-                      style={[
-                        styles.noText,
+                      style={
+                        ([styles.yesText],
                         {
                           color:
-                            item.selectedButton === 2
+                            item.buttonColor === 'No'
                               ? BaseColors.white
                               : BaseColors.textColor,
-                        },
-                      ]}
+                        })
+                      }
                     >
                       No
                     </Text>
                   </TouchableOpacity>
                 </View>
               </View>
-            );
-          })}
+            ))}
+          </View>
         </ScrollView>
       </View>
     </View>

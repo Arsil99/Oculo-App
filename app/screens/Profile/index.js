@@ -20,7 +20,12 @@ import { isEmpty, isNull } from 'lodash';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import { Picker } from '@react-native-picker/picker';
+import { useSelector } from 'react-redux';
 export default function Profile({ navigation }) {
+  const { userData } = useSelector(state => {
+    return state.auth;
+  });
+
   const switchOptions = [
     { id: 'detail', name: 'Detail' },
     { id: 'history', name: 'History' },
@@ -32,19 +37,19 @@ export default function Profile({ navigation }) {
     id: 'detail',
     name: 'Detail',
   });
-
+  console.log('🚀 ~ file: index.js:30 ~ Profile ~ userData:', userData);
   const patientdata = [
     {
       id: '1',
       leftIcon: 'user',
       title: 'First Name',
-      righttitle: 'Andy',
+      righttitle: userData?.firstname,
     },
     {
       id: '2',
       leftIcon: 'user',
       title: 'Last Name',
-      righttitle: 'Anderson',
+      righttitle: userData?.lastname,
     },
     {
       id: '3',
@@ -64,13 +69,13 @@ export default function Profile({ navigation }) {
       id: '1',
       leftIcon: 'phone',
       title: 'Patient Phone',
-      righttitle: '(454) 334 - 3301',
+      righttitle: userData?.phone,
     },
     {
       id: '2',
       leftIcon: 'mail',
       title: 'Patient Email',
-      righttitle: 'Anderson@gmail.com',
+      righttitle: userData?.email,
     },
     {
       id: '3',

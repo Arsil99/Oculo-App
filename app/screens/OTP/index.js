@@ -17,7 +17,7 @@ export default function OTP({ navigation, route }) {
   const dispatch = useDispatch();
 
   const { setUserData, setAccessToken } = Authentication;
-  const [code, setcode] = useState(false);
+  const [code, setcode] = useState('');
   const [loader, setLoader] = useState(false);
 
   useEffect(() => {
