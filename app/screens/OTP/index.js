@@ -1,4 +1,4 @@
-import { View, Text, Image, TextInput } from 'react-native';
+import { View, Text, Image, TextInput, Keyboard } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import styles from './styles';
@@ -46,8 +46,9 @@ export default function OTP({ navigation, route }) {
     setLoader(true);
     let endPoints = BaseSetting.endpoints.verifyOtp;
     const params = {
-      email: email,
+      value: email,
       type: from === 'tfa' ? 'tfa' : 'forgot-password',
+      parameterType: 'email',
       otp: code,
     };
     try {
@@ -81,7 +82,10 @@ export default function OTP({ navigation, route }) {
       setLoader(false);
     }
   };
-
+  const handleCodeFilled = code => {
+    console.log(`Code is ${code}, you are good to go!`);
+    Keyboard.dismiss(); // Dismiss the keyboard after code is filled
+  };
   return (
     <View style={styles.main}>
       <View style={{ alignItems: 'center' }}>
@@ -103,6 +107,7 @@ export default function OTP({ navigation, route }) {
           codeInputHighlightStyle={styles.underlineStyleHighLighted}
           onCodeFilled={code => {
             setcode(code);
+            handleCodeFilled;
           }}
           inputTextStyle={{ color: 'red' }}
           renderInputField={renderInputField}
