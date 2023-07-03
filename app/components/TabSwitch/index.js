@@ -63,8 +63,8 @@ export default function TabSwitch(props) {
                   translateX: translateValue,
                 },
               ],
-              marginLeft: -5,
-              width: threePack ? 110 : subTabSize,
+              marginLeft: threePack ? 0 : -5,
+              width: threePack ? 120 : subTabSize,
               borderBottomWidth: !insideTab ? 4 : 0,
               borderRadius: insideTab ? 50 : 0,
               borderBottomColor: insideTab
