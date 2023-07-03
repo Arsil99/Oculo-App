@@ -128,6 +128,6 @@ export const FontFamily = {
   // regular: 'Poppins-Medium',
   bold: 'Europa-Bold',
   // semiBold: 'Poppins-SemiBold',
-  light: 'Europa-Light.woff2',
+  light: 'Europa-Light',
   // thin: 'Poppins-Thin',
 };

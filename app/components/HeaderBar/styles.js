@@ -18,6 +18,7 @@ export default StyleSheet.create({
     width: '10%',
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 1,
   },
   headerTextCon: {
     flex: 1,

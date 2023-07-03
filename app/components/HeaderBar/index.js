@@ -37,7 +37,9 @@ const HeaderBar = ({
             <TouchableOpacity
               activeOpacity={BaseSetting.buttonOpacity}
               style={styles.imageCon}
-              onPress={() => (arrowPress ? arrowPress() : navigation.goBack())}
+              onPress={() => {
+                arrowPress ? arrowPress() : navigation.goBack();
+              }}
             >
               <Text>Back</Text>
             </TouchableOpacity>
