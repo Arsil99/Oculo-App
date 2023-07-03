@@ -8,8 +8,9 @@ import {
   Modal,
   Alert,
   Pressable,
+  StyleSheet,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
 import TabSwitch from '@components/TabSwitch';
@@ -24,9 +25,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import { Picker } from '@react-native-picker/picker';
 import { useSelector } from 'react-redux';
-import Button from '@components/Button';
 import Dropdown from '@components/Dropdown';
-import DropDownPicker from 'react-native-dropdown-picker';
 
 export default function Profile({ navigation }) {
   const [selectedValue, setSelectedValue] = useState(null);
@@ -42,7 +41,7 @@ export default function Profile({ navigation }) {
   const { userData } = useSelector(state => {
     return state.auth;
   });
-
+  const cInputRef = useRef();
   const switchOptions = [
     { id: 'detail', name: 'Detail' },
     { id: 'history', name: 'History' },
@@ -111,7 +110,7 @@ export default function Profile({ navigation }) {
   const settings = [
     {
       id: '1',
-      leftIcon: 'back',
+      leftIcon: 'unlock',
       title: 'Two Factor Enabled',
       righttitle: <Icon name="right" size={15} />,
       switch: false,
@@ -193,7 +192,6 @@ export default function Profile({ navigation }) {
   const [lastName, setLastName] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [gender, setGender] = useState('');
-  const [from, setFrom] = useState('');
   const [patientPhone, setPatientPhone] = useState('');
   const [patientemail, setPatientEmail] = useState('');
   const [guardianPhone, setGuardianPhone] = useState('');
@@ -433,8 +431,11 @@ export default function Profile({ navigation }) {
                       }}
                       showError={ErrObj.firstNameErr}
                       errorText={ErrObj.firstNameErrMsg}
+                      onSubmitEditing={() => cInputRef.current.focus()}
                     />
+
                     <LabeledInput
+                      ref={cInputRef}
                       Label={'Last Name'}
                       usericon
                       placeholder={'Enter last name'}
