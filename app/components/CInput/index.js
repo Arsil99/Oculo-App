@@ -83,14 +83,9 @@ class CInput extends Component {
       }
     });
   }
-
   focus() {
-    if (this.input !== undefined && this.input !== null) {
-      if (this.props.datePicker) {
-        this.input.onPressDate();
-      } else {
-        this.input.focus();
-      }
+    if (this.inputRef) {
+      this.inputRef.focus();
     }
   }
 
@@ -334,9 +329,11 @@ class CInput extends Component {
                   secureTextEntry={
                     eyePassword ? this.state.secureTextEntry : false
                   }
-                  ref={o => {
-                    this.input = o;
+                  ref={ref => {
+                    this.inputRef = ref;
                   }}
+                  // rest of the code
+
                   placeholderTextColor={
                     focused
                       ? BaseColors.black50

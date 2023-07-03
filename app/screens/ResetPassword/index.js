@@ -5,7 +5,7 @@ import {
   Image,
   Platform,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './styles';
 import LabeledInput from '@components/LabeledInput';
 import Button from '@components/Button';
@@ -23,6 +23,7 @@ const ResetPassword = ({ navigation, route }) => {
   const email = route?.params?.email || '';
   const token = route?.params?.token || '';
   const dispatch = useDispatch();
+  const cInputRef = useRef();
 
   const [setpassword, setSetpassword] = useState('');
   const [retypepassword, setRetypepassword] = useState('');
@@ -256,6 +257,7 @@ const ResetPassword = ({ navigation, route }) => {
             keyicon
             placeholder={'Enter New Password'}
             eyePassword
+            returnKeyType="next"
             value={setpassword}
             onChangeText={val => {
               setSetpassword(val);
@@ -263,9 +265,11 @@ const ResetPassword = ({ navigation, route }) => {
             }}
             showError={passErrObj.error}
             errorText={passErrObj.msg}
+            onSubmitEditing={() => cInputRef.current.focus()}
           />
 
           <LabeledInput
+            ref={cInputRef}
             Label={'Retype Password'}
             LabledInputStyle={{ marginTop: 20 }}
             keyicon
@@ -278,6 +282,7 @@ const ResetPassword = ({ navigation, route }) => {
             }}
             showError={RetypepassErrObj.error}
             errorText={RetypepassErrObj.msg}
+            onSubmitEditing={validation}
           />
 
           <View style={styles.btnContainer}>

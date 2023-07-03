@@ -5,7 +5,7 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './styles';
 import LabeledInput from '@components/LabeledInput';
 import Button from '@components/Button';
@@ -18,12 +18,14 @@ import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { getApiData } from '@utils/apiHelper';
 import Authentication from '@redux/reducers/auth/actions';
 import { BaseColors } from '@config/theme';
+import CInput from '@components/CInput';
 
 const Login = ({ navigation }) => {
   const { setUserData, setAccessToken } = Authentication;
   const IOS = Platform.OS === 'ios';
   const emailRegex = BaseSetting?.emailRegex;
   const dispatch = useDispatch();
+  const cInputRef = useRef();
 
   const [email, setEmail] = useState();
   const [password, setPassword] = useState('');
@@ -88,7 +90,8 @@ const Login = ({ navigation }) => {
     setLoader(true);
     let endPoints = BaseSetting.endpoints.generateOtp;
     const params = {
-      email: email,
+      value: email,
+      type: 'email',
     };
     try {
       const resp = await getApiData(endPoints, 'POST', params, {}, false);
@@ -193,6 +196,7 @@ const Login = ({ navigation }) => {
             }}
             Label={'EMAIL'}
             mailicon
+            returnKeyType="next"
             placeholder={'Enter Email'}
             value={email}
             onChangeText={val => {
@@ -201,9 +205,11 @@ const Login = ({ navigation }) => {
             }}
             showError={emailErrObj.error}
             errorText={emailErrObj.msg}
+            onSubmitEditing={() => cInputRef.current.focus()}
           />
 
           <LabeledInput
+            ref={cInputRef}
             changeViewWidthSty={{
               elevation: 2,
               backgroundColor: BaseColors.white,
@@ -220,6 +226,7 @@ const Login = ({ navigation }) => {
             }}
             showError={passErrObj.error}
             errorText={passErrObj.msg}
+            onSubmitEditing={validation}
           />
 
           <View

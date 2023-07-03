@@ -1,13 +1,13 @@
-import { View, Text } from "react-native";
-import React from "react";
-import { BaseColors } from "@config/theme";
-import { isEmpty } from "lodash";
-import CInput from "@components/CInput";
-import styles from "./styles";
+import React, { forwardRef } from 'react';
+import { View, Text } from 'react-native';
+import { BaseColors } from '@config/theme';
+import { isEmpty } from 'lodash';
+import CInput from '@components/CInput';
+import styles from './styles';
 
-const LabeledInput = (props) => {
+const LabeledInput = (props, ref) => {
   const {
-    Label = "",
+    Label = '',
     isRequired = false,
     LabledInputStyle = {},
     LabledTextStyle = {},
@@ -22,13 +22,14 @@ const LabeledInput = (props) => {
       )}
 
       <CInput
+        ref={ref}
         selectionColor={BaseColors.primary}
-        returnKeyType={"next"}
-        keyboardType={"default"}
+        returnKeyType={'next'}
+        keyboardType={'default'}
         {...props}
       />
     </View>
   );
 };
 
-export default LabeledInput;
+export default forwardRef(LabeledInput);
