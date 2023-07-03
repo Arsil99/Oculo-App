@@ -142,15 +142,18 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
+    backgroundColor: BaseColors.black60,
+  },
+  modalHead: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
   },
   modalView: {
-    margin: 20,
-    height: '35%',
     backgroundColor: 'white',
     borderRadius: 20,
-
-    alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -185,10 +188,10 @@ export default StyleSheet.create({
     marginBottom: 20,
     width: '60%',
   },
-  closeicon: { padding: 10, alignSelf: 'flex-end' },
+  closeicon: { padding: 10, position: 'absolute', right: 4 },
 
   dropdownContainer: {
-    paddingHorizontal: 50,
+    paddingHorizontal: 20,
     paddingVertical: 20,
     width: 300,
   },

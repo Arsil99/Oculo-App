@@ -1,22 +1,43 @@
 import React, { useState } from 'react';
 import DropDownPicker from 'react-native-dropdown-picker';
 
-export default function Dropdown({ items, onValueChange }) {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-
-  const handleValueChange = itemValue => {
-    setValue(itemValue);
-    onValueChange(itemValue); // Call the callback function from props
-  };
+export default function Dropdown(props) {
+  const {
+    open = false,
+    setOpen = () => null,
+    value = null,
+    setValue = () => null,
+    onOpen = () => null,
+    items = [],
+    placeholder = '',
+    selectedItemContainerStyle = {},
+    selectedItemLabelStyle = {},
+    showTickIcon = true,
+  } = props;
 
   return (
     <DropDownPicker
       open={open}
       value={value}
       items={items}
+      placeholder={placeholder}
       setOpen={setOpen}
-      setValue={handleValueChange}
+      setValue={setValue}
+      itemSeparator={true}
+      showTickIcon={showTickIcon}
+      onOpen={() => {
+        onOpen();
+      }}
+      placeholderStyle={{
+        color: 'grey',
+      }}
+      selectedItemLabelStyle={[
+        selectedItemLabelStyle,
+        {
+          fontWeight: 'bold',
+        },
+      ]}
+      selectedItemContainerStyle={selectedItemContainerStyle}
     />
   );
 }
