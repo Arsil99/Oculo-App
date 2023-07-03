@@ -5,6 +5,9 @@ import {
   TouchableOpacity,
   Platform,
   ScrollView,
+  Modal,
+  Alert,
+  Pressable,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import styles from './styles';
@@ -21,7 +24,21 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import { Picker } from '@react-native-picker/picker';
 import { useSelector } from 'react-redux';
+import Button from '@components/Button';
+import Dropdown from '@components/Dropdown';
+import DropDownPicker from 'react-native-dropdown-picker';
+
 export default function Profile({ navigation }) {
+  const [selectedValue, setSelectedValue] = useState(null);
+
+  const items = [
+    { label: 'Email', value: 'Email' },
+    { label: 'Phone', value: 'Phone' },
+  ];
+  const handleDropdownChange = value => {
+    setSelectedValue(value);
+  };
+  const [modalVisible, setModalVisible] = useState(false);
   const { userData } = useSelector(state => {
     return state.auth;
   });
@@ -92,6 +109,13 @@ export default function Profile({ navigation }) {
   ];
 
   const settings = [
+    {
+      id: '1',
+      leftIcon: 'back',
+      title: 'Two Factor Enabled',
+      righttitle: <Icon name="right" size={15} />,
+      switch: false,
+    },
     {
       id: '1',
       leftIcon: 'key',
@@ -169,6 +193,7 @@ export default function Profile({ navigation }) {
   const [lastName, setLastName] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [gender, setGender] = useState('');
+  const [from, setFrom] = useState('');
   const [patientPhone, setPatientPhone] = useState('');
   const [patientemail, setPatientEmail] = useState('');
   const [guardianPhone, setGuardianPhone] = useState('');
@@ -286,7 +311,9 @@ export default function Profile({ navigation }) {
               onPress={() =>
                 item?.title === 'Sign Out'
                   ? logout()
-                  : navigation.navigate(item.navto)
+                  : item?.title === 'Two Factor Enabled'
+                  ? setModalVisible(!modalVisible)
+                  : console.log(item.title)
               }
               style={[
                 styles.settingItem,
@@ -577,6 +604,38 @@ export default function Profile({ navigation }) {
         )
       ) : (
         <View style={styles.cardOuter}>
+          <View style={styles.centeredView}>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                Alert.alert('Modal has been closed.');
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={() => {
+                      setModalVisible(!modalVisible);
+                    }}
+                    style={styles.closeicon}
+                  >
+                    <Icon name="close" size={20} color={BaseColors.primary} />
+                  </TouchableOpacity>
+                  <Text style={styles.titleText}>Select Option</Text>
+                  <View style={styles.dropdownContainer}>
+                    <Dropdown
+                      items={items}
+                      onValueChange={handleDropdownChange}
+                    />
+                  </View>
+                </View>
+              </View>
+            </Modal>
+          </View>
           <InfoCard data={settings} mainTitle={'Settings'} />
           <InfoCard data={legal} mainTitle={'Legal & Regulatory'} />
         </View>

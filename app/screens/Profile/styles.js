@@ -65,7 +65,11 @@ export default StyleSheet.create({
     flexDirection: 'row',
     width: '85%',
   },
-  cardOuter: { width: fullWidth, alignItems: 'center', paddingHorizontal: 20 },
+  cardOuter: {
+    width: fullWidth,
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
   titleText: {
     fontSize: 20,
     fontWeight: '700',
@@ -88,6 +92,7 @@ export default StyleSheet.create({
     textAlign: 'center',
     fontFamily: FontFamily.regular,
     color: BaseColors.textColor,
+    alignItems: 'center',
   },
   dateTitle: { color: BaseColors.black, marginBottom: 10 },
   dateBox: {
@@ -132,5 +137,69 @@ export default StyleSheet.create({
   genderTitle: {
     marginTop: 8,
     color: BaseColors.black,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    height: '35%',
+    backgroundColor: 'white',
+    borderRadius: 20,
+
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  containers: {
+    marginBottom: 20,
+    width: '60%',
+  },
+  closeicon: { padding: 10, alignSelf: 'flex-end' },
+
+  dropdownContainer: {
+    paddingHorizontal: 50,
+    paddingVertical: 20,
+    width: 300,
+  },
+  dropdown: {
+    backgroundColor: '#fafafa',
+  },
+  dropdownList: {
+    backgroundColor: '#fafafa',
+  },
+  dropdownLabel: {
+    fontSize: 14,
+    color: '#333',
   },
 });
