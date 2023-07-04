@@ -17,19 +17,23 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import Dropdown from '@components/Dropdown';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Authentication from '@redux/reducers/auth/actions';
 
 const Profiledetailcomponent = ({ onPress }) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const dispatch = useDispatch();
-  const { setEditProfiles } = Authentication;
+  const { saveEdit } = useSelector(state => {
+    return state.auth;
+  });
+  const { setEditProfiles, setSaveEdit } = Authentication;
   useEffect(() => {
     if (onPress) {
       HandleDetailUpdateBtn();
     }
   }, [onPress]);
+
   const genderdata = [
     { label: 'Male', value: 'Male' },
     { label: 'Female', value: 'Female' },
@@ -41,8 +45,6 @@ const Profiledetailcomponent = ({ onPress }) => {
   const cInputRef2 = useRef();
   const cInputRef3 = useRef();
   const cInputRef4 = useRef();
-
-  const [rightText, setRightText] = useState('Saveeeeeeeeeeeee');
 
   const errObj = {
     firstNameErr: false,
@@ -143,7 +145,7 @@ const Profiledetailcomponent = ({ onPress }) => {
     setErrObj(error);
     if (Valid) {
       dispatch(setEditProfiles(false));
-      setRightText(rightText === 'Edit' ? 'Save' : 'Edit');
+      dispatch(setSaveEdit(saveEdit === 'Edit' ? 'Save' : 'Edit'));
     }
   };
 

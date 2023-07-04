@@ -15,7 +15,8 @@ const initialState = {
   newMissionData: {},
   askPermission: false,
   activeChatUser: null,
-  editProfile: false,
+  editProfiles: false,
+  saveEdit: 'Edit',
 };
 
 export default function reducer(state = initialState, action) {
@@ -120,6 +121,11 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         editProfiles: action.editProfiles,
+      };
+    case types.SET_SAVE_EDIT:
+      return {
+        ...state,
+        saveEdit: action.saveEdit,
       };
 
     default:

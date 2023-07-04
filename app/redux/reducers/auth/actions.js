@@ -15,6 +15,7 @@ const actions = {
   SET_ASK_PERMISSION: 'SET_ASK_PERMISSION',
   SET_ACTIVE_CHAT_USER: 'SET_ACTIVE_CHAT_USER',
   SET_EDIT_PROFILE: 'SET_EDIT_PROFILE',
+  SET_SAVE_EDIT: 'SET_SAVE_EDIT',
 
   setUserData: data => {
     return dispatch =>
@@ -114,6 +115,11 @@ const actions = {
     dispatch({
       type: actions.SET_ACTIVE_CHAT_USER,
       activeChatUser,
+    }),
+  setSaveEdit: saveEdit => dispatch =>
+    dispatch({
+      type: actions.SET_SAVE_EDIT,
+      saveEdit,
     }),
 };
 

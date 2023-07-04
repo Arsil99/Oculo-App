@@ -31,10 +31,10 @@ export default function Profile({ navigation }) {
     { label: 'Phone', value: 'Phone' },
   ];
   const dispatch = useDispatch();
-  const { setEditProfiles } = Authentication;
+  const { setEditProfiles, setSaveEdit } = Authentication;
 
   const [modalVisible, setModalVisible] = useState(false);
-  const { userData, editProfiles } = useSelector(state => {
+  const { userData, editProfiles, saveEdit } = useSelector(state => {
     return state.auth;
   });
   console.log('🚀 ~ file: index.js:46 ~ Profile ~ editProfiles:', editProfiles);
@@ -45,6 +45,9 @@ export default function Profile({ navigation }) {
     { id: 'account', name: 'Account' },
   ];
   const [isEnabled, setIsEnabled] = useState(false);
+  useEffect(() => {
+    dispatch(setEditProfiles(false));
+  }, []);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const [activeTab, setActiveTab] = useState({
     id: 'detail',
@@ -186,19 +189,22 @@ export default function Profile({ navigation }) {
   useEffect(() => {
     if (activeTab?.id === 'history') {
       setEditProfile(false);
-      setRightText('Edit');
+      dispatch(setEditProfiles(false));
+      dispatch(setSaveEdit('Edit'));
     } else if (activeTab?.id === 'detail') {
       setEditHistory(false);
-      setRightHistoryText('Edit');
+      dispatch(setSaveEdit('Edit'));
     } else if (activeTab?.id === 'account') {
       setEditProfile(false);
-      setRightText('Edit');
+      dispatch(setEditProfiles(false));
+      dispatch(setSaveEdit('Edit'));
       setEditHistory(false);
       setRightHistoryText('Edit');
     }
     return () => {
       setEditProfile(false);
-      setRightText('Edit');
+      dispatch(setEditProfiles(false));
+      dispatch(setSaveEdit('Edit'));
       setEditHistory(false);
       setRightHistoryText('Edit');
     };
@@ -277,18 +283,21 @@ export default function Profile({ navigation }) {
       <HeaderBar
         HeaderText={'Profile'}
         HeaderCenter
-        backPress
+        hiddenBack={editProfiles ? false : true}
+        closeBack={!editProfiles ? false : true}
         rightComponent={
           activeTab?.id === 'detail' ? (
             <TouchableOpacity
               onPress={() =>
-                rightText === 'Edit'
+                saveEdit === 'Edit'
                   ? (dispatch(setEditProfiles(true)),
-                    setRightText(rightText === 'Edit' ? 'Save' : 'Edit'))
+                    dispatch(
+                      setSaveEdit(saveEdit === 'Edit' ? 'Save' : 'Edit'),
+                    ))
                   : setIsClick(prevState => !prevState)
               }
             >
-              <Text>{rightText}</Text>
+              <Text>{saveEdit}</Text>
             </TouchableOpacity>
           ) : activeTab?.id === 'history' ? (
             <TouchableOpacity

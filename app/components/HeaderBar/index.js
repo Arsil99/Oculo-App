@@ -5,9 +5,9 @@ import { Images } from '@config';
 import { isEmpty } from 'lodash';
 import BaseSetting from '@config/setting';
 import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { BaseColors } from '@config/theme';
-
+import Authentication from '@redux/reducers/auth/actions';
 const HeaderBar = ({
   HeaderText,
   HeaderTextStyle,
@@ -18,11 +18,15 @@ const HeaderBar = ({
   containerStyle,
   arrowPress,
   backPress,
+  closeBack,
+  hiddenBack,
 }) => {
   const { userData } = useSelector(state => {
     return state.auth;
   });
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const { setEditProfiles, setSaveEdit } = Authentication;
   return (
     <View
       style={{
@@ -44,7 +48,19 @@ const HeaderBar = ({
               <Text>Back</Text>
             </TouchableOpacity>
           )}
-
+          {hiddenBack && <View />}
+          {closeBack && (
+            <TouchableOpacity
+              activeOpacity={BaseSetting.buttonOpacity}
+              style={styles.imageCon}
+              onPress={() => {
+                dispatch(setSaveEdit('Edit'));
+                dispatch(setEditProfiles(false));
+              }}
+            >
+              <Text>Close</Text>
+            </TouchableOpacity>
+          )}
           {!isEmpty(HeaderText) && (
             <View
               style={[
