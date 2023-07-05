@@ -28,11 +28,12 @@ const HeaderBar = ({
 
   return (
     <View
-      style={{
-        backgroundColor: isTransperant ? '#0000' : BaseColors.white,
-        width: '100%',
-        paddingTop: 10,
-      }}
+      style={[
+        {
+          backgroundColor: isTransperant ? '#0000' : BaseColors.white,
+        },
+        styles.first,
+      ]}
     >
       <View style={[styles.main, containerStyle]}>
         <View style={styles.contentBox}>

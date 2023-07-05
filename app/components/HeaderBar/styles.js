@@ -3,6 +3,18 @@ import { Platform, StyleSheet } from 'react-native';
 const IOS = Platform.OS === 'ios';
 
 export default StyleSheet.create({
+  first: {
+    width: '100%',
+    paddingTop: 10,
+    shadowColor: BaseColors.black,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
+  },
   main: {
     paddingHorizontal: 20,
     marginBottom: 20,
