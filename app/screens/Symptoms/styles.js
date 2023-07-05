@@ -68,8 +68,7 @@ export default StyleSheet.create({
     fontWeight: 'bold',
   },
   btnContainer: {
-    height: windowHeight / 3.1,
-
+    height: windowHeight / 3.4,
     justifyContent: 'flex-end',
   },
   sliderContainer: {
