@@ -40,6 +40,11 @@ const Symptoms = () => {
       return '';
     }
   };
+  const [sliderValue, setSliderValue] = useState(0);
+
+  const handleValueChange = newValue => {
+    setSliderValue(newValue);
+  };
   return (
     <View style={styles.main}>
       <HeaderBar HeaderText={'Symptoms'} HeaderCenter backPress />
@@ -90,32 +95,26 @@ const Symptoms = () => {
             <Text style={styles.boldText}>
               Report the severity level of Headache:
             </Text>
-
             <Slider
-              value={severityLevel}
-              onValueChange={value => setSeverityLevel(value)}
-              minimumValue={minValue}
-              maximumValue={maxValue}
+              value={sliderValue}
+              onValueChange={handleValueChange}
+              minimumValue={1}
+              maximumValue={6}
               minimumTrackTintColor={BaseColors.primary}
               maximumTrackTintColor={BaseColors.tabinActive}
               thumbTintColor={BaseColors.white}
               style={styles.slider}
-              thumbStyle={{ elevation: 5 }}
+              step={1}
             />
+            <View style={styles.sliderLabelsContainer}>
+              {[0, 1, 2, 3, 4, 5, 6].map(label => (
+                <Text style={styles.sliderLabel} key={label.toString()}>
+                  {label}
+                </Text>
+              ))}
+            </View>
 
             <View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}
-              >
-                {Array.from({ length: maxValue + 1 }).map((_, index) => (
-                  <View key={index} style={{ flex: 1 }}>
-                    <Text style={{}}>{index}</Text>
-                  </View>
-                ))}
-              </View>
 
               <View
                 style={{

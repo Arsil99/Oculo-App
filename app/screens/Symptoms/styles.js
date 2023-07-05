@@ -72,4 +72,21 @@ export default StyleSheet.create({
 
     justifyContent: 'flex-end',
   },
+  sliderContainer: {
+    flex: 1,
+    backgroundColor: 'red',
+    width: '100%',
+    marginLeft: 10,
+    marginRight: 10,
+    alignItems: 'stretch',
+    justifyContent: 'center',
+  },
+  sliderLabelsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+  },
+  sliderLabel: {
+    fontSize: 12,
+  },
 });
