@@ -219,57 +219,59 @@ export default function Profile({ navigation }) {
         <View style={styles.mainTitleStyle}>
           <Text style={styles.titleText}>{mainTitle}</Text>
         </View>
-        {data?.map((item, index) => {
-          return (
-            <TouchableOpacity
-              key={item?.id}
-              activeOpacity={0.7}
-              onPress={() =>
-                item?.title === 'Sign Out'
-                  ? logout()
-                  : item?.title === 'Two Factor Enabled'
-                  ? setModalVisible(!modalVisible)
-                  : console.log(item.title)
-              }
-              style={[
-                styles.settingItem,
-                index === 0 ? styles.topBorder : styles.otherBorder,
-                index === data.length - 1 ? styles.radiusDesign : null,
-              ]}
-            >
-              <View style={styles.cardContainer}>
-                <View style={styles.innerCard}>
-                  <Icon
-                    name={item.leftIcon}
-                    size={15}
-                    color={BaseColors.black90}
-                  />
-                </View>
-                <View>
-                  <Text style={styles.settingItemText}>{item.title}</Text>
-                </View>
-              </View>
-
-              <View>
-                <Text style={styles.righttitletext}>
-                  {item?.switch ? (
-                    <Switch
-                      trackColor={{ false: '#767577', true: '#81b0ff' }}
-                      thumbColor={
-                        isEnabled ? BaseColors.primary : BaseColors.offWhite
-                      }
-                      ios_backgroundColor="#3e3e3e"
-                      onValueChange={toggleSwitch}
-                      value={isEnabled}
+        <View style={styles.infoshadow}>
+          {data?.map((item, index) => {
+            return (
+              <TouchableOpacity
+                key={item?.id}
+                activeOpacity={0.7}
+                onPress={() =>
+                  item?.title === 'Sign Out'
+                    ? logout()
+                    : item?.title === 'Two Factor Enabled'
+                    ? setModalVisible(!modalVisible)
+                    : console.log(item.title)
+                }
+                style={[
+                  styles.settingItem,
+                  index === 0 ? styles.topBorder : styles.otherBorder,
+                  index === data.length - 1 ? styles.radiusDesign : null,
+                ]}
+              >
+                <View style={styles.cardContainer}>
+                  <View style={styles.innerCard}>
+                    <Icon
+                      name={item.leftIcon}
+                      size={15}
+                      color={BaseColors.black90}
                     />
-                  ) : (
-                    item.righttitle
-                  )}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          );
-        })}
+                  </View>
+                  <View>
+                    <Text style={styles.settingItemText}>{item.title}</Text>
+                  </View>
+                </View>
+
+                <View>
+                  <Text style={styles.righttitletext}>
+                    {item?.switch ? (
+                      <Switch
+                        trackColor={{ false: '#767577', true: '#81b0ff' }}
+                        thumbColor={
+                          isEnabled ? BaseColors.primary : BaseColors.offWhite
+                        }
+                        ios_backgroundColor="#3e3e3e"
+                        onValueChange={toggleSwitch}
+                        value={isEnabled}
+                      />
+                    ) : (
+                      item.righttitle
+                    )}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
       </View>
     );
   };

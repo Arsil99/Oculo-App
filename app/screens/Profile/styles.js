@@ -10,7 +10,7 @@ export default StyleSheet.create({
   },
   settigCon: {
     marginTop: 15,
-    marginHorizontal: 20,
+    // marginHorizontal: 20,
     width: fullWidth,
   },
   topBorder: { borderTopLeftRadius: 12, borderTopRightRadius: 12 },
@@ -57,6 +57,16 @@ export default StyleSheet.create({
   mainTitleStyle: {
     alignItems: 'flex-start',
     marginBottom: 15,
+  },
+  infoshadow: {
+    shadowColor: BaseColors.black,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
   },
   customGender: {
     backgroundColor: BaseColors.white,
