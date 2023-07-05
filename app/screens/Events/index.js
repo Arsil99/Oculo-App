@@ -13,7 +13,7 @@ export default function Events({ navigation }) {
         <Text style={{ fontSize: 18, marginVertical: 5 }}>Open Events</Text>
 
         <CardList
-          onPress={() => navigation.navigate('EventDetails')}
+          onPress={() => navigation.navigate('Callibration')}
           image={Images.emoji1}
           data={'March 30, 2000'}
           status={'Completed'}

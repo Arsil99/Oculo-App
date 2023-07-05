@@ -14,4 +14,5 @@ export const Images = {
   emoji5: require('../assets/Images/emoji5.png'),
   graph: require('../assets/Images/graph.png'),
   callibrateImg: require('../assets/Images/calli.png'),
+  eyeLine: require('../assets/Images/eyeline.png'),
 };
