@@ -1,12 +1,20 @@
-import BaseSetting from "@config/setting";
-import { BaseColors, FontFamily } from "@config/theme";
-import { StyleSheet } from "react-native";
+import BaseSetting from '@config/setting';
+import { BaseColors, FontFamily } from '@config/theme';
+import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   default: {
     minHeight: BaseSetting.nHeight * 0.06,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: BaseColors.black,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
   },
   primary: {
     borderWidth: 0,
