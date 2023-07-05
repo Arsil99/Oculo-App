@@ -3,12 +3,11 @@ import {
   Text,
   Switch,
   TouchableOpacity,
-  Platform,
   ScrollView,
   Modal,
   Alert,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
 import TabSwitch from '@components/TabSwitch';
@@ -16,7 +15,6 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import { BaseColors } from '@config/theme';
 import ProfilehistoryButton from '@components/ProfilehistoryButton';
 import { logout } from '@utils/CommonFunction';
-import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import Authentication from '@redux/reducers/auth/actions';
 import Dropdown from '@components/Dropdown';
@@ -42,10 +40,14 @@ export default function Profile({ navigation }) {
     { id: 'history', name: 'History' },
     { id: 'account', name: 'Account' },
   ];
+  const [isEnabledfaceid, setIsEnabledfaceid] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
+
   useEffect(() => {
     dispatch(setEditProfiles(false));
   }, []);
+  const toggleSwitchfaceid = () =>
+    setIsEnabledfaceid(previousState => !previousState);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const [activeTab, setActiveTab] = useState({
     id: 'detail',
@@ -108,13 +110,19 @@ export default function Profile({ navigation }) {
   const settings = [
     {
       id: '1',
+      leftIcon: 'meh',
+      title: 'Login With Face Id',
+      switch: true,
+    },
+    {
+      id: '2',
       leftIcon: 'unlock',
       title: 'Two Factor Enabled',
       righttitle: <Icon name="right" size={15} />,
       switch: false,
     },
     {
-      id: '1',
+      id: '3',
       leftIcon: 'key',
       title: 'Change Password',
       righttitle: <Icon name="right" size={15} />,
@@ -122,7 +130,7 @@ export default function Profile({ navigation }) {
       navto: 'ResetPassword',
     },
     {
-      id: '2',
+      id: '4',
       leftIcon: 'notification',
       title: 'Notifications settings',
       righttitle: <Icon name="right" size={15} />,
@@ -130,14 +138,14 @@ export default function Profile({ navigation }) {
       navto: 'NotificationSettings',
     },
     {
-      id: '3',
+      id: '5',
       leftIcon: 'calendar',
       title: 'Dark Theme',
       // righttitle: '',
       switch: true,
     },
     {
-      id: '4',
+      id: '6',
       leftIcon: 'logout',
       title: 'Sign Out',
       righttitle: <Icon name="right" size={15} />,
@@ -164,25 +172,6 @@ export default function Profile({ navigation }) {
   const [editHistory, setEditHistory] = useState(false);
   const [rightText, setRightText] = useState('Edit');
   const [rightHistoryText, setRightHistoryText] = useState('Edit');
-
-  const errObj = {
-    firstNameErr: false,
-    firstNameErrMsg: '',
-    lastNameErr: false,
-    lastNameErrMsg: '',
-    dateOfBirthErr: false,
-    dateOfBirthErrMsg: '',
-    genderErr: false,
-    genderErrMsg: '',
-    p_phoneErr: false,
-    p_phoneErrMsg: '',
-    p_emailErr: false,
-    p_emailErrMsg: '',
-    g_phoneErr: false,
-    g_phoneErrMsg: '',
-    g_emailErr: false,
-    g_emailErrMsg: '',
-  };
 
   useEffect(() => {
     if (activeTab?.id === 'history') {
@@ -257,11 +246,26 @@ export default function Profile({ navigation }) {
                       <Switch
                         trackColor={{ false: '#767577', true: '#81b0ff' }}
                         thumbColor={
-                          isEnabled ? BaseColors.primary : BaseColors.offWhite
+                          (isEnabled && item.title === 'Dark Theme') ||
+                          (isEnabledfaceid &&
+                            item.title === 'Login With Face Id')
+                            ? BaseColors.primary
+                            : BaseColors.offWhite
+                          // isEnabledfaceid
+                          //   ? BaseColors.primary
+                          //   : BaseColors.offWhite
                         }
                         ios_backgroundColor="#3e3e3e"
-                        onValueChange={toggleSwitch}
-                        value={isEnabled}
+                        onValueChange={
+                          item.title === 'Dark Theme'
+                            ? toggleSwitch
+                            : toggleSwitchfaceid
+                        }
+                        value={
+                          item.title === 'Dark Theme'
+                            ? isEnabled
+                            : isEnabledfaceid
+                        }
                       />
                     ) : (
                       item.righttitle
