@@ -6,17 +6,25 @@ const windowHeight = Dimensions.get('window').height;
 export default StyleSheet.create({
   main: {
     backgroundColor: BaseColors.lightBg,
+    flexGrow: 1,
   },
   scrollcontainer: {
-    height: '86%',
+    flexGrow: 1,
+    marginTop: 20,
+    marginBottom: 30,
     paddingVertical: 20,
     marginHorizontal: 20,
-    marginTop: 20,
     borderRadius: 12,
     backgroundColor: BaseColors.white,
-    paddingBottom: 20,
-    width: '90%',
     paddingHorizontal: 20,
+    shadowColor: BaseColors.black,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
   },
   buttoncontainer: {
     marginTop: 5,

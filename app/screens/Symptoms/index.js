@@ -3,7 +3,13 @@ import HeaderBar from '@components/HeaderBar';
 import { BaseColors, FontFamily } from '@config/theme';
 import { Slider } from '@miblanchard/react-native-slider';
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  StatusBar,
+} from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import styles from './styles';
 import { useNavigation } from '@react-navigation/native';
@@ -29,6 +35,7 @@ const Symptoms = () => {
   };
   return (
     <View style={styles.main}>
+      <StatusBar barStyle="dark-content" translucent={true} />
       <HeaderBar
         HeaderText={'Symptoms'}
         HeaderCenter
@@ -38,10 +45,10 @@ const Symptoms = () => {
         }}
       />
       <ScrollView
-        style={styles.scrollcontainer}
+        contentContainerStyle={styles.scrollcontainer}
         showsVerticalScrollIndicator={false}
       >
-        <View style={{ flex: 1 }}>
+        <View>
           <View>
             <FlatList
               data={buttons}
