@@ -191,6 +191,13 @@ const Login = ({ navigation }) => {
         <View style={styles.inputcontainer}>
           <LabeledInput
             changeViewWidthSty={{
+              shadowColor: BaseColors.black,
+              shadowOffset: {
+                width: 0,
+                height: 1,
+              },
+              shadowOpacity: 0.22,
+              shadowRadius: 2.22,
               elevation: 2,
               backgroundColor: BaseColors.white,
             }}
@@ -211,6 +218,13 @@ const Login = ({ navigation }) => {
           <LabeledInput
             ref={cInputRef}
             changeViewWidthSty={{
+              shadowColor: BaseColors.black,
+              shadowOffset: {
+                width: 0,
+                height: 1,
+              },
+              shadowOpacity: 0.22,
+              shadowRadius: 2.22,
               elevation: 2,
               backgroundColor: BaseColors.white,
             }}

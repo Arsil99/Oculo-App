@@ -101,11 +101,7 @@ const Milestones = ({ navigation, route }) => {
     );
   };
   return (
-    <View
-      style={{
-        backgroundColor: 'white',
-      }}
-    >
+    <View style={styles.maincontainer}>
       <FlatList
         renderItem={renderItem}
         data={data}
