@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     width: '100%',
   },
   maincontainer: {
@@ -11,16 +11,24 @@ export default StyleSheet.create({
     paddingBottom: 10,
     width: '100%',
   },
-  scrollcontainer: {
-    height: '86%',
+  mainDiv: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: BaseColors.white,
     paddingVertical: 20,
     marginHorizontal: 20,
-    marginTop: 10,
     borderRadius: 12,
-    backgroundColor: BaseColors.white,
-    paddingBottom: 20,
-    width: '90%',
+    marginTop: 10,
+    marginBottom: 20,
     paddingHorizontal: 20,
+    shadowColor: BaseColors.black,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
   },
   titleTextcontainer: {
     alignItems: 'flex-start',

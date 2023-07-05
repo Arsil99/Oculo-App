@@ -1,33 +1,33 @@
-import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
-import React from "react";
-import styles from "./styles";
-import { BaseColors } from "@config/theme";
-import BaseSetting from "@config/setting";
+import { ActivityIndicator, Text, TouchableOpacity } from 'react-native';
+import React from 'react';
+import styles from './styles';
+import { BaseColors } from '@config/theme';
+import BaseSetting from '@config/setting';
 
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-const Button = (props) => {
+const Button = props => {
   const { title, type, loading, shape, onPress, style, TextStyle, newOutline } =
     props;
 
   const shapeStyle =
-    shape === "round"
+    shape === 'round'
       ? styles.round
-      : shape === "square"
+      : shape === 'square'
       ? styles.square
       : null;
 
   let BStyle = {};
   let TStyle = {};
-  let indicatColor = "";
+  let indicatColor = '';
 
   switch (type) {
-    case "outlined":
+    case 'outlined':
       BStyle = !newOutline ? styles.outlined : null;
       TStyle = styles.txtBlack;
       indicatColor = BaseColors.secondary;
       break;
-    case "primary":
+    case 'primary':
       BStyle = styles.primary;
       TStyle = styles.txtWhite;
       indicatColor = BaseColors.white;
@@ -63,8 +63,8 @@ export default Button;
 
 Button.propTypes = {
   title: PropTypes.string,
-  type: PropTypes.oneOf(["primary", "outlined"]),
-  shape: PropTypes.oneOf(["round", "square"]),
+  type: PropTypes.oneOf(['primary', 'outlined']),
+  shape: PropTypes.oneOf(['round', 'square']),
   loading: PropTypes.bool,
   onPress: PropTypes.func,
   style: PropTypes.object,
@@ -72,9 +72,9 @@ Button.propTypes = {
 };
 
 Button.defaultProps = {
-  title: "title",
-  type: "primary", // "primary"  | "outlined" | "text"
-  shape: "square", // "round"  | "square"
+  title: 'title',
+  type: 'primary', // "primary"  | "outlined" | "text"
+  shape: 'square', // "round"  | "square"
   loading: false, // true | false
   onPress: () => {},
   style: {},

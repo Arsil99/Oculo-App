@@ -14,7 +14,6 @@ import HeaderBar from '@components/HeaderBar';
 import TabSwitch from '@components/TabSwitch';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { BaseColors } from '@config/theme';
-import ProfileHistory from '@components/ProfileHistory';
 import ProfilehistoryButton from '@components/ProfilehistoryButton';
 import { logout } from '@utils/CommonFunction';
 import moment from 'moment';
@@ -351,11 +350,7 @@ export default function Profile({ navigation }) {
           </View>
         </ScrollView>
       ) : activeTab?.id === 'history' ? (
-        editHistory ? (
-          <ProfilehistoryButton />
-        ) : (
-          <ProfileHistory />
-        )
+        <ProfilehistoryButton editHistory={editHistory} />
       ) : (
         <View style={styles.cardOuter}>
           <InfoCard data={settings} mainTitle={'Settings'} />
