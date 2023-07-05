@@ -1,7 +1,6 @@
 import Button from '@components/Button';
 import HeaderBar from '@components/HeaderBar';
 import { BaseColors } from '@config/theme';
-
 import { Slider } from '@miblanchard/react-native-slider';
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
@@ -9,8 +8,6 @@ import { FlatList } from 'react-native-gesture-handler';
 import styles from './styles';
 
 const Symptoms = () => {
-  const [ageVal, setAgeVal] = useState([16, 99]);
-  const [severityLevel, setSeverityLevel] = useState(5);
   const [activeButtonIndex, setActiveButtonIndex] = useState(0);
 
   const buttons = [
@@ -89,6 +86,7 @@ const Symptoms = () => {
               thumbTintColor={BaseColors.white}
               style={styles.slider}
               step={1}
+              thumbStyle={styles.thumbstyle}
             />
 
             <View style={styles.sliderLabelsContainer}>
@@ -107,53 +105,20 @@ const Symptoms = () => {
                   paddingVertical: 15,
                 }}
               >
-                <Text>None</Text>
-                <Text>Mild</Text>
-                <Text>Moderate</Text>
-                <Text>Sever</Text>
+                <Text style={styles.lighttext}>None</Text>
+                <Text style={styles.lighttext}>Mild</Text>
+                <Text style={styles.lighttext}>Moderate</Text>
+                <Text style={styles.lighttext}>Sever</Text>
               </View>
             </View>
 
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginTop: 30,
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                }}
-              >
-                <View
-                  style={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: 5,
-                    backgroundColor: BaseColors.secondary,
-                    marginRight: 10,
-                  }}
-                />
+            <View style={styles.assesmentmaincontainer}>
+              <View style={styles.assesmentcontainer}>
+                <View style={styles.previousassesment} />
                 <Text>Previous Assessment</Text>
               </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                }}
-              >
-                <View
-                  style={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: 5,
-                    backgroundColor: BaseColors.primary,
-                    marginRight: 10,
-                  }}
-                />
+              <View style={styles.assesmentcontainer}>
+                <View style={styles.currentassesment} />
                 <Text>Current Assessment</Text>
               </View>
             </View>

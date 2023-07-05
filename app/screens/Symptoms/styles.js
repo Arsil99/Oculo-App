@@ -1,6 +1,6 @@
 import { Dimensions, StyleSheet } from 'react-native';
 import { BaseColors, FontFamily } from '@config/theme';
-import BaseSetting from '@config/setting';
+
 const windowHeight = Dimensions.get('window').height;
 
 export default StyleSheet.create({
@@ -40,7 +40,11 @@ export default StyleSheet.create({
     fontWeight: '300',
     lineHeight: 22,
     fontFamily: FontFamily.light,
-    color: BaseColors.textColor,
+  },
+  lighttext: {
+    fontWeight: '300',
+    lineHeight: 22,
+    fontFamily: FontFamily.light,
   },
   boldText: {
     marginTop: 30,
@@ -69,7 +73,6 @@ export default StyleSheet.create({
   },
   btnContainer: {
     height: windowHeight / 3.1,
-
     justifyContent: 'flex-end',
   },
   sliderContainer: {
@@ -81,6 +84,7 @@ export default StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'center',
   },
+  thumbstyle: { elevation: 5, height: 28, width: 28, borderRadius: 14 },
   sliderLabelsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -88,5 +92,26 @@ export default StyleSheet.create({
   },
   sliderLabel: {
     fontSize: 12,
+  },
+  previousassesment: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: BaseColors.secondary,
+    marginRight: 10,
+  },
+  currentassesment: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: BaseColors.primary,
+    marginRight: 10,
+  },
+  assesmentcontainer: { flexDirection: 'row', alignItems: 'center' },
+  assesmentmaincontainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 30,
   },
 });
