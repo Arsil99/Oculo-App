@@ -41,7 +41,7 @@ const Dashboard = () => {
       contentContainerStyle={{ flexGrow: 1, backgroundColor: BaseColors.white }}
       showsVerticalScrollIndicator={false}
     >
-      <HeaderBar HeaderText={'Event Aug 3'} HeaderCenter backPress />
+      <HeaderBar HeaderText={'Event Aug 3'} HeaderCenter leftText="Back" />
       <View style={styles.imageView}>
         <Image source={Images.emoji5} resizeMode="contain" />
         <Text style={styles.headtext}>Headache</Text>

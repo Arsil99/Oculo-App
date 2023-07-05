@@ -7,7 +7,11 @@ import HeaderBar from '@components/HeaderBar';
 const NotificationSettings = () => {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <HeaderBar HeaderText={'Notifications Settings'} HeaderCenter backPress />
+      <HeaderBar
+        HeaderText={'Notifications Settings'}
+        HeaderCenter
+        leftText="Back"
+      />
     </ScrollView>
   );
 };

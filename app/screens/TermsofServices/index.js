@@ -7,7 +7,11 @@ import HeaderBar from '@components/HeaderBar';
 const TermsofServices = () => {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <HeaderBar HeaderText={'Terms of Services'} HeaderCenter backPress />
+      <HeaderBar
+        HeaderText={'Terms of Services'}
+        HeaderCenter
+        leftText="Back"
+      />
     </ScrollView>
   );
 };

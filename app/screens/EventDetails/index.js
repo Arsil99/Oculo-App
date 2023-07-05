@@ -31,7 +31,11 @@ export default function EventDetails() {
   });
   return (
     <View style={styles.main}>
-      <HeaderBar HeaderText={'Event Report (Aug 03)'} HeaderCenter backPress />
+      <HeaderBar
+        HeaderText={'Event Report (Aug 03)'}
+        HeaderCenter
+        leftText="Back"
+      />
       {/* SWITCH TAB */}
 
       <TabSwitch

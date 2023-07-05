@@ -37,7 +37,6 @@ export default function Profile({ navigation }) {
   const { userData, editProfiles, saveEdit } = useSelector(state => {
     return state.auth;
   });
-  console.log('🚀 ~ file: index.js:46 ~ Profile ~ editProfiles:', editProfiles);
 
   const switchOptions = [
     { id: 'detail', name: 'Detail' },
@@ -283,8 +282,11 @@ export default function Profile({ navigation }) {
       <HeaderBar
         HeaderText={'Profile'}
         HeaderCenter
-        hiddenBack={editProfiles ? false : true}
-        closeBack={!editProfiles ? false : true}
+        leftText={editProfiles ? 'Close' : ''}
+        leftBtnPress={() => {
+          dispatch(setSaveEdit('Edit'));
+          dispatch(setEditProfiles(false));
+        }}
         rightComponent={
           activeTab?.id === 'detail' ? (
             <TouchableOpacity

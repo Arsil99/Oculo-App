@@ -15,7 +15,7 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   imageCon: {
-    width: '10%',
+    width: 50,
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1,

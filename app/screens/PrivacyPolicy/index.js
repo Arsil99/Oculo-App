@@ -7,7 +7,7 @@ import HeaderBar from '@components/HeaderBar';
 const PrivacyPolicy = () => {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <HeaderBar HeaderText={'privacyPolicy'} HeaderCenter backPress />
+      <HeaderBar HeaderText={'privacyPolicy'} HeaderCenter leftText="Back" />
     </ScrollView>
   );
 };

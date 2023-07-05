@@ -8,65 +8,52 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { BaseColors } from '@config/theme';
 import Authentication from '@redux/reducers/auth/actions';
+
 const HeaderBar = ({
   HeaderText,
   HeaderTextStyle,
   userProfile,
   HeaderCenter,
-  Greatings,
+  leftText,
+  leftBtnPress,
+  LeftTextStyle,
   rightComponent,
   containerStyle,
-  arrowPress,
-  backPress,
-  closeBack,
-  hiddenBack,
+  isTransperant,
 }) => {
   const { userData } = useSelector(state => {
     return state.auth;
   });
   const navigation = useNavigation();
-  const dispatch = useDispatch();
-  const { setEditProfiles, setSaveEdit } = Authentication;
+
   return (
     <View
       style={{
-        backgroundColor: BaseColors.white,
+        backgroundColor: isTransperant ? '#0000' : BaseColors.white,
         width: '100%',
         paddingTop: 10,
       }}
     >
       <View style={[styles.main, containerStyle]}>
         <View style={styles.contentBox}>
-          {backPress && (
-            <TouchableOpacity
-              activeOpacity={BaseSetting.buttonOpacity}
-              style={styles.imageCon}
-              onPress={() => {
-                arrowPress ? arrowPress() : navigation.goBack();
-              }}
-            >
-              <Text>Back</Text>
-            </TouchableOpacity>
-          )}
-          {hiddenBack && <View />}
-          {closeBack && (
-            <TouchableOpacity
-              activeOpacity={BaseSetting.buttonOpacity}
-              style={styles.imageCon}
-              onPress={() => {
-                dispatch(setSaveEdit('Edit'));
-                dispatch(setEditProfiles(false));
-              }}
-            >
-              <Text>Close</Text>
-            </TouchableOpacity>
-          )}
+          <TouchableOpacity
+            activeOpacity={isEmpty(leftText) ? 1 : BaseSetting.buttonOpacity}
+            style={styles.imageCon}
+            onPress={() => {
+              if (leftText === 'Back') {
+                navigation.goBack();
+              } else if (!isEmpty(leftText)) {
+                leftBtnPress && leftBtnPress();
+              }
+            }}
+          >
+            <Text style={LeftTextStyle}>{leftText}</Text>
+          </TouchableOpacity>
           {!isEmpty(HeaderText) && (
             <View
               style={[
                 styles.headerTextCon,
                 HeaderCenter && styles.headerTextCenter,
-                HeaderTextStyle,
               ]}
             >
               <Text
@@ -79,6 +66,7 @@ const HeaderBar = ({
                         : 'capitalize'
                     }`,
                   },
+                  HeaderTextStyle,
                 ]}
                 numberOfLines={1}
               >
