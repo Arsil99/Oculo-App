@@ -23,23 +23,6 @@ const Symptoms = () => {
     setActiveButtonIndex(index);
   };
 
-  const minValue = 0;
-  const maxValue = 6;
-  const mildThreshold = 1;
-  const moderateThreshold = 3;
-  const severeThreshold = 5;
-
-  const renderCustomLabel = value => {
-    if (value === mildThreshold) {
-      return 'mild';
-    } else if (value === moderateThreshold) {
-      return 'moderate';
-    } else if (value === severeThreshold) {
-      return 'severe';
-    } else {
-      return '';
-    }
-  };
   const [sliderValue, setSliderValue] = useState(0);
 
   const handleValueChange = newValue => {
@@ -95,6 +78,7 @@ const Symptoms = () => {
             <Text style={styles.boldText}>
               Report the severity level of Headache:
             </Text>
+
             <Slider
               value={sliderValue}
               onValueChange={handleValueChange}
@@ -106,6 +90,7 @@ const Symptoms = () => {
               style={styles.slider}
               step={1}
             />
+
             <View style={styles.sliderLabelsContainer}>
               {[0, 1, 2, 3, 4, 5, 6].map(label => (
                 <Text style={styles.sliderLabel} key={label.toString()}>
@@ -115,23 +100,17 @@ const Symptoms = () => {
             </View>
 
             <View>
-
               <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
+                  paddingVertical: 15,
                 }}
               >
-                {Array.from({ length: maxValue + 1 }).map((_, index) => (
-                  <View
-                    key={index}
-                    style={{
-                      flex: 1,
-                    }}
-                  >
-                    <Text style={{}}>{renderCustomLabel(index)}</Text>
-                  </View>
-                ))}
+                <Text>None</Text>
+                <Text>Mild</Text>
+                <Text>Moderate</Text>
+                <Text>Sever</Text>
               </View>
             </View>
 
