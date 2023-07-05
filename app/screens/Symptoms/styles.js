@@ -1,6 +1,6 @@
 import { Dimensions, StyleSheet } from 'react-native';
 import { BaseColors, FontFamily } from '@config/theme';
-
+import BaseSetting from '@config/setting';
 const windowHeight = Dimensions.get('window').height;
 
 export default StyleSheet.create({
@@ -40,11 +40,7 @@ export default StyleSheet.create({
     fontWeight: '300',
     lineHeight: 22,
     fontFamily: FontFamily.light,
-  },
-  lighttext: {
-    fontWeight: '300',
-    lineHeight: 22,
-    fontFamily: FontFamily.light,
+    color: BaseColors.textColor,
   },
   boldText: {
     marginTop: 30,
@@ -73,6 +69,7 @@ export default StyleSheet.create({
   },
   btnContainer: {
     height: windowHeight / 3.1,
+
     justifyContent: 'flex-end',
   },
   sliderContainer: {
@@ -84,34 +81,91 @@ export default StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'center',
   },
-  thumbstyle: { elevation: 5, height: 28, width: 28, borderRadius: 14 },
-  sliderLabelsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-  },
+
   sliderLabel: {
     fontSize: 12,
   },
-  previousassesment: {
+  sliderLabelMarker: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#000000',
+  },
+  sliderMarker: {
+    // paddingHorizontal: 20,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+
+  sliderLabelsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+    marginTop: 15,
+  },
+  markerContainer: {
+    marginTop: -10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+  },
+  markerContainerNumber: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+    paddingHorizontal: 10,
+  },
+  marker: {
+    width: 1,
+    height: 10,
+    backgroundColor: '#000000',
+  },
+  thumbStyle: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+    elevation: 3,
+  },
+  trackStyle: {
+    height: 4,
+  },
+  lables: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 15,
+  },
+  topBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 30,
+  },
+  outer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  inner: {
     width: 10,
     height: 10,
     borderRadius: 5,
     backgroundColor: BaseColors.secondary,
     marginRight: 10,
   },
-  currentassesment: {
+  assessmentHead: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  assessmentData: {
     width: 10,
     height: 10,
     borderRadius: 5,
     backgroundColor: BaseColors.primary,
     marginRight: 10,
-  },
-  assesmentcontainer: { flexDirection: 'row', alignItems: 'center' },
-  assesmentmaincontainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: 30,
   },
 });

@@ -33,7 +33,7 @@ const Symptoms = () => {
         showsVerticalScrollIndicator={false}
       >
         <View style={{ flex: 1 }}>
-          <View style={{}}>
+          <View>
             <FlatList
               data={buttons}
               horizontal
@@ -75,50 +75,60 @@ const Symptoms = () => {
             <Text style={styles.boldText}>
               Report the severity level of Headache:
             </Text>
+            <View style={styles.sliderMarker}>
+              <Slider
+                value={sliderValue}
+                onValueChange={handleValueChange}
+                minimumValue={1}
+                maximumValue={8}
+                thumbStyle={styles.thumbStyle}
+                trackStyle={styles.trackStyle}
+                minimumTrackTintColor={BaseColors.primary}
+                maximumTrackTintColor={BaseColors.tabinActive}
+                thumbTintColor={BaseColors.white}
+                style={styles.slider}
+                step={1}
+              />
+              {/* Marker Vertical Lines */}
+              <View style={styles.markerContainer}>
+                {['', 0, 1, 2, 3, 4, 5, 6].map((marker, index) =>
+                  index === 0 ? (
+                    <View key={marker.toString()} />
+                  ) : (
+                    <View style={styles.marker} key={marker.toString()} />
+                  ),
+                )}
+              </View>
+            </View>
 
-            <Slider
-              value={sliderValue}
-              onValueChange={handleValueChange}
-              minimumValue={1}
-              maximumValue={6}
-              minimumTrackTintColor={BaseColors.primary}
-              maximumTrackTintColor={BaseColors.tabinActive}
-              thumbTintColor={BaseColors.white}
-              style={styles.slider}
-              step={1}
-              thumbStyle={styles.thumbstyle}
-            />
-
-            <View style={styles.sliderLabelsContainer}>
-              {[0, 1, 2, 3, 4, 5, 6].map(label => (
-                <Text style={styles.sliderLabel} key={label.toString()}>
-                  {label}
-                </Text>
-              ))}
+            <View style={styles.markerContainerNumber}>
+              {['', 0, 1, 2, 3, 4, 5, 6].map((label, index) =>
+                index === 0 ? (
+                  <Text key={label.toString()}>&nbsp;</Text>
+                ) : (
+                  <Text style={styles.sliderLabel} key={label.toString()}>
+                    {label}
+                  </Text>
+                ),
+              )}
             </View>
 
             <View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  paddingVertical: 15,
-                }}
-              >
-                <Text style={styles.lighttext}>None</Text>
-                <Text style={styles.lighttext}>Mild</Text>
-                <Text style={styles.lighttext}>Moderate</Text>
-                <Text style={styles.lighttext}>Sever</Text>
+              <View style={styles.lables}>
+                <Text>None</Text>
+                <Text>Mild</Text>
+                <Text>Moderate</Text>
+                <Text>Sever</Text>
               </View>
             </View>
 
-            <View style={styles.assesmentmaincontainer}>
-              <View style={styles.assesmentcontainer}>
-                <View style={styles.previousassesment} />
+            <View style={styles.topBox}>
+              <View style={styles.outer}>
+                <View style={styles.inner} />
                 <Text>Previous Assessment</Text>
               </View>
-              <View style={styles.assesmentcontainer}>
-                <View style={styles.currentassesment} />
+              <View style={styles.assessmentHead}>
+                <View style={styles.assessmentData} />
                 <Text>Current Assessment</Text>
               </View>
             </View>
