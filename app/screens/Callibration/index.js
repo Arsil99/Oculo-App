@@ -20,7 +20,7 @@ export default function Callibration() {
         HeaderText={'Callibration'}
         isTransperant
         HeaderCenter
-        leftText="Back"
+        leftText="Cancel"
         leftBtnPress={() => {
           navigation.goBack();
         }}
@@ -56,7 +56,14 @@ export default function Callibration() {
             </Text>
           </View>
         </View>
-        <Button shape="round" title={'Get Started'} style={styles.requestBtn} />
+        <Button
+          shape="round"
+          onPress={() => {
+            navigation?.navigate('Symptoms');
+          }}
+          title={'Get Started'}
+          style={styles.requestBtn}
+        />
       </View>
     </View>
   );

@@ -83,6 +83,7 @@ export default StyleSheet.create({
 
   sliderLabel: {
     fontSize: 12,
+    fontFamily: FontFamily.light,
   },
   sliderLabelMarker: {
     fontSize: 16,
@@ -119,7 +120,7 @@ export default StyleSheet.create({
   marker: {
     width: 1,
     height: 10,
-    backgroundColor: '#000000',
+    backgroundColor: BaseColors.black40,
   },
   thumbStyle: {
     shadowColor: '#000',
