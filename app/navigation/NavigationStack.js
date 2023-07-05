@@ -33,6 +33,7 @@ import PrivacyPolicy from '@screens/PrivacyPolicy';
 import TermsofServices from '@screens/TermsofServices';
 import NotificationSettings from '@screens/NotificationSettings';
 import Callibration from '@screens/Callibration';
+import Symptoms from '@screens/Symptoms';
 
 const intitialNotificationState = {
   notification: null,
@@ -250,6 +251,12 @@ function App() {
             component={Dashboard}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="Symptoms"
+            component={Symptoms}
+            options={{ headerShown: false }}
+          />
+
           <Stack.Screen
             name="OTP"
             component={OTP}
