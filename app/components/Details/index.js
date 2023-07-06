@@ -14,19 +14,18 @@ const Details = ({ iconName, text, number, iconColor, numberColor }) => {
             justifyContent: 'space-between',
           }}
         >
-          <View style={{ height: 50, width: 100 }}>
+          <View style={{ height: 50, width: 90 }}>
             <Text style={styles.text}>{text}</Text>
           </View>
           <Image source={Images.emoji1} resizeMode="contain" />
         </View>
         <View style={styles.graphcontainer}>
-          <View>
-            <Image
-              source={Images.graph1}
-              resizeMode="contain"
-              style={styles.img2}
-            />
-          </View>
+          <Image
+            source={Images.graph1}
+            resizeMode="contain"
+            style={styles.img2}
+          />
+
           <View style={styles.numbercontainer}>
             <View>
               <Text style={[styles.number, { color: numberColor }]}>
