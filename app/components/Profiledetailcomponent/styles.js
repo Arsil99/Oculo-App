@@ -27,6 +27,7 @@ export default StyleSheet.create({
     marginTop: 10,
   },
   genderIcon: {
+    height: 50,
     flexDirection: 'row',
     width: '100%',
     paddingHorizontal: 10,
@@ -65,6 +66,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     width: '85%',
+    borderWidth: 1,
   },
   cardOuter: {
     width: fullWidth,

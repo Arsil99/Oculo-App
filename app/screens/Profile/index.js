@@ -256,17 +256,11 @@ export default function Profile({ navigation }) {
                   <Text style={styles.righttitletext}>
                     {item?.switch ? (
                       <Switch
-                        trackColor={{ false: '#767577', true: '#81b0ff' }}
-                        thumbColor={
-                          (isEnabled && item.title === 'Dark Theme') ||
-                          (isEnabledfaceid &&
-                            item.title === 'Login With Face Id')
-                            ? BaseColors.primary
-                            : BaseColors.offWhite
-                          // isEnabledfaceid
-                          //   ? BaseColors.primary
-                          //   : BaseColors.offWhite
-                        }
+                        // trackColor={{ false: '#767577', true: '#81b0ff' }}
+                        // thumbColor={{
+                        //   false: BaseColors.primary,
+                        //   true: BaseColors.offWhite,
+                        // }}
                         ios_backgroundColor="#3e3e3e"
                         onValueChange={
                           item.title === 'Dark Theme'

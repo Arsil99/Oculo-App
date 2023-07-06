@@ -238,7 +238,7 @@ const Profiledetailcomponent = ({ onPress }) => {
                 </Text>
               </View>
             </TouchableOpacity>
-            <View style={styles.customGender}>
+            <View>
               <Modal
                 animationType="slide"
                 transparent={true}
