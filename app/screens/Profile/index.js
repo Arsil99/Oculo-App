@@ -6,11 +6,13 @@ import {
   ScrollView,
   Modal,
   Alert,
+  Platform,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
 import TabSwitch from '@components/TabSwitch';
+import Icon1 from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { BaseColors } from '@config/theme';
 import ProfilehistoryButton from '@components/ProfilehistoryButton';
@@ -19,6 +21,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import Authentication from '@redux/reducers/auth/actions';
 import Dropdown from '@components/Dropdown';
 import Profiledetailcomponent from '@components/Profiledetailcomponent';
+
+const IOS = Platform.OS === 'ios';
 
 export default function Profile({ navigation }) {
   const [open, setOpen] = useState(false);
@@ -110,8 +114,8 @@ export default function Profile({ navigation }) {
   const settings = [
     {
       id: '1',
-      leftIcon: 'meh',
-      title: 'Login With Face Id',
+      leftIcon: IOS ? 'Meh' : 'finger-print-outline',
+      title: IOS ? 'Login With Face Id' : 'Login With Touch Id',
       switch: true,
     },
     {
@@ -229,11 +233,19 @@ export default function Profile({ navigation }) {
               >
                 <View style={styles.cardContainer}>
                   <View style={styles.innerCard}>
-                    <Icon
-                      name={item.leftIcon}
-                      size={15}
-                      color={BaseColors.black90}
-                    />
+                    {item?.title === 'Login With Touch Id' ? (
+                      <Icon1
+                        name={item.leftIcon}
+                        size={15}
+                        color={BaseColors.black90}
+                      />
+                    ) : (
+                      <Icon
+                        name={item.leftIcon}
+                        size={15}
+                        color={BaseColors.black90}
+                      />
+                    )}
                   </View>
                   <View>
                     <Text style={styles.settingItemText}>{item.title}</Text>
