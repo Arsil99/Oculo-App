@@ -1,18 +1,16 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import 'react-native-gesture-handler';
-import {ActivityIndicator, Text, TextInput, LogBox} from 'react-native';
+import { ActivityIndicator, Text, TextInput, LogBox } from 'react-native';
 // import DatePicker from 'react-native-datepicker';
 // import codePush from 'react-native-code-push';
-import {Provider} from 'react-redux';
-import {PersistGate} from 'redux-persist/es/integration/react';
-import {ThemeProvider} from '@react-navigation/native';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/es/integration/react';
+import { ThemeProvider } from '@react-navigation/native';
 import NToast from 'react-native-toast-message';
-// import Bugsnag from '@bugsnag/react-native';
 import Navigator from './navigation/index';
-// import Toast from '@components/Toast';
 import CTopNotify from '@components/CTopNotify';
 import CStatusBar from '@components/CStatusBar';
-import {persistor, store} from './redux/store/configureStore';
+import { persistor, store } from './redux/store/configureStore';
 // import {initTranslate} from './lang/Translate';
 
 // const IOS = Platform.OS === 'ios';
@@ -93,7 +91,7 @@ class index extends Component {
   };
 
   render() {
-    const {processing, loading} = this.state;
+    const { processing, loading } = this.state;
 
     return (
       <ThemeProvider>
@@ -101,19 +99,12 @@ class index extends Component {
           <PersistGate
             loading={<ActivityIndicator />}
             persistor={persistor}
-            onBeforeLift={this.onBeforeLift}>
+            onBeforeLift={this.onBeforeLift}
+          >
             <CStatusBar />
             {loading ? <ActivityIndicator /> : <Navigator />}
             {processing && <CTopNotify title="Installing updates" />}
           </PersistGate>
-          {/* <Toast
-            ref={this.notifyToast}
-            position="top"
-            positionValue={100}
-            fadeInDuration={750}
-            fadeOutDuration={2000}
-            opacity={0.8}
-          /> */}
           <NToast />
         </Provider>
       </ThemeProvider>

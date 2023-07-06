@@ -26,6 +26,7 @@ const BaseSetting = {
   MAPS_API_CALL_KEY: '',
   emailRegex:
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+  buttonOpacity: 0.8,
 
   endpoints: {
     login: '/patient/login',

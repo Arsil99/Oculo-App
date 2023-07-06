@@ -1,5 +1,4 @@
 import { Images } from '@config';
-import { CustomIcon } from '@config/LoadIcons';
 import React from 'react';
 import { View, Text, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';

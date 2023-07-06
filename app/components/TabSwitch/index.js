@@ -46,10 +46,10 @@ export default function TabSwitch(props) {
     return (
       <View
         style={[
-          { ...styles.wrapper, width: tabSize },
+          styles.wrapper,
           {
             borderRadius: insideTab ? 50 : 0,
-
+            width: tabSize,
             backgroundColor: insideTab ? BaseColors.lightBg : null,
           },
         ]}
