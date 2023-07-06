@@ -130,10 +130,14 @@ const ForgetPassword = ({ navigation }) => {
           </View>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
-            style={{ alignItems: 'center' }}
+            style={{
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+              marginTop: 30,
+            }}
             activeOpacity={0.7}
           >
-            <Text style={styles.forgotPasswordTextStyle}>Login</Text>
+            <Text style={styles.forgotPasswordTextStyle}> Back To Login</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
