@@ -13,7 +13,11 @@ export default function Callibration() {
 
   return (
     <View style={styles.main}>
-      <StatusBar barStyle="light-content" translucent={true} />
+      <StatusBar
+        backgroundColor={'#0000'}
+        barStyle="light-content"
+        translucent={true}
+      />
       <Image source={Images?.callibrateImg} style={styles.imgStyle} />
 
       <HeaderBar
