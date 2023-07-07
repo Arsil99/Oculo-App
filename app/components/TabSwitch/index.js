@@ -13,7 +13,6 @@ import BaseSetting from '@config/setting';
 export default function TabSwitch(props) {
   const {
     insideTab,
-    threePack,
     tabSize,
     subTabSize,
     tabs,
@@ -32,7 +31,7 @@ export default function TabSwitch(props) {
 
   const setspring = index => {
     Animated.spring(translateValue, {
-      toValue: (isRTL ? -1 : 1) * (1 + index * (threePack ? 125 : subTabSize)),
+      toValue: (isRTL ? -1 : 1) * (1 + index * subTabSize),
       velocity: 10,
       useNativeDriver: true,
     }).start();
@@ -63,8 +62,8 @@ export default function TabSwitch(props) {
                   translateX: translateValue,
                 },
               ],
-              marginLeft: threePack ? 0 : -5,
-              width: threePack ? 120 : subTabSize,
+              marginLeft: -5,
+              width: subTabSize,
               borderBottomWidth: !insideTab ? 4 : 0,
               borderRadius: insideTab ? 50 : 0,
               borderBottomColor: insideTab
@@ -83,7 +82,7 @@ export default function TabSwitch(props) {
             }}
             style={{
               ...styles.tab,
-              width: threePack ? 130 : subTabSize,
+              width: subTabSize,
             }}
           >
             <Text

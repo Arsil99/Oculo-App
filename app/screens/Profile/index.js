@@ -23,6 +23,7 @@ import Dropdown from '@components/Dropdown';
 import Profiledetailcomponent from '@components/Profiledetailcomponent';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
+import BaseSetting from '@config/setting';
 
 const IOS = Platform.OS === 'ios';
 
@@ -443,6 +444,7 @@ export default function Profile({ navigation }) {
           onTabChange={currentTab => {
             setActiveTab(currentTab);
           }}
+          subTabSize={BaseSetting.nWidth * 0.3}
         />
       </View>
 
