@@ -3,11 +3,12 @@ import React from 'react';
 import { View, Text, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import styles from './styles';
+import BaseSetting from '@config/setting';
 
 const Details = ({ iconName, text, number, iconColor, numberColor }) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity activeOpacity={0.7}>
+      <TouchableOpacity activeOpacity={BaseSetting.buttonOpacity}>
         <View
           style={{
             flexDirection: 'row',

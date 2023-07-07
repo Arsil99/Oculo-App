@@ -80,7 +80,7 @@ export default function ProfilehistoryButton(props) {
                         },
                         styles.yesbutton,
                       ]}
-                      activeOpacity={0.7}
+                      activeOpacity={BaseSetting.buttonOpacity}
                     >
                       <Text
                         style={
@@ -108,7 +108,7 @@ export default function ProfilehistoryButton(props) {
                         },
                         styles.nobutton,
                       ]}
-                      activeOpacity={0.7}
+                      activeOpacity={BaseSetting.buttonOpacity}
                     >
                       <Text
                         style={

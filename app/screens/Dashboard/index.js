@@ -7,6 +7,7 @@ import { Images } from '@config';
 import { BaseColors } from '@config/theme';
 import { useState } from 'react';
 import HeaderBar from '@components/HeaderBar';
+import BaseSetting from '@config/setting';
 
 const Dashboard = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -84,7 +85,7 @@ const Dashboard = () => {
         {planData.map((item, index) => {
           return (
             <TouchableOpacity
-              activeOpacity={0.7}
+              activeOpacity={BaseSetting.buttonOpacity}
               onPress={() => {
                 setActiveIndex(index);
               }}

@@ -324,7 +324,7 @@ export default function Profile({ navigation }) {
             return (
               <TouchableOpacity
                 key={item?.id}
-                activeOpacity={0.7}
+                activeOpacity={BaseSetting.buttonOpacity}
                 onPress={() =>
                   item?.title === 'Sign Out'
                     ? logout()
@@ -406,6 +406,7 @@ export default function Profile({ navigation }) {
         rightComponent={
           activeTab?.id === 'detail' ? (
             <TouchableOpacity
+              activeOpacity={BaseSetting.buttonOpacity}
               onPress={() =>
                 saveEdit === 'Edit'
                   ? (dispatch(setEditProfiles(true)),
@@ -419,6 +420,7 @@ export default function Profile({ navigation }) {
             </TouchableOpacity>
           ) : activeTab?.id === 'history' ? (
             <TouchableOpacity
+              activeOpacity={BaseSetting.buttonOpacity}
               onPress={() =>
                 rightHistoryText === 'Edit'
                   ? (setEditHistory(!editHistory),
@@ -488,7 +490,7 @@ export default function Profile({ navigation }) {
                 <View style={styles.modalHead}>
                   <Text style={styles.titleText}>Select Option</Text>
                   <TouchableOpacity
-                    activeOpacity={0.7}
+                    activeOpacity={BaseSetting.buttonOpacity}
                     onPress={() => {
                       setModalVisible(!modalVisible);
                     }}

@@ -48,7 +48,7 @@ const Button = props => {
 
   return (
     <TouchableOpacity
-      activeOpacity={0.7}
+      activeOpacity={BaseSetting.buttonOpacity}
       style={[styles.default, shapeStyle, BStyle, style]}
       onPress={() => {
         loading ? null : onPress();

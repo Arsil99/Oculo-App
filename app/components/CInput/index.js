@@ -212,7 +212,7 @@ class CInput extends Component {
           >
             {_.isObject(phone) && !_.isEmpty(phone) ? (
               <TouchableOpacity
-                activeOpacity={0.8}
+                activeOpacity={BaseSetting.buttonOpacity}
                 style={styles.countryPickerView}
                 // onPress={() =>
                 //   editable ? this.setState({ openPicker: true }) : null

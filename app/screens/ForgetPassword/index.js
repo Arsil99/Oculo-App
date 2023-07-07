@@ -135,7 +135,7 @@ const ForgetPassword = ({ navigation }) => {
               justifyContent: 'flex-end',
               marginTop: 30,
             }}
-            activeOpacity={0.7}
+            activeOpacity={BaseSetting.buttonOpacity}
           >
             <Text style={styles.forgotPasswordTextStyle}> Back To Login</Text>
           </TouchableOpacity>

@@ -3,9 +3,14 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/AntDesign';
 import PropTypes from 'prop-types';
 import styles from './styles';
+import BaseSetting from '@config/setting';
 export default function CardList({ image, data, status, assessment, onPress }) {
   return (
-    <TouchableOpacity style={styles.main} onPress={onPress}>
+    <TouchableOpacity
+      style={styles.main}
+      onPress={onPress}
+      activeOpacity={BaseSetting.buttonOpacity}
+    >
       <View style={styles.container}>
         <View style={styles.insideBox}>
           <View>

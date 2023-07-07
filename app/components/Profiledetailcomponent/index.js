@@ -19,6 +19,7 @@ import Dropdown from '@components/Dropdown';
 
 import { useDispatch, useSelector } from 'react-redux';
 import Authentication from '@redux/reducers/auth/actions';
+import BaseSetting from '@config/setting';
 
 const Profiledetailcomponent = ({ onPress }) => {
   const [open, setOpen] = useState(false);
@@ -253,7 +254,7 @@ const Profiledetailcomponent = ({ onPress }) => {
                     <View style={styles.modalHead}>
                       <Text style={styles.titleText}>Select Option</Text>
                       <TouchableOpacity
-                        activeOpacity={0.7}
+                        activeOpacity={BaseSetting.buttonOpacity}
                         onPress={() => {
                           setModalVisible(!modalVisible);
                         }}

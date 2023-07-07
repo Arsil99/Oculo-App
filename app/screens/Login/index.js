@@ -371,7 +371,7 @@ const Login = ({ navigation }) => {
             }}
           >
             <TouchableOpacity
-              activeOpacity={0.7}
+              activeOpacity={BaseSetting.buttonOpacity}
               onPress={() => navigation.navigate('ForgetPassword')}
             >
               <Text style={styles.forgotPasswordTextStyle}>
@@ -389,7 +389,7 @@ const Login = ({ navigation }) => {
             />
             {Platform.OS === 'ios' && isBiometric ? (
               <TouchableOpacity
-                activeOpacity={0.7}
+                activeOpacity={BaseSetting.buttonOpacity}
                 onPress={() => {
                   checkBiometrics();
                 }}

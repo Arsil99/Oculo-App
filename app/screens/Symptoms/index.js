@@ -13,6 +13,7 @@ import {
 import { FlatList } from 'react-native-gesture-handler';
 import styles from './styles';
 import { useNavigation } from '@react-navigation/native';
+import BaseSetting from '@config/setting';
 
 const Symptoms = () => {
   const navigation = useNavigation();
@@ -67,7 +68,7 @@ const Symptoms = () => {
                       },
                       styles.yesbutton,
                     ]}
-                    activeOpacity={0.7}
+                    activeOpacity={BaseSetting.buttonOpacity}
                   >
                     <Text
                       style={{

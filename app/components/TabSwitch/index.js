@@ -76,7 +76,7 @@ export default function TabSwitch(props) {
         {tabs.map((obj, index) => (
           <TouchableOpacity
             key={`${index + 1}`}
-            activeOpacity={0.8}
+            activeOpacity={BaseSetting.buttonOpacity}
             onPress={() => {
               onTabChange(obj);
             }}
