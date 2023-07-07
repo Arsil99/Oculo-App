@@ -21,43 +21,54 @@ import { useDispatch, useSelector } from 'react-redux';
 import Authentication from '@redux/reducers/auth/actions';
 import Dropdown from '@components/Dropdown';
 import Profiledetailcomponent from '@components/Profiledetailcomponent';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
 
 const IOS = Platform.OS === 'ios';
 
 export default function Profile({ navigation }) {
+  const { setEditProfiles, setSaveEdit, setDarkmode, setBiometric } =
+    Authentication;
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [isClick, setIsClick] = useState(false);
+  const [editHistory, setEditHistory] = useState(false);
+  const [rightHistoryText, setRightHistoryText] = useState('Edit');
+
+  let epochTimeSeconds = Math.round(new Date().getTime() / 1000).toString();
+  let payload = epochTimeSeconds + 'some message';
+
+  const rnBiometrics = new ReactNativeBiometrics({
+    allowDeviceCredentials: true,
+  });
+
+  const { userData, editProfiles, saveEdit, darkmode, isBiometric } =
+    useSelector(state => {
+      return state.auth;
+    });
+
   const items = [
     { label: 'Email', value: 'Email' },
     { label: 'Phone', value: 'Phone' },
   ];
-  const dispatch = useDispatch();
-  const { setEditProfiles, setSaveEdit } = Authentication;
-
-  const [modalVisible, setModalVisible] = useState(false);
-  const { userData, editProfiles, saveEdit } = useSelector(state => {
-    return state.auth;
-  });
 
   const switchOptions = [
     { id: 'detail', name: 'Detail' },
     { id: 'history', name: 'History' },
     { id: 'account', name: 'Account' },
   ];
-  const [isEnabledfaceid, setIsEnabledfaceid] = useState(false);
-  const [isEnabled, setIsEnabled] = useState(false);
 
   useEffect(() => {
     dispatch(setEditProfiles(false));
   }, []);
-  const toggleSwitchfaceid = () =>
-    setIsEnabledfaceid(previousState => !previousState);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
   const [activeTab, setActiveTab] = useState({
     id: 'detail',
     name: 'Detail',
   });
-  console.log('🚀 ~ file: index.js:30 ~ Profile ~ userData:', userData);
+
   const patientdata = [
     {
       id: '1',
@@ -84,6 +95,7 @@ export default function Profile({ navigation }) {
       righttitle: 'Male',
     },
   ];
+
   const contactdata = [
     {
       id: '1',
@@ -156,6 +168,7 @@ export default function Profile({ navigation }) {
       switch: false,
     },
   ];
+
   const legal = [
     {
       id: '1',
@@ -172,34 +185,127 @@ export default function Profile({ navigation }) {
       navto: 'PrivacyPolicy',
     },
   ];
-  const [editProfile, setEditProfile] = useState(false);
-  const [editHistory, setEditHistory] = useState(false);
-  const [rightText, setRightText] = useState('Edit');
-  const [rightHistoryText, setRightHistoryText] = useState('Edit');
 
   useEffect(() => {
     if (activeTab?.id === 'history') {
-      setEditProfile(false);
       dispatch(setEditProfiles(false));
       dispatch(setSaveEdit('Edit'));
     } else if (activeTab?.id === 'detail') {
       setEditHistory(false);
       dispatch(setSaveEdit('Edit'));
     } else if (activeTab?.id === 'account') {
-      setEditProfile(false);
       dispatch(setEditProfiles(false));
       dispatch(setSaveEdit('Edit'));
       setEditHistory(false);
       setRightHistoryText('Edit');
     }
     return () => {
-      setEditProfile(false);
       dispatch(setEditProfiles(false));
       dispatch(setSaveEdit('Edit'));
       setEditHistory(false);
       setRightHistoryText('Edit');
     };
   }, [activeTab]);
+
+  const checkBiometrics = async () => {
+    try {
+      rnBiometrics.isSensorAvailable().then(resultObject => {
+        const { available, biometryType } = resultObject;
+
+        if (available && biometryType === BiometryTypes.TouchID) {
+          console.log('TouchID is supported');
+          authenticate();
+        } else if (available && biometryType === BiometryTypes.FaceID) {
+          console.log('FaceID is supported');
+          authenticate();
+        } else if (available && biometryType === BiometryTypes.Biometrics) {
+          console.log('Biometrics is supported');
+          authenticate();
+        } else {
+          console.log('Biometrics not supported');
+          authenticate();
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const authenticate = async () => {
+    try {
+      rnBiometrics
+        .biometricKeysExist()
+        .then(resultObject => {
+          const { keysExist } = resultObject;
+          console.log('resultObject ==key exists or not===>>> ', resultObject);
+          if (keysExist) {
+            checkSignature();
+          } else {
+            rnBiometrics
+              .createKeys()
+              .then(resultObject => {
+                console.log('resultObject ==create keys===>>> ', resultObject);
+                const { publicKey } = resultObject;
+                if (publicKey) {
+                  setTimeout(() => {
+                    // checkSignature();
+                  }, 400);
+                }
+              })
+              .catch(error => {
+                // moveToParticularPage();
+                console.log('Create keys error-----', error);
+              });
+          }
+        })
+        .catch(err => {
+          Toast.show({
+            type: 'error',
+            text1: 'Please turn on and add your device fingerprint',
+          });
+          console.log('Authentic error--', err);
+          // moveToParticularPage();
+        });
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Please turn on and add your device fingerprint',
+      });
+      console.log(error);
+      // moveToParticularPage();
+    }
+  };
+
+  const checkSignature = () => {
+    rnBiometrics
+      .createSignature({
+        promptMessage: 'Sign in',
+        payload: payload,
+      })
+      .then(resultObject => {
+        console.log('resultObject ===check signature==>>> ', resultObject);
+        const { success, signature } = resultObject;
+
+        if (success) {
+          dispatch(setBiometric(!isBiometric));
+        } else {
+          setTimeout(() => {
+            checkSignature();
+          }, 3000);
+        }
+      })
+      .catch(err => {
+        console.log('Err----', err);
+        if (Platform.OS === 'ios') {
+          Toast.show({
+            type: 'error',
+            text1: 'Please try again by reopen the app',
+          });
+        } else {
+          // moveToParticularPage();
+        }
+      });
+  };
 
   const HandleHistoryUpdateBtn = () => {
     setEditHistory(!editHistory);
@@ -262,15 +368,15 @@ export default function Profile({ navigation }) {
                         //   true: BaseColors.offWhite,
                         // }}
                         ios_backgroundColor="#3e3e3e"
-                        onValueChange={
+                        onValueChange={v => {
                           item.title === 'Dark Theme'
-                            ? toggleSwitch
-                            : toggleSwitchfaceid
-                        }
+                            ? dispatch(setDarkmode(v))
+                            : v
+                            ? checkBiometrics()
+                            : dispatch(setBiometric(v));
+                        }}
                         value={
-                          item.title === 'Dark Theme'
-                            ? isEnabled
-                            : isEnabledfaceid
+                          item.title === 'Dark Theme' ? darkmode : isBiometric
                         }
                       />
                     ) : (
@@ -285,8 +391,6 @@ export default function Profile({ navigation }) {
       </View>
     );
   };
-
-  const [isClick, setIsClick] = useState(false);
 
   return (
     <View style={styles.main}>

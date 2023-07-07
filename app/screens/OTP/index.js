@@ -10,9 +10,11 @@ import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import Authentication from '@redux/reducers/auth/actions';
 import { useDispatch } from 'react-redux';
 import { isEmpty } from 'lodash';
+import { storeCredentials } from '@utils/CommonFunction';
 
 export default function OTP({ navigation, route }) {
   const email = route?.params?.email || '';
+  const password = route?.params?.password || '';
   const from = route?.params?.from || '';
   const dispatch = useDispatch();
 
@@ -55,6 +57,7 @@ export default function OTP({ navigation, route }) {
       const resp = await getApiData(endPoints, 'POST', params, {}, false);
       if (resp?.status) {
         if (from === 'tfa') {
+          storeCredentials(email, password);
           dispatch(setUserData(resp?.data?.personal_info));
           dispatch(setAccessToken(resp?.data?.auth_token));
           navigation.reset({

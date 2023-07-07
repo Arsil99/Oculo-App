@@ -17,6 +17,7 @@ const initialState = {
   activeChatUser: null,
   editProfiles: false,
   saveEdit: 'Edit',
+  isBiometric: false,
 };
 
 export default function reducer(state = initialState, action) {
@@ -61,6 +62,11 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         introScreens: action.introScreens,
+      };
+    case types.SET_BIO_METRIC:
+      return {
+        ...state,
+        isBiometric: action.isBiometric,
       };
     case types.SET_PROFILESETUP:
       return {

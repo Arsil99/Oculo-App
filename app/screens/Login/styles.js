@@ -20,9 +20,7 @@ export default StyleSheet.create({
   forgotPasswordTextStyle: {
     color: BaseColors.primary,
   },
-  signinbutton: {
-    width: IOS ? '80%' : '100%',
-  },
+  signinbutton: { flex: 1 },
   btnContainer: {
     justifyContent: 'space-between',
     flexDirection: 'row',

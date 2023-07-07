@@ -16,6 +16,7 @@ const actions = {
   SET_ACTIVE_CHAT_USER: 'SET_ACTIVE_CHAT_USER',
   SET_EDIT_PROFILE: 'SET_EDIT_PROFILE',
   SET_SAVE_EDIT: 'SET_SAVE_EDIT',
+  SET_BIO_METRIC: 'SET_BIO_METRIC',
 
   setUserData: data => {
     return dispatch =>
@@ -43,6 +44,12 @@ const actions = {
     dispatch({
       type: actions.SET_ACCESSTOKEN,
       accessToken,
+    }),
+
+  setBiometric: isBiometric => dispatch =>
+    dispatch({
+      type: actions.SET_BIO_METRIC,
+      isBiometric,
     }),
 
   setUserType: userType => dispatch =>

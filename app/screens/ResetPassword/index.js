@@ -15,9 +15,10 @@ import { getApiData } from '@utils/apiHelper';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import Authentication from '@redux/reducers/auth/actions';
 import { useDispatch } from 'react-redux';
+import { removeCredentials, storeCredentials } from '@utils/CommonFunction';
 
 const ResetPassword = ({ navigation, route }) => {
-  const { setUserData, setAccessToken } = Authentication;
+  const { setUserData, setAccessToken, setBiometric } = Authentication;
   const IOS = Platform.OS === 'ios';
   const from = route?.params?.from || '';
   const email = route?.params?.email || '';
@@ -53,6 +54,8 @@ const ResetPassword = ({ navigation, route }) => {
     try {
       const resp = await getApiData(endPoints, 'POST', params, {}, false);
       if (resp?.status) {
+        dispatch(setBiometric(false));
+        removeCredentials();
         Toast.show({
           text1: resp?.message,
           type: 'success',
@@ -89,9 +92,9 @@ const ResetPassword = ({ navigation, route }) => {
     };
     try {
       const resp = await getApiData(endPoints, 'POST', params, {}, false);
-      console.log('resp======>', resp);
       if (resp?.status) {
         if (resp?.data?.userData?.personal_info?.two_factor_enabled === 0) {
+          storeCredentials(email, retypepassword);
           navigation.reset({
             routes: [{ name: 'Home' }],
           });
