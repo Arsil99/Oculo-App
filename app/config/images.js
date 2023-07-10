@@ -15,4 +15,5 @@ export const Images = {
   graph: require('../assets/Images/graph.png'),
   callibrateImg: require('../assets/Images/calli.png'),
   eyeLine: require('../assets/Images/eyeline.png'),
+  sliderimage: require('../assets/Images/sliderimage.png'),
 };

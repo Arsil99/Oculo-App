@@ -78,6 +78,7 @@ export default StyleSheet.create({
   btnContainer: {
     height: windowHeight / 3.4,
     justifyContent: 'flex-end',
+    marginHorizontal: 20,
   },
   sliderContainer: {
     flex: 1,
@@ -163,7 +164,7 @@ export default StyleSheet.create({
     height: 10,
     borderRadius: 5,
     backgroundColor: BaseColors.secondary,
-    marginRight: 10,
+    marginRight: 5,
   },
   assessmentHead: {
     flexDirection: 'row',
@@ -174,6 +175,6 @@ export default StyleSheet.create({
     height: 10,
     borderRadius: 5,
     backgroundColor: BaseColors.primary,
-    marginRight: 10,
+    marginRight: 5,
   },
 });
