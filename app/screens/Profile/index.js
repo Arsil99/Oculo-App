@@ -7,7 +7,7 @@ import {
   Alert,
   Platform,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
 import TabSwitch from '@components/TabSwitch';
@@ -20,6 +20,7 @@ import Authentication from '@redux/reducers/auth/actions';
 import Dropdown from '@components/Dropdown';
 import Profiledetailcomponent from '@components/Profiledetailcomponent';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { useIsFocused } from '@react-navigation/native';
 import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
 import BaseSetting from '@config/setting';
 import InfoCard from '@components/InfoCard';
@@ -33,17 +34,16 @@ import {
 } from '@config/staticData';
 
 export default function Profile({ navigation }) {
-  const { setEditProfiles, setSaveEdit, setDarkmode, setBiometric } =
-    Authentication;
+  const { setDarkmode, setBiometric } = Authentication;
   const dispatch = useDispatch();
+  const isFocused = useIsFocused();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [isClick, setIsClick] = useState(false);
   const [editHistory, setEditHistory] = useState(false);
   const [rightHistoryText, setRightHistoryText] = useState('Edit');
-
-  const { editProfiles, saveEdit, isBiometric } = useSelector(state => {
+  const profileRef = useRef();
+  const { isBiometric } = useSelector(state => {
     return state.auth;
   });
 
@@ -60,29 +60,16 @@ export default function Profile({ navigation }) {
   });
 
   useEffect(() => {
-    dispatch(setEditProfiles(false));
-  }, []);
+    setActiveTab({
+      id: 'detail',
+      name: 'Detail',
+    });
+  }, [isFocused]);
 
   useEffect(() => {
-    if (activeTab?.id === 'history') {
-      dispatch(setEditProfiles(false));
-      dispatch(setSaveEdit('Edit'));
-    } else if (activeTab?.id === 'detail') {
-      setEditHistory(false);
-      dispatch(setSaveEdit('Edit'));
-    } else if (activeTab?.id === 'account') {
-      dispatch(setEditProfiles(false));
-      dispatch(setSaveEdit('Edit'));
-      setEditHistory(false);
-      setRightHistoryText('Edit');
-    }
-    return () => {
-      dispatch(setEditProfiles(false));
-      dispatch(setSaveEdit('Edit'));
-      setEditHistory(false);
-      setRightHistoryText('Edit');
-    };
-  }, [activeTab]);
+    setEditHistory(false);
+    setRightHistoryText('Edit');
+  }, [activeTab, isFocused]);
 
   const checkBiometrics = async () => {
     try {
@@ -184,47 +171,28 @@ export default function Profile({ navigation }) {
       });
   };
 
-  const HandleHistoryUpdateBtn = () => {
-    setEditHistory(!editHistory);
-    setRightHistoryText(rightHistoryText === 'Edit' ? 'Save' : 'Edit');
-  };
-
   return (
     <View style={styles.main}>
       <HeaderBar
         HeaderText={'Profile'}
         HeaderCenter
-        leftText={editProfiles ? 'Close' : ''}
+        leftText={editHistory ? 'Close' : ''}
         leftBtnPress={() => {
-          dispatch(setSaveEdit('Edit'));
-          dispatch(setEditProfiles(false));
+          setEditHistory(false);
+          setRightHistoryText('Edit');
         }}
         rightComponent={
-          activeTab?.id === 'detail' ? (
+          activeTab?.id === 'detail' || activeTab?.id === 'history' ? (
             <TouchableOpacity
               activeOpacity={BaseSetting.buttonOpacity}
-              onPress={() =>
-                saveEdit === 'Edit'
-                  ? (dispatch(setEditProfiles(true)),
-                    dispatch(
-                      setSaveEdit(saveEdit === 'Edit' ? 'Save' : 'Edit'),
-                    ))
-                  : setIsClick(prevState => !prevState)
-              }
-            >
-              <Text>{saveEdit}</Text>
-            </TouchableOpacity>
-          ) : activeTab?.id === 'history' ? (
-            <TouchableOpacity
-              activeOpacity={BaseSetting.buttonOpacity}
-              onPress={() =>
-                rightHistoryText === 'Edit'
-                  ? (setEditHistory(!editHistory),
-                    setRightHistoryText(
-                      rightHistoryText === 'Edit' ? 'Save' : 'Edit',
-                    ))
-                  : HandleHistoryUpdateBtn()
-              }
+              onPress={() => {
+                if (rightHistoryText === 'Edit') {
+                  setEditHistory(true);
+                  setRightHistoryText('Save');
+                } else {
+                  profileRef?.current?.HandleDetailUpdateBtn();
+                }
+              }}
             >
               <Text>{rightHistoryText}</Text>
             </TouchableOpacity>
@@ -251,8 +219,17 @@ export default function Profile({ navigation }) {
       {activeTab?.id === 'detail' ? (
         <ScrollView style={{ width: '100%' }}>
           <View style={styles.cardOuter}>
-            {editProfiles === true ? (
-              <Profiledetailcomponent onPress={isClick} />
+            {editHistory === true ? (
+              <Profiledetailcomponent
+                ref={profileRef}
+                onPress={editHistory}
+                onSuccess={() => {
+                  setEditHistory(false);
+                  setRightHistoryText(
+                    rightHistoryText === 'Edit' ? 'Save' : 'Edit',
+                  );
+                }}
+              />
             ) : (
               <View style={styles.alignSetup}>
                 <InfoCard

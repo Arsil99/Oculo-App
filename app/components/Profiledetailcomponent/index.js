@@ -6,7 +6,13 @@ import {
   Modal,
   Alert,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import styles from './styles';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { BaseColors } from '@config/theme';
@@ -17,23 +23,31 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import Dropdown from '@components/Dropdown';
 
-import { useDispatch, useSelector } from 'react-redux';
-import Authentication from '@redux/reducers/auth/actions';
 import BaseSetting from '@config/setting';
 
-const Profiledetailcomponent = ({ onPress }) => {
+const errObj = {
+  firstNameErr: false,
+  firstNameErrMsg: '',
+  lastNameErr: false,
+  lastNameErrMsg: '',
+  dateOfBirthErr: false,
+  dateOfBirthErrMsg: '',
+  genderErr: false,
+  genderErrMsg: '',
+  p_phoneErr: false,
+  p_phoneErrMsg: '',
+  p_emailErr: false,
+  p_emailErrMsg: '',
+  g_phoneErr: false,
+  g_phoneErrMsg: '',
+  g_emailErr: false,
+  g_emailErrMsg: '',
+};
+
+const Profiledetailcomponent = (props, ref) => {
+  const { onSuccess } = props;
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
-  const dispatch = useDispatch();
-  const { saveEdit } = useSelector(state => {
-    return state.auth;
-  });
-  const { setEditProfiles, setSaveEdit } = Authentication;
-  useEffect(() => {
-    if (onPress) {
-      HandleDetailUpdateBtn();
-    }
-  }, [onPress]);
 
   const genderdata = [
     { label: 'Male', value: 'Male' },
@@ -46,25 +60,6 @@ const Profiledetailcomponent = ({ onPress }) => {
   const cInputRef2 = useRef();
   const cInputRef3 = useRef();
   const cInputRef4 = useRef();
-
-  const errObj = {
-    firstNameErr: false,
-    firstNameErrMsg: '',
-    lastNameErr: false,
-    lastNameErrMsg: '',
-    dateOfBirthErr: false,
-    dateOfBirthErrMsg: '',
-    genderErr: false,
-    genderErrMsg: '',
-    p_phoneErr: false,
-    p_phoneErrMsg: '',
-    p_emailErr: false,
-    p_emailErrMsg: '',
-    g_phoneErr: false,
-    g_phoneErrMsg: '',
-    g_emailErr: false,
-    g_emailErrMsg: '',
-  };
 
   // Detail Tab related states
   const [ErrObj, setErrObj] = useState(errObj);
@@ -81,6 +76,18 @@ const Profiledetailcomponent = ({ onPress }) => {
   const [date, setDate] = useState(new Date(1598051730000));
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      setErrObj(errObj);
+    };
+  }, []);
+
+  useImperativeHandle(ref, () => ({
+    HandleDetailUpdateBtn: () => {
+      HandleDetailUpdateBtn();
+    },
+  }));
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -145,8 +152,7 @@ const Profiledetailcomponent = ({ onPress }) => {
     }
     setErrObj(error);
     if (Valid) {
-      dispatch(setEditProfiles(false));
-      dispatch(setSaveEdit(saveEdit === 'Edit' ? 'Save' : 'Edit'));
+      onSuccess();
     }
   };
 
@@ -379,4 +385,4 @@ const Profiledetailcomponent = ({ onPress }) => {
   );
 };
 
-export default Profiledetailcomponent;
+export default forwardRef(Profiledetailcomponent);

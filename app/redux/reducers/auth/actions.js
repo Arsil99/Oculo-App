@@ -14,8 +14,6 @@ const actions = {
   SET_CURRENT_LOCATION: 'SET_CURRENT_LOCATION',
   SET_ASK_PERMISSION: 'SET_ASK_PERMISSION',
   SET_ACTIVE_CHAT_USER: 'SET_ACTIVE_CHAT_USER',
-  SET_EDIT_PROFILE: 'SET_EDIT_PROFILE',
-  SET_SAVE_EDIT: 'SET_SAVE_EDIT',
   SET_BIO_METRIC: 'SET_BIO_METRIC',
 
   setUserData: data => {
@@ -25,12 +23,6 @@ const actions = {
         userData: data,
       });
   },
-
-  setEditProfiles: editProfiles => dispatch =>
-    dispatch({
-      type: actions.SET_EDIT_PROFILE,
-      editProfiles,
-    }),
 
   setUserCurrentLocation: currentLocation => {
     return dispatch =>
@@ -122,11 +114,6 @@ const actions = {
     dispatch({
       type: actions.SET_ACTIVE_CHAT_USER,
       activeChatUser,
-    }),
-  setSaveEdit: saveEdit => dispatch =>
-    dispatch({
-      type: actions.SET_SAVE_EDIT,
-      saveEdit,
     }),
 };
 
