@@ -17,6 +17,21 @@
 		18E2F1882A4E91B50094AC2C /* Europa-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18E2F1872A4E91B40094AC2C /* Europa-Light.ttf */; };
 		7699B88040F8A987B510C191 /* libPods-oculo-oculoTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-oculo-oculoTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		E8610F932A56E7FF00BBC77C /* ARVideoKit in Frameworks */ = {isa = PBXBuildFile; productRef = E8610F922A56E7FF00BBC77C /* ARVideoKit */; };
+		E8610F962A56EAF200BBC77C /* EyeTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8610F952A56EAF200BBC77C /* EyeTracking.swift */; };
+		E8610F982A56EBE900BBC77C /* EyeTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = E8610F972A56EBE900BBC77C /* EyeTracking.m */; };
+		E8610FB82A58249F00BBC77C /* EyeTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8610FAE2A58249F00BBC77C /* EyeTrack.swift */; };
+		E8610FB92A58249F00BBC77C /* EyeTrackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8610FAF2A58249F00BBC77C /* EyeTrackView.swift */; };
+		E8610FBA2A58249F00BBC77C /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8610FB02A58249F00BBC77C /* Extension.swift */; };
+		E8610FBB2A58249F00BBC77C /* EyeTrackController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8610FB12A58249F00BBC77C /* EyeTrackController.swift */; };
+		E8610FBC2A58249F00BBC77C /* Eye.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8610FB32A58249F00BBC77C /* Eye.swift */; };
+		E8610FBD2A58249F00BBC77C /* EyeTrackInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8610FB42A58249F00BBC77C /* EyeTrackInfo.swift */; };
+		E8610FBE2A58249F00BBC77C /* Face.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8610FB52A58249F00BBC77C /* Face.swift */; };
+		E8610FBF2A58249F00BBC77C /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8610FB62A58249F00BBC77C /* Device.swift */; };
+		E8610FC02A58249F00BBC77C /* EyeTrackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8610FB72A58249F00BBC77C /* EyeTrackViewController.swift */; };
+		E8610FC22A58314600BBC77C /* EyeTrackingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8610FC12A58314600BBC77C /* EyeTrackingViewController.swift */; };
+		E8610FD22A5BCBC400BBC77C /* EyeTrackingEventEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8610FD12A5BCBC400BBC77C /* EyeTrackingEventEmitter.swift */; };
+		E8610FD42A5BCBD400BBC77C /* EyeTrackingEventEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = E8610FD32A5BCBD400BBC77C /* EyeTrackingEventEmitter.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +66,21 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-oculo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-oculo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = oculo/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-oculo-oculoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-oculo-oculoTests.release.xcconfig"; path = "Target Support Files/Pods-oculo-oculoTests/Pods-oculo-oculoTests.release.xcconfig"; sourceTree = "<group>"; };
+		E8610F942A56EAF200BBC77C /* oculo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "oculo-Bridging-Header.h"; sourceTree = "<group>"; };
+		E8610F952A56EAF200BBC77C /* EyeTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeTracking.swift; sourceTree = "<group>"; };
+		E8610F972A56EBE900BBC77C /* EyeTracking.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EyeTracking.m; sourceTree = "<group>"; };
+		E8610FAE2A58249F00BBC77C /* EyeTrack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EyeTrack.swift; sourceTree = "<group>"; };
+		E8610FAF2A58249F00BBC77C /* EyeTrackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EyeTrackView.swift; sourceTree = "<group>"; };
+		E8610FB02A58249F00BBC77C /* Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
+		E8610FB12A58249F00BBC77C /* EyeTrackController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EyeTrackController.swift; sourceTree = "<group>"; };
+		E8610FB32A58249F00BBC77C /* Eye.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Eye.swift; sourceTree = "<group>"; };
+		E8610FB42A58249F00BBC77C /* EyeTrackInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EyeTrackInfo.swift; sourceTree = "<group>"; };
+		E8610FB52A58249F00BBC77C /* Face.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Face.swift; sourceTree = "<group>"; };
+		E8610FB62A58249F00BBC77C /* Device.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
+		E8610FB72A58249F00BBC77C /* EyeTrackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EyeTrackViewController.swift; sourceTree = "<group>"; };
+		E8610FC12A58314600BBC77C /* EyeTrackingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeTrackingViewController.swift; sourceTree = "<group>"; };
+		E8610FD12A5BCBC400BBC77C /* EyeTrackingEventEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeTrackingEventEmitter.swift; sourceTree = "<group>"; };
+		E8610FD32A5BCBD400BBC77C /* EyeTrackingEventEmitter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EyeTrackingEventEmitter.m; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -67,6 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E8610F932A56E7FF00BBC77C /* ARVideoKit in Frameworks */,
 				0C80B921A6F3F58F76C31292 /* libPods-oculo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -94,12 +125,14 @@
 		13B07FAE1A68108700A75B9A /* oculo */ = {
 			isa = PBXGroup;
 			children = (
+				E8610FCA2A5BC73200BBC77C /* EyeTracking */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				E8610F942A56EAF200BBC77C /* oculo-Bridging-Header.h */,
 			);
 			name = oculo;
 			sourceTree = "<group>";
@@ -125,6 +158,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				E8610F9C2A57BD1700BBC77C /* Packages */,
 				18E2F1872A4E91B40094AC2C /* Europa-Light.ttf */,
 				18CE09AD2A431EB200B16FAA /* Europa-Bold.ttf */,
 				18CE09AC2A431EB200B16FAA /* Europa-Light.woff2.ttf */,
@@ -159,6 +193,58 @@
 				89C6BE57DB24E9ADA2F236DE /* Pods-oculo-oculoTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		E8610F9C2A57BD1700BBC77C /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		E8610FAD2A58249F00BBC77C /* EyeTrackKit */ = {
+			isa = PBXGroup;
+			children = (
+				E8610FAE2A58249F00BBC77C /* EyeTrack.swift */,
+				E8610FAF2A58249F00BBC77C /* EyeTrackView.swift */,
+				E8610FB02A58249F00BBC77C /* Extension.swift */,
+				E8610FB12A58249F00BBC77C /* EyeTrackController.swift */,
+				E8610FB22A58249F00BBC77C /* Model */,
+				E8610FB72A58249F00BBC77C /* EyeTrackViewController.swift */,
+			);
+			path = EyeTrackKit;
+			sourceTree = "<group>";
+		};
+		E8610FB22A58249F00BBC77C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				E8610FB32A58249F00BBC77C /* Eye.swift */,
+				E8610FB42A58249F00BBC77C /* EyeTrackInfo.swift */,
+				E8610FB52A58249F00BBC77C /* Face.swift */,
+				E8610FB62A58249F00BBC77C /* Device.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		E8610FCA2A5BC73200BBC77C /* EyeTracking */ = {
+			isa = PBXGroup;
+			children = (
+				E8610FCB2A5BC74700BBC77C /* CustomCode */,
+				E8610FAD2A58249F00BBC77C /* EyeTrackKit */,
+			);
+			path = EyeTracking;
+			sourceTree = "<group>";
+		};
+		E8610FCB2A5BC74700BBC77C /* CustomCode */ = {
+			isa = PBXGroup;
+			children = (
+				E8610F952A56EAF200BBC77C /* EyeTracking.swift */,
+				E8610FC12A58314600BBC77C /* EyeTrackingViewController.swift */,
+				E8610FD12A5BCBC400BBC77C /* EyeTrackingEventEmitter.swift */,
+				E8610FD32A5BCBD400BBC77C /* EyeTrackingEventEmitter.m */,
+				E8610F972A56EBE900BBC77C /* EyeTracking.m */,
+			);
+			path = CustomCode;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -203,6 +289,9 @@
 			dependencies = (
 			);
 			name = oculo;
+			packageProductDependencies = (
+				E8610F922A56E7FF00BBC77C /* ARVideoKit */,
+			);
 			productName = oculo;
 			productReference = 13B07F961A680F5B00A75B9A /* oculo.app */;
 			productType = "com.apple.product-type.application";
@@ -220,7 +309,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1430;
 					};
 				};
 			};
@@ -233,6 +322,9 @@
 				Base,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
+			packageReferences = (
+				E8610F912A56E7FF00BBC77C /* XCRemoteSwiftPackageReference "ARVideoKit" */,
+			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -428,8 +520,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E8610FD22A5BCBC400BBC77C /* EyeTrackingEventEmitter.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+				E8610F962A56EAF200BBC77C /* EyeTracking.swift in Sources */,
+				E8610FBA2A58249F00BBC77C /* Extension.swift in Sources */,
+				E8610FBF2A58249F00BBC77C /* Device.swift in Sources */,
+				E8610F982A56EBE900BBC77C /* EyeTracking.m in Sources */,
+				E8610FD42A5BCBD400BBC77C /* EyeTrackingEventEmitter.m in Sources */,
+				E8610FC02A58249F00BBC77C /* EyeTrackViewController.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				E8610FBC2A58249F00BBC77C /* Eye.swift in Sources */,
+				E8610FB92A58249F00BBC77C /* EyeTrackView.swift in Sources */,
+				E8610FBD2A58249F00BBC77C /* EyeTrackInfo.swift in Sources */,
+				E8610FC22A58314600BBC77C /* EyeTrackingViewController.swift in Sources */,
+				E8610FB82A58249F00BBC77C /* EyeTrack.swift in Sources */,
+				E8610FBB2A58249F00BBC77C /* EyeTrackController.swift in Sources */,
+				E8610FBE2A58249F00BBC77C /* Face.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -448,6 +554,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-oculo-oculoTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -475,6 +582,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-oculo-oculoTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = oculoTests/Info.plist;
@@ -502,11 +610,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = MSJULN6523;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = oculo/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Oculo;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -518,6 +627,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.oculo;
 				PRODUCT_NAME = oculo;
+				SWIFT_OBJC_BRIDGING_HEADER = "oculo-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -531,10 +641,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = MSJULN6523;
 				INFOPLIST_FILE = oculo/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Oculo;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -546,6 +657,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.oculo;
 				PRODUCT_NAME = oculo;
+				SWIFT_OBJC_BRIDGING_HEADER = "oculo-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -719,6 +831,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E8610F912A56E7FF00BBC77C /* XCRemoteSwiftPackageReference "ARVideoKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AFathi/ARVideoKit";
+			requirement = {
+				branch = swift_5;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E8610F922A56E7FF00BBC77C /* ARVideoKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E8610F912A56E7FF00BBC77C /* XCRemoteSwiftPackageReference "ARVideoKit" */;
+			productName = ARVideoKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 83CBB9F71A601CBA00E9B192 /* Project object */;
 }
