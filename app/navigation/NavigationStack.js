@@ -35,6 +35,7 @@ import NotificationSettings from '@screens/NotificationSettings';
 import Callibration from '@screens/Callibration';
 import Symptoms from '@screens/Symptoms';
 import Assessment from '@screens/Assessment';
+import ChangeInfo from '@screens/ChangeInfo';
 
 const intitialNotificationState = {
   notification: null,
@@ -260,6 +261,11 @@ function App() {
           <Stack.Screen
             name="Assessment"
             component={Assessment}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ChangeInfo"
+            component={ChangeInfo}
             options={{ headerShown: false }}
           />
           <Stack.Screen
