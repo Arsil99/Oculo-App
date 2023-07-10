@@ -8,16 +8,6 @@ export default StyleSheet.create({
     backgroundColor: BaseColors.lightBg,
     alignItems: 'center',
   },
-  settigCon: {
-    marginTop: 15,
-    // marginHorizontal: 20,
-    width: fullWidth,
-  },
-  topBorder: { borderTopLeftRadius: 12, borderTopRightRadius: 12 },
-  otherBorder: {
-    borderTopWidth: 0.7,
-    borderColor: BaseColors.borderColor,
-  },
   genderBox: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -32,42 +22,7 @@ export default StyleSheet.create({
     paddingHorizontal: 10,
     alignItems: 'center',
   },
-  settingItem: {
-    backgroundColor: 'white',
-    height: 50,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-  radiusDesign: {
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-  },
-  cardContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
   tabBox: { backgroundColor: BaseColors.white, width: fullWidth },
-  innerCard: {
-    width: 20,
-    marginRight: 20,
-    alignItems: 'center',
-  },
-  mainTitleStyle: {
-    alignItems: 'flex-start',
-    marginBottom: 15,
-  },
-  infoshadow: {
-    shadowColor: BaseColors.black,
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-    elevation: 3,
-  },
   customGender: {
     backgroundColor: BaseColors.white,
     height: 50,
@@ -89,22 +44,7 @@ export default StyleSheet.create({
     fontFamily: FontFamily.bold,
     color: BaseColors.black,
   },
-  settingItemText: {
-    fontWeight: '400',
-    lineHeight: 24,
-    textAlign: 'center',
-    fontFamily: FontFamily.regular,
-    color: BaseColors.black90,
-  },
   alignSetup: { width: '100%', alignItems: 'center' },
-  righttitletext: {
-    fontWeight: '400',
-    lineHeight: 24,
-    textAlign: 'center',
-    fontFamily: FontFamily.regular,
-    color: BaseColors.textColor,
-    alignItems: 'center',
-  },
   dateTitle: { color: BaseColors.black, marginBottom: 10 },
   dateBox: {
     backgroundColor: BaseColors.white,

@@ -1,7 +1,6 @@
 import {
   View,
   Text,
-  Switch,
   TouchableOpacity,
   ScrollView,
   Modal,
@@ -12,7 +11,6 @@ import React, { useEffect, useState } from 'react';
 import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
 import TabSwitch from '@components/TabSwitch';
-import Icon1 from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { BaseColors } from '@config/theme';
 import ProfilehistoryButton from '@components/ProfilehistoryButton';
@@ -24,8 +22,15 @@ import Profiledetailcomponent from '@components/Profiledetailcomponent';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
 import BaseSetting from '@config/setting';
-
-const IOS = Platform.OS === 'ios';
+import InfoCard from '@components/InfoCard';
+import {
+  contactdata,
+  items,
+  legal,
+  patientdata,
+  settings,
+  switchOptions,
+} from '@config/staticData';
 
 export default function Profile({ navigation }) {
   const { setEditProfiles, setSaveEdit, setDarkmode, setBiometric } =
@@ -38,6 +43,15 @@ export default function Profile({ navigation }) {
   const [editHistory, setEditHistory] = useState(false);
   const [rightHistoryText, setRightHistoryText] = useState('Edit');
 
+  const { editProfiles, saveEdit, isBiometric } = useSelector(state => {
+    return state.auth;
+  });
+
+  const [activeTab, setActiveTab] = useState({
+    id: 'detail',
+    name: 'Detail',
+  });
+
   let epochTimeSeconds = Math.round(new Date().getTime() / 1000).toString();
   let payload = epochTimeSeconds + 'some message';
 
@@ -45,152 +59,10 @@ export default function Profile({ navigation }) {
     allowDeviceCredentials: true,
   });
 
-  const { userData, editProfiles, saveEdit, darkmode, isBiometric } =
-    useSelector(state => {
-      return state.auth;
-    });
-
-  const items = [
-    { label: 'Email', value: 'Email' },
-    { label: 'Phone', value: 'Phone' },
-  ];
-
-  const switchOptions = [
-    { id: 'detail', name: 'Detail' },
-    { id: 'history', name: 'History' },
-    { id: 'account', name: 'Account' },
-  ];
-
   useEffect(() => {
     dispatch(setEditProfiles(false));
   }, []);
 
-  const [activeTab, setActiveTab] = useState({
-    id: 'detail',
-    name: 'Detail',
-  });
-
-  const patientdata = [
-    {
-      id: '1',
-      leftIcon: 'user',
-      title: 'First Name',
-      righttitle: userData?.firstname,
-    },
-    {
-      id: '2',
-      leftIcon: 'user',
-      title: 'Last Name',
-      righttitle: userData?.lastname,
-    },
-    {
-      id: '3',
-      leftIcon: 'calendar',
-      title: 'Date of Birth',
-      righttitle: '27-04-1998',
-    },
-    {
-      id: '4',
-      leftIcon: 'man',
-      title: 'Gender',
-      righttitle: 'Male',
-    },
-  ];
-
-  const contactdata = [
-    {
-      id: '1',
-      leftIcon: 'phone',
-      title: 'Patient Phone',
-      righttitle: userData?.phone,
-    },
-    {
-      id: '2',
-      leftIcon: 'mail',
-      title: 'Patient Email',
-      righttitle: userData?.email,
-    },
-    {
-      id: '3',
-      leftIcon: 'phone',
-      title: 'Guardian phone',
-      righttitle: '(454) 334 - 3301',
-    },
-    {
-      id: '4',
-      leftIcon: 'mail',
-      title: 'Guardian email',
-      righttitle: 'demo@gmail.com',
-    },
-  ];
-
-  const settings = [
-    IOS
-      ? {
-          id: '1',
-          leftIcon: IOS ? 'Meh' : null,
-          title: IOS ? 'Login With Face Id' : null,
-          switch: IOS ? true : null,
-        }
-      : null,
-    {
-      id: '2',
-      leftIcon: 'unlock',
-      title: 'Two Factor Enabled',
-      righttitle: <Icon name="right" size={15} />,
-      switch: false,
-    },
-    {
-      id: '3',
-      leftIcon: 'key',
-      title: 'Change Password',
-      righttitle: <Icon name="right" size={15} />,
-      switch: false,
-      navto: 'ResetPassword',
-    },
-    {
-      id: '4',
-      leftIcon: 'notification',
-      title: 'Notifications settings',
-      righttitle: <Icon name="right" size={15} />,
-      switch: false,
-      navto: 'NotificationSettings',
-    },
-    {
-      id: '5',
-      leftIcon: 'calendar',
-      title: 'Dark Theme',
-      // righttitle: '',
-      switch: true,
-    },
-    {
-      id: '6',
-      leftIcon: 'logout',
-      title: 'Sign Out',
-      righttitle: <Icon name="right" size={15} />,
-      switch: false,
-    },
-  ];
-
-  const legal = [
-    {
-      id: '1',
-      leftIcon: 'key',
-      title: 'Terms of Services',
-      righttitle: <Icon name="right" size={15} />,
-      navto: 'TermsofServices',
-    },
-    {
-      id: '2',
-      leftIcon: 'unknowfile1',
-      title: 'Privacy Policy',
-      righttitle: <Icon name="right" size={15} />,
-      navto: 'PrivacyPolicy',
-    },
-  ];
-  const firstitem = () => {
-    settings[0]?.title === null ? null : settings.shift();
-  };
   useEffect(() => {
     if (activeTab?.id === 'history') {
       dispatch(setEditProfiles(false));
@@ -317,87 +189,6 @@ export default function Profile({ navigation }) {
     setRightHistoryText(rightHistoryText === 'Edit' ? 'Save' : 'Edit');
   };
 
-  const InfoCard = ({ data, mainTitle }) => {
-    return (
-      <View style={styles.settigCon}>
-        <View style={styles.mainTitleStyle}>
-          <Text style={styles.titleText}>{mainTitle}</Text>
-        </View>
-        <View style={styles.infoshadow}>
-          {firstitem()}
-          {data.map((item, index) => {
-            return item?.title === null ? null : (
-              <TouchableOpacity
-                key={item?.id}
-                activeOpacity={BaseSetting.buttonOpacity}
-                onPress={() =>
-                  item?.title === 'Sign Out'
-                    ? logout()
-                    : item?.title === 'Two Factor Enabled'
-                    ? setModalVisible(!modalVisible)
-                    : console.log(item.title)
-                }
-                style={[
-                  styles.settingItem,
-                  index === 0 ? styles.topBorder : styles.otherBorder,
-                  index === data.length - 1 ? styles.radiusDesign : null,
-                ]}
-              >
-                <View style={styles.cardContainer}>
-                  <View style={styles.innerCard}>
-                    {item?.title === 'Login With Touch Id' ? (
-                      <Icon1
-                        name={item.leftIcon}
-                        size={15}
-                        color={BaseColors.black90}
-                      />
-                    ) : (
-                      <Icon
-                        name={item.leftIcon}
-                        size={15}
-                        color={BaseColors.black90}
-                      />
-                    )}
-                  </View>
-                  <View>
-                    <Text style={styles.settingItemText}>{item.title}</Text>
-                  </View>
-                </View>
-
-                <View>
-                  <Text style={styles.righttitletext}>
-                    {item?.switch ? (
-                      <Switch
-                        // trackColor={{ false: '#767577', true: '#81b0ff' }}
-                        // thumbColor={{
-                        //   false: BaseColors.primary,
-                        //   true: BaseColors.offWhite,
-                        // }}
-                        ios_backgroundColor="#3e3e3e"
-                        onValueChange={v => {
-                          item.title === 'Dark Theme'
-                            ? dispatch(setDarkmode(v))
-                            : v
-                            ? checkBiometrics()
-                            : dispatch(setBiometric(v));
-                        }}
-                        value={
-                          item.title === 'Dark Theme' ? darkmode : isBiometric
-                        }
-                      />
-                    ) : (
-                      item.righttitle
-                    )}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      </View>
-    );
-  };
-
   return (
     <View style={styles.main}>
       <HeaderBar
@@ -437,7 +228,9 @@ export default function Profile({ navigation }) {
             >
               <Text>{rightHistoryText}</Text>
             </TouchableOpacity>
-          ) : null
+          ) : (
+            <Text> </Text>
+          )
         }
       />
 
@@ -478,7 +271,24 @@ export default function Profile({ navigation }) {
         <ProfilehistoryButton editHistory={editHistory} />
       ) : (
         <View style={styles.cardOuter}>
-          <InfoCard data={settings} mainTitle={'Settings'} />
+          <InfoCard
+            data={settings}
+            mainTitle={'Settings'}
+            SwitchChange={(item, v) => {
+              item.slug === 'dark_theme'
+                ? dispatch(setDarkmode(v))
+                : item.slug === 'dark_theme' && v
+                ? checkBiometrics()
+                : dispatch(setBiometric(v));
+            }}
+            tabPress={item => {
+              item?.slug === 'sign_out'
+                ? logout()
+                : item?.slug === 'two_fa'
+                ? setModalVisible(!modalVisible)
+                : console.log(item.title);
+            }}
+          />
           <InfoCard data={legal} mainTitle={'Legal & Regulatory'} />
 
           <Modal
