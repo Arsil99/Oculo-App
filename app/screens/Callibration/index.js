@@ -2,13 +2,11 @@ import { View, Text, Image, StatusBar } from 'react-native';
 import React, { useEffect } from 'react';
 import styles from './styles';
 import { Images } from '@config';
-import { useNavigation } from '@react-navigation/native';
 import HeaderBar from '@components/HeaderBar';
 import { BaseColors } from '@config/theme';
 import Button from '@components/Button';
 
-export default function Callibration() {
-  const navigation = useNavigation();
+export default function Callibration({ navigation }) {
   useEffect(() => {}, []);
 
   return (

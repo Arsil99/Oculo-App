@@ -12,11 +12,9 @@ import {
 } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import styles from './styles';
-import { useNavigation } from '@react-navigation/native';
 import BaseSetting from '@config/setting';
 
-const Symptoms = () => {
-  const navigation = useNavigation();
+const Symptoms = ({ navigation }) => {
   const [activeButtonIndex, setActiveButtonIndex] = useState(0);
 
   const buttons = [

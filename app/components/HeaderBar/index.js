@@ -9,18 +9,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BaseColors } from '@config/theme';
 import Authentication from '@redux/reducers/auth/actions';
 
-const HeaderBar = ({
-  HeaderText,
-  HeaderTextStyle,
-  userProfile,
-  HeaderCenter,
-  leftText,
-  leftBtnPress,
-  LeftTextStyle,
-  rightComponent,
-  containerStyle,
-  isTransperant,
-}) => {
+const HeaderBar = props => {
+  const {
+    HeaderText,
+    HeaderTextStyle,
+    userProfile,
+    HeaderCenter,
+    leftText,
+    leftBtnPress,
+    LeftTextStyle,
+    rightComponent,
+    containerStyle,
+    isTransperant,
+  } = props;
   const { userData } = useSelector(state => {
     return state.auth;
   });
