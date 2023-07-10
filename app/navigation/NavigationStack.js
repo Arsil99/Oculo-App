@@ -34,6 +34,7 @@ import TermsofServices from '@screens/TermsofServices';
 import NotificationSettings from '@screens/NotificationSettings';
 import Callibration from '@screens/Callibration';
 import Symptoms from '@screens/Symptoms';
+import Assessment from '@screens/Assessment';
 
 const intitialNotificationState = {
   notification: null,
@@ -256,7 +257,11 @@ function App() {
             component={Symptoms}
             options={{ headerShown: false }}
           />
-
+          <Stack.Screen
+            name="Assessment"
+            component={Assessment}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="OTP"
             component={OTP}

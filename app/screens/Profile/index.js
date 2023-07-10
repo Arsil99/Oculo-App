@@ -125,12 +125,14 @@ export default function Profile({ navigation }) {
   ];
 
   const settings = [
-    {
-      id: '1',
-      leftIcon: IOS ? 'Meh' : 'finger-print-outline',
-      title: IOS ? 'Login With Face Id' : 'Login With Touch Id',
-      switch: true,
-    },
+    IOS
+      ? {
+          id: '1',
+          leftIcon: IOS ? 'Meh' : null,
+          title: IOS ? 'Login With Face Id' : null,
+          switch: IOS ? true : null,
+        }
+      : null,
     {
       id: '2',
       leftIcon: 'unlock',
@@ -186,7 +188,9 @@ export default function Profile({ navigation }) {
       navto: 'PrivacyPolicy',
     },
   ];
-
+  const firstitem = () => {
+    settings[0]?.title === null ? null : settings.shift();
+  };
   useEffect(() => {
     if (activeTab?.id === 'history') {
       dispatch(setEditProfiles(false));
@@ -320,8 +324,9 @@ export default function Profile({ navigation }) {
           <Text style={styles.titleText}>{mainTitle}</Text>
         </View>
         <View style={styles.infoshadow}>
-          {data?.map((item, index) => {
-            return (
+          {firstitem()}
+          {data.map((item, index) => {
+            return item?.title === null ? null : (
               <TouchableOpacity
                 key={item?.id}
                 activeOpacity={BaseSetting.buttonOpacity}
