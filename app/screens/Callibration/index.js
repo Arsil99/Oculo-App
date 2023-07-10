@@ -63,7 +63,7 @@ export default function Callibration() {
         <Button
           shape="round"
           onPress={() => {
-            navigation?.navigate('Symptoms');
+            navigation?.navigate('CallibrationStart');
           }}
           title={'Get Started'}
           style={styles.requestBtn}

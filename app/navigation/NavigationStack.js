@@ -33,6 +33,7 @@ import PrivacyPolicy from '@screens/PrivacyPolicy';
 import TermsofServices from '@screens/TermsofServices';
 import NotificationSettings from '@screens/NotificationSettings';
 import Callibration from '@screens/Callibration';
+import CallibrationStart from '@screens/Callibration/start';
 import Symptoms from '@screens/Symptoms';
 
 const intitialNotificationState = {
@@ -244,6 +245,11 @@ function App() {
           <Stack.Screen
             name="Callibration"
             component={Callibration}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="CallibrationStart"
+            component={CallibrationStart}
             options={{ headerShown: false }}
           />
           <Stack.Screen

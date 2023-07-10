@@ -39,6 +39,11 @@ const styles = StyleSheet.create({
     fontSize: 40,
     top: '50%',
   },
+  dotContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 
 export default styles;
