@@ -1,30 +1,16 @@
-import {
-  View,
-  Image,
-  Text,
-  TouchableOpacity,
-  Alert,
-  Modal,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
+import { View, Image, Text, TouchableOpacity } from 'react-native';
 import React from 'react';
 import styles from './styles';
 import Button from '@components/Button';
 import { Images } from '@config';
-import { BaseColors } from '@config/theme';
-import Icon from 'react-native-vector-icons/AntDesign';
 import BaseSetting from '@config/setting';
 import Dropdown from '@components/Dropdown';
 import { useState } from 'react';
 import { items } from '@config/staticData';
 
 const TwofactorEnabled = ({}) => {
-  const [modalVisible, setModalVisible] = useState(false);
   const [value, setValue] = useState(null);
   const [open, setOpen] = useState(false);
-  const IOS = Platform.OS === 'ios';
 
   return (
     <View style={styles.container}>
@@ -38,13 +24,7 @@ const TwofactorEnabled = ({}) => {
           style={styles.imgStyle}
         />
       </View>
-      <View
-        style={{
-          justifyContent: 'center',
-          backgroundColor: 'pink',
-          marginTop: 50,
-        }}
-      >
+      <View style={styles.dropdownContainer}>
         <Text style={styles.genderTitle}>2FA</Text>
         <View style={styles.genderBox}>
           <Dropdown
@@ -61,10 +41,10 @@ const TwofactorEnabled = ({}) => {
             shape="round"
             title={'Two Factor Enabled'}
             style={styles.button}
-            onPress={() => {
-              setModalVisible(!modalVisible);
-            }}
           />
+          <TouchableOpacity activeOpacity={BaseSetting.buttonOpacity}>
+            <Text style={styles.skip}>Skip</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
