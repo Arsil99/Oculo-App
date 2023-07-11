@@ -16,4 +16,5 @@ export const Images = {
   callibrateImg: require('../assets/Images/calli.png'),
   eyeLine: require('../assets/Images/eyeline.png'),
   sliderimage: require('../assets/Images/sliderimage.png'),
+  rememberword: require('../assets/Images/rememberword.png'),
 };
