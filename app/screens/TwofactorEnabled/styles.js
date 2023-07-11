@@ -58,7 +58,8 @@ export default StyleSheet.create({
   },
   errorText: {
     color: BaseColors.red,
-    marginTop: 10,
+    marginTop: 5,
     fontFamily: FontFamily.regular,
+    marginLeft: 5,
   },
 });

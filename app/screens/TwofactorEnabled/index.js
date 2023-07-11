@@ -1,4 +1,10 @@
-import { View, Image, Text, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Image,
+  Text,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+} from 'react-native';
 import React from 'react';
 import styles from './styles';
 import Button from '@components/Button';
@@ -9,6 +15,13 @@ import { useState } from 'react';
 import { items } from '@config/staticData';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { getApiData } from '@utils/apiHelper';
+import LabeledInput from '@components/LabeledInput';
+import { isEmpty, isNull } from 'lodash';
+import { ScrollView } from 'react-native-gesture-handler';
+const errObj = {
+  p_phoneErr: false,
+  p_phoneErrMsg: '',
+};
 
 const TwofactorEnabled = ({ navigation, route }) => {
   const [value, setValue] = useState(null);
@@ -16,6 +29,8 @@ const TwofactorEnabled = ({ navigation, route }) => {
   const [open, setOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const [error, setError] = useState(false);
+  const [patientPhone, setPatientPhone] = useState('');
+  const [ErrObj, setErrObj] = useState(errObj);
 
   // generate OTP
   const generateOTP = async () => {
@@ -60,9 +75,25 @@ const TwofactorEnabled = ({ navigation, route }) => {
       setError(false);
     }
   };
+  const Validation = () => {
+    const error = { ...ErrObj };
+    let Valid = true;
 
+    if (isEmpty(patientPhone) || isNull(patientPhone)) {
+      Valid = false;
+      error.p_phoneErr = true;
+      error.p_phoneErrMsg = 'Enter phone number';
+    } else if (patientPhone.length !== 10) {
+      Valid = false;
+      error.p_phoneErr = true;
+      error.p_phoneErrMsg = 'Phone number is not 10 digits long';
+      // Phone number is not 10 digits long
+    }
+    handleEnable2FA();
+    setErrObj(error);
+  };
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container}>
       <View style={styles.logoView}>
         <Image source={Images.logo} resizeMode="contain" style={styles.img} />
       </View>
@@ -88,12 +119,33 @@ const TwofactorEnabled = ({ navigation, route }) => {
         {error && (
           <Text style={styles.errorText}>Please select a validation type</Text>
         )}
+        <View style={{ marginTop: 20 }}>
+          <LabeledInput
+            phoneicon
+            keyboardType="numeric"
+            placeholder={'Please Enter Phone number'}
+            value={patientPhone}
+            returnKeyType="next"
+            onChangeText={val => {
+              setPatientPhone(val);
+              setErrObj(old => {
+                return {
+                  ...old,
+                  p_phoneErr: false,
+                  p_phoneErrMsg: '',
+                };
+              });
+            }}
+            showError={ErrObj.p_phoneErr}
+            errorText={ErrObj.p_phoneErrMsg}
+          />
+        </View>
         <View style={styles.btnContainer}>
           <Button
             shape="round"
             title={'Enabled Two Factor'}
             style={styles.button}
-            onPress={handleEnable2FA}
+            onPress={Validation}
           />
           <TouchableOpacity activeOpacity={BaseSetting.buttonOpacity}>
             <Text
@@ -109,7 +161,7 @@ const TwofactorEnabled = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
