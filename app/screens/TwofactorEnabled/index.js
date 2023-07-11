@@ -7,11 +7,51 @@ import BaseSetting from '@config/setting';
 import Dropdown from '@components/Dropdown';
 import { useState } from 'react';
 import { items } from '@config/staticData';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { getApiData } from '@utils/apiHelper';
 
-const TwofactorEnabled = ({}) => {
+const TwofactorEnabled = ({ navigation, route }) => {
   const [value, setValue] = useState(null);
+  const email = route?.params?.email || '';
   const [open, setOpen] = useState(false);
+  const [loader, setLoader] = useState(false);
   const [error, setError] = useState(false);
+
+  // generate OTP
+  const generateOTP = async () => {
+    setLoader(true);
+    let endPoints = BaseSetting.endpoints.generateOtp;
+    const params = {
+      value: email,
+      type: 'email',
+    };
+    try {
+      const resp = await getApiData(endPoints, 'POST', params, {}, false);
+      if (resp?.status) {
+        Toast.show({
+          text1: resp?.message?.toString(),
+          type: 'success',
+        });
+        navigation.navigate('OTP', {
+          email: email,
+          from: 'tfa',
+        });
+      } else {
+        Toast.show({
+          text1: resp?.message,
+          type: 'error',
+        });
+      }
+      setLoader(false);
+    } catch (error) {
+      Toast.show({
+        text1: error?.toString(),
+        type: 'error',
+      });
+      console.log('ERRRRR', error);
+      setLoader(false);
+    }
+  };
 
   const handleEnable2FA = () => {
     if (!value) {
@@ -34,13 +74,12 @@ const TwofactorEnabled = ({}) => {
         />
       </View>
       <View style={styles.dropdownContainer}>
-        <Text style={styles.genderTitle}>2FA</Text>
         <View style={styles.genderBox}>
           <Dropdown
             items={items}
             open={open}
             setOpen={setOpen}
-            placeholder="Please select validation type"
+            placeholder="Please select 2FA medium"
             value={value}
             setValue={setValue}
             onOpen={() => setError(false)}
@@ -52,12 +91,21 @@ const TwofactorEnabled = ({}) => {
         <View style={styles.btnContainer}>
           <Button
             shape="round"
-            title={'Two Factor Enabled'}
+            title={'Enabled Two Factor'}
             style={styles.button}
             onPress={handleEnable2FA}
           />
           <TouchableOpacity activeOpacity={BaseSetting.buttonOpacity}>
-            <Text style={styles.skip}>Skip</Text>
+            <Text
+              style={styles.skip}
+              onPress={() => {
+                navigation.reset({
+                  routes: [{ name: 'Home' }],
+                });
+              }}
+            >
+              Skip
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
