@@ -11,6 +11,15 @@ import { items } from '@config/staticData';
 const TwofactorEnabled = ({}) => {
   const [value, setValue] = useState(null);
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState(false);
+
+  const handleEnable2FA = () => {
+    if (!value) {
+      setError(true);
+    } else {
+      setError(false);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -34,13 +43,18 @@ const TwofactorEnabled = ({}) => {
             placeholder="Please select validation type"
             value={value}
             setValue={setValue}
+            onOpen={() => setError(false)}
           />
         </View>
+        {error && (
+          <Text style={styles.errorText}>Please select a validation type</Text>
+        )}
         <View style={styles.btnContainer}>
           <Button
             shape="round"
             title={'Two Factor Enabled'}
             style={styles.button}
+            onPress={handleEnable2FA}
           />
           <TouchableOpacity activeOpacity={BaseSetting.buttonOpacity}>
             <Text style={styles.skip}>Skip</Text>
