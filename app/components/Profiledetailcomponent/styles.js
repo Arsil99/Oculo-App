@@ -148,6 +148,7 @@ export default StyleSheet.create({
   genderTitle: {
     marginTop: 8,
     color: BaseColors.black,
+    fontFamily: FontFamily.regular,
   },
   centeredView: {
     flex: 1,

@@ -17,4 +17,5 @@ export const Images = {
   eyeLine: require('../assets/Images/eyeline.png'),
   sliderimage: require('../assets/Images/sliderimage.png'),
   rememberword: require('../assets/Images/rememberword.png'),
+  twofa: require('../assets/Images/2fa.png'),
 };

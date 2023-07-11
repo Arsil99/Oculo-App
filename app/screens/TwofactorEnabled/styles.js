@@ -3,17 +3,16 @@ import { BaseColors, FontFamily } from '@config/theme';
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: BaseColors.white,
     paddingHorizontal: 20,
   },
   logoView: {
-    flex: 0.3,
+    flex: 0.35,
     alignItems: 'center',
     justifyContent: 'center',
   },
   imgContainer: {
-    flex: 0.1,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -21,15 +20,16 @@ export default StyleSheet.create({
     height: 55,
     width: '100%',
   },
+  imgStyle: { height: 200, width: 200 },
   btnContainer: {
-    flex: 0.25,
+    // flex: 0.25,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 30,
-    marginHorizontal: 20,
+    // marginTop: 30,
+    // marginHorizontal: 20,
   },
   centeredView: {
-    flex: 1,
+    // flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: BaseColors.black60,
@@ -66,5 +66,23 @@ export default StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 20,
     width: 300,
+  },
+  genderBox: {
+    borderRadius: 10,
+    borderColor: BaseColors.black20,
+    borderWidth: 1,
+    marginTop: 10,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 6,
+  },
+  genderTitle: {
+    marginTop: 8,
+    color: BaseColors.black,
+    fontFamily: FontFamily.regular,
   },
 });
