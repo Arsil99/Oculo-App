@@ -36,6 +36,8 @@ import Callibration from '@screens/Callibration';
 import Symptoms from '@screens/Symptoms';
 import Assessment from '@screens/Assessment';
 import ChangeInfo from '@screens/ChangeInfo';
+import ImmediateRecall from '@screens/ImmediateRecall';
+import TwofactorEnabled from '@screens/TwofactorEnabled';
 
 const intitialNotificationState = {
   notification: null,
@@ -271,6 +273,16 @@ function App() {
           <Stack.Screen
             name="OTP"
             component={OTP}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TwofactorEnabled"
+            component={TwofactorEnabled}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ImmediateRecall"
+            component={ImmediateRecall}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
