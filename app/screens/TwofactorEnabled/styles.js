@@ -62,4 +62,18 @@ export default StyleSheet.create({
     fontFamily: FontFamily.regular,
     marginLeft: 5,
   },
+  inputContainer: {
+    marginTop: 10,
+    borderRadius: 10,
+    borderColor: BaseColors.black20,
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    height: 50,
+    backgroundColor: BaseColors.white,
+  },
+  inputText: {
+    flex: 1,
+    fontFamily: FontFamily.regular,
+    fontSize: 16,
+  },
 });

@@ -4,6 +4,8 @@ import {
   Text,
   TouchableOpacity,
   KeyboardAvoidingView,
+  ScrollView,
+  Platform,
 } from 'react-native';
 import React from 'react';
 import styles from './styles';
@@ -17,7 +19,7 @@ import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { getApiData } from '@utils/apiHelper';
 import LabeledInput from '@components/LabeledInput';
 import { isEmpty, isNull } from 'lodash';
-import { ScrollView } from 'react-native-gesture-handler';
+
 const errObj = {
   p_phoneErr: false,
   p_phoneErrMsg: '',
@@ -31,6 +33,7 @@ const TwofactorEnabled = ({ navigation, route }) => {
   const [error, setError] = useState(false);
   const [patientPhone, setPatientPhone] = useState('');
   const [ErrObj, setErrObj] = useState(errObj);
+  const IOS = Platform.OS === 'ios';
 
   // generate OTP
   const generateOTP = async () => {
@@ -93,74 +96,87 @@ const TwofactorEnabled = ({ navigation, route }) => {
     setErrObj(error);
   };
   return (
-    <KeyboardAvoidingView style={styles.container}>
-      <View style={styles.logoView}>
-        <Image source={Images.logo} resizeMode="contain" style={styles.img} />
-      </View>
-      <View style={styles.imgContainer}>
-        <Image
-          source={Images.twofa}
-          resizeMode="contain"
-          style={styles.imgStyle}
-        />
-      </View>
-      <View style={styles.dropdownContainer}>
-        <View style={styles.genderBox}>
-          <Dropdown
-            items={items}
-            open={open}
-            setOpen={setOpen}
-            placeholder="Please select 2FA medium"
-            value={value}
-            setValue={setValue}
-            onOpen={() => setError(false)}
+    <KeyboardAvoidingView
+      behavior={IOS ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <ScrollView
+        contentContainerStyle={{ flex: 1 }}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.logoView}>
+          <Image source={Images.logo} resizeMode="contain" style={styles.img} />
+        </View>
+        <View style={styles.imgContainer}>
+          <Image
+            source={Images.twofa}
+            resizeMode="contain"
+            style={styles.imgStyle}
           />
         </View>
-        {error && (
-          <Text style={styles.errorText}>Please select a validation type</Text>
-        )}
-        <View style={{ marginTop: 20 }}>
-          <LabeledInput
-            phoneicon
-            keyboardType="numeric"
-            placeholder={'Please Enter Phone number'}
-            value={patientPhone}
-            returnKeyType="next"
-            onChangeText={val => {
-              setPatientPhone(val);
-              setErrObj(old => {
-                return {
-                  ...old,
-                  p_phoneErr: false,
-                  p_phoneErrMsg: '',
-                };
-              });
-            }}
-            showError={ErrObj.p_phoneErr}
-            errorText={ErrObj.p_phoneErrMsg}
-          />
-        </View>
-        <View style={styles.btnContainer}>
-          <Button
-            shape="round"
-            title={'Enabled Two Factor'}
-            style={styles.button}
-            onPress={Validation}
-          />
-          <TouchableOpacity activeOpacity={BaseSetting.buttonOpacity}>
-            <Text
-              style={styles.skip}
-              onPress={() => {
-                navigation.reset({
-                  routes: [{ name: 'Home' }],
-                });
-              }}
-            >
-              Skip
+        <View style={styles.dropdownContainer}>
+          <View style={styles.genderBox}>
+            <Dropdown
+              items={items}
+              open={open}
+              setOpen={setOpen}
+              placeholder="Please select 2FA medium"
+              value={value}
+              setValue={setValue}
+              onOpen={() => setError(false)}
+            />
+          </View>
+          {error && (
+            <Text style={styles.errorText}>
+              Please select a validation type
             </Text>
-          </TouchableOpacity>
+          )}
+          {value === 'Phone' && (
+            <View style={{ marginTop: 20 }}>
+              <LabeledInput
+                phoneicon
+                maxLength={10}
+                keyboardType="numeric"
+                placeholder={'Enter phone number'}
+                value={patientPhone}
+                onChangeText={val => {
+                  setPatientPhone(val);
+                  setErrObj(old => {
+                    return {
+                      ...old,
+                      p_phoneErr: false,
+                      p_phoneErrMsg: '',
+                    };
+                  });
+                }}
+                showError={ErrObj.p_phoneErr}
+                errorText={ErrObj.p_phoneErrMsg}
+              />
+            </View>
+          )}
+          <View style={styles.btnContainer}>
+            <Button
+              shape="round"
+              title={'Enabled Two Factor'}
+              style={styles.button}
+              onPress={Validation}
+            />
+            <TouchableOpacity activeOpacity={BaseSetting.buttonOpacity}>
+              <Text
+                style={styles.skip}
+                onPress={() => {
+                  navigation.reset({
+                    routes: [{ name: 'Home' }],
+                  });
+                }}
+              >
+                Skip
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };
