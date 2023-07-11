@@ -23,7 +23,7 @@ import { storeCredentials } from '@utils/CommonFunction';
 import * as Keychain from 'react-native-keychain';
 
 const Login = ({ navigation }) => {
-  const { setUserData, setAccessToken } = Authentication;
+  const { setUserData, setAccessToken, setBiometric } = Authentication;
   const { isBiometric } = useSelector(state => state.auth);
   const IOS = Platform.OS === 'ios';
   const emailRegex = BaseSetting?.emailRegex;
@@ -178,9 +178,17 @@ const Login = ({ navigation }) => {
       const resp = await getApiData(endPoints, 'POST', params, {}, false);
       if (resp?.status) {
         if (resp?.data?.check_data?.is_password_set === 0) {
-          navigation.navigate('ResetPassword', {
-            email: from === 'bio' ? id : email,
-            from: 'tfa',
+          dispatch(setBiometric(false));
+          navigation.reset({
+            routes: [
+              {
+                name: 'ResetPassword',
+                params: {
+                  email: from === 'bio' ? id : email,
+                  from: 'tfa',
+                },
+              },
+            ],
           });
           clearData();
           setLoader(false);

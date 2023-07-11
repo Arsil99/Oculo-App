@@ -73,7 +73,7 @@ const Profiledetailcomponent = (props, ref) => {
   const [guardianemail, setGuardianEmail] = useState('');
 
   // Date time setup
-  const [date, setDate] = useState(new Date(1598051730000));
+  const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
 
@@ -232,66 +232,19 @@ const Profiledetailcomponent = (props, ref) => {
           )}
           <Text style={styles.genderTitle}>Gender</Text>
           <View style={styles.genderBox}>
-            <TouchableOpacity
-              onPress={() => {
-                setModalVisible(!modalVisible);
-              }}
-              style={styles.genderIcon}
-            >
-              <Icon name="man" size={25} color={BaseColors.primary} />
-              <View>
-                <Text style={{ color: BaseColors.black, marginLeft: 20 }}>
-                  {value}
-                </Text>
-              </View>
-            </TouchableOpacity>
-            <View>
-              <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                  Alert.alert('Modal has been closed.');
-                  setModalVisible(!modalVisible);
-                }}
-              >
-                <View style={styles.centeredView}>
-                  <View style={styles.modalView}>
-                    <View style={styles.modalHead}>
-                      <Text style={styles.titleText}>Select Option</Text>
-                      <TouchableOpacity
-                        activeOpacity={BaseSetting.buttonOpacity}
-                        onPress={() => {
-                          setModalVisible(!modalVisible);
-                        }}
-                        style={styles.closeicon}
-                      >
-                        <Icon
-                          name="close"
-                          size={20}
-                          color={BaseColors.primary}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                    <View style={styles.dropdownContainer}>
-                      <Dropdown
-                        items={genderdata}
-                        open={open}
-                        setOpen={setOpen}
-                        placeholder="Please select gender type"
-                        value={value}
-                        setValue={setValue}
-                        // onValueChange={handleDropdownChange}
-                      />
-                    </View>
-                  </View>
-                </View>
-              </Modal>
-            </View>
+            <Dropdown
+              items={genderdata}
+              open={open}
+              setOpen={setOpen}
+              placeholder="Please select gender type"
+              value={value}
+              setValue={setValue}
+              // onValueChange={handleDropdownChange}
+            />
           </View>
         </View>
       </View>
-      <View style={styles.settigCon}>
+      <View style={[styles.settigCon, { zIndex: 1 }]}>
         <View style={styles.mainTitleStyle}>
           <Text style={styles.titleText}>Contact Information</Text>
         </View>

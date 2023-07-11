@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+/* eslint-disable react-native/no-inline-styles */
+import { BaseColors } from '@config/theme';
+import React from 'react';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 export default function Dropdown(props) {
@@ -10,9 +12,6 @@ export default function Dropdown(props) {
     onOpen = () => null,
     items = [],
     placeholder = '',
-    selectedItemContainerStyle = {},
-    selectedItemLabelStyle = {},
-    showTickIcon = true,
   } = props;
 
   return (
@@ -24,20 +23,33 @@ export default function Dropdown(props) {
       setOpen={setOpen}
       setValue={setValue}
       itemSeparator={true}
-      showTickIcon={showTickIcon}
+      showTickIcon={false}
       onOpen={() => {
         onOpen();
       }}
       placeholderStyle={{
-        color: 'grey',
+        color: BaseColors?.black50,
       }}
-      selectedItemLabelStyle={[
-        selectedItemLabelStyle,
-        {
-          fontWeight: 'bold',
-        },
-      ]}
-      selectedItemContainerStyle={selectedItemContainerStyle}
+      style={{
+        borderWidth: 0,
+      }}
+      containerStyle={{
+        shadowColor: BaseColors.black,
+        // marginLeft: 50,
+      }}
+      dropDownContainerStyle={{
+        borderColor: BaseColors.black50,
+      }}
+      itemSeparatorStyle={{
+        backgroundColor: BaseColors.black50,
+      }}
+      selectedItemLabelStyle={{
+        fontWeight: 'bold',
+        color: BaseColors.white,
+      }}
+      selectedItemContainerStyle={{
+        backgroundColor: BaseColors.primary,
+      }}
     />
   );
 }

@@ -1,7 +1,7 @@
-import { Dimensions, Platform, StyleSheet } from "react-native";
-import { BaseColors, FontFamily } from "@config/theme";
+import { Dimensions, Platform, StyleSheet } from 'react-native';
+import { BaseColors, FontFamily } from '@config/theme';
 
-const IOS = Platform.OS === "ios";
+const IOS = Platform.OS === 'ios';
 export default StyleSheet.create({
   container: {
     flex: 1,
@@ -10,12 +10,12 @@ export default StyleSheet.create({
   },
   contentView: {
     flex: 0.35,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   inputcontainer: {
     flex: 0.4,
-    justifyContent: "flex-start",
+    justifyContent: 'flex-start',
   },
   forgotPasswordTextStyle: {
     marginTop: 10,
@@ -24,11 +24,11 @@ export default StyleSheet.create({
   },
   save: {
     height: 55,
-    width: "100%",
+    width: '100%',
   },
   btnContainer: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 30,
   },
   img: {
@@ -36,12 +36,22 @@ export default StyleSheet.create({
     height: 55,
   },
   socialBtnContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: BaseColors.backgroundPlaceholder,
     marginBottom: 8,
     paddingVertical: 8,
     borderRadius: 5,
+  },
+  twofa: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 20,
+  },
+  twofaTExt: {
+    fontFamily: FontFamily?.regular,
+    fontSize: 16,
   },
 });

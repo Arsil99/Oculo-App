@@ -12,6 +12,7 @@ export default StyleSheet.create({
     marginTop: 15,
     marginHorizontal: 20,
     width: fullWidth,
+    zIndex: 2,
   },
   topBorder: { borderTopLeftRadius: 12, borderTopRightRadius: 12 },
   otherBorder: {
@@ -23,8 +24,15 @@ export default StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
     borderColor: BaseColors.black20,
-    borderWidth: 1,
+    // borderWidth: 1,
     marginTop: 10,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 6,
   },
   genderIcon: {
     height: 50,
