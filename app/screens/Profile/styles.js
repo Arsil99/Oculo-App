@@ -114,12 +114,6 @@ export default StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  button: {
-    borderRadius: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 30,
-    elevation: 2,
-  },
   buttonOpen: {
     backgroundColor: '#F194FF',
   },
