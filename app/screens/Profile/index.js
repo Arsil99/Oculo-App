@@ -46,7 +46,7 @@ export default function Profile({ navigation }) {
   const { isBiometric } = useSelector(state => {
     return state.auth;
   });
-
+  const IOS = Platform.OS === 'ios';
   const [activeTab, setActiveTab] = useState({
     id: 'detail',
     name: 'Detail',
@@ -249,7 +249,7 @@ export default function Profile({ navigation }) {
       ) : (
         <View style={styles.cardOuter}>
           <InfoCard
-            data={settings}
+            data={IOS ? settings : settings.slice(1)}
             mainTitle={'Settings'}
             SwitchChange={(item, v) => {
               item.slug === 'dark_theme'
