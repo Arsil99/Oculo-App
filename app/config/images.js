@@ -20,4 +20,5 @@ export const Images = {
   twofa: require('../assets/Images/2fa.png'),
   speech: require('../assets/Images/speech.png'),
   typetobox: require('../assets/Images/typetobox.png'),
+  speechtotext: require('../assets/Images/speechtotext.png'),
 };
