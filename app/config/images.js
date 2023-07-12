@@ -18,4 +18,6 @@ export const Images = {
   sliderimage: require('../assets/Images/sliderimage.png'),
   rememberword: require('../assets/Images/rememberword.png'),
   twofa: require('../assets/Images/2fa.png'),
+  speech: require('../assets/Images/speech.png'),
+  typetobox: require('../assets/Images/typetobox.png'),
 };

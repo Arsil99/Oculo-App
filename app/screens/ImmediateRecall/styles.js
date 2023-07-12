@@ -1,6 +1,5 @@
-import { Dimensions, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { BaseColors, FontFamily } from '@config/theme';
-const windowHeight = Dimensions.get('window').height;
 
 export default StyleSheet.create({
   main: {
@@ -46,11 +45,7 @@ export default StyleSheet.create({
     fontFamily: FontFamily.regular,
     color: BaseColors.textColor,
   },
-  btnContainer: {
-    flex: 0.24,
-    marginHorizontal: 20,
-    justifyContent: 'flex-end',
-  },
+
   dotwithbordercontainer: {
     marginTop: 10,
     flexDirection: 'row',
@@ -75,5 +70,25 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  btnContainer: {
+    marginTop: 30,
+    alignItems: 'center',
+  },
+  button: {
+    height: 55,
+    width: '100%',
+  },
+  topcontainer: {
+    flexGrow: 1,
+    paddingVertical: 30,
+    paddingHorizontal: 30,
+    marginTop: 2,
+    backgroundColor: BaseColors.white,
+  },
+  imgcontainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 30,
   },
 });
