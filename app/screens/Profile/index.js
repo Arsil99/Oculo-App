@@ -263,6 +263,8 @@ export default function Profile({ navigation }) {
                 ? logout()
                 : item?.slug === 'two_fa'
                 ? setModalVisible(!modalVisible)
+                : item?.title === 'Speech to text'
+                ? navigation.navigate('VoiceInput')
                 : console.log(item.title);
             }}
           />

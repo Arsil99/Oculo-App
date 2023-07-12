@@ -109,6 +109,15 @@ export const settings = [
   },
   {
     id: '6',
+    leftIcon: 'microphone',
+    title: 'Speech to text',
+    slug: 'speech_to_text',
+    righttitle: <Icon name="right" size={15} />,
+    navto: 'VoiceInput',
+    switch: false,
+  },
+  {
+    id: '7',
     leftIcon: 'logout',
     slug: 'sign_out',
     title: 'Sign Out',

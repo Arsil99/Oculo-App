@@ -38,6 +38,7 @@ import Assessment from '@screens/Assessment';
 import ChangeInfo from '@screens/ChangeInfo';
 import ImmediateRecall from '@screens/ImmediateRecall';
 import TwofactorEnabled from '@screens/TwofactorEnabled';
+import VoiceInput from '@screens/VoiceInput';
 
 const intitialNotificationState = {
   notification: null,
@@ -283,6 +284,11 @@ function App() {
           <Stack.Screen
             name="ImmediateRecall"
             component={ImmediateRecall}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="VoiceInput"
+            component={VoiceInput}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

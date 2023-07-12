@@ -5,9 +5,9 @@ import BaseSetting from '@config/setting';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { BaseColors } from '@config/theme';
-import Icon1 from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/AntDesign';
-import Authentication from '@redux/reducers/auth/actions';
+import Icon1 from 'react-native-vector-icons/Ionicons';
+import Icon2 from 'react-native-vector-icons/FontAwesome';
 import { Switch } from 'react-native-gesture-handler';
 
 const InfoCard = props => {
@@ -39,6 +39,12 @@ const InfoCard = props => {
                 <View style={styles.innerCard}>
                   {item?.title === 'Login With Touch Id' ? (
                     <Icon1
+                      name={item.leftIcon}
+                      size={15}
+                      color={BaseColors.black90}
+                    />
+                  ) : item?.leftIcon === 'microphone' ? (
+                    <Icon2
                       name={item.leftIcon}
                       size={15}
                       color={BaseColors.black90}
