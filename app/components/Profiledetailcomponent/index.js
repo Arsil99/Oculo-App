@@ -253,6 +253,8 @@ const Profiledetailcomponent = (props, ref) => {
             ref={cInputRef1}
             Label={'Patient Phone'}
             phoneicon
+            maxLength={10}
+            keyboardType="numeric"
             placeholder={'Enter Patient Phone'}
             value={patientPhone}
             returnKeyType="next"
@@ -295,6 +297,8 @@ const Profiledetailcomponent = (props, ref) => {
           <LabeledInput
             Label={'Guardian Phone'}
             phoneicon
+            maxLength={10}
+            keyboardType="numeric"
             placeholder={'Enter Guardian phone'}
             returnKeyType="next"
             value={guardianPhone}
