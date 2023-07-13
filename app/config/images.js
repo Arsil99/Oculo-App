@@ -22,4 +22,6 @@ export const Images = {
   typetobox: require('../assets/Images/typetobox.png'),
   speechtotext: require('../assets/Images/speechtotext.png'),
   stopspeech: require('../assets/Images/stopspeech.png'),
+  man: require('../assets/Images/man.png'),
+  manbold: require('../assets/Images/manbold.png'),
 };

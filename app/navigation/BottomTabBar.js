@@ -7,11 +7,13 @@ import {
   StyleSheet,
   Dimensions,
   Animated,
+  Image,
 } from 'react-native';
 import AIcon from 'react-native-vector-icons/AntDesign';
 import IIcon from 'react-native-vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
 import { BaseColors, BaseStyles, FontFamily } from '@config/theme';
+import { Images } from '@config';
 
 export default function BottomTabBar({ state, descriptors, navigation }) {
   const totalWidth = Dimensions.get('window').width;
@@ -65,9 +67,16 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
                 color: isFocused ? BaseColors.primary : '#585858',
                 fontSize: 12,
                 fontFamily: FontFamily.regular,
+                textAlign: 'center',
+                width: 45,
+                height: 45,
               }}
             >
-              <AIcon size={26} color={tabIconColor} name="calendar" />
+              {!isFocused ? (
+                <Image source={Images.man} resizeMode="contain" />
+              ) : (
+                <Image source={Images.manbold} resizeMode="contain" />
+              )}
             </Text>
           </Animatable.View>
         );
@@ -113,7 +122,11 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
               }}
             >
               <View>
-                <AIcon size={26} color={tabIconColor} name="user" />
+                {!isFocused ? (
+                  <IIcon size={26} color={tabIconColor} name="person-outline" />
+                ) : (
+                  <IIcon size={26} color={tabIconColor} name="person" />
+                )}
               </View>
             </Text>
           </Animatable.View>
