@@ -116,7 +116,7 @@ const FaceidEnabled = ({ navigation, route }) => {
           <View style={styles.btnContainer}>
             <Button
               shape="round"
-              title={'Enabled Two Factor'}
+              title={'Enabled Face ID'}
               style={styles.button}
               onPress={Validation}
             />
