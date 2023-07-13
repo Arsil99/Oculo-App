@@ -40,6 +40,9 @@ import ImmediateRecall from '@screens/ImmediateRecall';
 import TwofactorEnabled from '@screens/TwofactorEnabled';
 import VoiceInput from '@screens/VoiceInput';
 import Wordlist from '@screens/Wordlist';
+import DigitalRecall from '@screens/DigitalRecall';
+import Recalldigits from '@screens/Recalldigits';
+import FaceidEnabled from '@screens/FaceidEnabled';
 
 const intitialNotificationState = {
   notification: null,
@@ -290,6 +293,21 @@ function App() {
           <Stack.Screen
             name="Wordlist"
             component={Wordlist}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="DigitalRecall"
+            component={DigitalRecall}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Recalldigits"
+            component={Recalldigits}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="FaceidEnabled"
+            component={FaceidEnabled}
             options={{ headerShown: false }}
           />
           <Stack.Screen
