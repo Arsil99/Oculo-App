@@ -14,6 +14,8 @@ import { storeCredentials } from '@utils/CommonFunction';
 
 export default function OTP({ navigation, route }) {
   const email = route?.params?.email || '';
+  const phone = route?.params?.phone || '';
+  const medium = route?.params?.medium || '';
   const password = route?.params?.password || '';
   const from = route?.params?.from || '';
   const dispatch = useDispatch();
@@ -48,9 +50,9 @@ export default function OTP({ navigation, route }) {
     setLoader(true);
     let endPoints = BaseSetting.endpoints.verifyOtp;
     const params = {
-      value: email,
-      type: from === 'tfa' ? 'tfa' : 'forgot-password',
-      parameterType: 'email',
+      value: medium === 'Email' ? email : phone,
+      type: from === 'tfa' ? '2FA' : 'forgot-password',
+      parameterType: medium === 'Email' ? 'email' : 'phone',
       otp: code,
     };
     try {

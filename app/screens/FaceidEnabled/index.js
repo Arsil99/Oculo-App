@@ -13,85 +13,137 @@ import Button from '@components/Button';
 import { Images } from '@config';
 import BaseSetting from '@config/setting';
 import { useState } from 'react';
-import { items } from '@config/staticData';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
-import { getApiData } from '@utils/apiHelper';
-import { isEmpty, isNull } from 'lodash';
-
-const errObj = {
-  p_phoneErr: false,
-  p_phoneErrMsg: '',
-};
+import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
+import { useDispatch, useSelector } from 'react-redux';
+import Authentication from '@redux/reducers/auth/actions';
 
 const FaceidEnabled = ({ navigation, route }) => {
-  const [value, setValue] = useState(null);
-  const email = route?.params?.email || '';
+  const { setBiometric } = Authentication;
   const [loader, setLoader] = useState(false);
-  const [error, setError] = useState(false);
-  const [patientPhone, setPatientPhone] = useState('');
-  const [ErrObj, setErrObj] = useState(errObj);
   const IOS = Platform.OS === 'ios';
+  const dispatch = useDispatch();
 
-  // generate OTP
-  const generateOTP = async () => {
+  const { isBiometric } = useSelector(state => {
+    return state.auth;
+  });
+
+  let epochTimeSeconds = Math.round(new Date().getTime() / 1000).toString();
+  let payload = epochTimeSeconds + 'some message';
+
+  const rnBiometrics = new ReactNativeBiometrics({
+    allowDeviceCredentials: true,
+  });
+
+  const checkBiometrics = async () => {
     setLoader(true);
-    let endPoints = BaseSetting.endpoints.generateOtp;
-    const params = {
-      value: email,
-      type: 'email',
-    };
     try {
-      const resp = await getApiData(endPoints, 'POST', params, {}, false);
-      if (resp?.status) {
-        Toast.show({
-          text1: resp?.message?.toString(),
-          type: 'success',
-        });
-        navigation.navigate('OTP', {
-          email: email,
-          from: 'tfa',
-        });
-      } else {
-        Toast.show({
-          text1: resp?.message,
-          type: 'error',
-        });
-      }
+      rnBiometrics.isSensorAvailable().then(resultObject => {
+        const { available, biometryType } = resultObject;
+
+        if (available && biometryType === BiometryTypes.TouchID) {
+          console.log('TouchID is supported');
+          authenticate();
+        } else if (available && biometryType === BiometryTypes.FaceID) {
+          console.log('FaceID is supported');
+          authenticate();
+        } else if (available && biometryType === BiometryTypes.Biometrics) {
+          console.log('Biometrics is supported');
+          authenticate();
+        } else {
+          console.log('Biometrics not supported');
+          authenticate();
+        }
+      });
+    } catch (error) {
+      console.log(error);
       setLoader(false);
+    }
+  };
+
+  const authenticate = async () => {
+    try {
+      rnBiometrics
+        .biometricKeysExist()
+        .then(resultObject => {
+          const { keysExist } = resultObject;
+          console.log('resultObject ==key exists or not===>>> ', resultObject);
+          if (keysExist) {
+            checkSignature();
+          } else {
+            rnBiometrics
+              .createKeys()
+              .then(resultObject => {
+                console.log('resultObject ==create keys===>>> ', resultObject);
+                const { publicKey } = resultObject;
+                if (publicKey) {
+                  setTimeout(() => {
+                    // checkSignature();
+                  }, 400);
+                }
+              })
+              .catch(error => {
+                // moveToParticularPage();
+                console.log('Create keys error-----', error);
+              });
+          }
+        })
+        .catch(err => {
+          Toast.show({
+            type: 'error',
+            text1: 'Please turn on and add your device fingerprint',
+          });
+          console.log('Authentic error--', err);
+          // moveToParticularPage();
+          setLoader(false);
+        });
     } catch (error) {
       Toast.show({
-        text1: error?.toString(),
         type: 'error',
+        text1: 'Please turn on and add your device fingerprint',
       });
-      console.log('ERRRRR', error);
+      console.log(error);
+      // moveToParticularPage();
       setLoader(false);
     }
   };
 
-  const handleEnable2FA = () => {
-    if (!value) {
-      setError(true);
-    } else {
-      setError(false);
-    }
-  };
-  const Validation = () => {
-    const error = { ...ErrObj };
-    let Valid = true;
+  const checkSignature = () => {
+    rnBiometrics
+      .createSignature({
+        promptMessage: 'Sign in',
+        payload: payload,
+      })
+      .then(resultObject => {
+        console.log('resultObject ===check signature==>>> ', resultObject);
+        const { success, signature } = resultObject;
 
-    if (isEmpty(patientPhone) || isNull(patientPhone)) {
-      Valid = false;
-      error.p_phoneErr = true;
-      error.p_phoneErrMsg = 'Enter phone number';
-    } else if (patientPhone.length !== 10) {
-      Valid = false;
-      error.p_phoneErr = true;
-      error.p_phoneErrMsg = 'Phone number is not 10 digits long';
-      // Phone number is not 10 digits long
-    }
-    handleEnable2FA();
-    setErrObj(error);
+        if (success) {
+          dispatch(setBiometric(!isBiometric));
+          navigation.reset({
+            routes: [{ name: 'TwofactorEnabled' }],
+          });
+          setLoader(false);
+        } else {
+          setTimeout(() => {
+            checkSignature();
+          }, 3000);
+        }
+      })
+      .catch(err => {
+        console.log('Err----', err);
+        if (Platform.OS === 'ios') {
+          Toast.show({
+            type: 'error',
+            text1: 'Please try again by reopen the app',
+          });
+        } else {
+          // moveToParticularPage();
+        }
+        setLoader(false);
+      });
   };
+
   return (
     <KeyboardAvoidingView
       behavior={IOS ? 'padding' : 'height'}
@@ -118,14 +170,15 @@ const FaceidEnabled = ({ navigation, route }) => {
               shape="round"
               title={'Enabled Face ID'}
               style={styles.button}
-              onPress={Validation}
+              loading={loader}
+              onPress={checkBiometrics}
             />
             <TouchableOpacity activeOpacity={BaseSetting.buttonOpacity}>
               <Text
                 style={styles.skip}
                 onPress={() => {
                   navigation.reset({
-                    routes: [{ name: 'Home' }],
+                    routes: [{ name: 'TwofactorEnabled' }],
                   });
                 }}
               >

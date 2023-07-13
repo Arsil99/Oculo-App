@@ -195,8 +195,11 @@ const Login = ({ navigation }) => {
         } else if (resp?.data?.enable_2fa) {
           generateOTP(from, id, pass);
         } else {
-          storeCredentials(email, password);
-          dispatch(setUserData(resp?.data));
+          storeCredentials(
+            from === 'bio' ? id : email,
+            from === 'bio' ? pass : password,
+          );
+          dispatch(setUserData(resp?.data?.personal_info));
           dispatch(setAccessToken(resp?.data?.auth_token));
           navigation.reset({
             routes: [{ name: 'Home' }],
@@ -240,6 +243,7 @@ const Login = ({ navigation }) => {
           email: from === 'bio' ? id : email,
           from: 'tfa',
           password: from === 'bio' ? pass : password,
+          medium: 'Email',
         });
       } else {
         Toast.show({

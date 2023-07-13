@@ -34,7 +34,8 @@ const ForgetPassword = ({ navigation }) => {
     setLoader(true);
     let endPoints = BaseSetting.endpoints.generateOtp;
     const params = {
-      email: email,
+      value: email,
+      type: 'email',
     };
     try {
       const resp = await getApiData(endPoints, 'POST', params, {}, false);
@@ -46,6 +47,7 @@ const ForgetPassword = ({ navigation }) => {
         navigation.navigate('OTP', {
           email: email,
           from: 'forget',
+          medium: 'Email',
         });
       } else {
         Toast.show({

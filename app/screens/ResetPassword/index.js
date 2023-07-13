@@ -15,10 +15,8 @@ import BaseSetting from '@config/setting';
 import { getApiData } from '@utils/apiHelper';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import Authentication from '@redux/reducers/auth/actions';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { removeCredentials, storeCredentials } from '@utils/CommonFunction';
-import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
-import { Switch } from 'react-native-gesture-handler';
 
 const ResetPassword = ({ navigation, route }) => {
   const { setUserData, setAccessToken, setBiometric } = Authentication;
@@ -29,9 +27,6 @@ const ResetPassword = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const cInputRef = useRef();
 
-  const { isBiometric } = useSelector(state => {
-    return state.auth;
-  });
   const [setpassword, setSetpassword] = useState('');
   const [retypepassword, setRetypepassword] = useState('');
   const [currentpassword, setCurrentpassword] = useState('');
@@ -42,13 +37,6 @@ const ResetPassword = ({ navigation, route }) => {
   const [RetypepassErrObj, setRetypepassErrObj] = useState({
     error: false,
     msg: '',
-  });
-
-  let epochTimeSeconds = Math.round(new Date().getTime() / 1000).toString();
-  let payload = epochTimeSeconds + 'some message';
-
-  const rnBiometrics = new ReactNativeBiometrics({
-    allowDeviceCredentials: true,
   });
 
   useEffect(() => {
@@ -74,7 +62,14 @@ const ResetPassword = ({ navigation, route }) => {
           type: 'success',
         });
         navigation.reset({
-          routes: [{ name: 'Login' }],
+          routes: [
+            {
+              name: 'Login',
+              params: {
+                email: email,
+              },
+            },
+          ],
         });
       } else {
         Toast.show({
@@ -106,16 +101,12 @@ const ResetPassword = ({ navigation, route }) => {
     try {
       const resp = await getApiData(endPoints, 'POST', params, {}, false);
       if (resp?.status) {
-        if (resp?.data?.userData?.personal_info?.two_factor_enabled === 0) {
-          storeCredentials(email, retypepassword);
-          navigation.reset({
-            routes: [{ name: 'Home' }],
-          });
-          dispatch(setUserData(resp?.data?.userData?.personal_info));
-          dispatch(setAccessToken(resp?.data?.auth_token));
-        } else {
-          generateOTP();
-        }
+        storeCredentials(email, retypepassword);
+        navigation.reset({
+          routes: [{ name: 'FaceidEnabled' }],
+        });
+        dispatch(setUserData(resp?.data?.userData?.personal_info));
+        dispatch(setAccessToken(resp?.data?.auth_token));
       } else {
         Toast.show({
           text1: resp?.message,
@@ -131,141 +122,6 @@ const ResetPassword = ({ navigation, route }) => {
       console.log('ERRRRR', error);
       setLoader(false);
     }
-  };
-
-  // generate OTP
-  const generateOTP = async () => {
-    setLoader(true);
-    let endPoints = BaseSetting.endpoints.generateOtp;
-    const params = {
-      email: email,
-    };
-    try {
-      const resp = await getApiData(endPoints, 'POST', params, {}, false);
-      if (resp?.status) {
-        Toast.show({
-          text1: resp?.message?.toString(),
-          type: 'success',
-        });
-        navigation.navigate('OTP', {
-          email: email,
-          from: 'tfa',
-        });
-      } else {
-        Toast.show({
-          text1: resp?.message,
-          type: 'error',
-        });
-      }
-      setLoader(false);
-    } catch (error) {
-      Toast.show({
-        text1: error?.toString(),
-        type: 'error',
-      });
-      console.log('ERRRRR', error);
-      setLoader(false);
-    }
-  };
-
-  const checkBiometrics = async () => {
-    try {
-      rnBiometrics.isSensorAvailable().then(resultObject => {
-        const { available, biometryType } = resultObject;
-
-        if (available && biometryType === BiometryTypes.TouchID) {
-          console.log('TouchID is supported');
-          authenticate();
-        } else if (available && biometryType === BiometryTypes.FaceID) {
-          console.log('FaceID is supported');
-          authenticate();
-        } else if (available && biometryType === BiometryTypes.Biometrics) {
-          console.log('Biometrics is supported');
-          authenticate();
-        } else {
-          console.log('Biometrics not supported');
-          authenticate();
-        }
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const authenticate = async () => {
-    try {
-      rnBiometrics
-        .biometricKeysExist()
-        .then(resultObject => {
-          const { keysExist } = resultObject;
-          console.log('resultObject ==key exists or not===>>> ', resultObject);
-          if (keysExist) {
-            checkSignature();
-          } else {
-            rnBiometrics
-              .createKeys()
-              .then(resultObject => {
-                console.log('resultObject ==create keys===>>> ', resultObject);
-                const { publicKey } = resultObject;
-                if (publicKey) {
-                  setTimeout(() => {
-                    // checkSignature();
-                  }, 400);
-                }
-              })
-              .catch(error => {
-                // moveToParticularPage();
-                console.log('Create keys error-----', error);
-              });
-          }
-        })
-        .catch(err => {
-          Toast.show({
-            type: 'error',
-            text1: 'Please turn on and add your device fingerprint',
-          });
-          console.log('Authentic error--', err);
-          // moveToParticularPage();
-        });
-    } catch (error) {
-      Toast.show({
-        type: 'error',
-        text1: 'Please turn on and add your device fingerprint',
-      });
-      console.log(error);
-      // moveToParticularPage();
-    }
-  };
-
-  const checkSignature = () => {
-    rnBiometrics
-      .createSignature({
-        promptMessage: 'Sign in',
-        payload: payload,
-      })
-      .then(resultObject => {
-        console.log('resultObject ===check signature==>>> ', resultObject);
-        const { success, signature } = resultObject;
-
-        if (success) {
-          dispatch(setBiometric(!isBiometric));
-        } else {
-          setTimeout(() => {
-            checkSignature();
-          }, 3000);
-        }
-      })
-      .catch(err => {
-        console.log('Err----', err);
-        if (Platform.OS === 'ios') {
-          Toast.show({
-            type: 'error',
-            text1: 'Please try again by reopen the app',
-          });
-        } else {
-          // moveToParticularPage();
-        }
-      });
   };
 
   function validation() {
@@ -398,20 +254,6 @@ const ResetPassword = ({ navigation, route }) => {
             errorText={RetypepassErrObj.msg}
             onSubmitEditing={validation}
           />
-          <View style={styles.twofa}>
-            <Text style={styles.twofaTExt}>Enable FaceID?</Text>
-            <Switch
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={v => {
-                if (v) {
-                  checkBiometrics();
-                } else {
-                  dispatch(setBiometric(!isBiometric));
-                }
-              }}
-              value={isBiometric}
-            />
-          </View>
           <View style={styles.btnContainer}>
             <Button
               shape="round"

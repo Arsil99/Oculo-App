@@ -19,15 +19,15 @@ import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { getApiData } from '@utils/apiHelper';
 import LabeledInput from '@components/LabeledInput';
 import { isEmpty, isNull } from 'lodash';
+import { useSelector } from 'react-redux';
 
 const errObj = {
   p_phoneErr: false,
   p_phoneErrMsg: '',
 };
 
-const TwofactorEnabled = ({ navigation, route }) => {
+const TwofactorEnabled = ({ navigation }) => {
   const [value, setValue] = useState(null);
-  const email = route?.params?.email || '';
   const [open, setOpen] = useState(false);
   const [loader, setLoader] = useState(false);
   const [error, setError] = useState(false);
@@ -35,13 +35,17 @@ const TwofactorEnabled = ({ navigation, route }) => {
   const [ErrObj, setErrObj] = useState(errObj);
   const IOS = Platform.OS === 'ios';
 
+  const { userData } = useSelector(state => {
+    return state.auth;
+  });
+
   // generate OTP
   const generateOTP = async () => {
     setLoader(true);
     let endPoints = BaseSetting.endpoints.generateOtp;
     const params = {
-      value: email,
-      type: 'email',
+      value: value === 'Email' ? userData?.email : patientPhone,
+      type: value === 'Email' ? 'email' : 'phone',
     };
     try {
       const resp = await getApiData(endPoints, 'POST', params, {}, false);
@@ -51,7 +55,9 @@ const TwofactorEnabled = ({ navigation, route }) => {
           type: 'success',
         });
         navigation.navigate('OTP', {
-          email: email,
+          email: userData?.email,
+          phone: patientPhone,
+          medium: value,
           from: 'tfa',
         });
       } else {
@@ -71,30 +77,33 @@ const TwofactorEnabled = ({ navigation, route }) => {
     }
   };
 
-  const handleEnable2FA = () => {
-    if (!value) {
-      setError(true);
-    } else {
-      setError(false);
-    }
-  };
   const Validation = () => {
     const error = { ...ErrObj };
+    setError(false);
     let Valid = true;
 
-    if (isEmpty(patientPhone) || isNull(patientPhone)) {
+    if ((isEmpty(patientPhone) || isNull(patientPhone)) && value === 'Phone') {
       Valid = false;
       error.p_phoneErr = true;
       error.p_phoneErrMsg = 'Enter phone number';
-    } else if (patientPhone.length !== 10) {
+    } else if (patientPhone.length !== 10 && value === 'Phone') {
       Valid = false;
       error.p_phoneErr = true;
       error.p_phoneErrMsg = 'Phone number is not 10 digits long';
       // Phone number is not 10 digits long
     }
-    handleEnable2FA();
+
+    if (!value) {
+      Valid = false;
+      setError(true);
+    }
+
+    if (Valid) {
+      generateOTP();
+    }
     setErrObj(error);
   };
+
   return (
     <KeyboardAvoidingView
       behavior={IOS ? 'padding' : 'height'}
@@ -161,6 +170,7 @@ const TwofactorEnabled = ({ navigation, route }) => {
               title={'Enabled Two Factor'}
               style={styles.button}
               onPress={Validation}
+              loading={loader}
             />
             <TouchableOpacity activeOpacity={BaseSetting.buttonOpacity}>
               <Text

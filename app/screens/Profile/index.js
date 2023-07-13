@@ -254,7 +254,7 @@ export default function Profile({ navigation }) {
             SwitchChange={(item, v) => {
               item.slug === 'dark_theme'
                 ? dispatch(setDarkmode(v))
-                : item.slug === 'dark_theme' && v
+                : item.slug === 'face_id' && v
                 ? checkBiometrics()
                 : dispatch(setBiometric(v));
             }}

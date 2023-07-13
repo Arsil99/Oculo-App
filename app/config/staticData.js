@@ -73,6 +73,7 @@ export const settings = [
     id: '1',
     leftIcon: 'Meh',
     title: 'Login With Face Id',
+    slug: 'face_id',
     switch: true,
   },
   {
