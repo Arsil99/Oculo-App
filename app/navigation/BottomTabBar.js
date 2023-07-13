@@ -11,6 +11,9 @@ import {
 } from 'react-native';
 import AIcon from 'react-native-vector-icons/AntDesign';
 import IIcon from 'react-native-vector-icons/Ionicons';
+import MIcon from 'react-native-vector-icons/MaterialIcons';
+import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import FIcon from 'react-native-vector-icons/FontAwesome5';
 import * as Animatable from 'react-native-animatable';
 import { BaseColors, BaseStyles, FontFamily } from '@config/theme';
 import { Images } from '@config';
@@ -49,7 +52,11 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
                 fontFamily: FontFamily.regular,
               }}
             >
-              <AIcon size={26} color={tabIconColor} name="home" />
+              {!isFocused ? (
+                <AIcon size={26} color={tabIconColor} name="home" />
+              ) : (
+                <MIcon size={31} color={tabIconColor} name="home" />
+              )}
             </Text>
           </Animatable.View>
         );
@@ -68,14 +75,12 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
                 fontSize: 12,
                 fontFamily: FontFamily.regular,
                 textAlign: 'center',
-                width: 45,
-                height: 45,
               }}
             >
               {!isFocused ? (
-                <Image source={Images.man} resizeMode="contain" />
+                <AIcon size={26} color={tabIconColor} name="calendar" />
               ) : (
-                <Image source={Images.manbold} resizeMode="contain" />
+                <FIcon size={26} color={tabIconColor} name="calendar-alt" />
               )}
             </Text>
           </Animatable.View>
@@ -96,11 +101,15 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
                 fontFamily: FontFamily.regular,
               }}
             >
-              <IIcon
-                size={26}
-                color={tabIconColor}
-                name="notifications-outline"
-              />
+              {!isFocused ? (
+                <IIcon
+                  size={26}
+                  color={tabIconColor}
+                  name="notifications-outline"
+                />
+              ) : (
+                <MCIcon size={26} color={tabIconColor} name="bell" />
+              )}
             </Text>
           </Animatable.View>
         );
