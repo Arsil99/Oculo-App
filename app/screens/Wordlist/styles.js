@@ -25,7 +25,7 @@ export default StyleSheet.create({
     elevation: 3,
   },
   wordcontainer: {
-    width: '50%',
+    width: '60%',
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
@@ -41,6 +41,7 @@ export default StyleSheet.create({
     lineHeight: 40,
     fontFamily: FontFamily.bold,
     color: BaseColors.textColor,
+    textAlign: 'center',
   },
 
   subtitleText: {
@@ -72,4 +73,13 @@ export default StyleSheet.create({
     textAlignVertical: 'top',
     fontSize: 16,
   },
+  stop: {
+    fontSize: 16,
+    fontWeight: '400',
+    lineHeight: 24,
+    fontFamily: FontFamily.regular,
+    color: BaseColors.red,
+    textAlign: 'center',
+  },
+  stopimg: { height: 100, width: 100, marginBottom: 20, alignSelf: 'center' },
 });
