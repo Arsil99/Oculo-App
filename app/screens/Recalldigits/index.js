@@ -141,7 +141,7 @@ export default function Recalldigits({ navigation }) {
         <StatusBar barStyle="dark-content" backgroundColor={BaseColors.white} />
 
         <HeaderBar
-          HeaderText={'Word List'}
+          HeaderText={'Recall Digits'}
           HeaderCenter
           leftText={'Cancel'}
           leftBtnPress={() => {
@@ -195,10 +195,10 @@ export default function Recalldigits({ navigation }) {
               )}
             </TouchableOpacity>
           ) : (
-            <View style={styles.wordcontainer}>
-              <Text style={styles.titleText}>
-                Jacket{'\n'} Arrow{'\n'} Pepper {'\n'}Cotton{'\n'} Movie
-              </Text>
+            <View style={{ flex: 0.5 }}>
+              <View style={styles.numbercontainer}>
+                <Text style={styles.titleText}>9834323</Text>
+              </View>
             </View>
           )}
           <View

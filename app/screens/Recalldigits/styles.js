@@ -43,7 +43,6 @@ export default StyleSheet.create({
     color: BaseColors.textColor,
     textAlign: 'center',
   },
-
   subtitleText: {
     fontSize: 16,
     fontWeight: '400',
@@ -52,7 +51,6 @@ export default StyleSheet.create({
     fontFamily: FontFamily.regular,
     color: BaseColors.textColor,
   },
-
   buttoncontainer: {
     flex: 0.3,
     marginHorizontal: 15,
@@ -67,6 +65,17 @@ export default StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     marginTop: 5,
+  },
+  numbercontainer: {
+    width: 180,
+    height: 90,
+    borderRadius: 12,
+    borderColor: BaseColors.borderColor,
+    borderWidth: 1,
+    padding: 24,
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   textInput: {
     flex: 1,
