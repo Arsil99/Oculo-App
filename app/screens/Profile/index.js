@@ -43,7 +43,7 @@ export default function Profile({ navigation }) {
   const [editHistory, setEditHistory] = useState(false);
   const [rightHistoryText, setRightHistoryText] = useState('Edit');
   const profileRef = useRef();
-  const { isBiometric } = useSelector(state => {
+  const { isBiometric, userData } = useSelector(state => {
     return state.auth;
   });
   const IOS = Platform.OS === 'ios';
@@ -60,6 +60,7 @@ export default function Profile({ navigation }) {
   });
 
   useEffect(() => {
+    setValue(userData?.two_factor_type);
     setActiveTab({
       id: 'detail',
       name: 'Detail',

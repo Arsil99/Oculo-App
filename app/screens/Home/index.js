@@ -5,9 +5,7 @@ import { Images } from '@config';
 import TabSwitch from '@components/TabSwitch';
 import Button from '@components/Button';
 import Milestones from '@components/Milestones';
-import { store } from '../../redux/store/configureStore';
-const authState = store?.getState() || {};
-const { userData } = authState?.auth || '';
+import { useSelector } from 'react-redux';
 
 export default function Home({ navigation }) {
   const switchOptions = [
@@ -19,6 +17,8 @@ export default function Home({ navigation }) {
     id: 'summary',
     name: 'Summary',
   });
+
+  const { userData } = useSelector(state => state.auth);
 
   return (
     // MAIN CONTAINER

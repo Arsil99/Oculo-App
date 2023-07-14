@@ -14,10 +14,7 @@ import { isEmpty, isNull } from 'lodash';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import Dropdown from '@components/Dropdown';
-import { store } from '../../redux/store/configureStore';
-const authState = store?.getState() || {};
-const { userData } = authState?.auth || '';
-console.log('🚀 ~ file: index.js:20 ~ userData:', userData);
+import { useSelector } from 'react-redux';
 
 const errObj = {
   firstNameErr: false,
@@ -53,14 +50,15 @@ const Profiledetailcomponent = (props, ref) => {
   const cInputRef2 = useRef();
   const cInputRef3 = useRef();
   const cInputRef4 = useRef();
+  const { userData } = useSelector(state => state.auth);
 
   // Detail Tab related states
   const [ErrObj, setErrObj] = useState(errObj);
-  const [firstName, setFirstName] = useState(userData?.firstname);
-  const [lastName, setLastName] = useState(userData?.lastname);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [birthDate, setBirthDate] = useState('');
-  const [patientPhone, setPatientPhone] = useState(userData?.phone);
-  const [patientemail, setPatientEmail] = useState(userData?.email);
+  const [patientPhone, setPatientPhone] = useState('');
+  const [patientemail, setPatientEmail] = useState('');
   const [guardianPhone, setGuardianPhone] = useState('');
   const [guardianemail, setGuardianEmail] = useState('');
 
@@ -70,6 +68,11 @@ const Profiledetailcomponent = (props, ref) => {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
+    setFirstName(userData?.firstname);
+    setLastName(userData?.lastname);
+    setPatientPhone(userData?.phone);
+    setPatientEmail(userData?.email);
+
     return () => {
       setErrObj(errObj);
     };

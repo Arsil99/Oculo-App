@@ -4,8 +4,8 @@ const authState = store?.getState() || {};
 const { userData } = authState?.auth || '';
 
 export const items = [
-  { label: 'Email', value: 'Email' },
-  { label: 'Phone', value: 'Phone' },
+  { label: 'Email', value: 'email' },
+  { label: 'Phone', value: 'phone' },
 ];
 
 export const switchOptions = [

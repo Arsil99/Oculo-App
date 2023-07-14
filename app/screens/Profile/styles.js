@@ -113,6 +113,7 @@ export default StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    width: 340,
   },
   buttonOpen: {
     backgroundColor: '#F194FF',
@@ -136,9 +137,20 @@ export default StyleSheet.create({
   closeicon: { padding: 10, position: 'absolute', right: 4 },
 
   dropdownContainer: {
-    paddingHorizontal: 20,
-    paddingVertical: 20,
-    width: 300,
+    margin: 20,
+    borderRadius: 10,
+    borderColor: BaseColors.black20,
+    borderWidth: 1,
+    marginTop: 10,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 6,
+    zIndex: 50,
+    backgroundColor: BaseColors.white,
   },
   dropdown: {
     backgroundColor: '#fafafa',
