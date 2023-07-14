@@ -39,8 +39,8 @@ export default StyleSheet.create({
     color: BaseColors.textColor,
   },
   btnContainer: {
-    flex: 0.24,
+    flex: 0.6,
+    marginVertical: 30,
     marginHorizontal: 20,
-    justifyContent: 'flex-end',
   },
 });

@@ -1,7 +1,6 @@
-import { View, Text, StatusBar } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import React from 'react';
 import styles from './styles';
-import HeaderBar from '@components/HeaderBar';
 import Button from '@components/Button';
 import { Image } from 'react-native';
 import { Images } from '@config';
@@ -9,17 +8,17 @@ import { BaseColors } from '@config/theme';
 
 const Symptom = ({ navigation, handleNextPress }) => {
   return (
-    <View style={styles.main}>
+    <ScrollView style={styles.main}>
       <View
         style={{
           paddingTop: 30,
-          flex: 1,
+          flexGrow: 1,
           paddingHorizontal: 25,
           marginTop: 2,
           backgroundColor: BaseColors.white,
         }}
       >
-        <View style={{ flex: 0.7 }}>
+        <View style={{ flex: 0.5 }}>
           <Text style={styles.titleText}>Report your symptoms</Text>
           <Text style={styles.titlesubText}>
             Please report your symptom severity level, based on how you've felt
@@ -53,7 +52,7 @@ const Symptom = ({ navigation, handleNextPress }) => {
           />
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
