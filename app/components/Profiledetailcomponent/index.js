@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Platform,
-  Modal,
-  Alert,
-} from 'react-native';
+import { View, Text, TouchableOpacity, Platform } from 'react-native';
 import React, {
   forwardRef,
   useEffect,
@@ -16,14 +9,15 @@ import React, {
 import styles from './styles';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { BaseColors } from '@config/theme';
-
 import LabeledInput from '@components/LabeledInput';
 import { isEmpty, isNull } from 'lodash';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import Dropdown from '@components/Dropdown';
-
-import BaseSetting from '@config/setting';
+import { store } from '../../redux/store/configureStore';
+const authState = store?.getState() || {};
+const { userData } = authState?.auth || '';
+console.log('🚀 ~ file: index.js:20 ~ userData:', userData);
 
 const errObj = {
   firstNameErr: false,
@@ -53,7 +47,6 @@ const Profiledetailcomponent = (props, ref) => {
     { label: 'Male', value: 'Male' },
     { label: 'Female', value: 'Female' },
   ];
-  const [modalVisible, setModalVisible] = useState(false);
 
   const cInputRef = useRef();
   const cInputRef1 = useRef();
@@ -63,12 +56,11 @@ const Profiledetailcomponent = (props, ref) => {
 
   // Detail Tab related states
   const [ErrObj, setErrObj] = useState(errObj);
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [firstName, setFirstName] = useState(userData?.firstname);
+  const [lastName, setLastName] = useState(userData?.lastname);
   const [birthDate, setBirthDate] = useState('');
-  const [gender, setGender] = useState('');
-  const [patientPhone, setPatientPhone] = useState('');
-  const [patientemail, setPatientEmail] = useState('');
+  const [patientPhone, setPatientPhone] = useState(userData?.phone);
+  const [patientemail, setPatientEmail] = useState(userData?.email);
   const [guardianPhone, setGuardianPhone] = useState('');
   const [guardianemail, setGuardianEmail] = useState('');
 

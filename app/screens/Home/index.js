@@ -1,12 +1,15 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styles from './styles';
 import { Images } from '@config';
 import TabSwitch from '@components/TabSwitch';
 import Button from '@components/Button';
-
-import { logout } from '@utils/CommonFunction';
 import Milestones from '@components/Milestones';
+import { store } from '../../redux/store/configureStore';
+const authState = store?.getState() || {};
+const { userData } = authState?.auth || '';
+console.log('🚀 ~ file: index.js:11 ~ userData:', userData);
+
 export default function Home({ navigation }) {
   const switchOptions = [
     { id: 'summary', name: 'Summary' },
@@ -30,7 +33,7 @@ export default function Home({ navigation }) {
           />
         </View>
         <View style={styles.title}>
-          <Text style={styles.name}>Hi, Arsil</Text>
+          <Text style={styles.name}>Hi, {userData?.firstname}</Text>
           <Text style={styles.welcomeText}>Welcome to Oculo</Text>
         </View>
       </View>
@@ -63,7 +66,7 @@ export default function Home({ navigation }) {
           </View>
 
           <Button
-            onPress={() => navigation.navigate('Dashboard')}
+            onPress={() => navigation.navigate('FaceidEnabled')}
             shape="round"
             title={'Request Another Baseline'}
             style={styles.requestBtn}
