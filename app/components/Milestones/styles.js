@@ -18,6 +18,7 @@ export default StyleSheet.create({
   listContainer: {
     marginHorizontal: 20,
     marginTop: 15,
+    paddingBottom: 20,
   },
   text: {
     fontFamily: FontFamily.roRegular,
