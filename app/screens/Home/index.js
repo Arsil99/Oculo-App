@@ -8,7 +8,6 @@ import Milestones from '@components/Milestones';
 import { store } from '../../redux/store/configureStore';
 const authState = store?.getState() || {};
 const { userData } = authState?.auth || '';
-console.log('🚀 ~ file: index.js:11 ~ userData:', userData);
 
 export default function Home({ navigation }) {
   const switchOptions = [
@@ -66,7 +65,7 @@ export default function Home({ navigation }) {
           </View>
 
           <Button
-            onPress={() => navigation.navigate('FaceidEnabled')}
+            onPress={() => navigation.navigate('Dashboard')}
             shape="round"
             title={'Request Another Baseline'}
             style={styles.requestBtn}
