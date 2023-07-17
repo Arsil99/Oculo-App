@@ -88,7 +88,7 @@ const Milestones = ({ navigation, route }) => {
 
   const renderItem = ({ item }) => {
     return (
-      <View style={{ width: '50%' }}>
+      <View style={{ width: '50%', alignItems: 'center' }}>
         <Details
           text={item.text}
           number={item.number}

@@ -15,7 +15,7 @@ const Details = ({ iconName, text, number, iconColor, numberColor }) => {
             justifyContent: 'space-between',
           }}
         >
-          <View style={{ height: 50, width: 90 }}>
+          <View style={{ height: 45, width: 90 }}>
             <Text style={styles.text}>{text}</Text>
           </View>
           <Image source={Images.emoji1} resizeMode="contain" />

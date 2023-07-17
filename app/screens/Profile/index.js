@@ -264,13 +264,16 @@ export default function Profile({ navigation }) {
                 ? logout()
                 : item?.slug === 'two_fa'
                 ? setModalVisible(!modalVisible)
-                : item?.title === 'Speech to text'
-                ? navigation.navigate('VoiceInput')
-                : console.log(item.title);
+                : navigation.navigate(item.navto);
             }}
           />
-          <InfoCard data={legal} mainTitle={'Legal & Regulatory'} />
-
+          <InfoCard
+            data={legal}
+            mainTitle={'Legal & Regulatory'}
+            tabPress={item => {
+              navigation.navigate(item.navto);
+            }}
+          />
           <Modal
             animationType="slide"
             transparent={true}

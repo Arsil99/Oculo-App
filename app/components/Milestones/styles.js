@@ -16,7 +16,7 @@ export default StyleSheet.create({
     borderRadius: 10,
   },
   listContainer: {
-    marginHorizontal: 20,
+    marginHorizontal: 10,
     marginTop: 15,
     paddingBottom: 20,
   },

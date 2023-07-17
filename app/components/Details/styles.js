@@ -7,10 +7,9 @@ export default StyleSheet.create({
     borderWidth: 1,
     marginVertical: 5,
     borderColor: BaseColors.black10,
-    width: '96%',
+    width: '95%',
     height: 90,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
+    padding: 10,
     borderRadius: 12,
     shadowColor: BaseColors.black,
     shadowOffset: {
@@ -22,7 +21,7 @@ export default StyleSheet.create({
     elevation: 3,
   },
   img: { height: 25, width: 23 },
-  img2: { width: 90 },
+  img2: { width: 130 },
   text: {
     color: BaseColors.textColor,
     fontFamily: FontFamily.regular,
@@ -39,6 +38,7 @@ export default StyleSheet.create({
   graphcontainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 10,
   },
   number: {
     color: BaseColors.secondary,
