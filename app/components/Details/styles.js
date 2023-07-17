@@ -21,7 +21,7 @@ export default StyleSheet.create({
     elevation: 3,
   },
   img: { height: 25, width: 23 },
-  img2: { width: 130 },
+  img2: { width: 110 },
   text: {
     color: BaseColors.textColor,
     fontFamily: FontFamily.regular,
