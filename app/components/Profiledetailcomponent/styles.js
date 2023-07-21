@@ -24,7 +24,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
     borderColor: BaseColors.black20,
-    // borderWidth: 1,
+    borderWidth: 1.2,
     marginTop: 10,
     shadowOffset: {
       width: 0,
@@ -32,7 +32,7 @@ export default StyleSheet.create({
     },
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
-    elevation: 6,
+    elevation: 1,
   },
   genderIcon: {
     height: 50,
@@ -111,6 +111,7 @@ export default StyleSheet.create({
     borderColor: BaseColors.black20,
     borderWidth: 1,
     height: 50,
+    elevation: 1,
     borderRadius: 10,
     flexDirection: 'row',
     alignItems: 'center',
