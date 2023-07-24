@@ -7,7 +7,9 @@ import { BaseColors } from '@config/theme';
 import Milestones from '@components/Milestones';
 import { Images } from '@config';
 import CardList from '@components/CardList';
+import { useSelector } from 'react-redux';
 export default function EventDetails() {
+  const { darkmode } = useSelector(state => state.auth);
   // OUTER TABS
   const switchOptions = [
     { id: 'report', name: 'Report' },
@@ -30,7 +32,14 @@ export default function EventDetails() {
     name: 'Summary',
   });
   return (
-    <View style={styles.main}>
+    <View
+      style={[
+        styles.main,
+        {
+          backgroundColor: darkmode ? BaseColors.lightBlack : BaseColors.white,
+        },
+      ]}
+    >
       <HeaderBar
         HeaderText={'Event Report (Aug 03)'}
         HeaderCenter
@@ -57,16 +66,38 @@ export default function EventDetails() {
             }}
           >
             <View>
-              <Text style={{ fontSize: 16, color: BaseColors.black }}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: darkmode ? BaseColors.white : BaseColors.black90,
+                }}
+              >
                 Event Type:{' '}
               </Text>
-              <Text>Intial Visit</Text>
+              <Text
+                style={{
+                  color: darkmode ? BaseColors.white : BaseColors.black90,
+                }}
+              >
+                Intial Visit
+              </Text>
             </View>
             <View>
-              <Text style={{ fontSize: 16, color: BaseColors.black }}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: darkmode ? BaseColors.white : BaseColors.black90,
+                }}
+              >
                 RTA Phase:{' '}
               </Text>
-              <Text>Symptom Limited Activity</Text>
+              <Text
+                style={{
+                  color: darkmode ? BaseColors.white : BaseColors.black90,
+                }}
+              >
+                Symptom Limited Activity
+              </Text>
             </View>
           </View>
           <TabSwitch
@@ -84,7 +115,14 @@ export default function EventDetails() {
                 justifyContent: 'center',
               }}
             >
-              <Text style={{ marginVertical: 25 }}>Coming Soon ...</Text>
+              <Text
+                style={{
+                  marginVertical: 25,
+                  color: darkmode ? BaseColors.white : BaseColors.black90,
+                }}
+              >
+                Coming Soon ...
+              </Text>
             </View>
           ) : (
             <View style={styles.detailsArea}>
@@ -93,9 +131,24 @@ export default function EventDetails() {
           )}
         </View>
       ) : (
-        <View style={{ backgroundColor: BaseColors.lightBg, flex: 1 }}>
+        <View
+          style={{
+            backgroundColor: darkmode
+              ? BaseColors.lightBlack
+              : BaseColors.white,
+            flex: 1,
+          }}
+        >
           <View style={{ paddingHorizontal: 15 }}>
-            <Text style={{ fontSize: 18, marginVertical: 5 }}>Open Events</Text>
+            <Text
+              style={{
+                fontSize: 18,
+                marginVertical: 5,
+                color: darkmode ? BaseColors.white : BaseColors.black90,
+              }}
+            >
+              Open Events
+            </Text>
             <CardList
               image={Images.emoji1}
               data={'March 30, 2000'}

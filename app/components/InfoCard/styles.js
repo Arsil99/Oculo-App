@@ -8,6 +8,7 @@ export default StyleSheet.create({
     marginTop: 15,
     // marginHorizontal: 20,
     width: fullWidth,
+    borderRadius: 10,
   },
   mainTitleStyle: {
     alignItems: 'flex-start',
@@ -17,9 +18,10 @@ export default StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     textAlign: 'center',
+    margin: 10,
     lineHeight: 30,
     fontFamily: FontFamily.bold,
-    color: BaseColors.black,
+    // color: BaseColors.black,
   },
   infoshadow: {
     shadowColor: BaseColors.black,
@@ -32,7 +34,7 @@ export default StyleSheet.create({
     elevation: 3,
   },
   settingItem: {
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
     height: 50,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -42,7 +44,7 @@ export default StyleSheet.create({
   topBorder: { borderTopLeftRadius: 12, borderTopRightRadius: 12 },
   otherBorder: {
     borderTopWidth: 0.7,
-    borderColor: BaseColors.borderColor,
+    // borderColor: BaseColors.borderColor,
   },
   radiusDesign: {
     borderBottomLeftRadius: 12,
@@ -62,14 +64,14 @@ export default StyleSheet.create({
     lineHeight: 24,
     textAlign: 'center',
     fontFamily: FontFamily.regular,
-    color: BaseColors.black90,
+    // color: BaseColors.black90,
   },
   righttitletext: {
     fontWeight: '400',
     lineHeight: 24,
     textAlign: 'center',
     fontFamily: FontFamily.regular,
-    color: BaseColors.textColor,
+    // color: BaseColors.textColor,
     alignItems: 'center',
   },
 });

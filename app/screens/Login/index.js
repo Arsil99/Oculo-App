@@ -24,7 +24,7 @@ import * as Keychain from 'react-native-keychain';
 
 const Login = ({ navigation }) => {
   const { setUserData, setAccessToken, setBiometric } = Authentication;
-  const { isBiometric } = useSelector(state => state.auth);
+  const { isBiometric, darkmode } = useSelector(state => state.auth);
   const IOS = Platform.OS === 'ios';
   const emailRegex = BaseSetting?.emailRegex;
   const dispatch = useDispatch();
@@ -319,7 +319,12 @@ const Login = ({ navigation }) => {
   return (
     <KeyboardAvoidingView
       behavior={IOS ? 'padding' : 'height'}
-      style={styles.container}
+      style={[
+        styles.container,
+        {
+          backgroundColor: darkmode ? BaseColors.lightBlack : BaseColors.white,
+        },
+      ]}
     >
       <ScrollView
         contentContainerStyle={{ flex: 1 }}

@@ -5,8 +5,10 @@ import styles from './styles';
 import _ from 'lodash';
 import { Images } from '@config';
 import Details from '@components/Details';
+import { useSelector } from 'react-redux';
 
 const Milestones = ({ navigation, route }) => {
+  const { darkmode } = useSelector(state => state.auth);
   const data = [
     {
       id: '1',
@@ -101,7 +103,14 @@ const Milestones = ({ navigation, route }) => {
     );
   };
   return (
-    <View style={styles.maincontainer}>
+    <View
+      style={[
+        styles.maincontainer,
+        {
+          backgroundColor: darkmode ? BaseColors.lightBlack : BaseColors.white,
+        },
+      ]}
+    >
       <FlatList
         renderItem={renderItem}
         data={data}

@@ -22,7 +22,7 @@ const HeaderBar = props => {
     containerStyle,
     isTransperant,
   } = props;
-  const { userData } = useSelector(state => {
+  const { userData, darkmode } = useSelector(state => {
     return state.auth;
   });
   const navigation = useNavigation();
@@ -31,7 +31,7 @@ const HeaderBar = props => {
     <View
       style={[
         {
-          backgroundColor: isTransperant ? '#0000' : BaseColors.white,
+          backgroundColor: darkmode ? BaseColors.lightBlack : BaseColors.white,
         },
         styles.first,
       ]}
@@ -49,7 +49,14 @@ const HeaderBar = props => {
               }
             }}
           >
-            <Text style={LeftTextStyle}>{leftText}</Text>
+            <Text
+              style={[
+                LeftTextStyle,
+                { color: darkmode ? BaseColors.white : BaseColors.black90 },
+              ]}
+            >
+              {leftText}
+            </Text>
           </TouchableOpacity>
           {!isEmpty(HeaderText) && (
             <View
@@ -67,6 +74,7 @@ const HeaderBar = props => {
                         ? 'uppercase'
                         : 'capitalize'
                     }`,
+                    color: darkmode ? BaseColors.white : BaseColors.lightBlack,
                   },
                   HeaderTextStyle,
                 ]}

@@ -5,12 +5,16 @@ import { Animated, TouchableOpacity, Text, View } from 'react-native';
 import { BaseColors } from '@config/theme';
 import { styles } from './styles';
 import BaseSetting from '@config/setting';
+import { useSelector } from 'react-redux';
 
 /**
  * Component for TabSwitch
  * @function TabSwitch
  */
 export default function TabSwitch(props) {
+  const { darkmode } = useSelector(state => {
+    return state.auth;
+  });
   const {
     insideTab,
     tabSize,
@@ -49,7 +53,11 @@ export default function TabSwitch(props) {
           {
             borderRadius: insideTab ? 50 : 0,
             width: tabSize,
-            backgroundColor: insideTab ? BaseColors.lightBg : null,
+            backgroundColor: darkmode
+              ? BaseColors.lightBlack
+              : insideTab
+              ? BaseColors.lightBg
+              : null,
           },
         ]}
       >

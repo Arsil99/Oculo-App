@@ -18,9 +18,25 @@ const InfoCard = props => {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.settigCon}>
+    <View
+      style={[
+        styles.settigCon,
+        {
+          backgroundColor: darkmode ? BaseColors.lightBlack : BaseColors.white,
+        },
+      ]}
+    >
       <View style={styles.mainTitleStyle}>
-        <Text style={styles.titleText}>{mainTitle}</Text>
+        <Text
+          style={[
+            styles.titleText,
+            {
+              color: darkmode ? BaseColors.white : BaseColors.lightBlack,
+            },
+          ]}
+        >
+          {mainTitle}
+        </Text>
       </View>
       <View style={styles.infoshadow}>
         {data.map((item, index) => {
@@ -31,7 +47,16 @@ const InfoCard = props => {
               onPress={() => tabPress && tabPress(item)}
               style={[
                 styles.settingItem,
-                index === 0 ? styles.topBorder : styles.otherBorder,
+                index === 0
+                  ? styles.topBorder
+                  : [
+                      styles.otherBorder,
+                      {
+                        borderColor: darkmode
+                          ? BaseColors.black90
+                          : BaseColors.borderColor,
+                      },
+                    ],
                 index === data.length - 1 ? styles.radiusDesign : null,
               ]}
             >
@@ -41,29 +66,43 @@ const InfoCard = props => {
                     <Icon1
                       name={item.leftIcon}
                       size={15}
-                      color={BaseColors.black90}
+                      color={darkmode ? BaseColors.white : BaseColors.black90}
                     />
                   ) : item?.leftIcon === 'microphone' ? (
                     <Icon2
                       name={item.leftIcon}
                       size={15}
-                      color={BaseColors.black90}
+                      color={darkmode ? BaseColors.white : BaseColors.black90}
                     />
                   ) : (
                     <Icon
                       name={item.leftIcon}
                       size={15}
-                      color={BaseColors.black90}
+                      color={darkmode ? BaseColors.white : BaseColors.black90}
                     />
                   )}
                 </View>
                 <View>
-                  <Text style={styles.settingItemText}>{item.title}</Text>
+                  <Text
+                    style={[
+                      styles.settingItemText,
+                      {
+                        color: darkmode ? BaseColors.white : BaseColors.black90,
+                      },
+                    ]}
+                  >
+                    {item.title}
+                  </Text>
                 </View>
               </View>
 
               <View>
-                <Text style={styles.righttitletext}>
+                <Text
+                  style={[
+                    styles.righttitletext,
+                    { color: darkmode ? BaseColors.white : BaseColors.black90 },
+                  ]}
+                >
                   {item?.switch ? (
                     <Switch
                       ios_backgroundColor="#3e3e3e"

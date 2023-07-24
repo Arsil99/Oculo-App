@@ -4,10 +4,18 @@ import { View, Text, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import styles from './styles';
 import BaseSetting from '@config/setting';
+import { useSelector } from 'react-redux';
+import { BaseColors } from '@config/theme';
 
 const Details = ({ iconName, text, number, iconColor, numberColor }) => {
+  const { darkmode } = useSelector(state => state.auth);
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { borderColor: darkmode ? BaseColors.textColor : BaseColors.lightGrey },
+      ]}
+    >
       <TouchableOpacity activeOpacity={BaseSetting.buttonOpacity}>
         <View
           style={{
@@ -16,7 +24,14 @@ const Details = ({ iconName, text, number, iconColor, numberColor }) => {
           }}
         >
           <View style={{ height: 45, width: 90 }}>
-            <Text style={styles.text}>{text}</Text>
+            <Text
+              style={[
+                styles.text,
+                { color: darkmode ? BaseColors.white : BaseColors.black90 },
+              ]}
+            >
+              {text}
+            </Text>
           </View>
           <Image source={Images.emoji1} resizeMode="contain" />
         </View>

@@ -50,7 +50,7 @@ const Profiledetailcomponent = (props, ref) => {
   const cInputRef2 = useRef();
   const cInputRef3 = useRef();
   const cInputRef4 = useRef();
-  const { userData } = useSelector(state => state.auth);
+  const { userData, darkmode } = useSelector(state => state.auth);
 
   // Detail Tab related states
   const [ErrObj, setErrObj] = useState(errObj);
@@ -160,9 +160,25 @@ const Profiledetailcomponent = (props, ref) => {
     <View style={styles.alignSetup}>
       <View style={styles.settigCon}>
         <View style={styles.mainTitleStyle}>
-          <Text style={styles.titleText}>Patient Information</Text>
+          <Text
+            style={[
+              styles.titleText,
+              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+            ]}
+          >
+            Patient Information
+          </Text>
         </View>
-        <View style={styles.editContainer}>
+        <View
+          style={[
+            styles.editContainer,
+            {
+              backgroundColor: darkmode
+                ? BaseColors.lightBlack
+                : BaseColors.white,
+            },
+          ]}
+        >
           <LabeledInput
             Label={'First Name'}
             usericon
@@ -203,7 +219,14 @@ const Profiledetailcomponent = (props, ref) => {
             errorText={ErrObj.lastNameErrMsg}
           />
           <TouchableOpacity onPress={showDatepicker}>
-            <Text style={styles.dateTitle}>Date of Birth</Text>
+            <Text
+              style={[
+                styles.dateTitle,
+                { color: darkmode ? BaseColors.white : BaseColors.black90 },
+              ]}
+            >
+              Date of Birth
+            </Text>
             <View style={styles.dateBox}>
               <View style={{ marginRight: 20 }}>
                 <Icon name="calendar" size={25} color={BaseColors.primary} />
@@ -225,7 +248,14 @@ const Profiledetailcomponent = (props, ref) => {
               onChange={onChange}
             />
           )}
-          <Text style={styles.genderTitle}>Gender</Text>
+          <Text
+            style={[
+              styles.genderTitle,
+              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+            ]}
+          >
+            Gender
+          </Text>
           <View style={styles.genderBox}>
             <Dropdown
               items={genderdata}
@@ -241,7 +271,14 @@ const Profiledetailcomponent = (props, ref) => {
       </View>
       <View style={[styles.settigCon, { zIndex: 1 }]}>
         <View style={styles.mainTitleStyle}>
-          <Text style={styles.titleText}>Contact Information</Text>
+          <Text
+            style={[
+              styles.titleText,
+              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+            ]}
+          >
+            Contact Information
+          </Text>
         </View>
         <View style={styles.editContainer}>
           <LabeledInput

@@ -17,6 +17,7 @@ export default StyleSheet.create({
   },
   main: {
     paddingHorizontal: 20,
+    // backgroundColor:'red',
     marginBottom: 20,
     marginTop: IOS ? 55 : 15,
     width: '100%',
@@ -45,7 +46,7 @@ export default StyleSheet.create({
   },
   headerText: {
     fontFamily: FontFamily.bold,
-    color: BaseColors.textColor,
+    // color: BaseColors.textColor,
     textTransform: 'capitalize',
     fontSize: 18,
   },

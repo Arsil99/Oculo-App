@@ -28,7 +28,7 @@ export default StyleSheet.create({
     color: BaseColors.secondary,
   },
   maincontainer: {
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
     shadowColor: BaseColors.black,
     shadowOffset: {
       width: 0,

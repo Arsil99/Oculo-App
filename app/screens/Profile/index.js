@@ -43,7 +43,7 @@ export default function Profile({ navigation }) {
   const [editHistory, setEditHistory] = useState(false);
   const [rightHistoryText, setRightHistoryText] = useState('Edit');
   const profileRef = useRef();
-  const { isBiometric, userData } = useSelector(state => {
+  const { isBiometric, userData, darkmode } = useSelector(state => {
     return state.auth;
   });
   const IOS = Platform.OS === 'ios';
@@ -173,7 +173,16 @@ export default function Profile({ navigation }) {
   };
 
   return (
-    <View style={styles.main}>
+    <View
+      style={[
+        styles.main,
+        {
+          backgroundColor: darkmode
+            ? BaseColors.lightBlack
+            : BaseColors.lightBg,
+        },
+      ]}
+    >
       <HeaderBar
         HeaderText={'Profile'}
         HeaderCenter
@@ -195,7 +204,13 @@ export default function Profile({ navigation }) {
                 }
               }}
             >
-              <Text>{rightHistoryText}</Text>
+              <Text
+                style={{
+                  color: darkmode ? BaseColors.white : BaseColors.black90,
+                }}
+              >
+                {rightHistoryText}
+              </Text>
             </TouchableOpacity>
           ) : (
             <Text> </Text>
@@ -205,7 +220,16 @@ export default function Profile({ navigation }) {
 
       {/* SWITCH TAB */}
 
-      <View style={styles.tabBox}>
+      <View
+        style={[
+          styles.tabBox,
+          {
+            backgroundColor: darkmode
+              ? BaseColors.lightBlack
+              : BaseColors.white,
+          },
+        ]}
+      >
         <TabSwitch
           threePack
           tabs={switchOptions}

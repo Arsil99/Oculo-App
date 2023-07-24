@@ -5,7 +5,7 @@ const fullWidth = '100%';
 export default StyleSheet.create({
   main: {
     flex: 1,
-    backgroundColor: BaseColors.lightBg,
+    // backgroundColor: BaseColors.lightBg,
     alignItems: 'center',
   },
   genderBox: {
@@ -22,7 +22,7 @@ export default StyleSheet.create({
     paddingHorizontal: 10,
     alignItems: 'center',
   },
-  tabBox: { backgroundColor: BaseColors.white, width: fullWidth },
+  tabBox: { width: fullWidth },
   customGender: {
     backgroundColor: BaseColors.white,
     height: 50,

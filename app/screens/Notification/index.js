@@ -4,13 +4,32 @@ import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
 import CardList from '@components/CardList';
 import { Images } from '@config';
+import { useSelector } from 'react-redux';
+import { BaseColors } from '@config/theme';
 
 export default function Notification({ navigation }) {
+  const { darkmode } = useSelector(state => state.auth);
   return (
-    <View style={styles.main}>
+    <View
+      style={[
+        styles.main,
+        {
+          backgroundColor: darkmode
+            ? BaseColors.lightBlack
+            : BaseColors.lightBg,
+        },
+      ]}
+    >
       <HeaderBar HeaderText={'Notification'} HeaderCenter />
       <View style={{ paddingHorizontal: 15 }}>
-        <Text style={{ fontSize: 15, marginTop: 15, marginBottom: 5 }}>
+        <Text
+          style={{
+            fontSize: 15,
+            marginTop: 15,
+            marginBottom: 5,
+            color: darkmode ? BaseColors.white : BaseColors.black90,
+          }}
+        >
           Today, Aug 11, 2025
         </Text>
         <CardList

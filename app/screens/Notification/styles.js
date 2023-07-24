@@ -4,6 +4,6 @@ import { BaseColors } from '@config/theme';
 export default StyleSheet.create({
   main: {
     flex: 1,
-    backgroundColor: BaseColors.lightBg,
+    // backgroundColor: BaseColors.lightBg,
   },
 });

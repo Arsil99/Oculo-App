@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import styles from './styles';
+import { useSelector } from 'react-redux';
 
 export default function ProfilehistoryButton(props) {
   const { editHistory } = props;
@@ -49,11 +50,20 @@ export default function ProfilehistoryButton(props) {
       buttonType: buttonType,
     };
   };
-
+  const { darkmode } = useSelector(state => {
+    return state.auth;
+  });
   return (
     <View style={styles.container}>
       <View style={styles.titleTextcontainer}>
-        <Text style={styles.titleText}>Medical History</Text>
+        <Text
+          style={[
+            styles.titleText,
+            { color: darkmode ? BaseColors.white : BaseColors.black90 },
+          ]}
+        >
+          Medical History
+        </Text>
       </View>
       <View style={styles.mainDiv}>
         {loader ? (

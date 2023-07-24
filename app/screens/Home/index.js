@@ -6,6 +6,7 @@ import TabSwitch from '@components/TabSwitch';
 import Button from '@components/Button';
 import Milestones from '@components/Milestones';
 import { useSelector } from 'react-redux';
+import { BaseColors } from '@config/theme';
 
 export default function Home({ navigation }) {
   const switchOptions = [
@@ -18,11 +19,18 @@ export default function Home({ navigation }) {
     name: 'Summary',
   });
 
-  const { userData } = useSelector(state => state.auth);
+  const { userData, darkmode } = useSelector(state => state.auth);
 
   return (
     // MAIN CONTAINER
-    <View style={styles.main}>
+    <View
+      style={[
+        styles.main,
+        {
+          backgroundColor: darkmode ? BaseColors.lightBlack : BaseColors.white,
+        },
+      ]}
+    >
       {/* TOP HEADER  */}
       <View style={styles.topBar}>
         <View>
@@ -33,7 +41,14 @@ export default function Home({ navigation }) {
         </View>
         <View style={styles.title}>
           <Text style={styles.name}>Hi, {userData?.firstname}</Text>
-          <Text style={styles.welcomeText}>Welcome to Oculo</Text>
+          <Text
+            style={[
+              styles.welcomeText,
+              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+            ]}
+          >
+            Welcome to Oculo
+          </Text>
         </View>
       </View>
 
@@ -57,8 +72,23 @@ export default function Home({ navigation }) {
             />
           </TouchableOpacity>
           <View style={styles.summaryText}>
-            <Text style={[styles.descText, { marginTop: 15 }]}>Baseline</Text>
-            <Text style={styles.descText}>
+            <Text
+              style={[
+                styles.descText,
+                {
+                  marginTop: 15,
+                  color: darkmode ? BaseColors.white : BaseColors.black90,
+                },
+              ]}
+            >
+              Baseline
+            </Text>
+            <Text
+              style={[
+                styles.descText,
+                { color: darkmode ? BaseColors.white : BaseColors.black90 },
+              ]}
+            >
               Comparision requires other assessments to compare with the
               baseline
             </Text>

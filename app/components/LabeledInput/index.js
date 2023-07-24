@@ -4,8 +4,10 @@ import { BaseColors } from '@config/theme';
 import { isEmpty } from 'lodash';
 import CInput from '@components/CInput';
 import styles from './styles';
+import { useSelector } from 'react-redux';
 
 const LabeledInput = (props, ref) => {
+  const { darkmode } = useSelector(state => state.auth);
   const {
     Label = '',
     isRequired = false,
@@ -16,7 +18,15 @@ const LabeledInput = (props, ref) => {
     <View style={[styles.main, LabledInputStyle]}>
       {!isEmpty(Label) && (
         <View style={styles.labelCon}>
-          <Text style={[styles.labelTxt, LabledTextStyle]}>{Label}</Text>
+          <Text
+            style={[
+              styles.labelTxt,
+              LabledTextStyle,
+              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+            ]}
+          >
+            {Label}
+          </Text>
           {isRequired && <Text style={styles.astrick}>*</Text>}
         </View>
       )}

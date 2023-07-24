@@ -11,7 +11,7 @@ export default function CStatusBar() {
   const { darkmode } = useSelector(state => state.auth);
   return (
     <StatusBar
-      backgroundColor={darkmode ? BaseColors.black : BaseColors.white}
+      backgroundColor={darkmode ? BaseColors.lightBlack : BaseColors.white}
       barStyle={darkmode ? 'light-content' : 'dark-content'}
     />
   );

@@ -5,7 +5,7 @@ const IOS = Platform.OS === 'ios';
 export default StyleSheet.create({
   main: {
     flex: 1,
-    backgroundColor: BaseColors.white,
+    // backgroundColor: BaseColors.white,
     alignItems: 'center',
   },
   topBar: {
@@ -52,6 +52,6 @@ export default StyleSheet.create({
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: BaseColors.lightBg,
+    // backgroundColor: BaseColors.lightBg,
   },
 });

@@ -5,7 +5,7 @@ const IOS = Platform.OS === 'ios';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: BaseColors.white,
+    // backgroundColor: BaseColors.white,
     paddingHorizontal: 20,
   },
   contentView: {

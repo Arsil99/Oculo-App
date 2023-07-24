@@ -4,32 +4,89 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import PropTypes from 'prop-types';
 import styles from './styles';
 import BaseSetting from '@config/setting';
+import { useSelector } from 'react-redux';
+import { BaseColors } from '@config/theme';
 export default function CardList({ image, data, status, assessment, onPress }) {
+  const { darkmode } = useSelector(state => state.auth);
   return (
     <TouchableOpacity
-      style={styles.main}
+      style={[
+        styles.main,
+        {
+          backgroundColor: darkmode ? BaseColors.lightBlack : BaseColors.white,
+        },
+      ]}
       onPress={onPress}
       activeOpacity={BaseSetting.buttonOpacity}
     >
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          {
+            borderWidth: darkmode ? 1 : null,
+            borderColor: darkmode ? BaseColors.textColor : null,
+          },
+        ]}
+      >
         <View style={styles.insideBox}>
           <View>
             <Image source={image} style={styles.imgStyle} />
           </View>
           <View style={{ marginHorizontal: 10 }}>
-            <Text style={{ fontSize: 17 }}>{data}</Text>
+            <Text
+              style={{
+                fontSize: 17,
+                color: darkmode ? BaseColors.white : BaseColors.black90,
+              }}
+            >
+              {data}
+            </Text>
             <View style={styles.statusBox}>
-              <View style={styles.chipBox}>
-                <Text>{status}</Text>
+              <View
+                style={[
+                  styles.chipBox,
+                  {
+                    backgroundColor: darkmode
+                      ? BaseColors.textColor
+                      : BaseColors.lightBg,
+                  },
+                ]}
+              >
+                <Text
+                  style={{
+                    color: darkmode ? BaseColors.white : BaseColors.black90,
+                  }}
+                >
+                  {status}
+                </Text>
               </View>
-              <View style={styles.chipBox}>
-                <Text>{assessment}</Text>
+              <View
+                style={[
+                  styles.chipBox,
+                  {
+                    backgroundColor: darkmode
+                      ? BaseColors.textColor
+                      : BaseColors.lightBg,
+                  },
+                ]}
+              >
+                <Text
+                  style={{
+                    color: darkmode ? BaseColors.white : BaseColors.black90,
+                  }}
+                >
+                  {assessment}
+                </Text>
               </View>
             </View>
           </View>
         </View>
         <View>
-          <Icon name="right" size={15} />
+          <Icon
+            name="right"
+            size={15}
+            style={{ color: darkmode ? BaseColors.white : BaseColors.black90 }}
+          />
         </View>
       </View>
     </TouchableOpacity>

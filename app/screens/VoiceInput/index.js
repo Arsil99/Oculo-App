@@ -11,7 +11,9 @@ import Voice from 'react-native-voice';
 import { BaseColors } from '@config/theme';
 import HeaderBar from '@components/HeaderBar';
 import styles from './styles';
+import { useSelector } from 'react-redux';
 const VoiceInput = () => {
+  const { darkmode } = useSelector(state => state.auth);
   const [pitch, setPitch] = useState('');
   const [error, setError] = useState('');
   const [end, setEnd] = useState('');
@@ -132,7 +134,14 @@ const VoiceInput = () => {
   };
 
   return (
-    <View style={styles.main}>
+    <View
+      style={[
+        styles.main,
+        {
+          backgroundColor: darkmode ? BaseColors.lightBlack : BaseColors.white,
+        },
+      ]}
+    >
       <HeaderBar HeaderText={'Voice Input'} HeaderCenter leftText="Back" />
       <SafeAreaView style={styles.container}>
         <View style={styles.container}>

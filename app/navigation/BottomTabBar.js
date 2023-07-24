@@ -17,8 +17,12 @@ import FIcon from 'react-native-vector-icons/FontAwesome5';
 import * as Animatable from 'react-native-animatable';
 import { BaseColors, BaseStyles, FontFamily } from '@config/theme';
 import { Images } from '@config';
+import { useSelector } from 'react-redux';
 
 export default function BottomTabBar({ state, descriptors, navigation }) {
+  const { darkmode } = useSelector(state => {
+    return state.auth;
+  });
   const totalWidth = Dimensions.get('window').width;
   const tabWidth = totalWidth / state.routes.length;
   const [translateValue] = useState(new Animated.Value(tabWidth * 2 - 7));
@@ -218,7 +222,9 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
               height: 70,
               justifyContent: 'center',
               alignItems: 'center',
-              backgroundColor: BaseColors.white,
+              backgroundColor: darkmode
+                ? BaseColors.lightBlack
+                : BaseColors.white,
               borderTopColor: BaseColors.borderColor,
               paddingTop: 5,
               borderTopWidth: 0.5,
@@ -230,7 +236,9 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
                 flex: 1,
                 justifyContent: 'center',
                 alignItems: 'center',
-                backgroundColor: BaseColors.white,
+                backgroundColor: darkmode
+                  ? BaseColors.lightBlack
+                  : BaseColors.white,
               }}
             >
               {getIcons(label, isFocused, index)}

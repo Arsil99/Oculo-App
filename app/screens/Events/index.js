@@ -4,13 +4,33 @@ import styles from './styles';
 import CardList from '@components/CardList';
 import { Images } from '@config';
 import HeaderBar from '@components/HeaderBar';
+import { useSelector } from 'react-redux';
+import { BaseColors } from '@config/theme';
 
 export default function Events({ navigation }) {
+  const { darkmode } = useSelector(state => state.auth);
   return (
-    <View style={styles.main}>
+    <View
+      style={[
+        styles.main,
+        {
+          backgroundColor: darkmode
+            ? BaseColors.lightBlack
+            : BaseColors.lightBg,
+        },
+      ]}
+    >
       <HeaderBar HeaderText={'Events'} HeaderCenter />
       <View style={{ paddingHorizontal: 15 }}>
-        <Text style={{ fontSize: 18, marginVertical: 5 }}>Open Events</Text>
+        <Text
+          style={{
+            fontSize: 18,
+            marginVertical: 5,
+            color: darkmode ? BaseColors.white : BaseColors.black90,
+          }}
+        >
+          Open Events
+        </Text>
 
         <CardList
           onPress={() => navigation.navigate('Callibration')}
@@ -20,7 +40,15 @@ export default function Events({ navigation }) {
           assessment={'Assessment 4/5'}
         />
 
-        <Text style={{ fontSize: 18, marginVertical: 5 }}>Closed Events</Text>
+        <Text
+          style={{
+            fontSize: 18,
+            marginVertical: 5,
+            color: darkmode ? BaseColors.white : BaseColors.black90,
+          }}
+        >
+          Closed Events
+        </Text>
 
         <CardList
           onPress={() => navigation.navigate('EventDetails')}

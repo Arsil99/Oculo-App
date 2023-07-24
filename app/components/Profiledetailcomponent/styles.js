@@ -119,7 +119,7 @@ export default StyleSheet.create({
   },
   leftImagem: { height: 20, width: 22 },
   editContainer: {
-    backgroundColor: BaseColors.white,
+    // backgroundColor: BaseColors.white,
     width: '100%',
     padding: 10,
     borderRadius: 10,
@@ -148,7 +148,7 @@ export default StyleSheet.create({
   },
   genderTitle: {
     marginTop: 8,
-    color: BaseColors.black,
+    // color: BaseColors.black,
     fontFamily: FontFamily.regular,
   },
   centeredView: {

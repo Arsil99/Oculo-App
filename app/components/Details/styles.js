@@ -3,27 +3,27 @@ import { BaseColors, FontFamily } from '@config/theme';
 
 export default StyleSheet.create({
   container: {
-    backgroundColor: BaseColors.white,
+    // backgroundColor: BaseColors.white,
     borderWidth: 1,
     marginVertical: 5,
-    borderColor: BaseColors.black10,
+    // borderColor: BaseColors.lightGrey,
     width: '95%',
     height: 90,
     padding: 10,
     borderRadius: 12,
-    shadowColor: BaseColors.black,
+    // shadowColor: BaseColors.black,
     shadowOffset: {
       width: 0,
       height: 1,
     },
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
-    elevation: 3,
+    elevation: 1,
   },
   img: { height: 25, width: 23 },
   img2: { width: 110 },
   text: {
-    color: BaseColors.textColor,
+    // color: BaseColors.textColor,
     fontFamily: FontFamily.regular,
     fontWeight: '400',
     fontSize: 14,

@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingVertical: 5,
     paddingHorizontal: 10,
-    backgroundColor: BaseColors.white,
+    // backgroundColor: BaseColors.white,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   imgStyle: { height: 50, width: 50, borderRadius: 50 },
   statusBox: { flexDirection: 'row', marginTop: 5 },
   chipBox: {
-    backgroundColor: BaseColors.lightBg,
+    // backgroundColor: BaseColors.lightBg,
     marginRight: 10,
   },
 });
