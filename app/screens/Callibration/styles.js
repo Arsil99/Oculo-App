@@ -11,8 +11,8 @@ const styles = StyleSheet.create({
     width: '80%',
   },
   squareBorder: {
-    height: 300,
-    width: 300,
+    height: 200,
+    width: 200,
     borderRadius: 30,
     borderWidth: 4,
     borderColor: BaseColors?.white,
@@ -38,6 +38,9 @@ const styles = StyleSheet.create({
     color: BaseColors?.white,
     fontSize: 40,
     top: '50%',
+  },
+  dotContainer: {
+    flex: 1,
   },
 });
 

@@ -45,7 +45,11 @@ export default function Callibration({ navigation }) {
           }}
         >
           <View style={styles?.squareBorder}>
-            <Image source={Images?.eyeLine} />
+            <Image
+              resizeMode="contain"
+              style={{ width: 160 }}
+              source={Images?.eyeLine}
+            />
             <Text style={styles?.plusStyle}>+</Text>
           </View>
           <View>
@@ -61,7 +65,7 @@ export default function Callibration({ navigation }) {
         <Button
           shape="round"
           onPress={() => {
-            navigation?.navigate('Symptoms');
+            navigation?.navigate('CallibrationStart');
           }}
           title={'Get Started'}
           style={styles.requestBtn}

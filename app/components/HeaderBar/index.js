@@ -9,19 +9,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BaseColors } from '@config/theme';
 import Authentication from '@redux/reducers/auth/actions';
 
-const HeaderBar = props => {
-  const {
-    HeaderText,
-    HeaderTextStyle,
-    userProfile,
-    HeaderCenter,
-    leftText,
-    leftBtnPress,
-    LeftTextStyle,
-    rightComponent,
-    containerStyle,
-    isTransperant,
-  } = props;
+const HeaderBar = ({
+  HeaderText,
+  HeaderTextStyle,
+  userProfile,
+  HeaderCenter,
+  leftText,
+  leftBtnPress,
+  rightText,
+  rightBtnPress,
+  LeftTextStyle,
+  rightComponent,
+  containerStyle,
+  isTransperant,
+}) => {
   const { userData, darkmode } = useSelector(state => {
     return state.auth;
   });
@@ -109,7 +110,21 @@ const HeaderBar = props => {
               />
             </TouchableOpacity>
           )}
-          {rightComponent}
+          {rightComponent ? (
+            rightComponent
+          ) : rightText ? (
+            <TouchableOpacity
+              activeOpacity={isEmpty(rightText) ? 1 : BaseSetting.buttonOpacity}
+              style={styles.imageCon}
+              onPress={() => {
+                if (!isEmpty(rightText)) {
+                  rightBtnPress && rightBtnPress();
+                }
+              }}
+            >
+              <Text style={LeftTextStyle}>{rightText}</Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
       </View>
     </View>

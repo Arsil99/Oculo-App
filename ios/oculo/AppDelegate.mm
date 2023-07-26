@@ -6,6 +6,9 @@
 
 #import <React/RCTAppSetupUtils.h>
 
+#import "oculo-Bridging-Header.h"
+#import "oculo-Swift.h"
+
 #if RCT_NEW_ARCH_ENABLED
 #import <React/CoreModulesPlugins.h>
 #import <React/RCTCxxBridgeDelegate.h>
@@ -53,7 +56,15 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   }
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-  UIViewController *rootViewController = [UIViewController new];
+
+  // Let's call our custom View Controller
+  EyeTrackingViewController *eyeTrackingViewController = [[EyeTrackingViewController alloc] init];
+  NSLog(@"Custom View Controller App Delegate");
+  UIViewController *rootViewController = eyeTrackingViewController;
+
+  // Commented original View Controller Code
+  // UIViewController *rootViewController = [UIViewController new];
+  
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
