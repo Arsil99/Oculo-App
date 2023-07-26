@@ -20,7 +20,7 @@ open class EyeTrackViewController: UIViewController, ARSCNViewDelegate, ARSessio
     public var recorder: RecordAR?
     public var isHidden: Bool?
     
-    public func initialize(isHidden: Bool = true, eyeTrack: EyeTrack) {
+    public func initialize(isHidden: Bool = false, eyeTrack: EyeTrack) {
         print("Eye Tracking Initialize called")
         self.isHidden = isHidden
         self.eyeTrack = eyeTrack
@@ -28,8 +28,7 @@ open class EyeTrackViewController: UIViewController, ARSCNViewDelegate, ARSessio
 
         // Initialize ARSCNView
         self.sceneView = ARSCNView(frame: frame)
-        self.view.addSubview(sceneView!)
-
+        self.view.insertSubview(sceneView!, at: 0)
         // Set the view's delegate
         sceneView.delegate = self
         sceneView.session.delegate = self

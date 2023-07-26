@@ -18,7 +18,11 @@ export const stopTracking = () => {
 
 // Helper function to calculate screen X value
 export const calculateScreenX = (eyeX, calibratedPositions, ViewWidth) => {
-  const { TL, TR} = calibratedPositions;
+  const { TL, TR } = calibratedPositions;
+
+  if (!TL || !TR) {
+    return 0;
+  }
   const minX = TL.avgX;
   const maxX = TR.avgX;
   const width = maxX - minX;
@@ -30,6 +34,10 @@ export const calculateScreenX = (eyeX, calibratedPositions, ViewWidth) => {
 // Helper function to calculate screen Y value
 export const calculateScreenY = (eyeY, calibratedPositions, ViewHeight) => {
   const { TL, BL } = calibratedPositions;
+
+  if (!TL || !BL) {
+    return 0;
+  }
   const minY = TL.avgY;
   const maxY = BL.avgY;
   const height = maxY - minY;

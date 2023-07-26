@@ -9,7 +9,6 @@ import Button from '@components/Button';
 
 export default function Callibration() {
   const navigation = useNavigation();
-  useEffect(() => {}, []);
 
   return (
     <View style={styles.main}>
@@ -47,7 +46,11 @@ export default function Callibration() {
           }}
         >
           <View style={styles?.squareBorder}>
-            <Image source={Images?.eyeLine} />
+            <Image
+              resizeMode="contain"
+              style={{ width: 160 }}
+              source={Images?.eyeLine}
+            />
             <Text style={styles?.plusStyle}>+</Text>
           </View>
           <View>

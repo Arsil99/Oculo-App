@@ -250,7 +250,7 @@ function App() {
           <Stack.Screen
             name="CallibrationStart"
             component={CallibrationStart}
-            options={{ headerShown: false }}
+            options={{ headerShown: false, gestureEnabled: false }}
           />
           <Stack.Screen
             name="Dashboard"

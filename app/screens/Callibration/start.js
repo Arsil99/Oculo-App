@@ -8,8 +8,12 @@ import {
   NativeModules,
   NativeEventEmitter,
   Platform,
+  Image,
+  Text,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import KeepAwake from 'react-native-keep-awake';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import EyeTracking from '@redux/reducers/eyeTracking/actions';
 import { useDispatch } from 'react-redux';
@@ -23,6 +27,8 @@ import {
   calculateScreenX,
   calculateScreenY,
 } from '@utils/eyeTracking';
+import { Images } from '@config';
+import Button from '@components/Button';
 
 let lastPosition = 'CENTER';
 let CALIBRATED_POSITIONS = {
@@ -37,6 +43,7 @@ let ViewWidth = 0;
 let TRACK_EYES = false;
 let MOVE_DOT = false;
 let timeoutVar = null;
+let NATIVE_TRACK_STARTED = false;
 
 const emptyCalibrations = {
   CENTER: null,
@@ -47,6 +54,7 @@ const emptyCalibrations = {
 };
 
 export default function CalibrationStart() {
+  const insets = useSafeAreaInsets();
   const navigation = useNavigation();
   const { setCalibration, resetCalibration } = EyeTracking;
   const dispatch = useDispatch();
@@ -57,37 +65,26 @@ export default function CalibrationStart() {
   const [viewWidth, setViewWidth] = useState(0);
   const [viewHeight, setViewHeight] = useState(0);
   const [dynamicDot, setDynamicDot] = useState(false);
+  const [caliStatus, setCaliStatus] = useState(false);
+  const [nativeTracking, setNativeTracking] = useState(true);
   let [calibrations, setCalibrations] = useState(emptyCalibrations);
 
   //
   // DONE: 1. Listening Eye Gaze X and Y from Native Code to Javascript code: DONE:
   // DONE: 2. Upon Listener -> Map Eye Gaze X and Y to Calibrated Point: DONE:
-  // TODO: 3. Once it's calibrated: Store to Redux: DONE:
+  // DONE: 3. Once it's calibrated: Store to Redux: DONE:
   // TODO: 4. On Question Screens Define AOI: and Provide Example to calculate Data required for Analytics
-  // TODO: 5. Log User Eye Movement and send to Backend
-  // TODO: 6. Add a Demo of Eye Movement Heatmap
-  // TODO: 7. Restart Calibration option to be added
-  // LATER: 5. Optimise Code
-  // LATER: 6. Find if head is moved
-  // LATER: 7. If Head is moved, then Eye Tracking will not be accurate
+  // TODO: 5. Anaylytics Data, Heatmap, Sequence to be tracked and sent to Backend: TASKS Added in Symptoms screen
+  // DONE: 6. Restart Calibration option to be added
+  // LATER: 7. Optimise Code
+  // LATER: 8. Find if head is moved
+  // LATER: 9. If Head is moved, then Eye Tracking will not be accurate
 
-  // Handle on Blur
-  useEffect(() => {
-    const handleBlur = () => {
-      // Logic to handle the tab/screen losing focus
-      console.log('Tab/Screen lost focus');
+  // Let's stop Native Eye Tracking when user navigates back
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('beforeRemove', e => {
       stopTracking();
-      // TODO: Fix: Stop Calibration doesn't clear Calibrations Object
-      stopCalibration();
-      Toast.show({
-        text1: 'Calibration process interrupted.',
-        text2: 'Please restart to continue.',
-        type: 'error',
-      });
-    };
-
-    const unsubscribe = navigation.addListener('blur', handleBlur);
-
+    });
     return () => {
       unsubscribe();
     };
@@ -95,18 +92,15 @@ export default function CalibrationStart() {
 
   // On Screen Init
   useEffect(() => {
-    // On Screen Init let's clear Redux
-    dispatch(resetCalibration());
+    // Let's Keep the Screen wake
+    KeepAwake.activate();
 
-    // Setup Emitter based on Device OS
-    const emitter =
-      Platform.OS === 'ios'
-        ? new NativeEventEmitter(NativeModules.EyeTrackingEventEmitter)
-        : DeviceEventEmitter;
-
-    // Let's listen to Tracking Event
-    emitter.addListener('tracking', event => {
-      console.log('EyeTracking Event: Received event:', event);
+    // Define Track Listener Function
+    const trackListener = event => {
+      if (!caliStatus) {
+        return;
+      }
+      // console.log('EyeTracking Event: Received event:', caliStatus, event);
 
       // Let's log X and Y for Calibration
       if (TRACK_EYES) {
@@ -117,6 +111,14 @@ export default function CalibrationStart() {
 
       // ADDED For TESTING PURPOSE: Let's move the dot using Eye Gaze.
       if (MOVE_DOT) {
+        console.log(
+          'Moving Dot: ',
+          event.centerEyeLookAtPoint.x,
+          ViewWidth,
+          'Y: ',
+          event.centerEyeLookAtPoint.y,
+          ViewHeight,
+        );
         const newXValue = calculateScreenX(
           event.centerEyeLookAtPoint.x,
           CALIBRATED_POSITIONS,
@@ -134,18 +136,59 @@ export default function CalibrationStart() {
           tYValue.setValue(newYValue);
         }
       }
-    });
-  }, [dispatch, resetCalibration, tXValue, tYValue]);
+    };
+
+    // Setup Emitter based on Device OS
+    const emitter =
+      Platform.OS === 'ios'
+        ? new NativeEventEmitter(NativeModules.EyeTrackingEventEmitter)
+        : DeviceEventEmitter;
+
+    // Let's listen to Tracking Event
+    const subscription = emitter.addListener('tracking', trackListener);
+
+    return () => {
+      subscription.remove();
+    };
+  }, [dispatch, tXValue, tYValue, caliStatus]);
+
+  useEffect(() => {
+    if (nativeTracking) {
+      init();
+      NATIVE_TRACK_STARTED = true;
+    } else {
+      stopTracking();
+      NATIVE_TRACK_STARTED = false;
+    }
+    return () => {
+      stopTracking();
+      NATIVE_TRACK_STARTED = false;
+    };
+  }, [nativeTracking]);
 
   useEffect(() => {
     // Let's Start Calibration once we get the View's Height and Width
-    console.log('viewWidth updated', viewWidth);
-    if (viewWidth > 0) {
-      TRACK_EYES = true;
-      startCalibration();
-      init();
+    console.log('View Width / Cali Status Updated : ', viewWidth, caliStatus);
+    // Let's disable Start
+    if (caliStatus) {
+      if (viewWidth > 0) {
+        // On Screen Init let's clear Redux
+        dispatch(resetCalibration());
+        TRACK_EYES = true;
+        startCalibration();
+      }
+    } else {
+      TRACK_EYES = false;
+      stopCalibration();
     }
-  }, [viewWidth]);
+  }, [
+    caliStatus,
+    viewWidth,
+    startCalibration,
+    stopCalibration,
+    dispatch,
+    resetCalibration,
+  ]);
 
   const nextCalibration = () => {
     const keys = Object.keys(calibrations);
@@ -164,6 +207,20 @@ export default function CalibrationStart() {
     }
 
     return null;
+  };
+
+  // Function to handle going back and forward
+  const handleNavigation = type => {
+    console.log('Handle Navigation called');
+    if (type === 'back') {
+      stopTracking();
+      navigation.goBack();
+      Toast.show({
+        text1: 'Calibration process interrupted.',
+        // text2: 'Please restart to continue.',
+        type: 'error',
+      });
+    }
   };
 
   // Function to update calibrations
@@ -199,8 +256,6 @@ export default function CalibrationStart() {
       // Navigate to the next screen
       console.log('All Calibrations Done');
 
-      // Storing Calibrated Positions to Redux
-      dispatch(setCalibration(CALIBRATED_POSITIONS));
       TRACK_EYES = false;
       console.log('Final Calibrations are: ', CALIBRATED_POSITIONS);
       const keys = Object.keys(calibrations);
@@ -215,12 +270,32 @@ export default function CalibrationStart() {
           CALIBRATED_POSITIONS[key].avgY = avgPos.y;
         }
       }
-      MOVE_DOT = true;
-      setDynamicDot(true);
-      Toast.show({
-        text1: 'Calibrations Done Successfully!',
-        type: 'success',
-      });
+
+      if (!CALIBRATED_POSITIONS.WIDTH) {
+        CALIBRATED_POSITIONS.viewWidth = viewWidth;
+        CALIBRATED_POSITIONS.viewHeight = viewHeight;
+      }
+
+      // Storing Calibrated Positions to Redux
+      dispatch(setCalibration(CALIBRATED_POSITIONS));
+
+      const testing = false;
+
+      if (!testing) {
+        console.log('Navigating to other screen');
+        setCaliStatus(false);
+        handleNavigation('other');
+        navigation?.navigate('Symptoms');
+        // Toast.show({
+        //   text1: 'Calibrations Done Successfully!',
+        //   type: 'success',
+        // });
+      } else {
+        // Moving dot is used for Testing
+        MOVE_DOT = true;
+        setDynamicDot(true);
+      }
+
       console.log('CALIBRATED_POSITIONS AVG', CALIBRATED_POSITIONS);
     }
   };
@@ -259,24 +334,24 @@ export default function CalibrationStart() {
     // Set Position Array
     const positionArray = {
       TL: {
-        left: -viewWidth / 2 + 10,
-        top: -viewHeight / 2 + 10,
+        left: 0,
+        top: 0,
       },
       TR: {
-        left: viewWidth / 2 - 10,
-        top: -viewHeight / 2 + 10,
+        left: viewWidth - 20,
+        top: 10,
       },
       BL: {
-        left: -viewWidth / 2 + 10,
-        top: viewHeight / 2 - 10,
+        left: 0,
+        top: viewHeight - 20,
       },
       BR: {
-        left: viewWidth / 2 - 10,
-        top: viewHeight / 2 - 10,
+        left: viewWidth - 20,
+        top: viewHeight - 20,
       },
       CENTER: {
-        left: -10,
-        top: -10,
+        left: viewWidth / 2 - 10,
+        top: viewHeight / 2 - 10,
       },
     };
 
@@ -324,41 +399,101 @@ export default function CalibrationStart() {
   };
 
   return (
-    <View style={styles.main}>
+    <View
+      style={[
+        styles.main,
+        {
+          backgroundColor: caliStatus ? BaseColors.black : '#0005',
+          paddingBottom: insets.bottom,
+        },
+      ]}
+    >
       <StatusBar
         backgroundColor={'#0000'}
         barStyle="light-content"
         translucent={true}
       />
       <HeaderBar
-        HeaderText={'Follow the Red Dot'}
+        HeaderText={caliStatus ? 'Follow the Red Dot' : 'Set Your Face'}
         isTransperant
         HeaderCenter
         leftText="Cancel"
         leftBtnPress={() => {
-          stopTracking();
-          navigation.goBack();
+          console.log('Back pressed');
+          handleNavigation('back');
         }}
         LeftTextStyle={{ color: BaseColors?.white }}
         rightText="Restart"
         rightBtnPress={() => {
-          stopTracking();
-          stopCalibration();
+          setCaliStatus(false);
           Toast.show({
             text1: 'Calibration will restart in 2 seconds!',
             type: 'success',
           });
           setTimeout(() => {
-            startCalibration();
-            init();
+            setCaliStatus(true);
           }, 2000);
         }}
         rightTextStyle={{ color: BaseColors?.white }}
         HeaderTextStyle={{ color: BaseColors?.white }}
       />
-
       <View style={styles.dotContainer} onLayout={onLayout}>
-        <Animated.View style={dotStyle} />
+        {!caliStatus && (
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: 50,
+              }}
+            >
+              <View style={[styles?.squareBorder]}>
+                <Image
+                  resizeMode="contain"
+                  style={{ width: 160 }}
+                  source={Images?.eyeLine}
+                />
+                <Text style={styles?.plusStyle}>+</Text>
+              </View>
+              <View style={{ paddingHorizontal: 20 }}>
+                <Text style={styles?.bigtext}>Set Your Face Properly</Text>
+                <Text
+                  style={[
+                    styles?.smalltext,
+                    { fontSize: 18, marginBottom: 10 },
+                  ]}
+                >
+                  Make sure your Eyes are near to White Dots Shown Above
+                </Text>
+                <Text style={styles?.smalltext}>
+                  After calibration, Keep your face and device still.
+                </Text>
+              </View>
+            </View>
+            <Button
+              shape="round"
+              onPress={() => {
+                Toast.show({
+                  text1: 'Calibration will start in 2 seconds!',
+                  type: 'success',
+                });
+                setTimeout(() => {
+                  setCaliStatus(true);
+                }, 2000);
+              }}
+              title={'Start Calibration Now'}
+              style={styles.requestBtn}
+            />
+          </View>
+        )}
+
+        {caliStatus && <Animated.View style={dotStyle} />}
         {dynamicDot && (
           <Animated.View
             style={{

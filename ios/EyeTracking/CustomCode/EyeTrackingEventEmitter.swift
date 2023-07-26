@@ -12,6 +12,7 @@ import Foundation
 open class EyeTrackingEventEmitter: RCTEventEmitter {
 
   public static var emitter: RCTEventEmitter!
+  @objc public override static func requiresMainQueueSetup() -> Bool { return true }
 
   override init() {
     super.init()
