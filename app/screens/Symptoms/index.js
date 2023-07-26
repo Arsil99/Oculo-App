@@ -25,8 +25,6 @@ import { captureScreen } from 'react-native-view-shot';
 import SocketIOClient from 'socket.io-client';
 import styles from './styles';
 import BaseSetting from '@config/setting';
-import Symptom from '@components/Symptom';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { calculateScreenX, calculateScreenY } from '@utils/eyeTracking';
 import { useSelector } from 'react-redux';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
@@ -360,30 +358,24 @@ fixDurScreen	= t	Average fixation duration on screen
   const handleValueChange = newValue => {
     setSliderValue(newValue);
   };
-  const [showContent, setShowContent] = useState(false);
-
-  const handleNextPress = () => {
-    setShowContent(true);
-  };
 
   return (
     <View style={styles.main}>
-      <StatusBar barStyle="dark-content" translucent={false} />
+      <StatusBar barStyle="dark-content" translucent={true} />
       <HeaderBar
         HeaderText={'Symptoms'}
         HeaderCenter
-        leftText={showContent ? 'Cancel' : 'Back'}
+        leftText="Cancel"
         leftBtnPress={() => {
           navigation.goBack();
         }}
       />
-
-      {showContent ? (
-        <ScrollView
-          contentContainerStyle={styles.scrollcontainer}
-          showsVerticalScrollIndicator={false}
-          ref={aoiRootView}
-        >
+      <ScrollView
+        contentContainerStyle={styles.scrollcontainer}
+        showsVerticalScrollIndicator={false}
+        ref={aoiRootView}
+      >
+        <>
           <View>
             <View>
               <FlatList
@@ -512,13 +504,37 @@ fixDurScreen	= t	Average fixation duration on screen
                 shape="round"
                 title={'Next'}
                 style={styles.signinbutton}
+                onPress={() => {
+                  handleSymptomChange(activeButtonIndex + 1);
+                }}
               />
             </View>
           </View>
-        </ScrollView>
-      ) : (
-        <Symptom handleNextPress={handleNextPress} />
-      )}
+          {dynamicDot && (
+            <Animated.View
+              style={useAnimatedStyle(() => {
+                return {
+                  width: 20,
+                  height: 20,
+                  borderRadius: 10,
+                  backgroundColor: 'red',
+                  position: 'absolute',
+                  left: -20,
+                  top: -20,
+                  transform: [
+                    {
+                      translateX: tXValue.value,
+                    },
+                    {
+                      translateY: tYValue.value,
+                    },
+                  ],
+                };
+              })}
+            />
+          )}
+        </>
+      </ScrollView>
     </View>
   );
 };

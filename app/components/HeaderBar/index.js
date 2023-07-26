@@ -32,7 +32,11 @@ const HeaderBar = ({
     <View
       style={[
         {
-          backgroundColor: darkmode ? BaseColors.lightBlack : BaseColors.white,
+          backgroundColor: isTransperant
+            ? '#0000'
+            : darkmode
+            ? BaseColors.lightBlack
+            : BaseColors.white,
         },
         styles.first,
       ]}
@@ -53,7 +57,7 @@ const HeaderBar = ({
             <Text
               style={[
                 LeftTextStyle,
-                { color: darkmode ? BaseColors.white : BaseColors.black90 },
+                // { color: darkmode ? BaseColors.white : BaseColors.black90 },
               ]}
             >
               {leftText}
