@@ -212,8 +212,8 @@ export default function CalibrationStart() {
   // Function to handle going back and forward
   const handleNavigation = type => {
     console.log('Handle Navigation called');
+    stopTracking();
     if (type === 'back') {
-      stopTracking();
       navigation.goBack();
       Toast.show({
         text1: 'Calibration process interrupted.',
