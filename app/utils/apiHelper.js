@@ -1,4 +1,4 @@
-import { isEmpty, isObject } from 'lodash';
+import { isEmpty, isObject, isString } from 'lodash';
 import axios from 'axios';
 // import Bugsnag from '@bugsnag/react-native';
 import BaseSetting from '../config/setting';
@@ -103,6 +103,7 @@ export function getApiDataProgress(
   onProgress,
   customUrl = '',
 ) {
+  console.log('data ==>>>', data);
   const authState = store?.getState() || {};
   const token = authState?.auth?.accessToken || '';
 

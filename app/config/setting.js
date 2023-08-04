@@ -34,7 +34,9 @@ const BaseSetting = {
     verifyOtp: '/user/verify-otp',
     resetPassword: '/user/reset-password',
     createPassword: '/patient/create-password',
-    question: '/questions/master-patient-questions',
+    question: '/questions/list',
+    savePatient: '/patient/save-history',
+    updatePatient: '/patient/update-profile',
   },
 
   geolocationOptions: {

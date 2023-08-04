@@ -20,6 +20,7 @@ export default function Home({ navigation }) {
   });
 
   const { userData, darkmode } = useSelector(state => state.auth);
+  console.log('🚀 ~ file: index.js:23 ~ Home ~ userData:', userData);
 
   return (
     // MAIN CONTAINER
@@ -35,8 +36,9 @@ export default function Home({ navigation }) {
       <View style={styles.topBar}>
         <View>
           <Image
-            source={Images.avatar}
-            style={{ height: 60, width: 60, borderRadius: 30 }}
+            source={{ uri: userData.profile_pic }} // Use the 'profile_pic' from userData
+            resizeMode="cover"
+            style={{ height: 60, width: 60, borderRadius: 30, borderWidth: 1 }}
           />
         </View>
         <View style={styles.title}>

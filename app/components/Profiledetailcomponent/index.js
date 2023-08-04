@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, Platform, Image } from 'react-native';
 import React, {
   forwardRef,
   useEffect,
@@ -10,15 +10,24 @@ import styles from './styles';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { BaseColors } from '@config/theme';
 import LabeledInput from '@components/LabeledInput';
-import { isEmpty, isNull } from 'lodash';
+import _, { isEmpty, isNull } from 'lodash';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import Dropdown from '@components/Dropdown';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import BaseSetting from '@config/setting';
+import { getApiData, getApiDataProgress } from '@utils/apiHelper';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { Images } from '@config';
+import ImagePicker from 'react-native-image-crop-picker';
+import Authentication from '@redux/reducers/auth/actions';
+import Icon1 from 'react-native-vector-icons/Feather';
 
 const errObj = {
   firstNameErr: false,
   firstNameErrMsg: '',
+  middleNameErr: false,
+  middleNameErrMsg: '',
   lastNameErr: false,
   lastNameErrMsg: '',
   dateOfBirthErr: false,
@@ -36,14 +45,12 @@ const errObj = {
 };
 
 const Profiledetailcomponent = (props, ref) => {
+  const { setUserData } = Authentication;
+  const dispatch = useDispatch();
   const { onSuccess } = props;
   const [open, setOpen] = useState(false);
+  const [proopen, setProOpen] = useState(false);
   const [value, setValue] = useState(null);
-
-  const genderdata = [
-    { label: 'Male', value: 'Male' },
-    { label: 'Female', value: 'Female' },
-  ];
 
   const cInputRef = useRef();
   const cInputRef1 = useRef();
@@ -51,16 +58,47 @@ const Profiledetailcomponent = (props, ref) => {
   const cInputRef3 = useRef();
   const cInputRef4 = useRef();
   const { userData, darkmode } = useSelector(state => state.auth);
+  console.log(
+    '🚀 ~ file: index.js:60 ~ Profiledetailcomponent ~ userData:',
+    userData,
+  );
 
   // Detail Tab related states
   const [ErrObj, setErrObj] = useState(errObj);
   const [firstName, setFirstName] = useState('');
+  const [middleName, setMiddleName] = useState('');
   const [lastName, setLastName] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [patientPhone, setPatientPhone] = useState('');
   const [patientemail, setPatientEmail] = useState('');
   const [guardianPhone, setGuardianPhone] = useState('');
   const [guardianemail, setGuardianEmail] = useState('');
+  const [selectedDropdownValue, setSelectedDropdownValue] = useState('');
+  const [sexOpen, setSexOpen] = useState(false);
+  const [sexValue, setSexValue] = useState('');
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [dateOfBirthErr, setDateOfBirthErr] = useState(false);
+  const [dateOfBirthErrMsg, setDateOfBirthErrMsg] = useState('');
+  const [sexErr, setSexErr] = useState(false);
+  const [sexErrMsg, setSexErrMsg] = useState('');
+
+  const sexData = [
+    { label: 'Female', value: '0=female' },
+    { label: 'Male', value: '1=male' },
+    { label: 'Intersex', value: '2=Intersex' },
+  ];
+
+  const genderdata = [
+    { label: 'Male', value: 'Male' },
+    { label: 'Female', value: 'Female' },
+  ];
+  const dropdownItems = [
+    { label: 'She/Her/Hers', value: '1=She/Her/Hers' },
+    { label: 'He/Him/His', value: '2=He/Him/His' },
+    { label: 'They/Them/Their', value: '3=They/Them/Their' },
+    { label: 'Ze/Zir/Zirs', value: '4=Ze/Zir/Zirs' },
+    { label: 'Ze/Hir/Hirs', value: '5=Ze/Hir/Hirs' },
+  ];
 
   // Date time setup
   const [date, setDate] = useState(new Date());
@@ -69,6 +107,7 @@ const Profiledetailcomponent = (props, ref) => {
 
   useEffect(() => {
     setFirstName(userData?.firstname);
+    setMiddleName(userData?.middlename);
     setLastName(userData?.lastname);
     setPatientPhone(userData?.phone);
     setPatientEmail(userData?.email);
@@ -89,6 +128,10 @@ const Profiledetailcomponent = (props, ref) => {
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
     setBirthDate(moment(selectedDate).format('DD-MM-YYYY'));
+
+    // Reset the error state when a valid date is selected
+    setDateOfBirthErr(false);
+    setDateOfBirthErrMsg('');
   };
 
   const showMode = currentMode => {
@@ -110,6 +153,11 @@ const Profiledetailcomponent = (props, ref) => {
       error.firstNameErr = true;
       error.firstNameErrMsg = 'Enter first name';
     }
+    if (isEmpty(sexValue) || isNull(sexValue)) {
+      Valid = false;
+      error.sexErr = true;
+      error.sexErrMsg = 'Select sex';
+    }
 
     // last name
     if (isEmpty(lastName) || isNull(lastName)) {
@@ -124,7 +172,40 @@ const Profiledetailcomponent = (props, ref) => {
       error.p_phoneErr = true;
       error.p_phoneErrMsg = 'Enter patient phone number';
     }
+    if (isEmpty(birthDate) || isNull(birthDate)) {
+      Valid = false;
+      setDateOfBirthErr(true);
+      setDateOfBirthErrMsg('Enter date of birth');
+    } else {
+      setDateOfBirthErr(false);
+      setDateOfBirthErrMsg('');
+    }
+    if (isEmpty(sexValue) || isNull(sexValue)) {
+      Valid = false;
+      setSexErr(true);
+      setSexErrMsg('Select sex');
+    } else {
+      setSexErr(false);
+      setSexErrMsg('');
+    }
 
+    if (isEmpty(birthDate) || isNull(birthDate)) {
+      Valid = false;
+      setDateOfBirthErr(true);
+      setDateOfBirthErrMsg('Enter date of birth');
+    } else {
+      setDateOfBirthErr(false);
+      setDateOfBirthErrMsg('');
+    }
+
+    if (isEmpty(birthDate) || isNull(birthDate)) {
+      Valid = false;
+      setDateOfBirthErr(true);
+      setDateOfBirthErrMsg('Enter date of birth');
+    } else {
+      setDateOfBirthErr(false);
+      setDateOfBirthErrMsg('');
+    }
     // patient email
     if (isEmpty(patientemail) || isNull(patientemail)) {
       Valid = false;
@@ -132,22 +213,9 @@ const Profiledetailcomponent = (props, ref) => {
       error.p_emailErrMsg = 'Enter patient email';
     }
 
-    // guardian phone
-    if (isEmpty(guardianPhone) || isNull(guardianPhone)) {
-      Valid = false;
-      error.g_phoneErr = true;
-      error.g_phoneErrMsg = 'Enter guardian phone number';
-    }
-
-    // guardian email
-    if (isEmpty(guardianemail) || isNull(guardianemail)) {
-      Valid = false;
-      error.g_emailErr = true;
-      error.g_emailErrMsg = 'Enter guardian email';
-    }
     setErrObj(error);
     if (Valid) {
-      onSuccess();
+      dataToSend();
     }
   };
 
@@ -156,6 +224,81 @@ const Profiledetailcomponent = (props, ref) => {
       ref.current.focus();
     }
   };
+
+  const dataToSend = async () => {
+    const selectedKey = selectedDropdownValue.split('=')[0];
+
+    const selectedsexKey = sexValue.split('=')[0];
+
+    let data = {
+      first_name: firstName,
+      middle_name: middleName,
+      last_name: lastName,
+      dob: birthDate,
+      phone: patientPhone,
+      email: patientemail,
+      user_id: userData?.id?.toString(),
+      emergency_phone: guardianPhone,
+      emergency_email: guardianemail,
+      gender: value,
+      pronouns: selectedKey,
+      sex: selectedsexKey,
+    };
+
+    if (!_.isEmpty(selectedImage) && _.isObject(selectedImage)) {
+      data.profile_pic = {
+        uri: selectedImage?.path,
+        name: selectedImage?.path.substr(
+          selectedImage?.path.lastIndexOf('/') + 1,
+        ),
+        type: selectedImage?.mime,
+      };
+    }
+
+    try {
+      const response = await getApiDataProgress(
+        BaseSetting.endpoints.updatePatient,
+        'POST',
+        data,
+      );
+
+      // Check the status of the response.
+      if (response?.status) {
+        dispatch(setUserData(response?.data));
+        // Display a success message.
+        Toast.show({
+          text1: response?.message,
+          type: 'success',
+        });
+        onSuccess();
+      } else {
+        // Display an error message.
+        Toast.error(response?.message);
+      }
+    } catch (error) {
+      // Log the error.
+      console.log('CATCH ERROR =======>>>', error);
+    }
+  };
+
+  const handleImagePicker = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+      cropperCircleOverlay: true,
+      cropperToolbarTitle: 'Crop your profile picture',
+
+      freeStyleCropEnabled: true,
+    })
+      .then(image => {
+        setSelectedImage(image);
+      })
+      .catch(error => {
+        console.log('ImagePicker Error: ', error);
+      });
+  };
+
   return (
     <View style={styles.alignSetup}>
       <View style={styles.settigCon}>
@@ -179,6 +322,37 @@ const Profiledetailcomponent = (props, ref) => {
             },
           ]}
         >
+          <View style={styles.topBar}>
+            {userData.profile_pic ? (
+              <Image
+                source={{ uri: userData.profile_pic }}
+                resizeMode="cover"
+                style={{
+                  height: 80,
+                  width: 80,
+                  borderRadius: 40,
+                  borderWidth: 1,
+                }}
+              />
+            ) : (
+              <View style={styles.placeholderImage}>
+                {/* Add the content you want to display as a placeholder */}
+                <Icon1
+                  name="user"
+                  style={{ fontSize: 25, color: BaseColors.primary }}
+                />
+                {/* You can also use an Icon component or any other content here */}
+              </View>
+            )}
+            <TouchableOpacity
+              onPress={handleImagePicker}
+              activeOpacity={BaseSetting.buttonOpacity}
+              style={styles.imagePickerButton}
+            >
+              <Icon size={31} name="camera" color={BaseColors.primary} />
+            </TouchableOpacity>
+          </View>
+
           <LabeledInput
             Label={'First Name'}
             usericon
@@ -198,7 +372,25 @@ const Profiledetailcomponent = (props, ref) => {
             errorText={ErrObj.firstNameErrMsg}
             onSubmitEditing={() => cInputRef.current.focus()}
           />
-
+          <LabeledInput
+            ref={cInputRef}
+            Label={'Middle Name'}
+            usericon
+            placeholder={'Enter Middle name'}
+            value={middleName}
+            onChangeText={val => {
+              setMiddleName(val);
+              setErrObj(old => {
+                return {
+                  ...old,
+                  middleNameErr: false,
+                  middleNameErrMsg: '',
+                };
+              });
+            }}
+            showError={ErrObj.middleNameErr}
+            errorText={ErrObj.middleNameErrMsg}
+          />
           <LabeledInput
             ref={cInputRef}
             Label={'Last Name'}
@@ -236,7 +428,9 @@ const Profiledetailcomponent = (props, ref) => {
               </View>
             </View>
           </TouchableOpacity>
-
+          {dateOfBirthErr && (
+            <Text style={styles.errorTxt}>{dateOfBirthErrMsg}</Text>
+          )}
           {show && (
             <DateTimePicker
               testID="dateTimePicker"
@@ -244,7 +438,7 @@ const Profiledetailcomponent = (props, ref) => {
               value={date}
               mode={mode}
               is24Hour={true}
-              display="default"
+              display="spinner"
               onChange={onChange}
             />
           )}
@@ -256,7 +450,7 @@ const Profiledetailcomponent = (props, ref) => {
           >
             Gender
           </Text>
-          <View style={styles.genderBox}>
+          <View style={[styles.genderBox, { zIndex: 50 }]}>
             <Dropdown
               items={genderdata}
               open={open}
@@ -267,6 +461,48 @@ const Profiledetailcomponent = (props, ref) => {
               // onValueChange={handleDropdownChange}
             />
           </View>
+          <Text
+            style={[
+              styles.genderTitle,
+              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+            ]}
+          >
+            Pronouns
+          </Text>
+          <View style={[styles.genderBox, { zIndex: open ? null : 50 }]}>
+            <Dropdown
+              items={dropdownItems}
+              open={proopen}
+              setOpen={setProOpen}
+              placeholder="Please select an option"
+              value={selectedDropdownValue}
+              setValue={setSelectedDropdownValue}
+            />
+          </View>
+          <Text
+            style={[
+              styles.genderTitle,
+              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+            ]}
+          >
+            Sex
+          </Text>
+          <View style={[styles.genderBox, { zIndex: proopen ? null : 50 }]}>
+            <Dropdown
+              items={sexData}
+              open={sexOpen}
+              setOpen={setSexOpen}
+              placeholder="Select sex"
+              value={sexValue}
+              setValue={newValue => {
+                // Reset the error state when a valid value is selected
+                setSexValue(newValue);
+                setSexErr(false);
+                setSexErrMsg('');
+              }}
+            />
+          </View>
+          {sexErr && <Text style={styles.errorTxt}>{sexErrMsg}</Text>}
         </View>
       </View>
       <View style={[styles.settigCon, { zIndex: 1 }]}>
@@ -280,7 +516,16 @@ const Profiledetailcomponent = (props, ref) => {
             Contact Information
           </Text>
         </View>
-        <View style={styles.editContainer}>
+        <View
+          style={[
+            styles.editContainer,
+            {
+              backgroundColor: darkmode
+                ? BaseColors.lightBlack
+                : BaseColors.white,
+            },
+          ]}
+        >
           <LabeledInput
             ref={cInputRef1}
             Label={'Patient Phone'}

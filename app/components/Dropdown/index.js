@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import { BaseColors } from '@config/theme';
+import { BaseColors, FontFamily } from '@config/theme';
 import React from 'react';
 import DropDownPicker from 'react-native-dropdown-picker';
 
@@ -28,7 +28,10 @@ export default function Dropdown(props) {
         onOpen();
       }}
       placeholderStyle={{
-        color: BaseColors?.black50,
+        fontFamily: FontFamily.regular,
+        fontSize: 14,
+        textTransform: 'capitalize',
+        marginRight: 3,
       }}
       style={{
         borderWidth: 0,

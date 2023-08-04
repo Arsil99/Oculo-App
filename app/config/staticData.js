@@ -24,6 +24,12 @@ export const patientdata = [
   {
     id: '2',
     leftIcon: 'user',
+    title: 'Middle Name',
+    righttitle: userData?.middlename,
+  },
+  {
+    id: '2',
+    leftIcon: 'user',
     title: 'Last Name',
     righttitle: userData?.lastname,
   },
@@ -31,13 +37,41 @@ export const patientdata = [
     id: '3',
     leftIcon: 'calendar',
     title: 'Date of Birth',
-    righttitle: '27-04-1998',
+    righttitle: userData?.dob,
   },
   {
     id: '4',
     leftIcon: 'man',
     title: 'Gender',
-    righttitle: 'Male',
+    righttitle: userData?.gender,
+  },
+  {
+    id: '5',
+    leftIcon: 'man',
+    title: 'Pronouns',
+    righttitle:
+      userData?.sex === '0'
+        ? 'She/Her/Hers'
+        : userData?.sex === '1'
+        ? 'He/Him/His'
+        : userData?.sex === '2'
+        ? 'They/Them/Their'
+        : userData?.sex === '3'
+        ? 'Ze/Zir/Zirs:Ze/Hir/Hirs'
+        : null,
+  },
+  {
+    id: '6',
+    leftIcon: 'man',
+    title: 'Sex',
+    righttitle:
+      userData?.sex === '0'
+        ? 'female'
+        : userData?.sex === '1'
+        ? 'male'
+        : userData?.sex === '2'
+        ? 'Intersex'
+        : null,
   },
 ];
 
@@ -58,13 +92,13 @@ export const contactdata = [
     id: '3',
     leftIcon: 'phone',
     title: 'Guardian phone',
-    righttitle: '(454) 334 - 3301',
+    righttitle: userData?.emergency_phone,
   },
   {
     id: '4',
     leftIcon: 'mail',
     title: 'Guardian email',
-    righttitle: 'demo@gmail.com',
+    righttitle: userData?.emergency_email,
   },
 ];
 

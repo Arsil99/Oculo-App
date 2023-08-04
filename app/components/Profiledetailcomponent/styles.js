@@ -41,6 +41,14 @@ export default StyleSheet.create({
     paddingHorizontal: 10,
     alignItems: 'center',
   },
+  errorTxt: {
+    color: '#FF0B1E',
+    paddingLeft: 5,
+    paddingBottom: 12,
+
+    fontFamily: FontFamily.regular,
+    fontSize: 14,
+  },
   settingItem: {
     backgroundColor: 'white',
     height: 50,
@@ -124,12 +132,6 @@ export default StyleSheet.create({
     padding: 10,
     borderRadius: 10,
   },
-  // screen: {
-  //   flex: 1,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   backgroundColor: '#F2F5FB',
-  // },
   headertext: {
     fontSize: 20,
     color: BaseColors.black,
@@ -163,6 +165,26 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10,
+  },
+  topBar: {
+    marginVertical: 10,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  placeholderImage: {
+    height: 80,
+    width: 80,
+    borderRadius: 40,
+
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#EAEAEA', // Customize the background color for the placeholder
+  },
+  placeholderText: {
+    fontSize: 16,
+    color: 'gray',
   },
   modalView: {
     backgroundColor: 'white',
@@ -211,5 +233,14 @@ export default StyleSheet.create({
   dropdownLabel: {
     fontSize: 14,
     color: '#333',
+  },
+  imagePickerButton: {
+    top: 23,
+    left: -20,
+  },
+  imagePickerButtonText: {
+    color: BaseColors.white,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
