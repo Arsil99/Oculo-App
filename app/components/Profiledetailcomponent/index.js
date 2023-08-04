@@ -69,6 +69,10 @@ const Profiledetailcomponent = (props, ref) => {
   const [middleName, setMiddleName] = useState('');
   const [lastName, setLastName] = useState('');
   const [birthDate, setBirthDate] = useState('');
+  console.log(
+    '🚀 ~ file: index.js:72 ~ Profiledetailcomponent ~ birthDate:',
+    birthDate,
+  );
   const [patientPhone, setPatientPhone] = useState('');
   const [patientemail, setPatientEmail] = useState('');
   const [guardianPhone, setGuardianPhone] = useState('');
@@ -102,6 +106,7 @@ const Profiledetailcomponent = (props, ref) => {
 
   // Date time setup
   const [date, setDate] = useState(new Date());
+  console.log('🚀 ~ file: index.js:105 ~ Profiledetailcomponent ~ date:', date);
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
 
@@ -128,6 +133,9 @@ const Profiledetailcomponent = (props, ref) => {
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
     setBirthDate(moment(selectedDate).format('DD-MM-YYYY'));
+
+    const formattedDate = currentDate.toLocaleDateString('en-GB');
+    setBirthDate(formattedDate);
 
     // Reset the error state when a valid date is selected
     setDateOfBirthErr(false);
@@ -244,6 +252,7 @@ const Profiledetailcomponent = (props, ref) => {
       pronouns: selectedKey,
       sex: selectedsexKey,
     };
+    console.log('🚀 ~ file: index.js:255 ~ dataToSend ~ data.dob:', data.dob);
 
     if (!_.isEmpty(selectedImage) && _.isObject(selectedImage)) {
       data.profile_pic = {
@@ -261,6 +270,7 @@ const Profiledetailcomponent = (props, ref) => {
         'POST',
         data,
       );
+      console.log('🚀 ~ file: index.js:273 ~ dataToSend ~ response:', response);
 
       // Check the status of the response.
       if (response?.status) {

@@ -1,3 +1,4 @@
+import moment from 'moment';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { store } from '../redux/store/configureStore';
 const authState = store?.getState() || {};
@@ -37,7 +38,7 @@ export const patientdata = [
     id: '3',
     leftIcon: 'calendar',
     title: 'Date of Birth',
-    righttitle: userData?.dob,
+    righttitle: moment(userData?.dob).format('DD-MM-YYYY'),
   },
   {
     id: '4',
