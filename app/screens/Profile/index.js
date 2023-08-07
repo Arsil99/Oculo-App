@@ -24,14 +24,8 @@ import { useIsFocused } from '@react-navigation/native';
 import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
 import BaseSetting from '@config/setting';
 import InfoCard from '@components/InfoCard';
-import {
-  contactdata,
-  items,
-  legal,
-  patientdata,
-  settings,
-  switchOptions,
-} from '@config/staticData';
+import { items, legal, settings, switchOptions } from '@config/staticData';
+import moment from 'moment';
 
 export default function Profile({ navigation }) {
   const { setDarkmode, setBiometric } = Authentication;
@@ -58,7 +52,93 @@ export default function Profile({ navigation }) {
   const rnBiometrics = new ReactNativeBiometrics({
     allowDeviceCredentials: true,
   });
+  const patientdata = [
+    {
+      id: '1',
+      leftIcon: 'user',
+      title: 'First Name',
+      righttitle: userData?.firstname,
+    },
+    {
+      id: '2',
+      leftIcon: 'user',
+      title: 'Middle Name',
+      righttitle: userData?.middlename,
+    },
+    {
+      id: '2',
+      leftIcon: 'user',
+      title: 'Last Name',
+      righttitle: userData?.lastname,
+    },
+    {
+      id: '3',
+      leftIcon: 'calendar',
+      title: 'Date of Birth',
+      righttitle: moment(userData?.dob).format('DD-MM-YYYY'),
+    },
+    {
+      id: '4',
+      leftIcon: 'man',
+      title: 'Gender',
+      righttitle: userData?.gender ? userData.gender : '_',
+    },
+    {
+      id: '5',
+      leftIcon: 'man',
+      title: 'Pronouns',
+      righttitle:
+        userData?.sex === '0'
+          ? 'She/Her/Hers'
+          : userData?.sex === '1'
+          ? 'He/Him/His'
+          : userData?.sex === '2'
+          ? 'They/Them/Their'
+          : userData?.sex === '3'
+          ? 'Ze/Zir/Zirs:Ze/Hir/Hirs'
+          : '_',
+    },
+    {
+      id: '6',
+      leftIcon: 'man',
+      title: 'Sex',
+      righttitle:
+        userData?.sex === '0'
+          ? 'female'
+          : userData?.sex === '1'
+          ? 'male'
+          : userData?.sex === '2'
+          ? 'Intersex'
+          : '_',
+    },
+  ];
 
+  const contactdata = [
+    {
+      id: '1',
+      leftIcon: 'phone',
+      title: 'Patient Phone',
+      righttitle: userData?.phone,
+    },
+    {
+      id: '2',
+      leftIcon: 'mail',
+      title: 'Patient Email',
+      righttitle: userData?.email,
+    },
+    {
+      id: '3',
+      leftIcon: 'phone',
+      title: 'Guardian phone',
+      righttitle: userData?.emergency_phone ? userData?.emergency_phone : '_',
+    },
+    {
+      id: '4',
+      leftIcon: 'mail',
+      title: 'Guardian email',
+      righttitle: userData?.emergency_email ? userData?.emergency_email : '_',
+    },
+  ];
   useEffect(() => {
     setValue(userData?.two_factor_type);
     setActiveTab({
