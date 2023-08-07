@@ -51,6 +51,7 @@ export default StyleSheet.create({
     marginBottom: 10,
     fontFamily: FontFamily.regular,
     color: BaseColors.black,
+    marginTop: 25,
   },
   subtitleText: {
     fontSize: 16,
@@ -59,6 +60,13 @@ export default StyleSheet.create({
     marginBottom: 20,
     fontFamily: FontFamily.regular,
     color: BaseColors.black90,
+  },
+  errortext: {
+    color: BaseColors.red,
+    fontSize: 13,
+    marginTop: 7,
+    fontWeight: '400',
+    fontFamily: FontFamily.regular,
   },
   yesText: {
     fontWeight: '400',
@@ -76,18 +84,35 @@ export default StyleSheet.create({
     marginTop: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: 180,
-    marginBottom: 25,
+  },
+  input: {
+    width: '100%',
+  },
+  dropdownContainer: {
+    marginVertical: 20,
+    borderRadius: 10,
+    borderColor: BaseColors.black20,
+    borderWidth: 1,
+    marginTop: 10,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 6,
+    zIndex: 50,
+    backgroundColor: BaseColors.white,
   },
   yesbutton: {
-    paddingHorizontal: 30,
-
+    width: 100,
     height: 34,
     borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: BaseColors.black20,
+    marginRight: 10,
   },
   nobutton: {
     paddingHorizontal: 30,
@@ -97,5 +122,6 @@ export default StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: BaseColors.black20,
+    marginRight: 10,
   },
 });
