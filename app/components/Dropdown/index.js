@@ -32,6 +32,7 @@ export default function Dropdown(props) {
         fontSize: 14,
         textTransform: 'capitalize',
         marginRight: 3,
+        color: BaseColors.black60,
       }}
       style={{
         borderWidth: 0,

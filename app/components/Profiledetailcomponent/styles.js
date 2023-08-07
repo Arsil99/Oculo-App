@@ -174,9 +174,9 @@ export default StyleSheet.create({
     flexDirection: 'row',
   },
   placeholderImage: {
-    height: 80,
-    width: 80,
-    borderRadius: 40,
+    height: 120,
+    width: 120,
+    borderRadius: 60,
 
     justifyContent: 'center',
     alignItems: 'center',
@@ -235,8 +235,14 @@ export default StyleSheet.create({
     color: '#333',
   },
   imagePickerButton: {
-    top: 23,
-    left: -20,
+    height: 40,
+    width: 40,
+    borderRadius: 20,
+    backgroundColor: BaseColors.primary,
+    top: 33,
+    left: -27,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   imagePickerButtonText: {
     color: BaseColors.white,

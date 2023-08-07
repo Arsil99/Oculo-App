@@ -44,7 +44,7 @@ export const patientdata = [
     id: '4',
     leftIcon: 'man',
     title: 'Gender',
-    righttitle: userData?.gender,
+    righttitle: userData?.gender ? userData.gender : '_',
   },
   {
     id: '5',
@@ -59,7 +59,7 @@ export const patientdata = [
         ? 'They/Them/Their'
         : userData?.sex === '3'
         ? 'Ze/Zir/Zirs:Ze/Hir/Hirs'
-        : null,
+        : '_',
   },
   {
     id: '6',
@@ -72,7 +72,7 @@ export const patientdata = [
         ? 'male'
         : userData?.sex === '2'
         ? 'Intersex'
-        : null,
+        : '_',
   },
 ];
 
@@ -93,13 +93,13 @@ export const contactdata = [
     id: '3',
     leftIcon: 'phone',
     title: 'Guardian phone',
-    righttitle: userData?.emergency_phone,
+    righttitle: userData?.emergency_phone ? userData?.emergency_phone : '_',
   },
   {
     id: '4',
     leftIcon: 'mail',
     title: 'Guardian email',
-    righttitle: userData?.emergency_email,
+    righttitle: userData?.emergency_email ? userData?.emergency_email : '_',
   },
 ];
 

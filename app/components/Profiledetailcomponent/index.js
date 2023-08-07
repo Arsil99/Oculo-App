@@ -52,40 +52,33 @@ const Profiledetailcomponent = (props, ref) => {
   const [proopen, setProOpen] = useState(false);
   const [value, setValue] = useState(null);
 
-  const cInputRef = useRef();
-  const cInputRef1 = useRef();
-  const cInputRef2 = useRef();
-  const cInputRef3 = useRef();
-  const cInputRef4 = useRef();
-  const { userData, darkmode } = useSelector(state => state.auth);
-  console.log(
-    '🚀 ~ file: index.js:60 ~ Profiledetailcomponent ~ userData:',
-    userData,
-  );
-
   // Detail Tab related states
   const [ErrObj, setErrObj] = useState(errObj);
   const [firstName, setFirstName] = useState('');
   const [middleName, setMiddleName] = useState('');
   const [lastName, setLastName] = useState('');
   const [birthDate, setBirthDate] = useState('');
-  console.log(
-    '🚀 ~ file: index.js:72 ~ Profiledetailcomponent ~ birthDate:',
-    birthDate,
-  );
+
   const [patientPhone, setPatientPhone] = useState('');
   const [patientemail, setPatientEmail] = useState('');
   const [guardianPhone, setGuardianPhone] = useState('');
   const [guardianemail, setGuardianEmail] = useState('');
-  const [selectedDropdownValue, setSelectedDropdownValue] = useState('');
+  const [selectedDropdownValue, setSelectedDropdownValue] = useState(null);
   const [sexOpen, setSexOpen] = useState(false);
-  const [sexValue, setSexValue] = useState('');
+  const [sexValue, setSexValue] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [dateOfBirthErr, setDateOfBirthErr] = useState(false);
   const [dateOfBirthErrMsg, setDateOfBirthErrMsg] = useState('');
   const [sexErr, setSexErr] = useState(false);
   const [sexErrMsg, setSexErrMsg] = useState('');
 
+  const cInputRef = useRef();
+  const cInputRef1 = useRef();
+  const cInputRef2 = useRef();
+  const cInputRef3 = useRef();
+  const cInputRef4 = useRef();
+  const { userData, darkmode } = useSelector(state => state.auth);
+  console.log('======>>userData', userData);
   const sexData = [
     { label: 'Female', value: '0=female' },
     { label: 'Male', value: '1=male' },
@@ -106,7 +99,7 @@ const Profiledetailcomponent = (props, ref) => {
 
   // Date time setup
   const [date, setDate] = useState(new Date());
-  console.log('🚀 ~ file: index.js:105 ~ Profiledetailcomponent ~ date:', date);
+
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
 
@@ -116,7 +109,28 @@ const Profiledetailcomponent = (props, ref) => {
     setLastName(userData?.lastname);
     setPatientPhone(userData?.phone);
     setPatientEmail(userData?.email);
-
+    setBirthDate(userData?.dob);
+    setSexValue(
+      userData?.sex === '0'
+        ? '0=female'
+        : userData?.sex === '1'
+        ? '1=male'
+        : userData?.sex === '2'
+        ? '2=Intersex'
+        : null,
+    );
+    setSelectedDropdownValue(
+      userData?.sex === '0'
+        ? '1=She/Her/Hers'
+        : userData?.sex === '1'
+        ? '2=He/Him/His'
+        : userData?.sex === '2'
+        ? '3=They/Them/Their'
+        : userData?.sex === '3'
+        ? '4=Ze/Zir/Zirs:Ze/Hir/Hirs'
+        : null,
+    );
+    setValue(userData?.gender);
     return () => {
       setErrObj(errObj);
     };
@@ -132,7 +146,7 @@ const Profiledetailcomponent = (props, ref) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
-    setBirthDate(moment(selectedDate).format('DD-MM-YYYY'));
+    setBirthDate(moment(currentDate).format('DD-MM-YYYY'));
 
     const formattedDate = currentDate.toLocaleDateString('en-GB');
     setBirthDate(formattedDate);
@@ -223,6 +237,7 @@ const Profiledetailcomponent = (props, ref) => {
 
     setErrObj(error);
     if (Valid) {
+      onSuccess();
       dataToSend();
     }
   };
@@ -234,9 +249,9 @@ const Profiledetailcomponent = (props, ref) => {
   };
 
   const dataToSend = async () => {
-    const selectedKey = selectedDropdownValue.split('=')[0];
+    const selectedpronounsKey = selectedDropdownValue?.split('=')[0];
 
-    const selectedsexKey = sexValue.split('=')[0];
+    const selectedsexKey = sexValue?.split('=')[0];
 
     let data = {
       first_name: firstName,
@@ -249,10 +264,9 @@ const Profiledetailcomponent = (props, ref) => {
       emergency_phone: guardianPhone,
       emergency_email: guardianemail,
       gender: value,
-      pronouns: selectedKey,
+      pronouns: selectedpronounsKey,
       sex: selectedsexKey,
     };
-    console.log('🚀 ~ file: index.js:255 ~ dataToSend ~ data.dob:', data.dob);
 
     if (!_.isEmpty(selectedImage) && _.isObject(selectedImage)) {
       data.profile_pic = {
@@ -263,14 +277,12 @@ const Profiledetailcomponent = (props, ref) => {
         type: selectedImage?.mime,
       };
     }
-
     try {
       const response = await getApiDataProgress(
         BaseSetting.endpoints.updatePatient,
         'POST',
         data,
       );
-      console.log('🚀 ~ file: index.js:273 ~ dataToSend ~ response:', response);
 
       // Check the status of the response.
       if (response?.status) {
@@ -280,7 +292,6 @@ const Profiledetailcomponent = (props, ref) => {
           text1: response?.message,
           type: 'success',
         });
-        onSuccess();
       } else {
         // Display an error message.
         Toast.error(response?.message);
@@ -338,19 +349,21 @@ const Profiledetailcomponent = (props, ref) => {
                 source={{ uri: userData.profile_pic }}
                 resizeMode="cover"
                 style={{
-                  height: 80,
-                  width: 80,
-                  borderRadius: 40,
+                  height: 120,
+                  width: 120,
+                  borderRadius: 60,
                   borderWidth: 1,
                 }}
               />
             ) : (
               <View style={styles.placeholderImage}>
                 {/* Add the content you want to display as a placeholder */}
-                <Icon1
-                  name="user"
-                  style={{ fontSize: 25, color: BaseColors.primary }}
-                />
+                <View>
+                  <Icon1
+                    name="user"
+                    style={{ fontSize: 31, color: BaseColors.primary }}
+                  />
+                </View>
                 {/* You can also use an Icon component or any other content here */}
               </View>
             )}
@@ -359,7 +372,7 @@ const Profiledetailcomponent = (props, ref) => {
               activeOpacity={BaseSetting.buttonOpacity}
               style={styles.imagePickerButton}
             >
-              <Icon size={31} name="camera" color={BaseColors.primary} />
+              <Icon size={17} name="camera" color={BaseColors.white} />
             </TouchableOpacity>
           </View>
 
@@ -443,9 +456,9 @@ const Profiledetailcomponent = (props, ref) => {
           )}
           {show && (
             <DateTimePicker
+              value={date}
               testID="dateTimePicker"
               timeZoneOffsetInMinutes={0}
-              value={date}
               mode={mode}
               is24Hour={true}
               display="spinner"
