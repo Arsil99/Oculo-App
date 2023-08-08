@@ -39,6 +39,7 @@ export default function Profile({ navigation }) {
   const [editHistory, setEditHistory] = useState(false);
   const [rightHistoryText, setRightHistoryText] = useState('Edit');
   const profileRef = useRef();
+  const historyRef = useRef();
   const { isBiometric, userData, darkmode } = useSelector(state => {
     return state.auth;
   });
@@ -54,6 +55,7 @@ export default function Profile({ navigation }) {
   const rnBiometrics = new ReactNativeBiometrics({
     allowDeviceCredentials: true,
   });
+
   const patientdata = [
     {
       id: '1',
@@ -68,7 +70,7 @@ export default function Profile({ navigation }) {
       righttitle: userData?.middlename,
     },
     {
-      id: '2',
+      id: '7',
       leftIcon: 'user',
       title: 'Last Name',
       righttitle: userData?.lastname,
@@ -141,6 +143,7 @@ export default function Profile({ navigation }) {
       righttitle: userData?.emergency_email ? userData?.emergency_email : '_',
     },
   ];
+
   useEffect(() => {
     setValue(userData?.two_factor_type);
     setActiveTab({
@@ -184,14 +187,12 @@ export default function Profile({ navigation }) {
         .biometricKeysExist()
         .then(resultObject => {
           const { keysExist } = resultObject;
-          console.log('resultObject ==key exists or not===>>> ', resultObject);
           if (keysExist) {
             checkSignature();
           } else {
             rnBiometrics
               .createKeys()
               .then(resultObject => {
-                console.log('resultObject ==create keys===>>> ', resultObject);
                 const { publicKey } = resultObject;
                 if (publicKey) {
                   setTimeout(() => {
@@ -230,7 +231,6 @@ export default function Profile({ navigation }) {
         payload: payload,
       })
       .then(resultObject => {
-        console.log('resultObject ===check signature==>>> ', resultObject);
         const { success, signature } = resultObject;
 
         if (success) {
@@ -281,8 +281,10 @@ export default function Profile({ navigation }) {
                 if (rightHistoryText === 'Edit') {
                   setEditHistory(true);
                   setRightHistoryText('Save');
-                } else {
+                } else if (activeTab?.id === 'detail') {
                   profileRef?.current?.HandleDetailUpdateBtn();
+                } else {
+                  historyRef?.current?.HandleDetailUpdateBtn();
                 }
               }}
             >
@@ -352,7 +354,14 @@ export default function Profile({ navigation }) {
           </View>
         </ScrollView>
       ) : activeTab?.id === 'history' ? (
-        <ProfilehistoryButton editHistory={editHistory} />
+        <ProfilehistoryButton
+          ref={historyRef}
+          editHistory={editHistory}
+          handleSuccess={() => {
+            setEditHistory(false);
+            setRightHistoryText('Edit');
+          }}
+        />
       ) : (
         <View style={styles.cardOuter}>
           <InfoCard

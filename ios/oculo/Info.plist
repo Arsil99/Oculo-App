@@ -22,14 +22,14 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
-  <key>NSCameraUsageDescription</key>
-  <string>Detect Your Eye Movement</string>
-  <key>NSPhotoLibraryAddUsageDescription</key>
-  <string>Detect Your Eye Movement</string>
-  <key>NSPhotoLibraryUsageDescription</key>
-  <string>Detect Your Eye Movement</string>
-  <key>NSMicrophoneUsageDescription</key>
-  <string>Detect Your Eye Movement</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Detect Your Eye Movement</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Detect Your Eye Movement</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Detect Your Eye Movement</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Detect Your Eye Movement</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>

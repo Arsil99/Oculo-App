@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useMemo, useReducer, useEffect } from 'react';
-import { Platform } from 'react-native';
+import { Platform, Text, TextInput } from 'react-native';
 import { useDispatch } from 'react-redux';
 import {
   NavigationContainer,
@@ -51,6 +51,14 @@ const intitialNotificationState = {
   countOfNotification: 0,
 };
 const IOS = Platform.OS === 'ios';
+
+// Remove font scale
+Text.defaultProps = Text.defaultProps || {};
+Text.defaultProps.allowFontScaling = false;
+TextInput.defaultProps = TextInput.defaultProps || {};
+TextInput.defaultProps.allowFontScaling = false;
+// DatePicker.defaultProps = DatePicker.defaultProps || {};
+// DatePicker.defaultProps.allowFontScaling = false;
 
 function App() {
   const dispatch = useDispatch();

@@ -105,8 +105,9 @@ export default StyleSheet.create({
     backgroundColor: BaseColors.white,
   },
   yesbutton: {
-    width: 100,
+    minWidth: 100,
     height: 34,
+    paddingHorizontal: 10,
     borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
