@@ -8,6 +8,7 @@ import {
 import AuthAction from '@redux/reducers/auth/actions';
 import { navigationRef } from '../navigation/NavigationService';
 import { store } from '@redux/store/configureStore';
+import * as Keychain from 'react-native-keychain';
 
 const { setAccessToken, setUserData } = AuthAction;
 
@@ -47,6 +48,23 @@ export function isValidPhonenumber(inputtxt) {
     return false;
   }
 }
+
+export const storeCredentials = async (username, password) => {
+  try {
+    await Keychain.setGenericPassword(username, password);
+    console.log('Credentials stored successfully!');
+  } catch (error) {
+    console.log('Error storing credentials:', error);
+  }
+};
+
+export const removeCredentials = async () => {
+  try {
+    await Keychain.resetGenericPassword();
+  } catch (error) {
+    console.log("Keychain couldn't be accessed!", error);
+  }
+};
 
 export const enableAnimateInEaseOut = () => {
   if (Platform.OS === 'android') {
