@@ -8,7 +8,6 @@ import {
 import AuthAction from '@redux/reducers/auth/actions';
 import { navigationRef } from '../navigation/NavigationService';
 import { store } from '@redux/store/configureStore';
-import * as Keychain from 'react-native-keychain';
 
 const { setAccessToken, setUserData } = AuthAction;
 
@@ -70,19 +69,17 @@ export const enableAnimateSpring = () => {
   LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
 };
 
-export const storeCredentials = async (username, password) => {
-  try {
-    await Keychain.setGenericPassword(username, password);
-    console.log('Credentials stored successfully!');
-  } catch (error) {
-    console.log('Error storing credentials:', error);
-  }
-};
-
-export const removeCredentials = async () => {
-  try {
-    await Keychain.resetGenericPassword();
-  } catch (error) {
-    console.log("Keychain couldn't be accessed!", error);
-  }
+export const getDate = () => {
+  return new Date()
+    .toLocaleString('en-GB', {
+      timeZone: 'asia/calcutta',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      fractionalSecondDigits: 3,
+    })
+    .replace(',', '');
 };

@@ -4,9 +4,13 @@ const { EyeTracking } = NativeModules;
 // Init: Initiates the Eye Tracking
 // Call this when you want to start trackinig the EyeGaze
 export const init = () => {
-  // TODO: Adding Error Handling in Swift and JS
-  EyeTracking.initTracking(result => {
-    console.log('Result => ', result);
+  return new Promise(resolve => {
+    // TODO: Adding Error Handling in Swift and JS
+    EyeTracking.initTracking(result => {
+      console.log('Result => ', result);
+      console.log('Sym Called ===> Eye Tracking Started');
+      resolve(true);
+    });
   });
 };
 

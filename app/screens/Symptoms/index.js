@@ -21,60 +21,25 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import { FlatList } from 'react-native-gesture-handler';
+import DeviceInfo from 'react-native-device-info';
 import { captureScreen } from 'react-native-view-shot';
-import SocketIOClient from 'socket.io-client';
 import styles from './styles';
-import BaseSetting from '@config/setting';
-import { calculateScreenX, calculateScreenY } from '@utils/eyeTracking';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { calculateScreenX, calculateScreenY, init } from '@utils/eyeTracking';
 import { useSelector } from 'react-redux';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import axios from 'axios';
+import { getDate } from '@utils/CommonFunction';
 
 let MOVE_DOT = false;
 let currentIndexEyeTracking = [];
 let currentIndexStartTime = null;
 let currentIndexEndTime = null;
-const socket = SocketIOClient('http://krunal.local:4000');
+
+const baseUrl = 'https://eyetracking.oculo.app';
 
 const Symptoms = ({ navigation }) => {
   const [activeButtonIndex, setActiveButtonIndex] = useState(0);
-
-  const buttons = [
-    { id: 1, label: 'Headache', value: 1 },
-    { id: 2, label: 'Neck Pain', value: 1 },
-    { id: 2, label: 'Nausea', value: 1 },
-  ];
-
-  const handleSymptomChange = index => {
-    if (buttons[index]) {
-      currentIndexEndTime = new Date().toLocaleString('en-GB', {
-        timeZone: 'asia/calcutta',
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        fractionalSecondDigits: 3,
-      });
-
-      console.log('Button Index Change: Eye Data ', currentIndexEyeTracking);
-      console.log(
-        'Button Index Change: Eye Data ',
-        currentIndexEndTime,
-        currentIndexStartTime,
-      );
-      socket.emit('trackingData', currentIndexEyeTracking);
-      console.log('Button Index Change: AOI ', aoiXY);
-      currentIndexEyeTracking = [];
-      setActiveButtonIndex(index);
-    } else {
-      Toast.show({
-        text1: 'Assessment Completed.',
-        type: 'success',
-      });
-    }
-  };
 
   const [sliderValue, setSliderValue] = useState(1);
 
@@ -82,7 +47,7 @@ const Symptoms = ({ navigation }) => {
   const { calibration } = useSelector(state => {
     return state.eyeTracking;
   });
-  const [dynamicDot, setDynamicDot] = useState(true);
+  const [dynamicDot, setDynamicDot] = useState(false);
   const tXValue = useSharedValue(-10);
   const tYValue = useSharedValue(-10);
   const [aoiXY, setAOIXY] = useState([]);
@@ -90,6 +55,8 @@ const Symptoms = ({ navigation }) => {
   const aoiRef = useRef(null);
   const aoiAnalytics = useState([]);
   const eyeTrackingPoints = useState([]);
+  const [deviceName, setDeviceName] = useState(null);
+  const [bgImageURI, setBgImageURI] = useState(null);
 
   /*
     TODO: 1 - Calculate and Push the Analytics
@@ -111,37 +78,90 @@ fixDurScreen	= t	Average fixation duration on screen
             - Done: But just had delay in Replaying
   */
 
+  const { userData } = useSelector(state => {
+    return state.auth;
+  });
+
+  DeviceInfo.getDeviceName().then(dName => {
+    setDeviceName(dName);
+  });
+
+  const buttons = [
+    { id: 1, label: 'Headache', value: 1 },
+    { id: 2, label: 'Neck Pain', value: 1 },
+    { id: 2, label: 'Nausea', value: 1 },
+  ];
+
+  // Uploading Assessment Data to Server
+  const handleUploadAssessmentData = async () => {
+    console.log('Handle Assessment: Uploading');
+    try {
+      const apiUrl = `${baseUrl}/store-assessment`; // Replace with your API endpoint
+
+      // Sample data to be uploaded (modify as needed)
+      const formData = new FormData();
+      formData.append('deviceBackgroundImage', {
+        uri: bgImageURI,
+        name: 'image.jpg',
+        type: 'image/jpeg',
+      });
+      formData.append('assessmentId', Math.random().toString(36).substr(2, 10));
+      formData.append(
+        'userName',
+        `${userData?.firstname} ${userData?.lastname}`,
+      );
+      formData.append('deviceModel', DeviceInfo.getModel());
+      formData.append('deviceName', deviceName);
+      formData.append('deviceSize', JSON.stringify(Dimensions.get('window')));
+      formData.append(
+        'aoiJson',
+        JSON.stringify({ aoiXY, eyeData: currentIndexEyeTracking }),
+      );
+      formData.append('dateTime', getDate());
+
+      console.log('Handle Assessment: Data', formData);
+
+      // Make the POST request using Axios
+      const response = await axios.post(apiUrl, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      // Handle the response from the server
+      console.log('Handle Assessment: Response from server:', response.data);
+    } catch (error) {
+      // Handle any errors that occurred during the request
+      console.error('Handle Assessment: Error uploading data:', error.message);
+    }
+  };
+
+  // Handle On Symptom Change
+  const handleSymptomChange = index => {
+    if (buttons[index]) {
+      currentIndexEndTime = getDate();
+
+      // Upload the Assessment Data to Server
+      handleUploadAssessmentData();
+      currentIndexEyeTracking = [];
+      setActiveButtonIndex(index);
+    } else {
+      Toast.show({
+        text1: 'Assessment Completed.',
+        type: 'success',
+      });
+    }
+  };
+
   useEffect(() => {
-    console.log('Symptoms useEffect => Init');
-    const onConnect = () => {
-      console.log('SOCKET ==> Connected to server');
-      socket.emit('calibration', calibration);
-      socket.emit('deviceSize', Dimensions.get('window'));
-    };
+    if (bgImageURI && !dynamicDot) {
+      setDynamicDot(true);
+    }
+  }, [bgImageURI, dynamicDot]);
 
-    const onDisconnect = () => {
-      console.log('SOCKET ==> Disconnected from server');
-    };
-
-    socket.on('connect', onConnect);
-
-    socket.on('disconnect', onDisconnect);
-
-    return () => {
-      socket.off('connect', onConnect);
-      socket.off('disconnect', onDisconnect);
-    };
-  }, [calibration, dynamicDot, tXValue, tYValue]);
-
+  // Let's call functions one by one
   useEffect(() => {
-    console.log('AOI XY Updated ==> ', aoiXY);
-    socket.emit('aoiXY', aoiXY);
-  }, [aoiXY]);
-
-  useEffect(() => {
-    console.log('Sym Called ===>');
-
-    const captureSS = async () => {
+    const captureSS = () => {
       return new Promise((resolve, reject) => {
         console.log('Sym Called ===> Capture SS');
         captureScreen({
@@ -151,34 +171,13 @@ fixDurScreen	= t	Average fixation duration on screen
           uri => {
             console.log('Sym Called ===> Capture SS Done');
             // console.log('AOI XY Updated Image saved to', uri);
-            const formData = new FormData();
-            formData.append('image', {
-              uri: uri,
-              name: 'image.jpg',
-              type: 'image/jpeg',
-            });
-
-            axios
-              .post('http://krunal.local:4000/bg', formData, {
-                headers: {
-                  'Content-Type': 'multipart/form-data',
-                },
-              })
-              .then(response => {
-                console.log('Sym Called ===> Capture SS Uploaded');
-                // Handle success
-                setTimeout(() => {
-                  resolve(true);
-                }, 100);
-              })
-              .catch(error => {
-                // Handle error
-                reject(error);
-                console.log('Sym Called ===> Capture SS Error');
-              });
+            setBgImageURI(uri);
+            resolve(true);
           },
-          error =>
-            console.error('AOI XY Updated Image Oops, snapshot failed', error),
+          error => {
+            console.error('AOI XY Updated Image Oops, snapshot failed', error);
+            resolve(false);
+          },
         );
       });
     };
@@ -189,29 +188,7 @@ fixDurScreen	= t	Average fixation duration on screen
         if (aoiRef.current) {
           aoiRootView.current.measure(
             (rx, ry, rwidth, rheight, rpageX, rpageY) => {
-              // console.log(
-              //   'AOI XY Updated RootView X:',
-              //   'Page X: ',
-              //   rpageX,
-              //   ' Page Y: ',
-              //   rpageY,
-              //   'rheight: ',
-              //   rheight,
-              //   'rwidth: ',
-              //   rwidth,
-              // );
               aoiRef.current.measure((x, y, width, height, pageX, pageY) => {
-                // console.log(
-                //   'AOI XY Updated Component X:',
-                //   'Width: ',
-                //   width,
-                //   'Height: ',
-                //   height,
-                //   'Page X: ',
-                //   pageX,
-                //   ' Page Y: ',
-                //   pageY,
-                // );
                 console.log('Sym Called ===> XY Found');
                 setAOIXY([
                   ...aoiXY,
@@ -247,17 +224,14 @@ fixDurScreen	= t	Average fixation duration on screen
 
     const handleAOILayout = async () => {
       console.log('Sym Called ===> Start');
-      // InteractionManager.runAfterInteractions(async () => {
-      //   await captureSS();
-      // });
+      await captureSS();
+
       console.log('Sym Called ===> Start 1');
-      await InteractionManager.runAfterInteractions(async () => {
-        return Promise(async (resolve, reject) => {
-          await getViewMeasurements();
-          resolve(true);
-        });
-      });
+      // Let's Init Eye Tracking
+      await init();
       console.log('Sym Called ===> Start 2');
+      await getViewMeasurements();
+      console.log('Sym Called ===> Start 3');
 
       // Setup Emitter based on Device OS
       const emitter =
@@ -270,12 +244,6 @@ fixDurScreen	= t	Average fixation duration on screen
       // Let's listen to Tracking Event
       subscription = emitter.addListener('tracking', event => {
         console.log('Sym Called ==> Event Received');
-        // Let's log X and Y for Calibration
-        // if (TRACK_EYES) {
-        //   // Adding Eye Gaze X and Y to the Array of Calibrated Data
-        //   CALIBRATED_POSITIONS[lastPosition].x.push(event.centerEyeLookAtPoint.x);
-        //   CALIBRATED_POSITIONS[lastPosition].y.push(event.centerEyeLookAtPoint.y);
-        // }
 
         // ADDED For TESTING PURPOSE: Let's move the dot using Eye Gaze.
         if (MOVE_DOT) {
@@ -295,34 +263,14 @@ fixDurScreen	= t	Average fixation duration on screen
             tXValue.value = newXValue;
             tYValue.value = newYValue;
             if (currentIndexStartTime == null) {
-              currentIndexStartTime = new Date().toLocaleString('en-GB', {
-                timeZone: 'asia/calcutta',
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                fractionalSecondDigits: 3,
-              });
+              currentIndexStartTime = getDate();
             }
             currentIndexEyeTracking.push({
               // ...event,
               screenX: newXValue,
               screenY: newYValue,
               time: new Date().getTime(),
-              dateTime: new Date()
-                .toLocaleString('en-GB', {
-                  timeZone: 'asia/calcutta',
-                  day: '2-digit',
-                  month: '2-digit',
-                  year: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                  second: '2-digit',
-                  fractionalSecondDigits: 3,
-                })
-                .replace(',', ''),
+              dateTime: getDate(),
             });
           }
         }
@@ -330,31 +278,29 @@ fixDurScreen	= t	Average fixation duration on screen
       MOVE_DOT = true;
     };
 
-    const unsubscribe = navigation.addListener('focus', () => {
+    const focusSubscribe = navigation.addListener('focus', () => {
+      // Waiting 1 Second to complete Screen Transitioning Animation
       setTimeout(() => {
         handleAOILayout();
       }, 1000);
     });
 
-    return () => {
-      subscription?.remove();
-      unsubscribe();
-    };
-  }, [navigation]);
-
-  // Let's clear data before going back
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener('beforeRemove', e => {
+    // Let's clear all the data before going back
+    const brSubscribe = navigation.addListener('beforeRemove', e => {
       MOVE_DOT = false;
       currentIndexEyeTracking = [];
       currentIndexStartTime = null;
       currentIndexEndTime = null;
     });
+
     return () => {
-      unsubscribe();
+      subscription?.remove();
+      focusSubscribe();
+      brSubscribe();
     };
   }, [navigation]);
 
+  // On Slider Change Value
   const handleValueChange = newValue => {
     setSliderValue(newValue);
   };
@@ -510,29 +456,28 @@ fixDurScreen	= t	Average fixation duration on screen
               />
             </View>
           </View>
-          {dynamicDot && (
-            <Animated.View
-              style={useAnimatedStyle(() => {
-                return {
-                  width: 20,
-                  height: 20,
-                  borderRadius: 10,
-                  backgroundColor: 'red',
-                  position: 'absolute',
-                  left: -20,
-                  top: -20,
-                  transform: [
-                    {
-                      translateX: tXValue.value,
-                    },
-                    {
-                      translateY: tYValue.value,
-                    },
-                  ],
-                };
-              })}
-            />
-          )}
+
+          <Animated.View
+            style={useAnimatedStyle(() => {
+              return {
+                width: dynamicDot ? 20 : 0,
+                height: dynamicDot ? 20 : 0,
+                borderRadius: 10,
+                backgroundColor: 'red',
+                position: 'absolute',
+                left: -20,
+                top: -20,
+                transform: [
+                  {
+                    translateX: tXValue.value,
+                  },
+                  {
+                    translateY: tYValue.value,
+                  },
+                ],
+              };
+            })}
+          />
         </>
       </ScrollView>
     </View>
