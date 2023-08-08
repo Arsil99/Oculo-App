@@ -28,6 +28,8 @@ import { items, legal, settings, switchOptions } from '@config/staticData';
 import moment from 'moment';
 
 export default function Profile({ navigation }) {
+  const [showSignOutConfirmation, setShowSignOutConfirmation] = useState(false);
+
   const { setDarkmode, setBiometric } = Authentication;
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
@@ -364,11 +366,13 @@ export default function Profile({ navigation }) {
                 : dispatch(setBiometric(v));
             }}
             tabPress={item => {
-              item?.slug === 'sign_out'
-                ? logout()
-                : item?.slug === 'two_fa'
-                ? setModalVisible(!modalVisible)
-                : navigation.navigate(item.navto);
+              if (item?.slug === 'sign_out') {
+                setShowSignOutConfirmation(true); // Show the confirmation modal
+              } else if (item?.slug === 'two_fa') {
+                setModalVisible(!modalVisible);
+              } else {
+                navigation.navigate(item.navto);
+              }
             }}
           />
           <InfoCard
@@ -411,6 +415,46 @@ export default function Profile({ navigation }) {
                     setValue={setValue}
                     // onValueChange={handleDropdownChange}
                   />
+                </View>
+              </View>
+            </View>
+          </Modal>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={showSignOutConfirmation}
+            onRequestClose={() => {
+              setShowSignOutConfirmation(false);
+            }}
+          >
+            <View style={styles.confirmmmodalcenteredView}>
+              <View style={styles.confirmmmodalView}>
+                <Text style={styles.confirmmodaltitleText}>
+                  Confirm Sign Out
+                </Text>
+                <Text style={styles.confirmmodalText}>
+                  Are you sure you want to sign out?
+                </Text>
+                <View style={styles.modalButtons}>
+                  <TouchableOpacity
+                    activeOpacity={BaseSetting.buttonOpacity}
+                    style={[styles.button, styles.confirmButton]}
+                    onPress={() => {
+                      setShowSignOutConfirmation(false);
+                      logout();
+                    }}
+                  >
+                    <Text style={styles.buttonText}>Confirm</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    activeOpacity={BaseSetting.buttonOpacity}
+                    style={[styles.button, styles.cancelButton]}
+                    onPress={() => {
+                      setShowSignOutConfirmation(false);
+                    }}
+                  >
+                    <Text style={styles.buttonText}>Cancel</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>

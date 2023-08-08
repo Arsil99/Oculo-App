@@ -162,4 +162,48 @@ export default StyleSheet.create({
     fontSize: 14,
     color: '#333',
   },
+  confirmmmodalcenteredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: BaseColors.black50,
+  },
+  confirmmmodalView: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    width: '80%',
+  },
+  confirmmodaltitleText: {
+    marginBottom: 10,
+    fontSize: 20,
+    fontWeight: '700',
+    lineHeight: 30,
+    fontFamily: FontFamily.bold,
+    color: BaseColors.black,
+  },
+  confirmmodalText: {
+    color: BaseColors.textColor,
+    marginBottom: 20,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  button: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginLeft: 10,
+  },
+  confirmButton: {
+    backgroundColor: BaseColors.primary,
+  },
+  cancelButton: {
+    backgroundColor: BaseColors.secondary,
+  },
+  buttonText: {
+    color: BaseColors.white,
+    fontWeight: 'bold',
+  },
 });
