@@ -6,6 +6,7 @@ import {
   Modal,
   Alert,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './styles';
@@ -29,7 +30,7 @@ import moment from 'moment';
 
 export default function Profile({ navigation }) {
   const [showSignOutConfirmation, setShowSignOutConfirmation] = useState(false);
-
+  const [confirmLoading, setConfirmLoading] = useState(false);
   const { setDarkmode, setBiometric } = Authentication;
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
@@ -455,6 +456,60 @@ export default function Profile({ navigation }) {
                   >
                     <Text style={styles.buttonText}>Confirm</Text>
                   </TouchableOpacity>
+                  <TouchableOpacity
+                    activeOpacity={BaseSetting.buttonOpacity}
+                    style={[styles.button, styles.cancelButton]}
+                    onPress={() => {
+                      setShowSignOutConfirmation(false);
+                    }}
+                  >
+                    <Text style={styles.buttonText}>Cancel</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={showSignOutConfirmation}
+            onRequestClose={() => {
+              setShowSignOutConfirmation(false);
+            }}
+          >
+            <View style={styles.confirmmmodalcenteredView}>
+              <View style={styles.confirmmmodalView}>
+                <Text style={styles.confirmmodaltitleText}>
+                  Confirm Sign Out
+                </Text>
+                <Text style={styles.confirmmodalText}>
+                  Are you sure you want to sign out?
+                </Text>
+                <View style={styles.modalButtons}>
+                  <TouchableOpacity
+                    style={[styles.button, styles.confirmButton]}
+                    onPress={async () => {
+                      setConfirmLoading(true); // Start loading
+
+                      // Perform asynchronous actions (e.g., logout)
+                      try {
+                        await logout(); // Assuming logout is an asynchronous function
+                        setShowSignOutConfirmation(false);
+                      } catch (error) {
+                        console.error(error);
+                      }
+
+                      setConfirmLoading(false); // Stop loading
+                    }}
+                    disabled={confirmLoading} // Disable button while loading
+                  >
+                    {confirmLoading ? (
+                      <ActivityIndicator color="white" size="small" />
+                    ) : (
+                      <Text style={styles.buttonText}>Confirm</Text>
+                    )}
+                  </TouchableOpacity>
+
                   <TouchableOpacity
                     activeOpacity={BaseSetting.buttonOpacity}
                     style={[styles.button, styles.cancelButton]}
