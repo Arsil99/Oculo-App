@@ -24,12 +24,11 @@ import moment from 'moment';
 import Dropdown from '@components/Dropdown';
 import { useDispatch, useSelector } from 'react-redux';
 import BaseSetting from '@config/setting';
-import { getApiData, getApiDataProgress } from '@utils/apiHelper';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
-import { Images } from '@config';
 import ImagePicker from 'react-native-image-crop-picker';
 import Authentication from '@redux/reducers/auth/actions';
 import Icon1 from 'react-native-vector-icons/Feather';
+import { getApiDataProgress } from '@utils/apiHelper';
 
 const errObj = {
   firstNameErr: false,
@@ -66,7 +65,6 @@ const Profiledetailcomponent = (props, ref) => {
   const [middleName, setMiddleName] = useState('');
   const [lastName, setLastName] = useState('');
   const [birthDate, setBirthDate] = useState('');
-
   const [patientPhone, setPatientPhone] = useState('');
   const [patientemail, setPatientEmail] = useState('');
   const [guardianPhone, setGuardianPhone] = useState('');
@@ -117,7 +115,7 @@ const Profiledetailcomponent = (props, ref) => {
     setLastName(userData?.lastname);
     setPatientPhone(userData?.phone);
     setPatientEmail(userData?.email);
-    setBirthDate(userData?.dob);
+    setBirthDate(moment(userData?.dob).format('DD-MM-YYYY'));
     setSexValue(
       userData?.sex === '0'
         ? '0=female'
@@ -183,11 +181,6 @@ const Profiledetailcomponent = (props, ref) => {
       error.firstNameErr = true;
       error.firstNameErrMsg = 'Enter first name';
     }
-    if (isEmpty(sexValue) || isNull(sexValue)) {
-      Valid = false;
-      error.sexErr = true;
-      error.sexErrMsg = 'Select sex';
-    }
 
     // last name
     if (isEmpty(lastName) || isNull(lastName)) {
@@ -219,23 +212,6 @@ const Profiledetailcomponent = (props, ref) => {
       setSexErrMsg('');
     }
 
-    if (isEmpty(birthDate) || isNull(birthDate)) {
-      Valid = false;
-      setDateOfBirthErr(true);
-      setDateOfBirthErrMsg('Enter date of birth');
-    } else {
-      setDateOfBirthErr(false);
-      setDateOfBirthErrMsg('');
-    }
-
-    if (isEmpty(birthDate) || isNull(birthDate)) {
-      Valid = false;
-      setDateOfBirthErr(true);
-      setDateOfBirthErrMsg('Enter date of birth');
-    } else {
-      setDateOfBirthErr(false);
-      setDateOfBirthErrMsg('');
-    }
     // patient email
     if (isEmpty(patientemail) || isNull(patientemail)) {
       Valid = false;
@@ -302,7 +278,10 @@ const Profiledetailcomponent = (props, ref) => {
         });
       } else {
         // Display an error message.
-        Toast.error(response?.message);
+        Toast.show({
+          text1: response?.message,
+          type: 'error',
+        });
       }
     } catch (error) {
       // Log the error.
