@@ -171,7 +171,6 @@ export default StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'row',
   },
   placeholderImage: {
     height: 120,
@@ -239,8 +238,8 @@ export default StyleSheet.create({
     width: 40,
     borderRadius: 20,
     backgroundColor: BaseColors.primary,
-    top: 33,
-    left: -27,
+    top: -35,
+    left: 35,
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -169,6 +169,7 @@ const Profiledetailcomponent = (props, ref) => {
 
   const showDatepicker = () => {
     showMode('date');
+    setShow(!show);
   };
 
   const HandleDetailUpdateBtn = () => {
@@ -333,7 +334,11 @@ const Profiledetailcomponent = (props, ref) => {
           <View style={styles.topBar}>
             {userData.profile_pic ? (
               <Image
-                source={{ uri: userData.profile_pic }}
+                source={{
+                  uri: isNull(selectedImage)
+                    ? userData.profile_pic
+                    : selectedImage?.path,
+                }}
                 resizeMode="cover"
                 style={{
                   height: 120,
@@ -452,7 +457,7 @@ const Profiledetailcomponent = (props, ref) => {
               timeZoneOffsetInMinutes={0}
               mode={mode}
               is24Hour={true}
-              display="spinner"
+              display={IOS ? 'spinner' : 'default'}
               onChange={onChange}
             />
           )}
