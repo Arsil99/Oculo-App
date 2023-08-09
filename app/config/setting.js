@@ -33,6 +33,7 @@ const BaseSetting = {
     generateOtp: '/user/generate-otp',
     verifyOtp: '/user/verify-otp',
     resetPassword: '/user/reset-password',
+    changePassword: '/patient/change-password',
     createPassword: '/patient/create-password',
     question: '/patient/list-history',
     savePatient: '/patient/save-history',

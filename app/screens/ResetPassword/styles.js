@@ -6,7 +6,6 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: BaseColors.white,
-    paddingHorizontal: 20,
   },
   contentView: {
     flex: 0.35,

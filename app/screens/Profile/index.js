@@ -41,6 +41,7 @@ export default function Profile({ navigation }) {
   const [rightHistoryText, setRightHistoryText] = useState('Edit');
   const profileRef = useRef();
   const historyRef = useRef();
+ 
   const { isBiometric, userData, darkmode } = useSelector(state => {
     return state.auth;
   });
@@ -147,10 +148,6 @@ export default function Profile({ navigation }) {
 
   useEffect(() => {
     setValue(userData?.two_factor_type);
-    setActiveTab({
-      id: 'detail',
-      name: 'Detail',
-    });
   }, [isFocused]);
 
   useEffect(() => {
@@ -327,33 +324,46 @@ export default function Profile({ navigation }) {
       </View>
 
       {activeTab?.id === 'detail' ? (
-        <ScrollView style={{ width: '100%' }}>
-          <View style={styles.cardOuter}>
-            {editHistory === true ? (
-              <Profiledetailcomponent
-                ref={profileRef}
-                onPress={editHistory}
-                onSuccess={() => {
-                  setEditHistory(false);
-                  setRightHistoryText(
-                    rightHistoryText === 'Edit' ? 'Save' : 'Edit',
-                  );
-                }}
-              />
-            ) : (
-              <View style={styles.alignSetup}>
-                <InfoCard
-                  data={patientdata}
-                  mainTitle={'Patient Information'}
-                />
-                <InfoCard
-                  data={contactdata}
-                  mainTitle={'Contact Information'}
-                />
-              </View>
-            )}
+        rightHistoryText === 'Wait...' ? (
+          <View
+            style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+          >
+            <ActivityIndicator size={'large'} />
           </View>
-        </ScrollView>
+        ) : (
+          <ScrollView style={{ width: '100%' }}>
+            <View style={styles.cardOuter}>
+              {editHistory === true ? (
+                <Profiledetailcomponent
+                  ref={profileRef}
+                  onPress={editHistory}
+                  onSuccess={() => {
+                    setEditHistory(false);
+                    setRightHistoryText(
+                      rightHistoryText !== 'Edit' && 'Wait...',
+                    );
+                    setTimeout(() => {
+                      setRightHistoryText(
+                        rightHistoryText === 'Edit' ? 'Save' : 'Edit',
+                      );
+                    }, 2000);
+                  }}
+                />
+              ) : (
+                <View style={styles.alignSetup}>
+                  <InfoCard
+                    data={patientdata}
+                    mainTitle={'Patient Information'}
+                  />
+                  <InfoCard
+                    data={contactdata}
+                    mainTitle={'Contact Information'}
+                  />
+                </View>
+              )}
+            </View>
+          </ScrollView>
+        )
       ) : activeTab?.id === 'history' ? (
         <ProfilehistoryButton
           ref={historyRef}
@@ -381,7 +391,11 @@ export default function Profile({ navigation }) {
               } else if (item?.slug === 'two_fa') {
                 setModalVisible(!modalVisible);
               } else {
-                navigation.navigate(item.navto);
+                if (item.navto === 'ResetPassword') {
+                  navigation.navigate(item.navto, { from: 'profile' });
+                } else {
+                  navigation.navigate(item.navto);
+                }
               }
             }}
           />

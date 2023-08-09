@@ -273,10 +273,12 @@ const Profiledetailcomponent = (props, ref) => {
       if (response?.status) {
         dispatch(setUserData(response?.data));
         // Display a success message.
-        Toast.show({
-          text1: response?.message,
-          type: 'success',
-        });
+        setTimeout(() => {
+          Toast.show({
+            text1: response?.message,
+            type: 'success',
+          });
+        }, 2000);
       } else {
         // Display an error message.
         Toast.show({
@@ -290,8 +292,8 @@ const Profiledetailcomponent = (props, ref) => {
     }
   };
 
-  const handleImagePicker = () => {
-    ImagePicker.openPicker({
+  const handleImagePicker = async () => {
+    await ImagePicker.openPicker({
       width: 300,
       height: 400,
       cropping: true,

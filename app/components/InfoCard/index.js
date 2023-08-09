@@ -3,13 +3,12 @@ import { View, Text, TouchableOpacity, Image } from 'react-native';
 import styles from './styles';
 import BaseSetting from '@config/setting';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { BaseColors } from '@config/theme';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Icon1 from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/FontAwesome';
 import { Switch } from 'react-native-gesture-handler';
-import { patientdata } from '@config/staticData';
 
 const InfoCard = props => {
   const { userData } = useSelector(state => {

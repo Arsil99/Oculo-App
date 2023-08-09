@@ -30,6 +30,7 @@ import { useSelector } from 'react-redux';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import axios from 'axios';
 import { getDate } from '@utils/CommonFunction';
+import BaseSetting from '@config/setting';
 
 let MOVE_DOT = false;
 let currentIndexEyeTracking = [];

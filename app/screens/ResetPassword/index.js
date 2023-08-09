@@ -17,6 +17,7 @@ import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import Authentication from '@redux/reducers/auth/actions';
 import { useDispatch } from 'react-redux';
 import { removeCredentials, storeCredentials } from '@utils/CommonFunction';
+import HeaderBar from '@components/HeaderBar';
 
 const ResetPassword = ({ navigation, route }) => {
   const { setUserData, setAccessToken, setBiometric } = Authentication;
@@ -47,11 +48,24 @@ const ResetPassword = ({ navigation, route }) => {
   // Reset OTP
   const resetPass = async () => {
     setLoader(true);
-    let endPoints = BaseSetting.endpoints.resetPassword;
-    const params = {
-      password: retypepassword,
-      token: token,
-    };
+    let endPoints =
+      from !== 'profile'
+        ? BaseSetting.endpoints.resetPassword // from OTP screen
+        : BaseSetting.endpoints.changePassword; // from Profile to change password
+    let params = {};
+    if (from !== 'profile') {
+      params = {
+        password: retypepassword,
+        token: token,
+      };
+    } else {
+      params = {
+        currentPassword: currentpassword,
+        newPassword: retypepassword,
+        confirmPassword: retypepassword,
+      };
+    }
+
     try {
       const resp = await getApiData(endPoints, 'POST', params, {}, false);
       if (resp?.status) {
@@ -61,16 +75,18 @@ const ResetPassword = ({ navigation, route }) => {
           text1: resp?.message,
           type: 'success',
         });
-        navigation.reset({
-          routes: [
-            {
-              name: 'Login',
-              params: {
-                email: email,
-              },
-            },
-          ],
-        });
+        from === 'profile'
+          ? navigation.goBack()
+          : navigation.reset({
+              routes: [
+                {
+                  name: 'Login',
+                  params: {
+                    email: email,
+                  },
+                },
+              ],
+            });
       } else {
         Toast.show({
           text1: resp?.message,
@@ -127,7 +143,7 @@ const ResetPassword = ({ navigation, route }) => {
   function validation() {
     let valid = true;
 
-    if (from === 'tfa') {
+    if (from === 'tfa' || from === 'profile') {
       if (currentpassword == '') {
         valid = false;
         setCurrentErrObj({
@@ -198,33 +214,57 @@ const ResetPassword = ({ navigation, route }) => {
       behavior={IOS ? 'padding' : 'height'}
       style={styles.container}
     >
+      {from === 'profile' && (
+        <HeaderBar
+          HeaderText={'Change Password'}
+          HeaderCenter
+          leftText="Back"
+          leftBtnPress={() => {
+            navigation.goBack();
+          }}
+        />
+      )}
       <ScrollView
-        contentContainerStyle={{ flex: 1 }}
+        contentContainerStyle={{
+          flex: 1,
+          paddingHorizontal: 20,
+          marginTop: 25,
+        }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        <View style={styles.contentView}>
-          <Image source={Images.logo} resizeMode="contain" style={styles.img} />
-        </View>
-        <View style={styles.inputcontainer}>
-          {from === 'tfa' && (
-            <LabeledInput
-              Label={'Current Password'}
-              keyicon
-              placeholder={'Enter Current Password'}
-              eyePassword
-              value={currentpassword}
-              onChangeText={val => {
-                setCurrentpassword(val);
-                setCurrentErrObj({ error: false, msg: '' });
-              }}
-              showError={currentErrObj.error}
-              errorText={currentErrObj.msg}
+        {from !== 'profile' ? (
+          <View style={styles.contentView}>
+            <Image
+              source={Images.logo}
+              resizeMode="contain"
+              style={styles.img}
             />
-          )}
+          </View>
+        ) : null}
+
+        <View style={styles.inputcontainer}>
+          {from === 'tfa' ||
+            (from === 'profile' && (
+              <LabeledInput
+                Label={'Current Password'}
+                keyicon
+                placeholder={'Enter Current Password'}
+                eyePassword
+                value={currentpassword}
+                onChangeText={val => {
+                  setCurrentpassword(val);
+                  setCurrentErrObj({ error: false, msg: '' });
+                }}
+                showError={currentErrObj.error}
+                errorText={currentErrObj.msg}
+              />
+            ))}
           <LabeledInput
             Label={'Set Password'}
-            LabledInputStyle={{ marginTop: from === 'tfa' ? 20 : 0 }}
+            LabledInputStyle={{
+              marginTop: from === 'tfa' || from === 'profile' ? 20 : 0,
+            }}
             keyicon
             placeholder={'Enter New Password'}
             eyePassword
