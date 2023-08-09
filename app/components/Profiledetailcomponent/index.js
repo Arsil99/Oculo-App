@@ -361,13 +361,13 @@ const Profiledetailcomponent = (props, ref) => {
                 {/* You can also use an Icon component or any other content here */}
               </View>
             )}
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={handleImagePicker}
               activeOpacity={BaseSetting.buttonOpacity}
               style={styles.imagePickerButton}
             >
               <Icon size={17} name="camera" color={BaseColors.white} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
 
           <LabeledInput
