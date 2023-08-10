@@ -5,6 +5,7 @@ const fullWidth = '100%';
 export default StyleSheet.create({
   main: {
     flex: 1,
+    paddingBottom: 70,
   },
   genderBox: {
     flexDirection: 'row',

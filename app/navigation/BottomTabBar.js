@@ -8,6 +8,7 @@ import {
   Dimensions,
   Animated,
   Keyboard,
+  Platform,
 } from 'react-native';
 import AIcon from 'react-native-vector-icons/AntDesign';
 import IIcon from 'react-native-vector-icons/Ionicons';
@@ -29,14 +30,8 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
   const eventAnimRef = useRef();
   const notifyAnimRef = useRef();
   const profileAnimRef = useRef();
-  /* All events in bottombar are hendle here it means when user change screen it will be store in redux */
-
-  const focusedOptions = descriptors[state.routes[state.index].key].options;
-  if (focusedOptions.tabBarVisible === false) {
-    return null;
-  }
-
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
+  const IOS = Platform.OS === 'ios';
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
@@ -51,6 +46,12 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
       hideSubscription.remove();
     };
   }, []);
+  /* All events in bottombar are hendle here it means when user change screen it will be store in redux */
+
+  const focusedOptions = descriptors[state.routes[state.index].key].options;
+  if (focusedOptions.tabBarVisible === false) {
+    return null;
+  }
 
   const getIcons = (label, isFocused, index) => {
     const tabIconColor = isFocused ? BaseColors.primary : BaseColors.msgColor;
@@ -161,6 +162,7 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
         );
     }
   };
+
   const getIconsName = (label, isFocused) => {
     switch (label) {
       case 'HomeStackNavigator':
@@ -173,11 +175,16 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
         return 'Profile';
     }
   };
+
   return (
     <View
       style={{
+        position: 'absolute',
+        bottom: -2,
+        left: 0,
+        right: 0,
         flexDirection: 'row',
-        display: isKeyboardOpen ? 'none' : null,
+        // display: isKeyboardOpen && !IOS ? 'none' : null,
       }}
     >
       <Animated.View
