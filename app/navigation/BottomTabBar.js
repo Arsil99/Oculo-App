@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Dimensions,
   Animated,
-  Image,
+  Keyboard,
 } from 'react-native';
 import AIcon from 'react-native-vector-icons/AntDesign';
 import IIcon from 'react-native-vector-icons/Ionicons';
@@ -16,7 +16,6 @@ import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FIcon from 'react-native-vector-icons/FontAwesome5';
 import * as Animatable from 'react-native-animatable';
 import { BaseColors, BaseStyles, FontFamily } from '@config/theme';
-import { Images } from '@config';
 import { useSelector } from 'react-redux';
 
 export default function BottomTabBar({ state, descriptors, navigation }) {
@@ -36,6 +35,22 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
   if (focusedOptions.tabBarVisible === false) {
     return null;
   }
+
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+      setIsKeyboardOpen(true);
+    });
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      setIsKeyboardOpen(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
 
   const getIcons = (label, isFocused, index) => {
     const tabIconColor = isFocused ? BaseColors.primary : BaseColors.msgColor;
@@ -162,6 +177,7 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
     <View
       style={{
         flexDirection: 'row',
+        display: isKeyboardOpen ? 'none' : null,
       }}
     >
       <Animated.View

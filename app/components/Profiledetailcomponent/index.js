@@ -536,8 +536,7 @@ const Profiledetailcomponent = (props, ref) => {
             Contact Information
           </Text>
         </View>
-        <KeyboardAvoidingView
-          behavior={IOS ? 'padding' : 'height'}
+        <View
           style={[
             styles.editContainer,
             {
@@ -634,7 +633,7 @@ const Profiledetailcomponent = (props, ref) => {
             showError={ErrObj.g_emailErr}
             errorText={ErrObj.g_emailErrMsg}
           />
-        </KeyboardAvoidingView>
+        </View>
       </View>
     </View>
   );
