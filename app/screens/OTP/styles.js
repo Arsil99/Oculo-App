@@ -34,5 +34,11 @@ const styles = StyleSheet.create({
   otpBtn: {
     marginTop: 15,
   },
+  resend: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 30,
+  },
 });
 export default styles;

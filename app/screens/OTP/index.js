@@ -1,4 +1,11 @@
-import { View, Text, Image, TextInput, Keyboard } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TextInput,
+  Keyboard,
+  TouchableOpacity,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import styles from './styles';
@@ -11,6 +18,7 @@ import Authentication from '@redux/reducers/auth/actions';
 import { useDispatch } from 'react-redux';
 import { isEmpty } from 'lodash';
 import { storeCredentials } from '@utils/CommonFunction';
+import { BaseColors } from '@config/theme';
 
 export default function OTP({ navigation, route }) {
   const email = route?.params?.email || '';
@@ -18,10 +26,67 @@ export default function OTP({ navigation, route }) {
   const medium = route?.params?.medium || '';
   const password = route?.params?.password || '';
   const from = route?.params?.from || '';
+  const [timer, setTimer] = useState(60);
+  const [clearInput, setClearInput] = useState(false);
+  const [resend, setResend] = useState(false);
+  useEffect(() => {
+    if (timer > 0) {
+      const interval = setInterval(() => {
+        setTimer(prevTimer => prevTimer - 1);
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [timer, resend]);
+
+  useEffect(() => {
+    if (timer === 0) {
+      setResend(true);
+    }
+  }, [timer]);
+
+  const generateOTP = async () => {
+    setResend(false);
+    setLoader(true);
+    let endPoints = BaseSetting.endpoints.generateOtp;
+    const params = {
+      value: email,
+      type: 'email',
+    };
+    try {
+      const resp = await getApiData(endPoints, 'POST', params, {}, false);
+      if (resp?.status) {
+        setTimer(60);
+        Toast.show({
+          text1: resp?.message?.toString(),
+          type: 'success',
+        });
+      } else {
+        setCode('');
+        setClearInput(true); // Clear the OTP input fields
+        Toast.show({
+          text1: resp?.message,
+          type: 'error',
+        });
+      }
+      setLoader(false);
+    } catch (error) {
+      setCode('');
+      setClearInput(true); // Clear the OTP input fields
+      Toast.show({
+        text1: error?.toString(),
+        type: 'error',
+      });
+      console.log('ERRRRR', error);
+      setLoader(false);
+    }
+    setClearInput(false);
+  };
+
   const dispatch = useDispatch();
 
   const { setUserData, setAccessToken } = Authentication;
-  const [code, setcode] = useState('');
+  const [code, setCode] = useState('');
   const [loader, setLoader] = useState(false);
 
   useEffect(() => {
@@ -33,19 +98,17 @@ export default function OTP({ navigation, route }) {
   const renderInputField = (index, isSelected) => {
     const inputStyle = {
       color: 'red',
-      // Add other styles as needed
     };
 
     return (
       <TextInput
         key={`input-field-${index}`}
         style={inputStyle}
-        // Other props
+        editable={!clearInput}
       />
     );
   };
 
-  // verify OTP
   const verifyOTP = async () => {
     setLoader(true);
     let endPoints = BaseSetting.endpoints.verifyOtp;
@@ -72,6 +135,8 @@ export default function OTP({ navigation, route }) {
           });
         }
       } else {
+        setOtpInputValue('');
+        setClearInput(true);
         Toast.show({
           text1: resp?.message,
           type: 'error',
@@ -79,6 +144,8 @@ export default function OTP({ navigation, route }) {
       }
       setLoader(false);
     } catch (error) {
+      setOtpInputValue('');
+      setClearInput(true);
       Toast.show({
         text1: error?.toString(),
         type: 'error',
@@ -86,11 +153,19 @@ export default function OTP({ navigation, route }) {
       console.log('ERRRRR', error);
       setLoader(false);
     }
+    setClearInput(false);
   };
-  const handleCodeFilled = code => {
-    console.log(`Code is ${code}, you are good to go!`);
-    Keyboard.dismiss(); // Dismiss the keyboard after code is filled
+  const [otpInputValue, setOtpInputValue] = useState('');
+  const handleCodeFilled = () => {
+    Keyboard.dismiss();
+    setOtpInputValue('');
+    setClearInput(true);
   };
+  useEffect(() => {
+    if (clearInput) {
+      setClearInput(false);
+    }
+  }, [clearInput]);
   return (
     <View style={styles.main}>
       <View style={{ alignItems: 'center' }}>
@@ -105,14 +180,15 @@ export default function OTP({ navigation, route }) {
         <OTPInputView
           pinCount={6}
           editable
-          // code={this.state.code} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
-          // onCodeChanged = {code => { this.setState({code})}}
+          clearInputs={clearInput}
+          onCodeChanged={value => setOtpInputValue(value)}
+          code={otpInputValue}
           autoFocusOnLoad
           codeInputFieldStyle={styles.underlineStyleBase}
           codeInputHighlightStyle={styles.underlineStyleHighLighted}
           onCodeFilled={code => {
-            setcode(code);
-            handleCodeFilled;
+            setCode(code);
+            handleCodeFilled();
           }}
           inputTextStyle={{ color: 'red' }}
           renderInputField={renderInputField}
@@ -125,6 +201,17 @@ export default function OTP({ navigation, route }) {
         onPress={verifyOTP}
         loading={loader}
       />
+      <View style={styles.resend}>
+        <TouchableOpacity onPress={() => resend && generateOTP()}>
+          <Text
+            style={{
+              color: resend ? BaseColors.primary : BaseColors.lightGrey,
+            }}
+          >
+            Resent OTP {!resend && `: 00:${timer}`}
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
