@@ -5,8 +5,6 @@ const fullWidth = '100%';
 export default StyleSheet.create({
   main: {
     flex: 1,
-    // backgroundColor: BaseColors.lightBg,
-    alignItems: 'center',
   },
   genderBox: {
     flexDirection: 'row',

@@ -338,48 +338,53 @@ const ProfilehistoryButton = (props, ref) => {
         ) : (
           // Render the main content
 
-          <View>
-            <ScrollView showsVerticalScrollIndicator={false}>
-              {/* Your main content */}
-              {questionList.length > 0 ? (
-                questionList.map((item, index) => {
-                  const type_arr =
-                    item?.meta_name === 'HI_Recov'
-                      ? [
-                          { label: '7 to 10 days', value: 1 },
-                          { label: '2 weeks to 1 month', value: 2 },
-                          { label: '1 to 6 months', value: 3 },
-                          { label: 'greater than 6 months', value: 4 },
-                          { label: 'greater than', value: 5 },
-                        ]
-                      : [
-                          { label: 'Yes', value: 1 },
-                          { label: 'No', value: 0 },
-                          { label: 'Undiagnosed', value: 2 },
-                        ];
-                  return item?.parent_meta_name
-                    ? questionList.map((itemM, indexM) => {
-                        return (
-                          item?.parent_meta_name === itemM?.meta_name &&
-                          itemM?.answer === 1 &&
-                          renderQuestion(item, index, type_arr)
-                        );
-                      })
-                    : renderQuestion(item, index, type_arr);
-                })
-              ) : (
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '80%',
-                  }}
-                >
-                  <Text>No Data</Text>
-                </View>
-              )}
-            </ScrollView>
-          </View>
+          <ScrollView
+            contentContainerStyle={{
+              backgroundColor: BaseColors.white,
+              flexGrow: 1,
+            }}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            {/* Your main content */}
+            {questionList.length > 0 ? (
+              questionList.map((item, index) => {
+                const type_arr =
+                  item?.meta_name === 'HI_Recov'
+                    ? [
+                        { label: '7 to 10 days', value: 1 },
+                        { label: '2 weeks to 1 month', value: 2 },
+                        { label: '1 to 6 months', value: 3 },
+                        { label: 'greater than 6 months', value: 4 },
+                        { label: 'greater than', value: 5 },
+                      ]
+                    : [
+                        { label: 'Yes', value: 1 },
+                        { label: 'No', value: 0 },
+                        { label: 'Undiagnosed', value: 2 },
+                      ];
+                return item?.parent_meta_name
+                  ? questionList.map((itemM, indexM) => {
+                      return (
+                        item?.parent_meta_name === itemM?.meta_name &&
+                        itemM?.answer === 1 &&
+                        renderQuestion(item, index, type_arr)
+                      );
+                    })
+                  : renderQuestion(item, index, type_arr);
+              })
+            ) : (
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '80%',
+                }}
+              >
+                <Text>No Data</Text>
+              </View>
+            )}
+          </ScrollView>
         )}
       </View>
     </View>

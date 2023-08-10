@@ -5,7 +5,6 @@ import {
   Platform,
   Image,
   KeyboardAvoidingView,
-  ScrollView,
 } from 'react-native';
 import React, {
   forwardRef,
@@ -548,99 +547,93 @@ const Profiledetailcomponent = (props, ref) => {
             },
           ]}
         >
-          <ScrollView
-            contentContainerStyle={{ flexGrow: 1 }}
-            showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="handled"
-          >
-            <LabeledInput
-              ref={cInputRef1}
-              Label={'Patient Phone'}
-              phoneicon
-              maxLength={10}
-              keyboardType="numeric"
-              placeholder={'Enter Patient Phone'}
-              value={patientPhone}
-              returnKeyType="next"
-              onChangeText={val => {
-                setPatientPhone(val);
-                setErrObj(old => {
-                  return {
-                    ...old,
-                    p_phoneErr: false,
-                    p_phoneErrMsg: '',
-                  };
-                });
-              }}
-              showError={ErrObj.p_phoneErr}
-              errorText={ErrObj.p_phoneErrMsg}
-              onSubmitEditing={() => focusNextInput(cInputRef2)}
-            />
+          <LabeledInput
+            ref={cInputRef1}
+            Label={'Patient Phone'}
+            phoneicon
+            maxLength={10}
+            keyboardType="numeric"
+            placeholder={'Enter Patient Phone'}
+            value={patientPhone}
+            returnKeyType="next"
+            onChangeText={val => {
+              setPatientPhone(val);
+              setErrObj(old => {
+                return {
+                  ...old,
+                  p_phoneErr: false,
+                  p_phoneErrMsg: '',
+                };
+              });
+            }}
+            showError={ErrObj.p_phoneErr}
+            errorText={ErrObj.p_phoneErrMsg}
+            onSubmitEditing={() => focusNextInput(cInputRef2)}
+          />
 
-            <LabeledInput
-              Label={'Patient Email'}
-              mailicon
-              placeholder={'Enter Patient Email'}
-              value={patientemail}
-              returnKeyType="next"
-              onChangeText={val => {
-                setPatientEmail(val);
-                setErrObj(old => {
-                  return {
-                    ...old,
-                    p_emailErr: false,
-                    p_emailErrMsg: '',
-                  };
-                });
-              }}
-              showError={ErrObj.p_emailErr}
-              errorText={ErrObj.p_emailErrMsg}
-              ref={cInputRef2}
-              onSubmitEditing={() => focusNextInput(cInputRef3)}
-            />
-            <LabeledInput
-              Label={'Guardian Phone'}
-              phoneicon
-              maxLength={10}
-              keyboardType="numeric"
-              placeholder={'Enter Guardian phone'}
-              returnKeyType="next"
-              value={guardianPhone}
-              onChangeText={val => {
-                setGuardianPhone(val);
-                setErrObj(old => {
-                  return {
-                    ...old,
-                    g_phoneErr: false,
-                    g_phoneErrMsg: '',
-                  };
-                });
-              }}
-              showError={ErrObj.g_phoneErr}
-              errorText={ErrObj.g_phoneErrMsg}
-              ref={cInputRef3}
-              onSubmitEditing={() => focusNextInput(cInputRef4)}
-            />
-            <LabeledInput
-              ref={cInputRef4}
-              Label={'Guardian Email'}
-              mailicon
-              placeholder={'Enter Guardian email'}
-              value={guardianemail}
-              onChangeText={val => {
-                setGuardianEmail(val);
-                setErrObj(old => {
-                  return {
-                    ...old,
-                    g_emailErr: false,
-                    g_emailErrMsg: '',
-                  };
-                });
-              }}
-              showError={ErrObj.g_emailErr}
-              errorText={ErrObj.g_emailErrMsg}
-            />
-          </ScrollView>
+          <LabeledInput
+            Label={'Patient Email'}
+            mailicon
+            placeholder={'Enter Patient Email'}
+            value={patientemail}
+            returnKeyType="next"
+            onChangeText={val => {
+              setPatientEmail(val);
+              setErrObj(old => {
+                return {
+                  ...old,
+                  p_emailErr: false,
+                  p_emailErrMsg: '',
+                };
+              });
+            }}
+            showError={ErrObj.p_emailErr}
+            errorText={ErrObj.p_emailErrMsg}
+            ref={cInputRef2}
+            onSubmitEditing={() => focusNextInput(cInputRef3)}
+          />
+          <LabeledInput
+            Label={'Guardian Phone'}
+            phoneicon
+            maxLength={10}
+            keyboardType="numeric"
+            placeholder={'Enter Guardian phone'}
+            returnKeyType="next"
+            value={guardianPhone}
+            onChangeText={val => {
+              setGuardianPhone(val);
+              setErrObj(old => {
+                return {
+                  ...old,
+                  g_phoneErr: false,
+                  g_phoneErrMsg: '',
+                };
+              });
+            }}
+            showError={ErrObj.g_phoneErr}
+            errorText={ErrObj.g_phoneErrMsg}
+            ref={cInputRef3}
+            onSubmitEditing={() => focusNextInput(cInputRef4)}
+          />
+          <LabeledInput
+            ref={cInputRef4}
+            Label={'Guardian Email'}
+            mailicon
+            placeholder={'Enter Guardian email'}
+            value={guardianemail}
+            onChangeText={val => {
+              setGuardianEmail(val);
+              setErrObj(old => {
+                return {
+                  ...old,
+                  g_emailErr: false,
+                  g_emailErrMsg: '',
+                };
+              });
+            }}
+            showError={ErrObj.g_emailErr}
+            errorText={ErrObj.g_emailErrMsg}
+          />
         </KeyboardAvoidingView>
       </View>
     </View>
