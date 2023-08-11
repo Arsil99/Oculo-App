@@ -86,13 +86,9 @@ const VoiceInput = () => {
         <View
           style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
         >
-          <Text style={{ marginVertical: 25, color: BaseColors.black }}>
+          <Text style={styles.text}>
             {/* {recognizedText.replace(/\s+/g, '\n').slice} */}
             {words.slice(0, 5).join(' ').replace(/\s+/g, '\n')}
-            {console.log(
-              'this : ',
-              prevText + words.slice(0, 5).join(' ').replace(/\s+/g, '\n'),
-            )}
           </Text>
           <TouchableOpacity
             onPress={isListening ? stopListening : startListening}
