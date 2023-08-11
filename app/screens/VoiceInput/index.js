@@ -20,7 +20,6 @@ const VoiceInput = () => {
   const { darkmode } = useSelector(state => state.auth);
   const [isListening, setIsListening] = useState(false);
   const [recognizedText, setRecognizedText] = useState('');
-  const [prevText, setPrevText] = useState('');
 
   useEffect(() => {
     // Initialize voice recognition
@@ -35,8 +34,6 @@ const VoiceInput = () => {
     Voice.onSpeechResults = e => {
       const recognized = e.value[0];
       setRecognizedText(recognized);
-      setPrevText(recognized);
-      setIsListening(false);
       console.log('Speech results', recognized);
     };
 
@@ -72,7 +69,13 @@ const VoiceInput = () => {
     }
   };
   const words = recognizedText.split(' ');
-
+  const capitalizedWords = words.map(word => {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  });
+  const capitalizedFirstFiveWords = capitalizedWords
+    .slice(0, 5)
+    .join(' ')
+    .replace(/\s+/g, '\n');
   return (
     <View
       style={[
@@ -87,10 +90,7 @@ const VoiceInput = () => {
         <View
           style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
         >
-          <Text style={styles.text}>
-            {/* {recognizedText.replace(/\s+/g, '\n').slice} */}
-            {words.slice(0, 5).join(' ').replace(/\s+/g, '\n')}
-          </Text>
+          <Text style={styles.text}>{capitalizedFirstFiveWords}</Text>
           <TouchableOpacity
             onPress={isListening ? stopListening : startListening}
             style={[

@@ -79,6 +79,8 @@ export default StyleSheet.create({
     marginVertical: 25,
     color: BaseColors.black,
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: 22,
+    lineHeight: 35,
+    fontWeight: '800',
   },
 });
