@@ -24,9 +24,9 @@ const InfoCard = props => {
     <View
       style={[
         styles.settigCon,
-        {
-          backgroundColor: darkmode ? BaseColors.lightBlack : BaseColors.white,
-        },
+        // {
+        //   backgroundColor: darkmode ? BaseColors.lightBlack : BaseColors.white,
+        // },
       ]}
     >
       <View style={styles.mainTitleStyle}>
@@ -43,7 +43,13 @@ const InfoCard = props => {
       </View>
 
       <View style={styles.infoshadow}>
-        <View>
+        <View
+          style={{
+            backgroundColor: darkmode ? BaseColors.black90 : BaseColors.white,
+            borderTopLeftRadius: 12,
+            borderTopRightRadius: 12,
+          }}
+        >
           {mainTitle === 'Patient Information' ? (
             <Image
               source={{ uri: userData.profile_pic }} // Use the 'profile_pic' from userData
@@ -54,7 +60,7 @@ const InfoCard = props => {
                 borderRadius: 60,
                 borderWidth: 1,
                 alignSelf: 'center',
-                marginBottom: 30,
+                marginVertical: 20,
               }}
             />
           ) : null}
@@ -67,13 +73,28 @@ const InfoCard = props => {
               onPress={() => tabPress && tabPress(item)}
               style={[
                 styles.settingItem,
-                index === 0
+                (index === 0) &
+                ((mainTitle !== 'Patient Information') &
+                  (mainTitle == 'contact Information'))
                   ? styles.topBorder
                   : [
                       styles.otherBorder,
                       {
+                        borderTopLeftRadius:
+                          (index === 0) & (mainTitle !== 'Patient Information')
+                            ? 12
+                            : null,
+                        borderTopRightRadius:
+                          (index === 0) & (mainTitle !== 'Patient Information')
+                            ? 12
+                            : null,
+                        backgroundColor: darkmode
+                          ? BaseColors.black90
+                          : BaseColors.white,
                         borderColor: darkmode
                           ? BaseColors.black90
+                          : index === 0
+                          ? BaseColors.white
                           : BaseColors.borderColor,
                       },
                     ],

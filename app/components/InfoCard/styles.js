@@ -12,7 +12,7 @@ export default StyleSheet.create({
   },
   mainTitleStyle: {
     alignItems: 'flex-start',
-    marginBottom: 15,
+    marginBottom: 5,
   },
   titleText: {
     fontSize: 20,
@@ -34,7 +34,7 @@ export default StyleSheet.create({
     elevation: 3,
   },
   settingItem: {
-    // backgroundColor: 'white',
+    backgroundColor: 'white',
     height: 50,
     flexDirection: 'row',
     justifyContent: 'space-between',
