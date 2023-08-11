@@ -62,12 +62,13 @@ const VoiceInput = () => {
 
   const stopListening = async () => {
     try {
-      await Voice.stop();
+      await Voice.destroy();
       setIsListening(false);
     } catch (e) {
       console.error('Error stopping voice recognition', e);
     }
   };
+
   const words = recognizedText.split(' ');
   const capitalizedWords = words.map(word => {
     return word.charAt(0).toUpperCase() + word.slice(1);
@@ -76,6 +77,7 @@ const VoiceInput = () => {
     .slice(0, 5)
     .join(' ')
     .replace(/\s+/g, '\n');
+
   return (
     <View
       style={[
@@ -113,7 +115,10 @@ const VoiceInput = () => {
 
           <TouchableOpacity
             style={styles.textInput}
-            onPress={() => (setIsListening(false), setRecognizedText(''))}
+            onPress={() => {
+              stopListening();
+              setRecognizedText('');
+            }}
           >
             <Text
               style={{
