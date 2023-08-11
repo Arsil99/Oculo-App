@@ -36,6 +36,7 @@ const VoiceInput = () => {
       const recognized = e.value[0];
       setRecognizedText(recognized);
       setPrevText(recognized);
+      setIsListening(false);
       console.log('Speech results', recognized);
     };
 
