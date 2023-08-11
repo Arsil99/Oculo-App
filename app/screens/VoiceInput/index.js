@@ -6,132 +6,74 @@ import {
   Image,
   TouchableHighlight,
   ScrollView,
+  Button,
 } from 'react-native';
-import Voice from 'react-native-voice';
+import Voice from '@react-native-voice/voice';
 import { BaseColors } from '@config/theme';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import HeaderBar from '@components/HeaderBar';
 import styles from './styles';
 import { useSelector } from 'react-redux';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+
 const VoiceInput = () => {
   const { darkmode } = useSelector(state => state.auth);
-  const [pitch, setPitch] = useState('');
-  const [error, setError] = useState('');
-  const [end, setEnd] = useState('');
-  const [started, setStarted] = useState('');
-  const [results, setResults] = useState([]);
-  const [partialResults, setPartialResults] = useState([]);
-  const [on, setOn] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [recognizedText, setRecognizedText] = useState('');
+  const [prevText, setPrevText] = useState('');
 
   useEffect(() => {
-    setOn(true); // Enable speech recognition
+    // Initialize voice recognition
+    Voice.onSpeechStart = () => {
+      console.log('Speech started');
+    };
+
+    Voice.onSpeechRecognized = e => {
+      console.log('Speech recognized', e);
+    };
+
+    Voice.onSpeechResults = e => {
+      const recognized = e.value[0];
+      setRecognizedText(recognized);
+      setPrevText(recognized);
+      console.log('Speech results', recognized);
+      setTimeout(() => {
+        setIsListening(false);
+      }, 1000);
+    };
+
+    Voice.onSpeechEnd = () => {
+      console.log('Speech ended');
+    };
+
+    Voice.onSpeechError = e => {
+      console.log('Speech error', e);
+    };
 
     return () => {
+      // Clean up event listeners
       Voice.destroy().then(Voice.removeAllListeners);
     };
   }, []);
 
-  useEffect(() => {
-    if (on) {
-      Voice.onSpeechStart = onSpeechStart;
-      Voice.onSpeechEnd = onSpeechEnd;
-      Voice.onSpeechError = onSpeechError;
-      Voice.onSpeechResults = onSpeechResults;
-      Voice.onSpeechPartialResults = onSpeechPartialResults;
-      Voice.onSpeechVolumeChanged = onSpeechVolumeChanged;
-    }
-  }, [on]);
-
-  const onSpeechStart = e => {
-    console.log('onSpeechStart: ', e);
-    setStarted('√');
-  };
-
-  const onSpeechEnd = e => {
-    console.log('onSpeechEnd: ', e);
-    setEnd('√');
-  };
-
-  const onSpeechError = e => {
-    console.log('onSpeechError: ', e);
-    setError(JSON.stringify(e.error));
-  };
-
-  const onSpeechResults = e => {
-    console.log('onSpeechResults: ', e);
-    setResults(e.value);
-  };
-
-  const onSpeechPartialResults = e => {
-    console.log('onSpeechPartialResults: ', e);
-    setPartialResults(e.value);
-  };
-
-  const onSpeechVolumeChanged = e => {
-    console.log('onSpeechVolumeChanged: ', e);
-    setPitch(e.value);
-  };
-
-  // ===== Note :- don't remove this function. May be this will useful in future. =====
-
-  //   const requestMicrophonePermission = async () => {
-  //     try {
-  //       const result =
-  //         Platform.OS === 'android'
-  //           ? await request(PERMISSIONS.ANDROID.RECORD_AUDIO)
-  //           : await request(PERMISSIONS.IOS.MICROPHONE);
-  //       if (result === 'granted') {
-  //         startRecognizing();
-  //       } else {
-  //         console.log('Microphone permission denied');
-  //       }
-  //     } catch (error) {
-  //       console.error('Error occurred while requesting permission: ', error);
-  //     }
-  //   };
-
-  const startRecognizing = async () => {
+  const startListening = async () => {
     try {
       await Voice.start('en-US');
-      setPitch('');
-      setError('');
-      setStarted('');
-      setResults([]);
-      setPartialResults([]);
-      setEnd('');
+      setIsListening(true);
     } catch (e) {
-      console.error(e);
+      console.error('Error starting voice recognition', e);
     }
   };
 
-  const stopRecognizing = async () => {
+  const stopListening = async () => {
     try {
       await Voice.stop();
+      setIsListening(false);
     } catch (e) {
-      console.error(e);
+      console.error('Error stopping voice recognition', e);
     }
   };
-
-  const cancelRecognizing = async () => {
-    try {
-      await Voice.cancel();
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const destroyRecognizer = async () => {
-    try {
-      await Voice.destroy();
-      setPitch('');
-      setError('');
-      setStarted('');
-      setResults([]);
-      setPartialResults([]);
-      setEnd('');
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  const words = recognizedText.split(' ');
 
   return (
     <View
@@ -144,71 +86,50 @@ const VoiceInput = () => {
     >
       <HeaderBar HeaderText={'Voice Input'} HeaderCenter leftText="Back" />
       <SafeAreaView style={styles.container}>
-        <View style={styles.container}>
-          <Text style={styles.titleText}>
-            Speech to Text Conversion in React Native | Voice Recognition
+        <View
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        >
+          <Text style={{ marginVertical: 25, color: BaseColors.black }}>
+            {/* {recognizedText.replace(/\s+/g, '\n').slice} */}
+            {words.slice(0, 5).join(' ').replace(/\s+/g, '\n')}
+            {console.log(
+              'this : ',
+              prevText + words.slice(0, 5).join(' ').replace(/\s+/g, '\n'),
+            )}
           </Text>
-          <Text style={styles.textStyle}>
-            Press the microphone to start recognition
-          </Text>
-          <View style={styles.headerContainer}>
-            <Text
-              style={styles.textWithSpaceStyle}
-            >{`Started: ${started}`}</Text>
-            <Text style={styles.textWithSpaceStyle}>{`End: ${end}`}</Text>
-          </View>
-          <View style={styles.headerContainer}>
-            <Text
-              style={styles.textWithSpaceStyle}
-            >{`Pitch: \n ${pitch}`}</Text>
-            <Text
-              style={styles.textWithSpaceStyle}
-            >{`Error: \n ${error}`}</Text>
-          </View>
-          <TouchableHighlight onPress={startRecognizing}>
-            <Image
-              style={styles.imageButton}
-              source={{
-                uri: 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/microphone.png',
-              }}
+          <TouchableOpacity
+            onPress={isListening ? stopListening : startListening}
+            style={[
+              styles.borderVoice,
+              {
+                borderColor: darkmode ? BaseColors.white : BaseColors.black10,
+                backgroundColor: darkmode
+                  ? BaseColors.textColor
+                  : BaseColors.white,
+                elevation: darkmode ? 0 : 2,
+              },
+            ]}
+          >
+            <Icon
+              size={65}
+              name="microphone"
+              color={isListening ? BaseColors.red : BaseColors.primary}
             />
-          </TouchableHighlight>
-          <Text style={styles.textStyle}>Partial Results</Text>
-          <ScrollView>
-            {partialResults.map((result, index) => (
-              <Text key={`partial-result-${index}`} style={styles.textStyle}>
-                {result}
-              </Text>
-            ))}
-          </ScrollView>
-          <Text style={styles.textStyle}>Results</Text>
-          <ScrollView style={{ marginBottom: 42 }}>
-            {results.map((result, index) => (
-              <Text key={`result-${index}`} style={styles.textStyle}>
-                {result}
-              </Text>
-            ))}
-          </ScrollView>
-          <View style={styles.horizontalView}>
-            <TouchableHighlight
-              onPress={stopRecognizing}
-              style={styles.buttonStyle}
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.textInput}
+            onPress={() => (setIsListening(false), setRecognizedText(''))}
+          >
+            <Text
+              style={{
+                color: darkmode ? BaseColors.white : BaseColors.primary,
+                fontSize: 14,
+              }}
             >
-              <Text style={styles.buttonTextStyle}>Stop</Text>
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={cancelRecognizing}
-              style={styles.buttonStyle}
-            >
-              <Text style={styles.buttonTextStyle}>Cancel</Text>
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={destroyRecognizer}
-              style={styles.buttonStyle}
-            >
-              <Text style={styles.buttonTextStyle}>Destroy</Text>
-            </TouchableHighlight>
-          </View>
+              Clear
+            </Text>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     </View>

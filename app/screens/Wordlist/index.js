@@ -4,7 +4,7 @@ import { Images } from '@config';
 import BaseSetting from '@config/setting';
 import { BaseColors } from '@config/theme';
 import React, { useEffect, useState } from 'react';
-import Voice from 'react-native-voice';
+// import Voice from 'react-native-voice';
 import {
   View,
   StatusBar,
@@ -24,42 +24,42 @@ export default function Wordlist({ navigation }) {
   const [textInputValue, setTextInputValue] = useState('');
   const [isRecognizing, setIsRecognizing] = useState(false);
   const IOS = Platform.OS === 'ios';
-  const startRecognizing = async () => {
-    try {
-      await Voice.start('en-US');
-      setIsRecognizing(true);
-      setRecognizedPhrase('');
-    } catch (e) {
-      console.error(e);
-    }
-  };
-  const stopRecognizing = async () => {
-    try {
-      await Voice.stop();
-      setIsRecognizing(false);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  // const startRecognizing = async () => {
+  //   try {
+  //     await Voice.start('en-US');
+  //     setIsRecognizing(true);
+  //     setRecognizedPhrase('');
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
+  // const stopRecognizing = async () => {
+  //   try {
+  //     await Voice.stop();
+  //     setIsRecognizing(false);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
 
-  const onNextButtonPress = () => {
-    setShowImage(true);
-  };
+  // const onNextButtonPress = () => {
+  //   setShowImage(true);
+  // };
 
-  const handleValueChange = text => {
-    setRecognizedPhrase(text);
-  };
+  // const handleValueChange = text => {
+  //   setRecognizedPhrase(text);
+  // };
 
-  useEffect(() => {
-    Voice.onSpeechResults = e => {
-      const phrases = e.value;
-      setRecognizedPhrase(phrases[phrases.length - 1]);
-    };
+  // useEffect(() => {
+  //   Voice.onSpeechResults = e => {
+  //     const phrases = e.value;
+  //     setRecognizedPhrase(phrases[phrases.length - 1]);
+  //   };
 
-    return () => {
-      Voice.destroy().then(Voice.removeAllListeners);
-    };
-  }, []);
+  //   return () => {
+  //     Voice.destroy().then(Voice.removeAllListeners);
+  //   };
+  // }, []);
 
   return (
     <KeyboardAvoidingView
@@ -82,7 +82,7 @@ export default function Wordlist({ navigation }) {
           }}
         />
 
-        <View style={styles.mainDiv}>
+        {/* <View style={styles.mainDiv}>
           <View style={{ flex: showImage ? 0.1 : 0.3 }}>
             {showImage ? (
               <Text style={styles.subtitleText}>
@@ -147,7 +147,7 @@ export default function Wordlist({ navigation }) {
               <Button shape="round" title={'Next'} />
             )}
           </View>
-        </View>
+        </View> */}
       </ScrollView>
     </KeyboardAvoidingView>
   );

@@ -20,6 +20,14 @@ export default StyleSheet.create({
     fontSize: 16,
     marginBottom: 8,
   },
+  textInput: {
+    marginTop: 25,
+    borderWidth: 1,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    borderRadius: 5,
+    borderColor: BaseColors.primary,
+  },
   textWithSpaceStyle: {
     textAlign: 'center',
     fontSize: 16,
@@ -51,5 +59,20 @@ export default StyleSheet.create({
   },
   buttonTextStyle: {
     color: '#FFFFFF',
+  },
+  borderVoice: {
+    borderWidth: 1,
+    borderRadius: 50,
+    width: 100,
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: BaseColors.black,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
   },
 });
