@@ -37,9 +37,6 @@ const VoiceInput = () => {
       setRecognizedText(recognized);
       setPrevText(recognized);
       console.log('Speech results', recognized);
-      setTimeout(() => {
-        setIsListening(false);
-      }, 1000);
     };
 
     Voice.onSpeechEnd = () => {
