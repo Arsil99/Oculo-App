@@ -49,13 +49,18 @@ export default function CardList({ image, data, status, assessment, onPress }) {
                   },
                 ]}
               >
-                <Text
-                  style={{
-                    color: darkmode ? BaseColors.white : BaseColors.black80,
-                  }}
-                >
-                  {status}
-                </Text>
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={styles.colorcontainer}></View>
+                  <Text
+                    style={{
+                      color: darkmode ? BaseColors.white : BaseColors.black80,
+                      textAlign: 'center',
+                      fontSize: 12,
+                    }}
+                  >
+                    {status}
+                  </Text>
+                </View>
               </View>
               <View
                 style={[
@@ -71,6 +76,8 @@ export default function CardList({ image, data, status, assessment, onPress }) {
                 <Text
                   style={{
                     color: darkmode ? BaseColors.white : BaseColors.black80,
+                    textAlign: 'center',
+                    fontSize: 12,
                   }}
                 >
                   {assessment}

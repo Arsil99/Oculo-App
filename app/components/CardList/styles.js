@@ -27,10 +27,27 @@ const styles = StyleSheet.create({
   },
   insideBox: { flexDirection: 'row', alignItems: 'center' },
   imgStyle: { height: 50, width: 50, borderRadius: 50 },
-  statusBox: { flexDirection: 'row', marginTop: 5 },
+  statusBox: {
+    flexDirection: 'row',
+    marginTop: 5,
+    justifyContent: 'space-between',
+  },
   chipBox: {
-
+    height: 30,
+    borderRadius: 50,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
     marginRight: 10,
+  },
+  colorcontainer: {
+    width: 8,
+    height: 8,
+    borderRadius: 50,
+    alignSelf: 'center',
+    marginRight: 10,
+    backgroundColor: BaseColors.lightorange,
   },
 });
 

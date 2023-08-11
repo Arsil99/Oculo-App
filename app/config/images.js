@@ -27,4 +27,5 @@ export const Images = {
   rememberno: require('../assets/Images/rememberno.png'),
   speechno: require('../assets/Images/speechno.png'),
   typeno: require('../assets/Images/typeno.png'),
+  updatedlogo: require('../assets/Images/updatedlogo.png'),
 };

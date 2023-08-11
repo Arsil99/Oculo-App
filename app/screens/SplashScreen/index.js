@@ -36,7 +36,7 @@ const SplashScreen = ({ navigation }) => {
             opacity: fadeAnim,
           }}
         >
-          <Image source={Images.logo} height={100} width={100} />
+          <Image source={Images.updatedlogo} height={100} width={100} />
         </Animated.View>
       </View>
     </>
