@@ -3,22 +3,21 @@ import { BaseColors, FontFamily } from '@config/theme';
 
 export default StyleSheet.create({
   container: {
-    // backgroundColor: BaseColors.white,
     borderWidth: 1,
     marginVertical: 5,
-    // borderColor: BaseColors.lightGrey,
+    borderColor: BaseColors.lightGrey,
     width: '95%',
     height: 90,
     padding: 10,
     borderRadius: 12,
-    // shadowColor: BaseColors.black,
+    shadowColor: BaseColors.black,
     shadowOffset: {
       width: 0,
       height: 1,
     },
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
-    elevation: 1,
+ 
   },
   img: { height: 25, width: 23 },
   img2: { width: 110 },

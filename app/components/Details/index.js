@@ -13,7 +13,11 @@ const Details = ({ iconName, text, number, iconColor, numberColor }) => {
     <View
       style={[
         styles.container,
-        { borderColor: darkmode ? BaseColors.textColor : BaseColors.lightGrey },
+        {
+          borderColor: darkmode ? BaseColors.textColor : BaseColors.black10,
+          backgroundColor: darkmode ? null : BaseColors.white,
+          elevation: darkmode ? 0 : 3,
+        },
       ]}
     >
       <TouchableOpacity activeOpacity={BaseSetting.buttonOpacity}>
