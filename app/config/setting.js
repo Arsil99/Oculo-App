@@ -38,6 +38,7 @@ const BaseSetting = {
     question: '/patient/list-history',
     savePatient: '/patient/save-history',
     updatePatient: '/patient/update-profile',
+    numberarray: '/questions/list',
   },
 
   geolocationOptions: {

@@ -23,18 +23,9 @@ export default StyleSheet.create({
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
     elevation: 3,
-  },
-  wordcontainer: {
-    width: '60%',
-    alignSelf: 'center',
-    alignItems: 'center',
     justifyContent: 'center',
-    flex: 0.5,
   },
-  imgContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+
   titleText: {
     fontSize: 32,
     fontWeight: '700',
@@ -51,21 +42,7 @@ export default StyleSheet.create({
     fontFamily: FontFamily.regular,
     color: BaseColors.textColor,
   },
-  buttoncontainer: {
-    flex: 0.3,
-    marginHorizontal: 15,
-    justifyContent: 'flex-end',
-  },
-  textInputContainer: {
-    width: '100%',
-    height: 150,
-    borderWidth: 1,
-    borderColor: BaseColors.borderColor,
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    marginTop: 5,
-  },
+
   numbercontainer: {
     width: 180,
     height: 90,
@@ -77,18 +54,4 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  textInput: {
-    flex: 1,
-    textAlignVertical: 'top',
-    fontSize: 16,
-  },
-  stop: {
-    fontSize: 16,
-    fontWeight: '400',
-    lineHeight: 24,
-    fontFamily: FontFamily.regular,
-    color: BaseColors.red,
-    textAlign: 'center',
-  },
-  stopimg: { height: 100, width: 100, marginBottom: 20, alignSelf: 'center' },
 });
