@@ -41,7 +41,7 @@ export default function CardList({ image, data, status, assessment, onPress }) {
                   styles.chipBox,
                   {
                     backgroundColor: darkmode
-                      ? BaseColors.black10
+                      ? BaseColors.black80
                       : BaseColors.lightBg,
                     borderColor: darkmode
                       ? BaseColors.textColor
@@ -66,9 +66,14 @@ export default function CardList({ image, data, status, assessment, onPress }) {
                 style={[
                   styles.chipBox,
                   {
-                    backgroundColor: darkmode ? null : BaseColors.lightBg,
+                    backgroundColor:
+                      assessment === ''
+                        ? null
+                        : darkmode
+                        ? BaseColors.black80
+                        : BaseColors.lightBg,
                     borderColor: darkmode
-                      ? BaseColors.textColor
+                      ? BaseColors.white
                       : BaseColors.black80,
                   },
                 ]}
@@ -91,7 +96,7 @@ export default function CardList({ image, data, status, assessment, onPress }) {
             name="right"
             size={15}
             style={{
-              color: darkmode ? BaseColors.textGrey : BaseColors.black10,
+              color: darkmode ? BaseColors.white : BaseColors.black80,
             }}
           />
         </View>
