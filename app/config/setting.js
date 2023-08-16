@@ -1,7 +1,7 @@
 import { Dimensions } from 'react-native';
 const devMode = __DEV__;
 const baseUrl = devMode
-  ? 'http://192.168.0.103:5000/v1'
+  ? 'http://192.168.0.153:5000/v1'
   : 'https://api.oculo.app/v1';
 
 const BaseSetting = {
@@ -41,6 +41,7 @@ const BaseSetting = {
     numberarray: '/questions/list',
     questionList: '/questions/list',
     createCall: 'assessment/create-immediate-recall',
+    sendnumberarray: '/assessment/create-digit-recall',
   },
 
   geolocationOptions: {
