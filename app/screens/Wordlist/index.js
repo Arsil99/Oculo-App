@@ -1,66 +1,324 @@
 import Button from '@components/Button';
 import HeaderBar from '@components/HeaderBar';
-import { Images } from '@config';
 import BaseSetting from '@config/setting';
 import { BaseColors } from '@config/theme';
-import React, { useEffect, useState } from 'react';
-// import Voice from 'react-native-voice';
+import React, { useEffect, useRef, useState } from 'react';
+import { getApiData } from '@utils/apiHelper';
+import Voice from '@react-native-voice/voice';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {
   View,
   StatusBar,
   Text,
   TouchableOpacity,
-  Image,
   TextInput,
   KeyboardAvoidingView,
   ScrollView,
   Platform,
 } from 'react-native';
 import styles from './styles';
+import { useSelector } from 'react-redux';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
 export default function Wordlist({ navigation }) {
-  const [showImage, setShowImage] = useState(false);
-  const [recognizedPhrase, setRecognizedPhrase] = useState('');
-  const [textInputValue, setTextInputValue] = useState('');
-  const [isRecognizing, setIsRecognizing] = useState(false);
+  const { darkmode } = useSelector(state => state.auth);
+  const [isListening, setIsListening] = useState(false);
+  const [recognizedText, setRecognizedText] = useState('');
+  const [optionList, setOptionList] = useState([]);
+  const [viewType, setViewType] = useState('list');
+  const [counter, setCounter] = useState(1);
+  const [input1, setInput1] = useState('');
+  const [input2, setInput2] = useState('');
+  const [input3, setInput3] = useState('');
+  const [input4, setInput4] = useState('');
+  const [input5, setInput5] = useState('');
+  const [timer1, setTimer1] = useState(0);
+  const [timer2, setTimer2] = useState(0);
+  const [timer3, setTimer3] = useState(0);
+  const [isSpeak, setIsSpeak] = useState(false);
   const IOS = Platform.OS === 'ios';
-  // const startRecognizing = async () => {
-  //   try {
-  //     await Voice.start('en-US');
-  //     setIsRecognizing(true);
-  //     setRecognizedPhrase('');
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // };
-  // const stopRecognizing = async () => {
-  //   try {
-  //     await Voice.stop();
-  //     setIsRecognizing(false);
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // };
 
-  // const onNextButtonPress = () => {
-  //   setShowImage(true);
-  // };
+  const InputRef1 = useRef();
+  const InputRef2 = useRef();
+  const InputRef3 = useRef();
+  const InputRef4 = useRef();
+  const InputRef5 = useRef();
 
-  // const handleValueChange = text => {
-  //   setRecognizedPhrase(text);
-  // };
+  // three attempts structure
+  const current_voice_attempt = {
+    voiceInput1: input1 ? input1 : '',
+    voiceInput2: input2 ? input2 : '',
+    voiceInput3: input3 ? input3 : '',
+    voiceInput4: input4 ? input4 : '',
+    voiceInput5: input5 ? input5 : '',
+  };
+  const [answers, setAnswers] = useState([]);
+  const [webId, setWebId] = useState();
 
-  // useEffect(() => {
-  //   Voice.onSpeechResults = e => {
-  //     const phrases = e.value;
-  //     setRecognizedPhrase(phrases[phrases.length - 1]);
-  //   };
+  useEffect(() => {
+    QuestionListAPI();
+  }, []);
 
-  //   return () => {
-  //     Voice.destroy().then(Voice.removeAllListeners);
-  //   };
-  // }, []);
+  // display the questions list
+  const QuestionListAPI = async () => {
+    const endPoint = `${BaseSetting.endpoints.questionList}?event_type=6&list=a`;
+    try {
+      const res = await getApiData(`${endPoint}`, 'GET');
+      if (res?.status) {
+        setWebId(res?.data[1]?.word_set_id);
+        setOptionList(res?.data[1]?.options);
+      }
+    } catch (error) {
+      console.log('📌 ⏩ file: index.js:24 ⏩ LangListAPI ⏩ error:', error);
+    }
+  };
 
+  // handle counter after click on next
+  const handleVoice = () => {
+    setViewType('voice');
+  };
+
+  useEffect(() => {
+    // Initialize voice recognition
+    Voice.onSpeechStart = () => {
+      console.log('Speech started');
+    };
+
+    Voice.onSpeechRecognized = e => {
+      console.log('Speech recognized', e);
+    };
+
+    Voice.onSpeechResults = e => {
+      const recognized = e.value[0];
+      setRecognizedText(recognized);
+      console.log('Speech results', recognized);
+      setIsSpeak(true);
+    };
+
+    Voice.onSpeechEnd = () => {
+      console.log('Speech ended');
+    };
+
+    Voice.onSpeechError = e => {
+      console.log('Speech error', e);
+    };
+
+    return () => {
+      // Clean up event listeners
+      Voice.destroy().then(Voice.removeAllListeners);
+    };
+  }, []);
+
+  const startListening = async () => {
+    try {
+      await Voice.start('en-US');
+      setIsListening(true);
+    } catch (e) {
+      console.error('Error starting voice recognition', e);
+    }
+  };
+
+  const stopListening = async () => {
+    try {
+      await Voice.destroy();
+      setIsListening(false);
+    } catch (e) {
+      console.error('Error stopping voice recognition', e);
+    }
+  };
+
+  const words = recognizedText.split(' ');
+  const capitalizedWords = words.map(word => {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  });
+
+  // ===== NOTE :- DON'T REMOVE THIS CODE (it's for future update) =====
+  const capitalizedFirstFiveWords = capitalizedWords
+    .slice(0, 5)
+    .join(' ')
+    .replace(/\s+/g, '\n');
+
+  // handle 5 inputs with space key
+
+  const handleKeyPressFirstInput = e => {
+    if (e.nativeEvent.key === ' ') {
+      InputRef2.current.focus();
+    }
+  };
+  const handleKeyPressSecondInput = e => {
+    if (e.nativeEvent.key === ' ') {
+      InputRef3.current.focus();
+    } else if (e.nativeEvent.key === 'Backspace' && input2.length === 0) {
+      InputRef1.current.focus();
+    }
+  };
+  const handleKeyPressThirdInput = e => {
+    if (e.nativeEvent.key === ' ') {
+      InputRef4.current.focus();
+    } else if (e.nativeEvent.key === 'Backspace' && input3.length === 0) {
+      InputRef2.current.focus();
+    }
+  };
+  const handleKeyPressFourthInput = e => {
+    if (e.nativeEvent.key === ' ') {
+      InputRef5.current.focus();
+    } else if (e.nativeEvent.key === 'Backspace' && input4.length === 0) {
+      InputRef3.current.focus();
+    }
+  };
+  const handleKeyPressFifthInput = e => {
+    if (e.nativeEvent.key === ' ') {
+    } else if (e.nativeEvent.key === 'Backspace' && input5.length === 0) {
+      InputRef4.current.focus();
+    }
+  };
+
+  // set input text in fields
+  const inputTextIntegration = () => {
+    if (input1?.length === 0) {
+      setInput1(words[0]);
+      setInput2(words[1]);
+      setInput3(words[2]);
+      setInput4(words[3]);
+      setInput5(words[4]);
+    } else if (input2?.length === 0) {
+      setInput2(words[0]);
+      setInput3(words[1]);
+      setInput4(words[2]);
+      setInput5(words[3]);
+    } else if (input3?.length === 0) {
+      setInput3(words[0]);
+      setInput4(words[1]);
+      setInput5(words[2]);
+    } else if (input4?.length === 0) {
+      setInput4(words[0]);
+      setInput5(words[1]);
+    } else if (input5?.length === 0) {
+      setInput5(words[0]);
+    } else {
+      // when all fields are filled
+      return null;
+    }
+    setIsSpeak(false);
+  };
+
+  // object data stored in array
+  const pushOperation = e => {
+    answers.push({
+      trial: e === 1 ? 'app_trial_1' : e === 2 ? 'app_trial_2' : 'app_trial_3',
+      userResponse:
+        current_voice_attempt.voiceInput1 +
+        ', ' +
+        current_voice_attempt.voiceInput2 +
+        ', ' +
+        current_voice_attempt.voiceInput3 +
+        ', ' +
+        current_voice_attempt.voiceInput4 +
+        ', ' +
+        current_voice_attempt.voiceInput5,
+      score: e === 1 ? timer1 * 1000 : e === 2 ? timer2 * 1000 : timer3 * 1000,
+    });
+  };
+
+  // handle all voice & list attempts
+  const handleAttempts = () => {
+    if (counter < 3) {
+      setViewType('list');
+    }
+    if (counter === 1) {
+      pushOperation(counter);
+      setCounter(2);
+    } else if (counter === 2) {
+      pushOperation(counter);
+      setCounter(3);
+    } else if (counter === 3) {
+      pushOperation(counter);
+
+      // final call
+      createCallApi();
+    }
+    setInput1('');
+    setInput2('');
+    setInput3('');
+    setInput4('');
+    setInput5('');
+    setIsListening(false);
+  };
+
+  // count the attemps
+  const CounterTag = () => {
+    return (
+      <View style={styles.counterTag}>
+        <Text style={{ fontSize: 14 }}>{`Attempt : ${counter} / 3`}</Text>
+      </View>
+    );
+  };
+
+  // api integration for create call
+  const createCallApi = async () => {
+    try {
+      const paramsArray = answers?.map((item, index) => ({
+        fixAOI: 12,
+        viewed: 12,
+        fixDurAOI: 12,
+        fixScreen: 12,
+        durScreen: item.score,
+        userResponse: item.userResponse,
+        trial: item.trial,
+      }));
+
+      const response = await getApiData(
+        BaseSetting.endpoints.createCall,
+        'POST',
+        {
+          patient_id: 15,
+          event_id: 1,
+          assessment_id: 1,
+          word_set_id: webId,
+          answers: JSON.stringify(paramsArray),
+          created_from: 'app',
+        },
+        '',
+        false,
+      );
+      if (response?.status) {
+        navigation.goBack();
+        Toast.show({
+          text1: response?.message.toString(),
+          type: 'success',
+        });
+      } else {
+        Toast.show({
+          text1: response?.message,
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      console.log('error =======>>>', error);
+    }
+  };
+
+  useEffect(() => {
+    let intervalId;
+    if (viewType === 'voice') {
+      if (counter === 1) {
+        intervalId = setInterval(() => {
+          setTimer1(prevTimer => prevTimer + 1);
+        }, 1000);
+      } else if (counter === 2) {
+        intervalId = setInterval(() => {
+          setTimer2(prevTimer => prevTimer + 1);
+        }, 1000);
+      } else if (counter === 3) {
+        intervalId = setInterval(() => {
+          setTimer3(prevTimer => prevTimer + 1);
+        }, 1000);
+      }
+    }
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [viewType]);
   return (
     <KeyboardAvoidingView
       behavior={IOS ? 'padding' : 'height'}
@@ -73,81 +331,160 @@ export default function Wordlist({ navigation }) {
       >
         <StatusBar barStyle="dark-content" backgroundColor={BaseColors.white} />
 
-        <HeaderBar
-          HeaderText={'Word List'}
-          HeaderCenter
-          leftText={'Cancel'}
-          leftBtnPress={() => {
-            navigation.goBack();
-          }}
-        />
-
-        {/* <View style={styles.mainDiv}>
-          <View style={{ flex: showImage ? 0.1 : 0.3 }}>
-            {showImage ? (
-              <Text style={styles.subtitleText}>
-                Enter words list from previous screen
+        {viewType === 'list' ? (
+          <View style={{ flex: 1 }}>
+            <HeaderBar
+              HeaderText={'Word List'}
+              HeaderCenter
+              leftText={'Cancel'}
+              leftBtnPress={() => {
+                navigation.goBack();
+              }}
+            />
+            <View style={styles.main}>
+              <View />
+              <Text style={styles.optionList}>
+                {optionList.map(item => item + '\n')}
               </Text>
-            ) : (
-              <Text style={styles.subtitleText}>
-                Please memorize the word list and enter it on the next screen
-              </Text>
-            )}
-
-            {showImage ? (
-              <View style={styles.textInputContainer}>
-                <TextInput
-                  multiline
-                  placeholder="Type or speak here ..."
-                  value={recognizedPhrase.split(' ').join('\n')}
-                  onChangeText={handleValueChange}
-                  style={styles.textInput}
-                  textAlignVertical="top"
-                  underlineColorAndroid="transparent"
-                />
-              </View>
-            ) : null}
-          </View>
-          {showImage ? (
-            <TouchableOpacity
-              style={styles.wordcontainer}
-              onPress={!isRecognizing ? startRecognizing : stopRecognizing}
-              activeOpacity={BaseSetting.buttonOpacity}
-            >
-              {!isRecognizing ? (
-                <Image source={Images.speechtotext} resizeMode="contain" />
-              ) : (
-                <View>
-                  <Image
-                    source={Images.stopspeech}
-                    resizeMode="contain"
-                    style={styles.stopimg}
-                  />
-                  <Text style={styles.stop}>Stop Speech to text</Text>
-                </View>
-              )}
-            </TouchableOpacity>
-          ) : (
-            <View style={styles.wordcontainer}>
-              <Text style={styles.titleText}>
-                Jacket{'\n'} Arrow{'\n'} Pepper {'\n'}Cotton{'\n'} Movie
-              </Text>
-            </View>
-          )}
-          <View
-            style={[styles.buttoncontainer, { flex: showImage ? 0.5 : 0.3 }]}
-          >
-            {!showImage ? (
               <Button
+                onPress={() => handleVoice()}
                 shape="round"
                 title={'Next'}
-                onPress={onNextButtonPress}
+                style={styles.nextBtn}
               />
-            ) : (
-              <Button shape="round" title={'Next'} />
-            )}
+            </View>
           </View>
-        </View> */}
+        ) : (
+          <View style={styles.mainVoice}>
+            <HeaderBar
+              HeaderText={'Voice Input'}
+              HeaderCenter
+              leftText={'Cancel'}
+              leftBtnPress={() => {
+                navigation.goBack();
+              }}
+            />
+
+            <CounterTag />
+            {isSpeak && inputTextIntegration()}
+            {/* textarea */}
+            <View style={{ width: '100%', alignItems: 'center' }}>
+              <TextInput
+                ref={InputRef1}
+                style={styles.voiceInput1}
+                value={
+                  input1
+                    ? input1.charAt(0).toUpperCase() + input1.slice(1)
+                    : input1
+                }
+                onChangeText={setInput1}
+                onKeyPress={handleKeyPressFirstInput}
+              />
+              <TextInput
+                ref={InputRef2}
+                style={styles.voiceInput2}
+                value={
+                  input2
+                    ? input2.charAt(0).toUpperCase() + input2.slice(1)
+                    : input2
+                }
+                onChangeText={setInput2}
+                onKeyPress={handleKeyPressSecondInput}
+              />
+              <TextInput
+                ref={InputRef3}
+                style={styles.voiceInput3}
+                value={
+                  input3
+                    ? input3.charAt(0).toUpperCase() + input3.slice(1)
+                    : input3
+                }
+                onChangeText={setInput3}
+                onKeyPress={handleKeyPressThirdInput}
+              />
+              <TextInput
+                ref={InputRef4}
+                style={styles.voiceInput4}
+                value={
+                  input4
+                    ? input4.charAt(0).toUpperCase() + input4.slice(1)
+                    : input4
+                }
+                onChangeText={setInput4}
+                onKeyPress={handleKeyPressFourthInput}
+              />
+              <TextInput
+                ref={InputRef5}
+                style={[styles.voiceInput5, { marginBottom: 20 }]}
+                value={
+                  input5
+                    ? input5.charAt(0).toUpperCase() + input5.slice(1)
+                    : input5
+                }
+                onChangeText={setInput5}
+                onKeyPress={handleKeyPressFifthInput}
+              />
+              <TouchableOpacity
+                onPress={isListening ? stopListening : startListening}
+                style={[
+                  styles.borderVoice,
+                  {
+                    borderColor: darkmode
+                      ? BaseColors.white
+                      : BaseColors.black10,
+                    backgroundColor: darkmode
+                      ? BaseColors.textColor
+                      : BaseColors.white,
+                    elevation: darkmode ? 0 : 2,
+                  },
+                ]}
+              >
+                <Icon
+                  size={65}
+                  name="microphone"
+                  color={isListening ? BaseColors.red : BaseColors.primary}
+                />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.textInputVoice}
+                onPress={() => {
+                  stopListening();
+                  setRecognizedText('');
+                  setInput1('');
+                  setInput2('');
+                  setInput3('');
+                  setInput4('');
+                  setInput5('');
+                }}
+              >
+                <Text
+                  style={{
+                    color: darkmode ? BaseColors.white : BaseColors.primary,
+                    fontSize: 14,
+                  }}
+                >
+                  Clear
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.attemptBtn}>
+              <Button
+                onPress={handleAttempts}
+                shape="round"
+                title={
+                  counter === 1
+                    ? 'Second Attempt'
+                    : counter === 2
+                    ? 'Third Attempt'
+                    : 'Submit'
+                }
+                style={styles.nextBtn}
+              />
+            </View>
+          </View>
+        )}
       </ScrollView>
     </KeyboardAvoidingView>
   );

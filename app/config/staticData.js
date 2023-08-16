@@ -65,7 +65,16 @@ export const settings = [
     switch: false,
   },
   {
-    id: '7',
+    id: '8',
+    leftIcon: 'eye',
+    slug: 'Wordlist',
+    title: 'Wordlist',
+    navto: 'Wordlist',
+    righttitle: <Icon name="right" size={15} />,
+    switch: false,
+  },
+  {
+    id: '8',
     leftIcon: 'logout',
     slug: 'sign_out',
     title: 'Sign Out',
