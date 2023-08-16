@@ -1,3 +1,5 @@
+/* eslint-disable */ 
+
 import Button from '@components/Button';
 import HeaderBar from '@components/HeaderBar';
 import { BaseColors, FontFamily } from '@config/theme';
@@ -77,6 +79,13 @@ fixDurScreen	= t	Average fixation duration on screen
     TODO: 3 - Generating Sequence
     DONE: 4 - Playing Recording
             - Done: But just had delay in Replaying
+
+
+
+    NEW TODO on 31st JULY
+    TODO: 1 - Reduce the size of Calibration data. Try with 10 Seconds, 30 Seconds, 1 Minutes, 2 Minutes, 3 Minutes
+    TODO: 2 - How are we rendering the correct sized static mobile screen?
+    TODO: 3 - Documentation of Eye Tracking
   */
 
   const { userData } = useSelector(state => {
@@ -116,7 +125,7 @@ fixDurScreen	= t	Average fixation duration on screen
       formData.append('deviceSize', JSON.stringify(Dimensions.get('window')));
       formData.append(
         'aoiJson',
-        JSON.stringify({ aoiXY, eyeData: currentIndexEyeTracking }),
+        JSON.stringify({ calibration, aoiXY, eyeData: currentIndexEyeTracking }),
       );
       formData.append('dateTime', getDate());
 
@@ -268,8 +277,11 @@ fixDurScreen	= t	Average fixation duration on screen
             }
             currentIndexEyeTracking.push({
               // ...event,
+              eventData: event,
               screenX: newXValue,
               screenY: newYValue,
+              actualX: event.centerEyeLookAtPoint.x,
+              actualY: event.centerEyeLookAtPoint.y,
               time: new Date().getTime(),
               dateTime: getDate(),
             });

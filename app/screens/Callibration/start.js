@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
@@ -268,6 +269,8 @@ export default function CalibrationStart() {
 
           CALIBRATED_POSITIONS[key].avgX = avgPos.x;
           CALIBRATED_POSITIONS[key].avgY = avgPos.y;
+          CALIBRATED_POSITIONS[key].dotX = positionArray[key].left;
+          CALIBRATED_POSITIONS[key].dotY = positionArray[key].top;
         }
       }
 
