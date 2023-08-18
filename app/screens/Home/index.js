@@ -7,6 +7,8 @@ import Button from '@components/Button';
 import Milestones from '@components/Milestones';
 import { useSelector } from 'react-redux';
 import { BaseColors } from '@config/theme';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import SpiderWebChart from '@components/SpiderWebChart';
 
 export default function Home({ navigation }) {
   const switchOptions = [
@@ -66,44 +68,40 @@ export default function Home({ navigation }) {
       {/* ACTIVE TAB AREA */}
       {activeTab?.id === 'summary' ? (
         <View style={styles.summaryArea}>
-          {/* MAP IN SUMMARY */}
-          <TouchableOpacity>
-            <Image
-              source={Images.demoSummary}
-              style={{ height: 320, width: 320 }}
-            />
-          </TouchableOpacity>
-          <View style={styles.summaryText}>
-            <Text
-              style={[
-                styles.descText,
-                {
-                  marginTop: 15,
-                  color: darkmode ? BaseColors.white : BaseColors.black90,
-                },
-              ]}
-            >
-              Baseline
-            </Text>
-            <Text
-              style={[
-                styles.descText,
-                { color: darkmode ? BaseColors.white : BaseColors.black90 },
-              ]}
-            >
-              Comparision requires other assessments to compare with the
-              baseline
-            </Text>
+          <View style={styles.container}>
+            <SpiderWebChart />
+            <View style={styles.summaryText}>
+              <Text
+                style={[
+                  styles.descText,
+                  {
+                    marginTop: 15,
+                    color: darkmode ? BaseColors.white : BaseColors.black90,
+                  },
+                ]}
+              >
+                Baseline
+              </Text>
+              <Text
+                style={[
+                  styles.descText,
+                  { color: darkmode ? BaseColors.white : BaseColors.black90 },
+                ]}
+              >
+                Comparision requires other assessments to compare with the
+                baseline
+              </Text>
+            </View>
           </View>
-
-          <Button
-            onPress={() => navigation.navigate('Dashboard')}
-            shape="round"
-            title={'Request Another Baseline'}
-            style={styles.requestBtn}
-            // onPress={validation}
-            // loading={loader}
-          />
+          <Animated.View entering={FadeIn} style={styles.requestBtn}>
+            <Button
+              onPress={() => navigation.navigate('Dashboard')}
+              shape="round"
+              title={'Request Another Baseline'}
+              // onPress={validation}
+              // loading={loader}
+            />
+          </Animated.View>
         </View>
       ) : (
         <View style={styles.detailsArea}>

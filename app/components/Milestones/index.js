@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { Images } from '@config';
 import Details from '@components/Details';
 import { useSelector } from 'react-redux';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
 const Milestones = ({ navigation, route }) => {
   const { darkmode } = useSelector(state => state.auth);
@@ -90,7 +91,10 @@ const Milestones = ({ navigation, route }) => {
 
   const renderItem = ({ item }) => {
     return (
-      <View style={{ width: '50%', alignItems: 'center' }}>
+      <Animated.View
+        entering={FadeInDown}
+        style={{ width: '50%', alignItems: 'center' }}
+      >
         <Details
           text={item.text}
           number={item.number}
@@ -99,7 +103,7 @@ const Milestones = ({ navigation, route }) => {
           numberColor={item.color}
           imageColor={item.imagecolor}
         />
-      </View>
+      </Animated.View>
     );
   };
   return (

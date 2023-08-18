@@ -3,6 +3,14 @@ import { BaseColors, FontFamily } from '@config/theme';
 const IOS = Platform.OS === 'ios';
 
 export default StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: BaseColors.white,
+  },
+  chart: {
+    width: '90%',
+    height: 300,
+  },
   main: {
     flex: 1,
     // backgroundColor: BaseColors.white,
@@ -43,7 +51,7 @@ export default StyleSheet.create({
     fontSize: 17,
   },
   requestBtn: {
-    marginTop: 15,
+    marginVertical: 15,
     width: '80%',
   },
   detailsArea: {
@@ -52,6 +60,5 @@ export default StyleSheet.create({
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    // backgroundColor: BaseColors.lightBg,
   },
 });

@@ -40,7 +40,7 @@ const BaseSetting = {
     updatePatient: '/patient/update-profile',
     numberarray: '/questions/list',
     questionList: '/questions/list',
-    createCall: 'assessment/create-immediate-recall',
+    createCall: '/assessment/create-immediate-recall',
     sendnumberarray: '/assessment/create-digit-recall',
   },
 

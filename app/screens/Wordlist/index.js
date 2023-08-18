@@ -266,18 +266,18 @@ export default function Wordlist({ navigation }) {
         userResponse: item.userResponse,
         trial: item.trial,
       }));
-
+      const data = {
+        patient_id: 15,
+        event_id: 106, // static
+        assessment_id: 68, //static
+        word_set_id: webId,
+        answers: JSON.stringify(paramsArray),
+        created_from: 'app',
+      };
       const response = await getApiData(
         BaseSetting.endpoints.createCall,
         'POST',
-        {
-          patient_id: 15,
-          event_id: 1,
-          assessment_id: 1,
-          word_set_id: webId,
-          answers: JSON.stringify(paramsArray),
-          created_from: 'app',
-        },
+        data,
         '',
         false,
       );
