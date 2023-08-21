@@ -392,172 +392,178 @@ export default function Profile({ navigation }) {
             }}
           />
         ) : (
-          <View style={styles.cardOuter}>
-            <InfoCard
-              data={IOS ? settings : settings.slice(1)}
-              mainTitle={'Settings'}
-              SwitchChange={(item, v) => {
-                item.slug === 'dark_theme'
-                  ? dispatch(setDarkmode(v))
-                  : item.slug === 'face_id' && v
-                  ? checkBiometrics()
-                  : dispatch(setBiometric(v));
-              }}
-              tabPress={item => {
-                if (item?.slug === 'dark_theme' || item.slug === 'face_id') {
-                  return null;
-                } else if (item?.slug === 'sign_out') {
-                  setShowSignOutConfirmation(true); // Show the confirmation modal
-                } else if (item?.slug === 'two_fa') {
-                  setModalVisible(!modalVisible);
-                } else {
-                  if (item.navto === 'ResetPassword') {
-                    navigation.navigate(item.navto, { from: 'profile' });
+          <ScrollView showsHorizontalScrollIndicator={false}>
+            <View style={styles.cardOuter}>
+              <InfoCard
+                data={IOS ? settings : settings.slice(1)}
+                mainTitle={'Settings'}
+                SwitchChange={(item, v) => {
+                  item.slug === 'dark_theme'
+                    ? dispatch(setDarkmode(v))
+                    : item.slug === 'face_id' && v
+                    ? checkBiometrics()
+                    : dispatch(setBiometric(v));
+                }}
+                tabPress={item => {
+                  if (item?.slug === 'dark_theme' || item.slug === 'face_id') {
+                    return null;
+                  } else if (item?.slug === 'sign_out') {
+                    setShowSignOutConfirmation(true); // Show the confirmation modal
+                  } else if (item?.slug === 'two_fa') {
+                    setModalVisible(!modalVisible);
                   } else {
-                    navigation.navigate(item.navto);
+                    if (item.navto === 'ResetPassword') {
+                      navigation.navigate(item.navto, { from: 'profile' });
+                    } else {
+                      navigation.navigate(item.navto);
+                    }
                   }
-                }
-              }}
-            />
-            <InfoCard
-              data={legal}
-              mainTitle={'Legal & Regulatory'}
-              tabPress={item => {
-                navigation.navigate(item.navto);
-              }}
-            />
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={modalVisible}
-              onRequestClose={() => {
-                Alert.alert('Modal has been closed.');
-                setModalVisible(!modalVisible);
-              }}
-            >
-              <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                  <View style={styles.modalHead}>
-                    <Text style={styles.titleText}>Select Option</Text>
-                    <TouchableOpacity
-                      activeOpacity={BaseSetting.buttonOpacity}
-                      onPress={() => {
-                        setModalVisible(!modalVisible);
-                      }}
-                      style={styles.closeicon}
-                    >
-                      <Icon name="close" size={20} color={BaseColors.primary} />
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.dropdownContainer}>
-                    <Dropdown
-                      items={items}
-                      open={open}
-                      setOpen={setOpen}
-                      placeholder="Please select validation type"
-                      value={value}
-                      setValue={setValue}
-                      // onValueChange={handleDropdownChange}
-                    />
-                  </View>
-                </View>
-              </View>
-            </Modal>
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={showSignOutConfirmation}
-              onRequestClose={() => {
-                setShowSignOutConfirmation(false);
-              }}
-            >
-              <View style={styles.confirmmmodalcenteredView}>
-                <View style={styles.confirmmmodalView}>
-                  <Text style={styles.confirmmodaltitleText}>
-                    Confirm Sign Out
-                  </Text>
-                  <Text style={styles.confirmmodalText}>
-                    Are you sure you want to sign out?
-                  </Text>
-                  <View style={styles.modalButtons}>
-                    <TouchableOpacity
-                      activeOpacity={BaseSetting.buttonOpacity}
-                      style={[styles.button, styles.confirmButton]}
-                      onPress={() => {
-                        setShowSignOutConfirmation(false);
-                        logout();
-                      }}
-                    >
-                      <Text style={styles.buttonText}>Confirm</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      activeOpacity={BaseSetting.buttonOpacity}
-                      style={[styles.button, styles.cancelButton]}
-                      onPress={() => {
-                        setShowSignOutConfirmation(false);
-                      }}
-                    >
-                      <Text style={styles.buttonText}>Cancel</Text>
-                    </TouchableOpacity>
+                }}
+              />
+              <InfoCard
+                data={legal}
+                mainTitle={'Legal & Regulatory'}
+                tabPress={item => {
+                  navigation.navigate(item.navto);
+                }}
+              />
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                  Alert.alert('Modal has been closed.');
+                  setModalVisible(!modalVisible);
+                }}
+              >
+                <View style={styles.centeredView}>
+                  <View style={styles.modalView}>
+                    <View style={styles.modalHead}>
+                      <Text style={styles.titleText}>Select Option</Text>
+                      <TouchableOpacity
+                        activeOpacity={BaseSetting.buttonOpacity}
+                        onPress={() => {
+                          setModalVisible(!modalVisible);
+                        }}
+                        style={styles.closeicon}
+                      >
+                        <Icon
+                          name="close"
+                          size={20}
+                          color={BaseColors.primary}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                    <View style={styles.dropdownContainer}>
+                      <Dropdown
+                        items={items}
+                        open={open}
+                        setOpen={setOpen}
+                        placeholder="Please select validation type"
+                        value={value}
+                        setValue={setValue}
+                        // onValueChange={handleDropdownChange}
+                      />
+                    </View>
                   </View>
                 </View>
-              </View>
-            </Modal>
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={showSignOutConfirmation}
-              onRequestClose={() => {
-                setShowSignOutConfirmation(false);
-              }}
-            >
-              <View style={styles.confirmmmodalcenteredView}>
-                <View style={styles.confirmmmodalView}>
-                  <Text style={styles.confirmmodaltitleText}>
-                    Confirm Sign Out
-                  </Text>
-                  <Text style={styles.confirmmodalText}>
-                    Are you sure you want to sign out?
-                  </Text>
-                  <View style={styles.modalButtons}>
-                    <TouchableOpacity
-                      style={[styles.button, styles.confirmButton]}
-                      onPress={async () => {
-                        setConfirmLoading(true); // Start loading
-
-                        // Perform asynchronous actions (e.g., logout)
-                        try {
-                          await logout(); // Assuming logout is an asynchronous function
+              </Modal>
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={showSignOutConfirmation}
+                onRequestClose={() => {
+                  setShowSignOutConfirmation(false);
+                }}
+              >
+                <View style={styles.confirmmmodalcenteredView}>
+                  <View style={styles.confirmmmodalView}>
+                    <Text style={styles.confirmmodaltitleText}>
+                      Confirm Sign Out
+                    </Text>
+                    <Text style={styles.confirmmodalText}>
+                      Are you sure you want to sign out?
+                    </Text>
+                    <View style={styles.modalButtons}>
+                      <TouchableOpacity
+                        activeOpacity={BaseSetting.buttonOpacity}
+                        style={[styles.button, styles.confirmButton]}
+                        onPress={() => {
                           setShowSignOutConfirmation(false);
-                        } catch (error) {
-                          console.error(error);
-                        }
-
-                        setConfirmLoading(false); // Stop loading
-                      }}
-                      disabled={confirmLoading} // Disable button while loading
-                    >
-                      {confirmLoading ? (
-                        <ActivityIndicator color="white" size="small" />
-                      ) : (
+                          logout();
+                        }}
+                      >
                         <Text style={styles.buttonText}>Confirm</Text>
-                      )}
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      activeOpacity={BaseSetting.buttonOpacity}
-                      style={[styles.button, styles.cancelButton]}
-                      onPress={() => {
-                        setShowSignOutConfirmation(false);
-                      }}
-                    >
-                      <Text style={styles.buttonText}>Cancel</Text>
-                    </TouchableOpacity>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        activeOpacity={BaseSetting.buttonOpacity}
+                        style={[styles.button, styles.cancelButton]}
+                        onPress={() => {
+                          setShowSignOutConfirmation(false);
+                        }}
+                      >
+                        <Text style={styles.buttonText}>Cancel</Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
-              </View>
-            </Modal>
-          </View>
+              </Modal>
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={showSignOutConfirmation}
+                onRequestClose={() => {
+                  setShowSignOutConfirmation(false);
+                }}
+              >
+                <View style={styles.confirmmmodalcenteredView}>
+                  <View style={styles.confirmmmodalView}>
+                    <Text style={styles.confirmmodaltitleText}>
+                      Confirm Sign Out
+                    </Text>
+                    <Text style={styles.confirmmodalText}>
+                      Are you sure you want to sign out?
+                    </Text>
+                    <View style={styles.modalButtons}>
+                      <TouchableOpacity
+                        style={[styles.button, styles.confirmButton]}
+                        onPress={async () => {
+                          setConfirmLoading(true); // Start loading
+
+                          // Perform asynchronous actions (e.g., logout)
+                          try {
+                            await logout(); // Assuming logout is an asynchronous function
+                            setShowSignOutConfirmation(false);
+                          } catch (error) {
+                            console.error(error);
+                          }
+
+                          setConfirmLoading(false); // Stop loading
+                        }}
+                        disabled={confirmLoading} // Disable button while loading
+                      >
+                        {confirmLoading ? (
+                          <ActivityIndicator color="white" size="small" />
+                        ) : (
+                          <Text style={styles.buttonText}>Confirm</Text>
+                        )}
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        activeOpacity={BaseSetting.buttonOpacity}
+                        style={[styles.button, styles.cancelButton]}
+                        onPress={() => {
+                          setShowSignOutConfirmation(false);
+                        }}
+                      >
+                        <Text style={styles.buttonText}>Cancel</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+              </Modal>
+            </View>
+          </ScrollView>
         )}
       </KeyboardAvoidingView>
     </View>

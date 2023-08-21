@@ -7,6 +7,7 @@ import {
   ScrollView,
   Platform,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
@@ -21,65 +22,76 @@ import { Toast } from 'react-native-toast-message/lib/src/Toast';
 export default function Recalldigits({ navigation }) {
   const [loader, setLoader] = useState(true);
   const [questionList, setQuestionList] = useState([]);
+  console.log(
+    '🚀 ~ file: index.js:24 ~ Recalldigits ~ questionList:',
+    questionList,
+  );
   const [currentIndex, setCurrentIndex] = useState(0);
+  console.log(
+    '🚀 ~ file: index.js:25 ~ Recalldigits ~ currentIndex:',
+    currentIndex,
+  );
   const [showInput, setShowInput] = useState(false);
   const [userInputs, setUserInputs] = useState([]);
-  const [manualInputValue, setManualInputValue] = useState([]);
+  const [manualInputValue, setManualInputValue] = useState('');
   const [inputError, setInputError] = useState('');
   const textInputRef = useRef(null); // Create a ref for the text input
-  const [submitButtonEnabled, setSubmitButtonEnabled] = useState(false);
+
   const [data, setData] = useState({
-    patient_id: 18, //Static
-    event_id: 1, //Static
-    assessment_id: 1, //Static
-    answers: [
-      {
-        digit: 12, //Static
-        fixAOI: 12, //Static
-        viewed: 12, //Static
-        fixDurAOI: 12, //Static
-        fixScreen: 12, //Static
-        durScreen: 12, //Temp
-        userResponse: Array(questionList.length).fill(null), // Initialize with null values
-      },
-    ],
+    event_id: 106, //Static
+    assessment_id: 68, //Static
+    answers: [],
     created_from: 'app',
   });
-  console.log('🚀 ~ file: index.js:40 ~ Recalldigits ~ data:', data);
+
+  console.log('🚀 ~ file: index.js:37 ~ Recalldigits ~ data:', data);
 
   const [inputValues, setInputValues] = useState([]);
-  console.log(
-    '🚀 ~ file: index.js:61 ~ Recalldigits ~ inputValues:',
-    inputValues,
-  );
   const { userData } = useSelector(state => state.auth);
+
+  const IOS = Platform.OS === 'ios';
 
   useEffect(() => {
     if (showInput && textInputRef.current) {
       textInputRef.current.focus(); // Focus the input when it becomes visible
     }
   }, [showInput]);
-  const IOS = Platform.OS === 'ios';
+
   useEffect(() => {
     QuestionListAPI();
   }, []);
 
+  const inputStartTimes = useRef([]); // Ref to store start times
+  const [sumitbutton, setSumitbutton] = useState('Next');
+
   const onToggleDisplay = () => {
-    if (showInput) {
+    if (!showInput) {
+      // Start the timer when showing a digit
+      inputStartTimes.current[currentIndex] = Date.now(); // Record the start timeal
+    } else {
+      // Stop the timer when moving to the next question
+      // currentIndex === questionList.length - 1 && showInput
+      //   ? setSumitbutton('submit')
+      //   : null;
       if (manualInputValue === '') {
         setInputError('Please enter digits before proceeding.');
         return;
       }
+
+      const elapsedMilliseconds =
+        Date.now() - inputStartTimes.current[currentIndex];
+
       const answer = {
-        digit: 12,
+        digit: questionList[currentIndex],
         fixAOI: 12,
         viewed: 12,
         fixDurAOI: 12,
         fixScreen: 12,
-        durScreen: 12, // Temp
+        durScreen: elapsedMilliseconds,
         userResponse: manualInputValue,
       };
 
+      // Stringify the answer and store it in the answers array
       const updatedAnswers = [...data.answers];
       updatedAnswers[currentIndex] = answer;
       setData({ ...data, answers: updatedAnswers });
@@ -93,11 +105,10 @@ export default function Recalldigits({ navigation }) {
       setInputValues(updatedInputValues);
 
       setManualInputValue('');
-
       setInputError('');
 
       if (currentIndex === questionList.length - 1) {
-        submitData(data);
+        submitData({ ...data, answers: updatedAnswers });
         navigation.goBack();
       } else {
         setCurrentIndex(currentIndex + 1);
@@ -107,18 +118,28 @@ export default function Recalldigits({ navigation }) {
     setShowInput(!showInput);
   };
 
-  async function submitData() {
+  async function submitData(val) {
     try {
+      val['answers'] = JSON.stringify(val.answers);
       const response = await getApiData(
         BaseSetting.endpoints.sendnumberarray,
         'POST',
-        data,
+        val,
+        {},
         false,
       );
+      console.log('🚀 ~ file: index.js:121 ~ submitData ~ response:', response);
+      console.log('DATA >>>>>>>>>>>>>>>>>>>>>>>', val);
       if (response?.status) {
-        console.success(' submitting data:', 'success');
+        Toast.show({
+          text1: response?.message,
+          type: 'success',
+        });
       } else {
-        console.error('Error submitting data:', 'error');
+        Toast.show({
+          text1: response?.message,
+          type: 'error',
+        });
       }
     } catch (error) {
       console.log('error =======>>>', error);
@@ -201,6 +222,7 @@ export default function Recalldigits({ navigation }) {
                     {inputError && (
                       <Text style={styles.errorTxt}>{inputError}</Text>
                     )}
+
                     <Button
                       style={{ marginTop: 30 }}
                       shape="round"
@@ -219,9 +241,8 @@ export default function Recalldigits({ navigation }) {
                     <Button
                       style={{ marginTop: 30 }}
                       shape="round"
-                      title={'Next'}
+                      title={sumitbutton === 'submit' ? 'Submit' : 'Next'}
                       onPress={onToggleDisplay}
-                      disabled={!submitButtonEnabled}
                     />
                   </View>
                 )}
