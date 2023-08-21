@@ -7,7 +7,6 @@ import {
   ScrollView,
   Platform,
   ActivityIndicator,
-  Alert,
 } from 'react-native';
 import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
@@ -16,21 +15,12 @@ import Button from '@components/Button';
 import BaseSetting from '@config/setting';
 import { getApiData } from '@utils/apiHelper';
 import { TextInput } from 'react-native-gesture-handler';
-import { useSelector } from 'react-redux';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
 export default function Recalldigits({ navigation }) {
   const [loader, setLoader] = useState(true);
   const [questionList, setQuestionList] = useState([]);
-  console.log(
-    '🚀 ~ file: index.js:24 ~ Recalldigits ~ questionList:',
-    questionList,
-  );
   const [currentIndex, setCurrentIndex] = useState(0);
-  console.log(
-    '🚀 ~ file: index.js:25 ~ Recalldigits ~ currentIndex:',
-    currentIndex,
-  );
   const [showInput, setShowInput] = useState(false);
   const [userInputs, setUserInputs] = useState([]);
   const [manualInputValue, setManualInputValue] = useState('');
@@ -44,10 +34,7 @@ export default function Recalldigits({ navigation }) {
     created_from: 'app',
   });
 
-  console.log('🚀 ~ file: index.js:37 ~ Recalldigits ~ data:', data);
-
   const [inputValues, setInputValues] = useState([]);
-  const { userData } = useSelector(state => state.auth);
 
   const IOS = Platform.OS === 'ios';
 
@@ -70,9 +57,10 @@ export default function Recalldigits({ navigation }) {
       inputStartTimes.current[currentIndex] = Date.now(); // Record the start timeal
     } else {
       // Stop the timer when moving to the next question
-      // currentIndex === questionList.length - 1 && showInput
-      //   ? setSumitbutton('submit')
-      //   : null;
+      if (currentIndex === questionList.length - 2) {
+        setSumitbutton('Submit'); // Change the button text to "Submit"
+        setCurrentIndex(currentIndex + 1);
+      }
       if (manualInputValue === '') {
         setInputError('Please enter digits before proceeding.');
         return;
@@ -91,7 +79,6 @@ export default function Recalldigits({ navigation }) {
         userResponse: manualInputValue,
       };
 
-      // Stringify the answer and store it in the answers array
       const updatedAnswers = [...data.answers];
       updatedAnswers[currentIndex] = answer;
       setData({ ...data, answers: updatedAnswers });
@@ -128,8 +115,7 @@ export default function Recalldigits({ navigation }) {
         {},
         false,
       );
-      console.log('🚀 ~ file: index.js:121 ~ submitData ~ response:', response);
-      console.log('DATA >>>>>>>>>>>>>>>>>>>>>>>', val);
+
       if (response?.status) {
         Toast.show({
           text1: response?.message,
@@ -241,7 +227,7 @@ export default function Recalldigits({ navigation }) {
                     <Button
                       style={{ marginTop: 30 }}
                       shape="round"
-                      title={sumitbutton === 'submit' ? 'Submit' : 'Next'}
+                      title={sumitbutton}
                       onPress={onToggleDisplay}
                     />
                   </View>
