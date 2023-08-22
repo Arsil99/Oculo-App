@@ -41,18 +41,21 @@ export default function Callibration({ navigation }) {
       >
         <View
           style={{
-            borderWidth: 1,
             top: 0,
             bottom: 0,
             marginHorizontal: 10,
             width: '100%',
-            height: '100%',
+            height: '90%',
             alignItems: 'center',
             justifyContent: 'space-around',
             position: 'absolute',
           }}
         >
-          <Image source={Images?.faceposition} style={styles.imgStylee} />
+          <Image
+            source={Images?.faceposition}
+            resizeMode="contain"
+            style={styles.imgStylee}
+          />
         </View>
         <View
           style={{
@@ -108,8 +111,10 @@ export default function Callibration({ navigation }) {
               </View>
             </View>
           </View>
-          <View>
-            <Text style={styles?.bigtext}>Position Face for Calibration</Text>
+          <View style={{ width: '50%', flex: 0.5, justifyContent: 'flex-end' }}>
+            <Text style={styles?.bigtext}>
+              Position Face for{'\n'} Calibration
+            </Text>
           </View>
         </View>
         <Button

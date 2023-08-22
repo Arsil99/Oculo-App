@@ -4,17 +4,17 @@ import BaseSetting from '@config/setting';
 
 const IOS = Platform.OS === 'ios';
 const styles = StyleSheet.create({
-  main: { flex: 1, borderWidth: 1 },
+  main: { flex: 1 },
   imgStyle: { height: '100%', width: '100%', position: 'absolute' },
   imgStylee: { height: '90%', width: '100%', marginHorizontal: 10 },
   statusBox: { flexDirection: 'row', marginTop: 5 },
   requestBtn: {
     width: '80%',
+    marginTop: 50,
   },
   squareBorder: {
     height: 200,
     width: 450,
-
     alignItems: 'center',
     justifyContent: 'flex-end',
   },
@@ -31,6 +31,8 @@ const styles = StyleSheet.create({
     color: BaseColors?.white,
     fontFamily: FontFamily.regular,
     fontSize: 20,
+    textAlign: 'center',
+    lineHeight: 30,
   },
   plusStyle: {
     position: 'absolute',
