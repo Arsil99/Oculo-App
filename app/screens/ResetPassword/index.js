@@ -243,7 +243,7 @@ const ResetPassword = ({ navigation, route }) => {
           </View>
         ) : null}
 
-        <View style={styles.inputcontainer}>
+        <ScrollView style={styles.inputcontainer}>
           {(from === 'tfa' || from === 'profile') && (
             <LabeledInput
               Label={'Current Password'}
@@ -302,7 +302,7 @@ const ResetPassword = ({ navigation, route }) => {
               loading={loader}
             />
           </View>
-        </View>
+        </ScrollView>
       </ScrollView>
     </KeyboardAvoidingView>
   );

@@ -14,7 +14,7 @@ export default StyleSheet.create({
   },
   inputcontainer: {
     flex: 0.4,
-    justifyContent: 'flex-start',
+    // justifyContent: 'flex-start',
   },
   forgotPasswordTextStyle: {
     marginTop: 10,
