@@ -33,6 +33,7 @@ export default StyleSheet.create({
     width: fullWidth,
     alignItems: 'center',
     paddingHorizontal: 20,
+    paddingBottom: 20,
   },
   titleText: {
     fontSize: 20,

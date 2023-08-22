@@ -236,7 +236,7 @@ const ResetPassword = ({ navigation, route }) => {
         {from !== 'profile' ? (
           <View style={styles.contentView}>
             <Image
-              source={Images.logo}
+              source={Images.updatedlogo}
               resizeMode="contain"
               style={styles.img}
             />

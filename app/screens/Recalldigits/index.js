@@ -59,7 +59,6 @@ export default function Recalldigits({ navigation }) {
       // Stop the timer when moving to the next question
       if (currentIndex === questionList.length - 2) {
         setSumitbutton('Submit'); // Change the button text to "Submit"
-        setCurrentIndex(currentIndex + 1);
       }
       if (manualInputValue === '') {
         setInputError('Please enter digits before proceeding.');

@@ -170,7 +170,7 @@ export default function OTP({ navigation, route }) {
     <View style={styles.main}>
       <View style={{ alignItems: 'center' }}>
         <Image
-          source={Images.logo}
+          source={Images.updatedlogo}
           style={{ marginBottom: 25, marginTop: -5 }}
         />
         <Text style={{ fontSize: 18 }}>Code has sent to</Text>
