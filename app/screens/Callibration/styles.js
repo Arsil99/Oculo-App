@@ -4,20 +4,19 @@ import BaseSetting from '@config/setting';
 
 const IOS = Platform.OS === 'ios';
 const styles = StyleSheet.create({
-  main: { flex: 1 },
+  main: { flex: 1, borderWidth: 1 },
   imgStyle: { height: '100%', width: '100%', position: 'absolute' },
+  imgStylee: { height: '90%', width: '100%', marginHorizontal: 10 },
   statusBox: { flexDirection: 'row', marginTop: 5 },
   requestBtn: {
     width: '80%',
   },
   squareBorder: {
     height: 200,
-    width: 200,
-    borderRadius: 30,
-    borderWidth: 4,
-    borderColor: BaseColors?.white,
+    width: 450,
+
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
   },
   smalltext: {
     textAlign: 'center',
@@ -41,6 +40,10 @@ const styles = StyleSheet.create({
   },
   dotContainer: {
     flex: 1,
+  },
+  image: {
+    flex: 1,
+    justifyContent: 'center',
   },
 });
 

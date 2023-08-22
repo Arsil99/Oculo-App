@@ -1,4 +1,4 @@
-import { View, Text, Image, StatusBar } from 'react-native';
+import { View, Text, Image, StatusBar, ImageBackground } from 'react-native';
 import React, { useEffect } from 'react';
 import styles from './styles';
 import { Images } from '@config';
@@ -29,6 +29,7 @@ export default function Callibration({ navigation }) {
         LeftTextStyle={{ color: BaseColors?.white }}
         HeaderTextStyle={{ color: BaseColors?.white }}
       />
+
       <View
         style={[
           styles.main,
@@ -40,6 +41,21 @@ export default function Callibration({ navigation }) {
       >
         <View
           style={{
+            borderWidth: 1,
+            top: 0,
+            bottom: 0,
+            marginHorizontal: 10,
+            width: '100%',
+            height: '100%',
+            alignItems: 'center',
+            justifyContent: 'space-around',
+            position: 'absolute',
+          }}
+        >
+          <Image source={Images?.faceposition} style={styles.imgStylee} />
+        </View>
+        <View
+          style={{
             alignItems: 'center',
             justifyContent: 'center',
           }}
@@ -47,19 +63,53 @@ export default function Callibration({ navigation }) {
           <View style={styles?.squareBorder}>
             <Image
               resizeMode="contain"
-              style={{ width: 160 }}
-              source={Images?.eyeLine}
+              style={{ width: '100%', marginBottom: -20 }}
+              source={Images?.line}
             />
-            <Text style={styles?.plusStyle}>+</Text>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                width: '50%',
+                justifyContent: 'space-between',
+              }}
+            >
+              <View>
+                <Image
+                  resizeMode="contain"
+                  style={{ width: 30, height: 30 }}
+                  source={Images?.round}
+                />
+                <Image
+                  resizeMode="contain"
+                  style={{
+                    position: 'absolute',
+                    right: 10,
+                    top: 10,
+                  }}
+                  source={Images?.arrowr}
+                />
+              </View>
+              <View>
+                <Image
+                  resizeMode="contain"
+                  style={{ width: 30, height: 30 }}
+                  source={Images?.round}
+                />
+                <Image
+                  resizeMode="contain"
+                  style={{
+                    position: 'absolute',
+                    left: 10,
+                    top: 10,
+                  }}
+                  source={Images?.arrowleft}
+                />
+              </View>
+            </View>
           </View>
           <View>
-            <Text style={styles?.bigtext}>Calibrate Eye Tracking</Text>
-            <Text style={styles?.smalltext}>
-              Make sure your face is fully visible on the screen.
-            </Text>
-            <Text style={styles?.smalltext}>
-              After calibration, try to keep your face and device still.
-            </Text>
+            <Text style={styles?.bigtext}>Position Face for Calibration</Text>
           </View>
         </View>
         <Button

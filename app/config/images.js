@@ -28,4 +28,9 @@ export const Images = {
   speechno: require('../assets/Images/speechno.png'),
   typeno: require('../assets/Images/typeno.png'),
   updatedlogo: require('../assets/Images/updatedlogo.png'),
+  round: require('../assets/Images/round.png'),
+  faceposition: require('../assets/Images/faceposition.png'),
+  line: require('../assets/Images/line.png'),
+  arrowleft: require('../assets/Images/arrowleft.png'),
+  arrowr: require('../assets/Images/arrowr.png'),
 };
