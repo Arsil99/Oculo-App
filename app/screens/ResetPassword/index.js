@@ -244,22 +244,21 @@ const ResetPassword = ({ navigation, route }) => {
         ) : null}
 
         <View style={styles.inputcontainer}>
-          {from === 'tfa' ||
-            (from === 'profile' && (
-              <LabeledInput
-                Label={'Current Password'}
-                keyicon
-                placeholder={'Enter Current Password'}
-                eyePassword
-                value={currentpassword}
-                onChangeText={val => {
-                  setCurrentpassword(val);
-                  setCurrentErrObj({ error: false, msg: '' });
-                }}
-                showError={currentErrObj.error}
-                errorText={currentErrObj.msg}
-              />
-            ))}
+          {(from === 'tfa' || from === 'profile') && (
+            <LabeledInput
+              Label={'Current Password'}
+              keyicon
+              placeholder={'Enter Current Password'}
+              eyePassword
+              value={currentpassword}
+              onChangeText={val => {
+                setCurrentpassword(val);
+                setCurrentErrObj({ error: false, msg: '' });
+              }}
+              showError={currentErrObj.error}
+              errorText={currentErrObj.msg}
+            />
+          )}
           <LabeledInput
             Label={'Set Password'}
             LabledInputStyle={{
