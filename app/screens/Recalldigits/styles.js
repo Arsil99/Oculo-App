@@ -35,16 +35,18 @@ export default StyleSheet.create({
     textAlign: 'center',
   },
   subtitleText: {
+    alignSelf: 'center',
+    textAlign: 'center',
     fontSize: 16,
     fontWeight: '400',
-    lineHeight: 24,
+    lineHeight: 30,
     marginTop: 15,
     fontFamily: FontFamily.regular,
     color: BaseColors.textColor,
   },
 
   numbercontainer: {
-    width: 230,
+    width: '80%',
     height: 90,
     borderRadius: 12,
     borderColor: BaseColors.borderColor,

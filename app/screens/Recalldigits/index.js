@@ -56,10 +56,6 @@ export default function Recalldigits({ navigation }) {
       // Start the timer when showing a digit
       inputStartTimes.current[currentIndex] = Date.now(); // Record the start timeal
     } else {
-      // Stop the timer when moving to the next question
-      if (currentIndex === questionList.length - 2) {
-        setSumitbutton('Submit'); // Change the button text to "Submit"
-      }
       if (manualInputValue === '') {
         setInputError('Please enter digits before proceeding.');
         return;
@@ -102,6 +98,9 @@ export default function Recalldigits({ navigation }) {
     }
 
     setShowInput(!showInput);
+    setSumitbutton(
+      currentIndex === questionList.length - 2 ? 'Submit' : 'Next',
+    );
   };
 
   async function submitData(val) {
@@ -177,20 +176,20 @@ export default function Recalldigits({ navigation }) {
             />
           ) : (
             <View style={{ flex: 1 }}>
-              <View style={{ flex: 0.3 }}>
+              <View style={{ flex: 0.1 }}>
                 {showInput ? (
                   <Text style={styles.subtitleText}>
-                    Enter digits from previous screen
+                    Trial {currentIndex + 1}/12{'\n'}Report backwards
                   </Text>
                 ) : (
                   <Text style={styles.subtitleText}>
-                    Please memorize the digits and enter them on the next screen
+                    Trial {currentIndex + 1}/12{'\n'} Remember these numbers
                   </Text>
                 )}
               </View>
               <View>
                 {showInput ? (
-                  <View style={{ flex: 0.5, marginTop: 25 }}>
+                  <View style={{ flex: 0.1 }}>
                     <TextInput
                       ref={textInputRef} // Create a ref using useRef
                       value={manualInputValue}
@@ -207,13 +206,6 @@ export default function Recalldigits({ navigation }) {
                     {inputError && (
                       <Text style={styles.errorTxt}>{inputError}</Text>
                     )}
-
-                    <Button
-                      style={{ marginTop: 30 }}
-                      shape="round"
-                      title={'Next'}
-                      onPress={onToggleDisplay}
-                    />
                   </View>
                 ) : (
                   <View>
@@ -222,18 +214,29 @@ export default function Recalldigits({ navigation }) {
                         {questionList[currentIndex]}
                       </Text>
                     </View>
-
-                    <Button
-                      style={{ marginTop: 30 }}
-                      shape="round"
-                      title={sumitbutton}
-                      onPress={onToggleDisplay}
-                    />
                   </View>
                 )}
               </View>
             </View>
           )}
+
+          <View style={{ flex: 0.1 }}>
+            {showInput ? (
+              <Button
+                style={{ marginTop: 30 }}
+                shape="round"
+                title={'Next'}
+                onPress={onToggleDisplay}
+              />
+            ) : (
+              <Button
+                style={{ marginTop: 30 }}
+                shape="round"
+                title={sumitbutton}
+                onPress={onToggleDisplay}
+              />
+            )}
+          </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
