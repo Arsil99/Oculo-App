@@ -88,7 +88,7 @@ export default function Callibration({ navigation }) {
                   style={{
                     position: 'absolute',
                     right: 10,
-                    top: 10,
+                    top: 15,
                   }}
                   source={Images?.arrowr}
                 />
@@ -104,7 +104,7 @@ export default function Callibration({ navigation }) {
                   style={{
                     position: 'absolute',
                     left: 10,
-                    top: 10,
+                    top: 15,
                   }}
                   source={Images?.arrowleft}
                 />

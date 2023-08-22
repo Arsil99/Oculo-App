@@ -13,8 +13,8 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   squareBorder: {
-    height: 200,
-    width: 450,
+    height: 170,
+    width: BaseSetting.nWidth,
     alignItems: 'center',
     justifyContent: 'flex-end',
   },
