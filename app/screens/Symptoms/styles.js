@@ -43,6 +43,9 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderColor: BaseColors.black20,
   },
+  btnText: {
+    fontSize: 13,
+  },
   yesText: {
     marginTop: 20,
     fontWeight: '300',

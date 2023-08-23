@@ -1,4 +1,4 @@
-/* eslint-disable */ 
+/* eslint-disable */
 
 import Button from '@components/Button';
 import HeaderBar from '@components/HeaderBar';
@@ -33,6 +33,7 @@ import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import axios from 'axios';
 import { getDate } from '@utils/CommonFunction';
 import BaseSetting from '@config/setting';
+import { getApiData } from '@utils/apiHelper';
 
 let MOVE_DOT = false;
 let currentIndexEyeTracking = [];
@@ -41,7 +42,8 @@ let currentIndexEndTime = null;
 
 const baseUrl = 'https://eyetracking.oculo.app';
 
-const Symptoms = ({ navigation }) => {
+const Symptoms = ({ navigation, route }) => {
+  const eventId = route?.params?.event_id;
   const [activeButtonIndex, setActiveButtonIndex] = useState(0);
 
   const [sliderValue, setSliderValue] = useState(1);
@@ -60,7 +62,9 @@ const Symptoms = ({ navigation }) => {
   const eyeTrackingPoints = useState([]);
   const [deviceName, setDeviceName] = useState(null);
   const [bgImageURI, setBgImageURI] = useState(null);
-
+  const [tag, setTag] = useState([]);
+  const [symptomArray, setSymptomArray] = useState([]);
+  const flatListRef = useRef(null);
   /*
     TODO: 1 - Calculate and Push the Analytics
 fixAOI	      = Total # of fixations b/w 200-500ms duration within AOI
@@ -96,11 +100,33 @@ fixDurScreen	= t	Average fixation duration on screen
     setDeviceName(dName);
   });
 
-  const buttons = [
-    { id: 1, label: 'Headache', value: 1 },
-    { id: 2, label: 'Neck Pain', value: 1 },
-    { id: 2, label: 'Nausea', value: 1 },
-  ];
+  useEffect(() => {
+    QuestionListAPI();
+  }, []);
+
+  const [meta, setMeta] = useState([]);
+  // display the questions list
+  const QuestionListAPI = async () => {
+    const endPoint = `${BaseSetting.endpoints.questionList}?event_type=5&list=a`;
+    try {
+      const res = await getApiData(`${endPoint}`, 'GET');
+
+      if (res?.status) {
+        const questionsArray = [];
+        const metaName = [];
+        for (let i = 0; i < res?.data.length; i++) {
+          if (res?.data[i]?.type === '4') {
+            questionsArray.push(res?.data[i]?.question);
+            metaName.push(res?.data[i]?.meta_name);
+          }
+        }
+        setTag(questionsArray);
+        setMeta(metaName);
+      }
+    } catch (error) {
+      console.log('📌 ⏩ file: index.js:24 ⏩ LangListAPI ⏩ error:', error);
+    }
+  };
 
   // Uploading Assessment Data to Server
   const handleUploadAssessmentData = async () => {
@@ -125,7 +151,11 @@ fixDurScreen	= t	Average fixation duration on screen
       formData.append('deviceSize', JSON.stringify(Dimensions.get('window')));
       formData.append(
         'aoiJson',
-        JSON.stringify({ calibration, aoiXY, eyeData: currentIndexEyeTracking }),
+        JSON.stringify({
+          calibration,
+          aoiXY,
+          eyeData: currentIndexEyeTracking,
+        }),
       );
       formData.append('dateTime', getDate());
 
@@ -146,21 +176,89 @@ fixDurScreen	= t	Average fixation duration on screen
     }
   };
 
+  // temperory data
+  const staticData = [
+    {
+      symptom: 'Physical_Activity',
+      initialScore: false,
+      scoreChng: 2,
+      finalScore: true,
+    },
+    {
+      symptom: 'Mental_Activity',
+      initialScore: false,
+      scoreChng: 2,
+      finalScore: 0,
+    },
+    {
+      symptom: 'Feel_Perfect',
+      initialScore: 1,
+      scoreChng: 3,
+      finalScore: 100,
+    },
+  ];
+
   // Handle On Symptom Change
   const handleSymptomChange = index => {
-    if (buttons[index]) {
+    const sliderObject = {
+      symptom: meta[index - 1],
+      initialScore: initValue,
+      scoreChng: count,
+      finalScore: lastValue,
+    };
+    symptomArray.push(sliderObject);
+    if (tag[index]) {
       currentIndexEndTime = getDate();
 
       // Upload the Assessment Data to Server
       handleUploadAssessmentData();
       currentIndexEyeTracking = [];
       setActiveButtonIndex(index);
+      flatListRef.current.scrollToIndex({ index, animated: true });
     } else {
-      Toast.show({
-        text1: 'Assessment Completed.',
-        type: 'success',
-      });
+      createSymptom();
     }
+    ResetValues();
+  };
+  // api integration for create call
+  const createSymptom = async () => {
+    const updatedSymptomArray = symptomArray.concat(staticData);
+    try {
+      const response = await getApiData(
+        BaseSetting.endpoints.symptom,
+        'POST',
+        {
+          event_id: eventId,
+          answers: JSON.stringify(updatedSymptomArray),
+          created_from: 'app',
+        },
+        '',
+        false,
+      );
+      console.log('last > ', updatedSymptomArray);
+      if (response?.status) {
+        navigation.navigate('Wordlist');
+        Toast.show({
+          text1: response?.message.toString(),
+          type: 'success',
+        });
+      } else {
+        Toast.show({
+          text1: response?.message,
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      console.log('error =======>>>', error);
+    }
+  };
+
+  const ResetValues = () => {
+    setCount(0);
+    setInitValue(0);
+    setMilliseconds(0);
+    setLastValue(0);
+    setSliderValue(1);
   };
 
   useEffect(() => {
@@ -313,10 +411,34 @@ fixDurScreen	= t	Average fixation duration on screen
     };
   }, [navigation]);
 
+  // slider details state management
+  const [count, setCount] = useState(0);
+  const [initValue, setInitValue] = useState(0);
+  const [milliseconds, setMilliseconds] = useState(0);
+  const [lastValue, setLastValue] = useState(0);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setMilliseconds(prevMilliseconds => prevMilliseconds + 1);
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
   // On Slider Change Value
   const handleValueChange = newValue => {
     setSliderValue(newValue);
+    setLastValue(newValue - 2);
+    setCount(count + 1);
   };
+
+  useEffect(() => {
+    if (count === 1) {
+      setInitValue(sliderValue - 2);
+    }
+  }, [count]);
 
   return (
     <View style={styles.main}>
@@ -338,7 +460,7 @@ fixDurScreen	= t	Average fixation duration on screen
           <View>
             <View>
               <FlatList
-                data={buttons}
+                data={tag}
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item, index }) => (
@@ -357,25 +479,29 @@ fixDurScreen	= t	Average fixation duration on screen
                       activeOpacity={BaseSetting.buttonOpacity}
                     >
                       <Text
-                        style={{
-                          color:
-                            activeButtonIndex === index
-                              ? BaseColors.white
-                              : BaseColors.textColor,
-                        }}
+                        style={[
+                          {
+                            color:
+                              activeButtonIndex === index
+                                ? BaseColors.white
+                                : BaseColors.textColor,
+                          },
+                          styles.btnText,
+                        ]}
                       >
-                        {item.label}
+                        {item}
                       </Text>
                     </TouchableOpacity>
                   </View>
                 )}
                 keyExtractor={item => item.id}
+                ref={flatListRef}
               />
               <Text style={styles.yesText}>
                 Please select the severity level you can also see the previous
                 severity level.
               </Text>
-              {buttons?.map((item, index) => {
+              {tag?.map((item, index) => {
                 return (
                   index === activeButtonIndex && (
                     <>
@@ -384,7 +510,7 @@ fixDurScreen	= t	Average fixation duration on screen
                         ref={aoiRef}
                       >
                         <Text style={styles.boldText}>
-                          Report the severity level of {buttons[index].label}:
+                          Report the severity level of {tag[index].label}:
                         </Text>
                         <View style={styles.sliderMarker}>
                           <Slider
