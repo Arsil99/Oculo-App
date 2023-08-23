@@ -221,7 +221,7 @@ export default function Recalldigits({ navigation }) {
           )}
 
           <View style={{ flex: 0.1 }}>
-            {currentIndex === questionList.length - 1 ? (
+            {(currentIndex === questionList.length - 1) & showInput ? (
               <Button
                 style={{ marginTop: 30 }}
                 shape="round"
