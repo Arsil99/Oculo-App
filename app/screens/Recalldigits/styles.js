@@ -37,11 +37,11 @@ export default StyleSheet.create({
   subtitleText: {
     alignSelf: 'center',
     textAlign: 'center',
-    fontSize: 16,
-    fontWeight: '400',
+    fontSize: 20,
+    fontWeight: '700',
     lineHeight: 30,
-    marginTop: 15,
-    fontFamily: FontFamily.regular,
+    // marginTop: 15,
+    fontFamily: FontFamily.bold,
     color: BaseColors.textColor,
   },
 

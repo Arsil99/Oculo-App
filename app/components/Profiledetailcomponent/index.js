@@ -360,17 +360,17 @@ const Profiledetailcomponent = (props, ref) => {
                 {/* You can also use an Icon component or any other content here */}
               </View>
             )}
-            {/* <TouchableOpacity
+            <TouchableOpacity
               onPress={handleImagePicker}
               activeOpacity={BaseSetting.buttonOpacity}
               style={styles.imagePickerButton}
             >
               <Icon size={17} name="camera" color={BaseColors.white} />
-            </TouchableOpacity> */}
+            </TouchableOpacity>
           </View>
-
           <LabeledInput
             Label={'First Name'}
+            isRequired
             usericon
             placeholder={'Enter first name'}
             value={firstName}
@@ -409,6 +409,7 @@ const Profiledetailcomponent = (props, ref) => {
           />
           <LabeledInput
             ref={cInputRef}
+            isRequired
             Label={'Last Name'}
             usericon
             placeholder={'Enter last name'}
@@ -427,14 +428,25 @@ const Profiledetailcomponent = (props, ref) => {
             errorText={ErrObj.lastNameErrMsg}
           />
           <View>
-            <Text
-              style={[
-                styles.dateTitle,
-                { color: darkmode ? BaseColors.white : BaseColors.black90 },
-              ]}
-            >
-              Date of Birth
-            </Text>
+            <View style={{ flexDirection: 'row' }}>
+              <Text
+                style={[
+                  styles.dateTitle,
+                  { color: darkmode ? BaseColors.white : BaseColors.black90 },
+                ]}
+              >
+                Date of Birth
+              </Text>
+              <Text
+                style={{
+                  color: BaseColors.red,
+                  marginTop: -5,
+                  marginLeft: 2,
+                }}
+              >
+                *
+              </Text>
+            </View>
             <TouchableOpacity
               activeOpacity={BaseSetting.buttonOpacity}
               onPress={showDatepicker}
@@ -462,24 +474,27 @@ const Profiledetailcomponent = (props, ref) => {
               onChange={onChange}
             />
           )}
-          <Text
-            style={[
-              styles.genderTitle,
-              { color: darkmode ? BaseColors.white : BaseColors.black90 },
-            ]}
-          >
-            Gender
-          </Text>
-          <View style={[styles.genderBox, { zIndex: 50 }]}>
-            <Dropdown
-              items={genderdata}
-              open={open}
-              setOpen={setOpen}
-              placeholder="Please select gender type"
-              value={value}
-              setValue={setValue}
-              // onValueChange={handleDropdownChange}
-            />
+          <View>
+            <Text
+              style={[
+                styles.genderTitle,
+                { color: darkmode ? BaseColors.white : BaseColors.black90 },
+              ]}
+            >
+              Gender
+            </Text>
+
+            <View style={[styles.genderBox, { zIndex: 50 }]}>
+              <Dropdown
+                items={genderdata}
+                open={open}
+                setOpen={setOpen}
+                placeholder="Please select gender type"
+                value={value}
+                setValue={setValue}
+                // onValueChange={handleDropdownChange}
+              />
+            </View>
           </View>
           <Text
             style={[
@@ -499,14 +514,25 @@ const Profiledetailcomponent = (props, ref) => {
               setValue={setSelectedDropdownValue}
             />
           </View>
-          <Text
-            style={[
-              styles.genderTitle,
-              { color: darkmode ? BaseColors.white : BaseColors.black90 },
-            ]}
-          >
-            Sex
-          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text
+              style={[
+                styles.genderTitle,
+                { color: darkmode ? BaseColors.white : BaseColors.black90 },
+              ]}
+            >
+              Sex
+            </Text>
+            <Text
+              style={{
+                color: BaseColors.red,
+                marginTop: -3,
+                marginLeft: 2,
+              }}
+            >
+              *
+            </Text>
+          </View>
           <View style={[styles.genderBox, { zIndex: proopen ? null : 50 }]}>
             <Dropdown
               items={sexData}
@@ -547,6 +573,7 @@ const Profiledetailcomponent = (props, ref) => {
           ]}
         >
           <LabeledInput
+            isRequired
             ref={cInputRef1}
             Label={'Patient Phone'}
             phoneicon
@@ -571,6 +598,7 @@ const Profiledetailcomponent = (props, ref) => {
           />
 
           <LabeledInput
+            isRequired
             Label={'Patient Email'}
             mailicon
             placeholder={'Enter Patient Email'}
