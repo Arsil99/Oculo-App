@@ -221,18 +221,18 @@ export default function Recalldigits({ navigation }) {
           )}
 
           <View style={{ flex: 0.1 }}>
-            {showInput ? (
+            {currentIndex === questionList.length - 1 ? (
               <Button
                 style={{ marginTop: 30 }}
                 shape="round"
-                title={'Next'}
+                title={'Submit'}
                 onPress={onToggleDisplay}
               />
             ) : (
               <Button
                 style={{ marginTop: 30 }}
                 shape="round"
-                title={sumitbutton}
+                title={'Next'}
                 onPress={onToggleDisplay}
               />
             )}
