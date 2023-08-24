@@ -180,4 +180,14 @@ export default StyleSheet.create({
     backgroundColor: BaseColors.primary,
     marginRight: 5,
   },
+  btnStyle: {
+    marginRight: 10,
+    borderColor: BaseColors.black80,
+    borderWidth: 1,
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    borderRadius: 25,
+    marginTop: 10,
+    marginBottom: 25,
+  },
 });

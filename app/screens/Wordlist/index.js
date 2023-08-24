@@ -267,9 +267,9 @@ export default function Wordlist({ navigation }) {
         trial: item.trial,
       }));
       const data = {
-        patient_id: 15,
-        event_id: 106, // static
-        assessment_id: 68, //static
+        // patient_id: 15,
+        event_id: 109, // static
+        // assessment_id: 68, //static
         word_set_id: webId,
         answers: JSON.stringify(paramsArray),
         created_from: 'app',
@@ -282,7 +282,7 @@ export default function Wordlist({ navigation }) {
         false,
       );
       if (response?.status) {
-        navigation.goBack();
+        navigation.navigate('EventsStackNavigator');
         Toast.show({
           text1: response?.message.toString(),
           type: 'success',
