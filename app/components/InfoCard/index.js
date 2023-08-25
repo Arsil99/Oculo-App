@@ -72,9 +72,9 @@ const InfoCard = props => {
               onPress={() => tabPress && tabPress(item)}
               style={[
                 styles.settingItem,
-                (index === 0) &
-                ((mainTitle !== 'Patient Information') &
-                  (mainTitle == 'contact Information'))
+                index === 0 &&
+                (mainTitle !== 'Patient Information') &
+                  (mainTitle == 'contact Information')
                   ? styles.topBorder
                   : [
                       styles.otherBorder,
@@ -90,9 +90,8 @@ const InfoCard = props => {
                         backgroundColor: darkmode
                           ? BaseColors.black90
                           : BaseColors.white,
-                        borderColor: darkmode
-                          ? BaseColors.white
-                          : BaseColors.borderColor,
+                        borderColor: BaseColors.borderColor,
+                        borderTopWidth: index === 0 ? 0 : 0.3,
                       },
                     ],
                 index === data.length - 1 ? styles.radiusDesign : null,
