@@ -7,6 +7,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 35,
+    marginTop: 10,
   },
   container: {
     flexGrow: 1,
@@ -198,7 +199,7 @@ export default StyleSheet.create({
     height: 35,
     paddingHorizontal: 10,
     fontSize: 14,
-    color: BaseColors.black,
+    color: BaseColors.white,
     fontWeight: 'bold',
     borderTopWidth: 1,
     borderTopColor: BaseColors.primary,

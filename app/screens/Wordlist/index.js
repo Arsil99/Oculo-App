@@ -249,7 +249,12 @@ export default function Wordlist({ navigation }) {
   const CounterTag = () => {
     return (
       <View style={styles.counterTag}>
-        <Text style={{ fontSize: 14 }}>{`Attempt : ${counter} / 3`}</Text>
+        <Text
+          style={{
+            fontSize: 14,
+            color: darkmode ? BaseColors.white : BaseColors.textColor,
+          }}
+        >{`Attempt : ${counter} / 3`}</Text>
       </View>
     );
   };
@@ -322,17 +327,32 @@ export default function Wordlist({ navigation }) {
   return (
     <KeyboardAvoidingView
       behavior={IOS ? 'padding' : 'height'}
-      style={styles.container}
+      style={[
+        styles.container,
+        {
+          backgroundColor: darkmode ? BaseColors.lightBlack : BaseColors.white,
+        },
+      ]}
     >
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        <StatusBar barStyle="dark-content" backgroundColor={BaseColors.white} />
+        <StatusBar
+          barStyle={!darkmode ? 'dark-content' : null}
+          backgroundColor={darkmode ? BaseColors.black : BaseColors.white}
+        />
 
         {viewType === 'list' ? (
-          <View style={{ flex: 1 }}>
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: darkmode
+                ? BaseColors.lightBlack
+                : BaseColors.white,
+            }}
+          >
             <HeaderBar
               HeaderText={'Word List'}
               HeaderCenter
@@ -343,7 +363,12 @@ export default function Wordlist({ navigation }) {
             />
             <View style={styles.main}>
               <View />
-              <Text style={styles.optionList}>
+              <Text
+                style={[
+                  styles.optionList,
+                  { color: darkmode ? BaseColors.white : BaseColors.textColor },
+                ]}
+              >
                 {optionList.map(item => item + '\n')}
               </Text>
               <Button
@@ -371,7 +396,14 @@ export default function Wordlist({ navigation }) {
             <View style={{ width: '100%', alignItems: 'center' }}>
               <TextInput
                 ref={InputRef1}
-                style={styles.voiceInput1}
+                style={[
+                  styles.voiceInput1,
+                  {
+                    backgroundColor: darkmode
+                      ? BaseColors.lightBlack
+                      : BaseColors.white,
+                  },
+                ]}
                 value={
                   input1
                     ? input1.charAt(0).toUpperCase() + input1.slice(1)
@@ -382,7 +414,14 @@ export default function Wordlist({ navigation }) {
               />
               <TextInput
                 ref={InputRef2}
-                style={styles.voiceInput2}
+                style={[
+                  styles.voiceInput2,
+                  {
+                    backgroundColor: darkmode
+                      ? BaseColors.lightBlack
+                      : BaseColors.white,
+                  },
+                ]}
                 value={
                   input2
                     ? input2.charAt(0).toUpperCase() + input2.slice(1)
@@ -393,7 +432,14 @@ export default function Wordlist({ navigation }) {
               />
               <TextInput
                 ref={InputRef3}
-                style={styles.voiceInput3}
+                style={[
+                  styles.voiceInput3,
+                  {
+                    backgroundColor: darkmode
+                      ? BaseColors.lightBlack
+                      : BaseColors.white,
+                  },
+                ]}
                 value={
                   input3
                     ? input3.charAt(0).toUpperCase() + input3.slice(1)
@@ -404,7 +450,14 @@ export default function Wordlist({ navigation }) {
               />
               <TextInput
                 ref={InputRef4}
-                style={styles.voiceInput4}
+                style={[
+                  styles.voiceInput4,
+                  {
+                    backgroundColor: darkmode
+                      ? BaseColors.lightBlack
+                      : BaseColors.white,
+                  },
+                ]}
                 value={
                   input4
                     ? input4.charAt(0).toUpperCase() + input4.slice(1)
@@ -415,7 +468,15 @@ export default function Wordlist({ navigation }) {
               />
               <TextInput
                 ref={InputRef5}
-                style={[styles.voiceInput5, { marginBottom: 20 }]}
+                style={[
+                  styles.voiceInput5,
+                  {
+                    marginBottom: 20,
+                    backgroundColor: darkmode
+                      ? BaseColors.lightBlack
+                      : BaseColors.white,
+                  },
+                ]}
                 value={
                   input5
                     ? input5.charAt(0).toUpperCase() + input5.slice(1)
@@ -429,11 +490,10 @@ export default function Wordlist({ navigation }) {
                 style={[
                   styles.borderVoice,
                   {
-                    borderColor: darkmode
-                      ? BaseColors.white
-                      : BaseColors.black10,
+                    borderColor: darkmode ? null : BaseColors.black10,
+                    borderWidth: darkmode ? null : 1,
                     backgroundColor: darkmode
-                      ? BaseColors.textColor
+                      ? BaseColors.lightBlack
                       : BaseColors.white,
                     elevation: darkmode ? 0 : 2,
                   },

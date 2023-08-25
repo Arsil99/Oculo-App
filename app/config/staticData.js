@@ -10,7 +10,7 @@ export const items = [
 ];
 
 export const switchOptions = [
-  { id: 'detail', name: 'Detail' },
+  { id: 'detail', name: 'Details' },
   { id: 'history', name: 'History' },
   { id: 'account', name: 'Account' },
 ];

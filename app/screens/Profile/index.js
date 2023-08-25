@@ -49,7 +49,7 @@ export default function Profile({ navigation }) {
   const IOS = Platform.OS === 'ios';
   const [activeTab, setActiveTab] = useState({
     id: 'detail',
-    name: 'Detail',
+    name: 'Details',
   });
 
   let epochTimeSeconds = Math.round(new Date().getTime() / 1000).toString();
