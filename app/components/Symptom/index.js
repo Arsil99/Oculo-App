@@ -5,10 +5,19 @@ import Button from '@components/Button';
 import { Image } from 'react-native';
 import { Images } from '@config';
 import { BaseColors } from '@config/theme';
+import HeaderBar from '@components/HeaderBar';
 
 const Symptom = ({ navigation, handleNextPress }) => {
   return (
     <ScrollView style={styles.main}>
+      <HeaderBar
+        HeaderText={'Symptoms'}
+        HeaderCenter
+        leftText={'Back'}
+        leftBtnPress={() => {
+          navigation.goBack();
+        }}
+      />
       <View
         style={{
           paddingTop: 30,
@@ -18,7 +27,7 @@ const Symptom = ({ navigation, handleNextPress }) => {
           backgroundColor: BaseColors.white,
         }}
       >
-        <View style={{ flex: 0.5 }}>
+        <View style={{ flex: 0.1 }}>
           <Text style={styles.titleText}>Report your symptoms</Text>
           <Text style={styles.titlesubText}>
             Please report your symptom severity level, based on how you've felt
@@ -48,7 +57,9 @@ const Symptom = ({ navigation, handleNextPress }) => {
             shape="round"
             title={'Next'}
             style={styles.Assessment}
-            onPress={handleNextPress}
+            onPress={() => {
+              navigation.navigate('Symptoms');
+            }}
           />
         </View>
       </View>

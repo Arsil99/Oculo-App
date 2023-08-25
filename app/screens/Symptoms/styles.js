@@ -79,7 +79,7 @@ export default StyleSheet.create({
     fontWeight: 'bold',
   },
   btnContainer: {
-    height: windowHeight / 4.2,
+    height: windowHeight / 3.2,
     justifyContent: 'flex-end',
     marginHorizontal: 20,
   },

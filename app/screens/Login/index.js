@@ -173,6 +173,8 @@ const Login = ({ navigation }) => {
     const params = {
       email: from === 'bio' ? id : email.trim(),
       password: from === 'bio' ? pass : password,
+      platform: Platform.OS,
+      uuid: '123456',
     };
     try {
       const resp = await getApiData(endPoints, 'POST', params, {}, false);

@@ -3,6 +3,7 @@ import React from 'react';
 import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
 import Button from '@components/Button';
+import ChangeInfo from '@screens/ChangeInfo';
 
 const Assessment = ({ navigation }) => {
   return (
@@ -60,6 +61,9 @@ const Assessment = ({ navigation }) => {
             shape="round"
             title={'Begin Assessment'}
             style={styles.Assessment}
+            onPress={() => {
+              navigation?.navigate('ChangeInfo');
+            }}
           />
         </View>
       </View>

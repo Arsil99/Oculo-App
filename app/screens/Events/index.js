@@ -72,7 +72,7 @@ export default function Events({ navigation }) {
             <CardList
               key={index}
               onPress={() =>
-                navigation.navigate('Symptoms', { event_id: item?.id })
+                navigation.navigate('Assessment', { event_id: item?.id })
               }
               image={Images.emoji1}
               data={item?.createdAt}
