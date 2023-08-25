@@ -249,12 +249,10 @@ export default function Wordlist({ navigation }) {
   const CounterTag = () => {
     return (
       <View style={styles.counterTag}>
-        <Text
-          style={{
-            fontSize: 14,
-            color: darkmode ? BaseColors.white : BaseColors.textColor,
-          }}
-        >{`Attempt : ${counter} / 3`}</Text>
+        <Text style={styles.subtitleText}>
+          {` Trial ${counter} / 3`}
+          {'\n'}What do you remember?{'\n'}
+        </Text>
       </View>
     );
   };
@@ -330,7 +328,9 @@ export default function Wordlist({ navigation }) {
       style={[
         styles.container,
         {
-          backgroundColor: darkmode ? BaseColors.lightBlack : BaseColors.white,
+          backgroundColor: darkmode
+            ? BaseColors.lightBlack
+            : BaseColors.lightBg,
         },
       ]}
     >
@@ -350,7 +350,7 @@ export default function Wordlist({ navigation }) {
               flex: 1,
               backgroundColor: darkmode
                 ? BaseColors.lightBlack
-                : BaseColors.white,
+                : BaseColors.lightBg,
             }}
           >
             <HeaderBar
@@ -361,26 +361,34 @@ export default function Wordlist({ navigation }) {
                 navigation.goBack();
               }}
             />
-            <View style={styles.main}>
-              <View />
-              <Text
-                style={[
-                  styles.optionList,
-                  { color: darkmode ? BaseColors.white : BaseColors.textColor },
-                ]}
-              >
-                {optionList.map(item => item + '\n')}
-              </Text>
-              <Button
-                onPress={() => handleVoice()}
-                shape="round"
-                title={'Next'}
-                style={styles.nextBtn}
-              />
+
+            <View style={styles.mainDiv}>
+              <View style={{ flex: 0.2 }}>
+                <Text style={styles.subtitleText}>
+                  Trial {+1}/3{'\n'}Remember these words{'\n'}
+                </Text>
+                <Text
+                  style={[
+                    styles.optionList,
+                    {
+                      color: darkmode ? BaseColors.white : BaseColors.textColor,
+                    },
+                  ]}
+                >
+                  {optionList.map(item => item + '\n')}
+                </Text>
+              </View>
+              <View style={styles.btnContainer}>
+                <Button
+                  shape="round"
+                  title={'Next'}
+                  onPress={() => handleVoice()}
+                />
+              </View>
             </View>
           </View>
         ) : (
-          <View style={styles.mainVoice}>
+          <View>
             <HeaderBar
               HeaderText={'Voice Input'}
               HeaderCenter
@@ -389,159 +397,166 @@ export default function Wordlist({ navigation }) {
                 navigation.goBack();
               }}
             />
-
-            <CounterTag />
-            {isSpeak && inputTextIntegration()}
-            {/* textarea */}
-            <View style={{ width: '100%', alignItems: 'center' }}>
-              <TextInput
-                ref={InputRef1}
-                style={[
-                  styles.voiceInput1,
-                  {
-                    backgroundColor: darkmode
-                      ? BaseColors.lightBlack
-                      : BaseColors.white,
-                  },
-                ]}
-                value={
-                  input1
-                    ? input1.charAt(0).toUpperCase() + input1.slice(1)
-                    : input1
-                }
-                onChangeText={setInput1}
-                onKeyPress={handleKeyPressFirstInput}
-              />
-              <TextInput
-                ref={InputRef2}
-                style={[
-                  styles.voiceInput2,
-                  {
-                    backgroundColor: darkmode
-                      ? BaseColors.lightBlack
-                      : BaseColors.white,
-                  },
-                ]}
-                value={
-                  input2
-                    ? input2.charAt(0).toUpperCase() + input2.slice(1)
-                    : input2
-                }
-                onChangeText={setInput2}
-                onKeyPress={handleKeyPressSecondInput}
-              />
-              <TextInput
-                ref={InputRef3}
-                style={[
-                  styles.voiceInput3,
-                  {
-                    backgroundColor: darkmode
-                      ? BaseColors.lightBlack
-                      : BaseColors.white,
-                  },
-                ]}
-                value={
-                  input3
-                    ? input3.charAt(0).toUpperCase() + input3.slice(1)
-                    : input3
-                }
-                onChangeText={setInput3}
-                onKeyPress={handleKeyPressThirdInput}
-              />
-              <TextInput
-                ref={InputRef4}
-                style={[
-                  styles.voiceInput4,
-                  {
-                    backgroundColor: darkmode
-                      ? BaseColors.lightBlack
-                      : BaseColors.white,
-                  },
-                ]}
-                value={
-                  input4
-                    ? input4.charAt(0).toUpperCase() + input4.slice(1)
-                    : input4
-                }
-                onChangeText={setInput4}
-                onKeyPress={handleKeyPressFourthInput}
-              />
-              <TextInput
-                ref={InputRef5}
-                style={[
-                  styles.voiceInput5,
-                  {
-                    marginBottom: 20,
-                    backgroundColor: darkmode
-                      ? BaseColors.lightBlack
-                      : BaseColors.white,
-                  },
-                ]}
-                value={
-                  input5
-                    ? input5.charAt(0).toUpperCase() + input5.slice(1)
-                    : input5
-                }
-                onChangeText={setInput5}
-                onKeyPress={handleKeyPressFifthInput}
-              />
-              <TouchableOpacity
-                onPress={isListening ? stopListening : startListening}
-                style={[
-                  styles.borderVoice,
-                  {
-                    borderColor: darkmode ? null : BaseColors.black10,
-                    borderWidth: darkmode ? null : 1,
-                    backgroundColor: darkmode
-                      ? BaseColors.lightBlack
-                      : BaseColors.white,
-                    elevation: darkmode ? 0 : 2,
-                  },
-                ]}
-              >
-                <Icon
-                  size={65}
-                  name="microphone"
-                  color={isListening ? BaseColors.red : BaseColors.primary}
-                />
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.textInputVoice}
-                onPress={() => {
-                  stopListening();
-                  setRecognizedText('');
-                  setInput1('');
-                  setInput2('');
-                  setInput3('');
-                  setInput4('');
-                  setInput5('');
+            <View style={styles.mainDiv}>
+              <CounterTag />
+              {isSpeak && inputTextIntegration()}
+              {/* textarea */}
+              <View
+                style={{
+                  width: '100%',
+                  alignItems: 'center',
+                  flex: 0.5,
                 }}
               >
-                <Text
-                  style={{
-                    color: darkmode ? BaseColors.white : BaseColors.primary,
-                    fontSize: 14,
+                <TextInput
+                  ref={InputRef1}
+                  style={[
+                    styles.voiceInput1,
+                    {
+                      backgroundColor: darkmode
+                        ? BaseColors.lightBlack
+                        : BaseColors.white,
+                    },
+                  ]}
+                  value={
+                    input1
+                      ? input1.charAt(0).toUpperCase() + input1.slice(1)
+                      : input1
+                  }
+                  onChangeText={setInput1}
+                  onKeyPress={handleKeyPressFirstInput}
+                />
+                <TextInput
+                  ref={InputRef2}
+                  style={[
+                    styles.voiceInput2,
+                    {
+                      backgroundColor: darkmode
+                        ? BaseColors.lightBlack
+                        : BaseColors.white,
+                    },
+                  ]}
+                  value={
+                    input2
+                      ? input2.charAt(0).toUpperCase() + input2.slice(1)
+                      : input2
+                  }
+                  onChangeText={setInput2}
+                  onKeyPress={handleKeyPressSecondInput}
+                />
+                <TextInput
+                  ref={InputRef3}
+                  style={[
+                    styles.voiceInput3,
+                    {
+                      backgroundColor: darkmode
+                        ? BaseColors.lightBlack
+                        : BaseColors.white,
+                    },
+                  ]}
+                  value={
+                    input3
+                      ? input3.charAt(0).toUpperCase() + input3.slice(1)
+                      : input3
+                  }
+                  onChangeText={setInput3}
+                  onKeyPress={handleKeyPressThirdInput}
+                />
+                <TextInput
+                  ref={InputRef4}
+                  style={[
+                    styles.voiceInput4,
+                    {
+                      backgroundColor: darkmode
+                        ? BaseColors.lightBlack
+                        : BaseColors.white,
+                    },
+                  ]}
+                  value={
+                    input4
+                      ? input4.charAt(0).toUpperCase() + input4.slice(1)
+                      : input4
+                  }
+                  onChangeText={setInput4}
+                  onKeyPress={handleKeyPressFourthInput}
+                />
+                <TextInput
+                  ref={InputRef5}
+                  style={[
+                    styles.voiceInput5,
+                    {
+                      marginBottom: 20,
+                      backgroundColor: darkmode
+                        ? BaseColors.lightBlack
+                        : BaseColors.white,
+                    },
+                  ]}
+                  value={
+                    input5
+                      ? input5.charAt(0).toUpperCase() + input5.slice(1)
+                      : input5
+                  }
+                  onChangeText={setInput5}
+                  onKeyPress={handleKeyPressFifthInput}
+                />
+                <TouchableOpacity
+                  onPress={isListening ? stopListening : startListening}
+                  style={[
+                    styles.borderVoice,
+                    {
+                      borderColor: darkmode ? null : BaseColors.black10,
+                      borderWidth: darkmode ? null : 1,
+                      backgroundColor: darkmode
+                        ? BaseColors.lightBlack
+                        : BaseColors.white,
+                      elevation: darkmode ? 0 : 2,
+                    },
+                  ]}
+                >
+                  <Icon
+                    size={65}
+                    name="microphone"
+                    color={isListening ? BaseColors.red : BaseColors.primary}
+                  />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.textInputVoice}
+                  onPress={() => {
+                    stopListening();
+                    setRecognizedText('');
+                    setInput1('');
+                    setInput2('');
+                    setInput3('');
+                    setInput4('');
+                    setInput5('');
                   }}
                 >
-                  Clear
-                </Text>
-              </TouchableOpacity>
-            </View>
+                  <Text
+                    style={{
+                      color: darkmode ? BaseColors.white : BaseColors.primary,
+                      fontSize: 14,
+                    }}
+                  >
+                    Clear
+                  </Text>
+                </TouchableOpacity>
+              </View>
 
-            <View style={styles.attemptBtn}>
-              <Button
-                onPress={handleAttempts}
-                shape="round"
-                title={
-                  counter === 1
-                    ? 'Second Attempt'
-                    : counter === 2
-                    ? 'Third Attempt'
-                    : 'Submit'
-                }
-                style={styles.nextBtn}
-              />
+              <View style={styles.attemptBtn}>
+                <Button
+                  onPress={handleAttempts}
+                  shape="round"
+                  title={
+                    counter === 1
+                      ? 'Second Attempt'
+                      : counter === 2
+                      ? 'Third Attempt'
+                      : 'Submit'
+                  }
+                  style={styles.nextBtn}
+                />
+              </View>
             </View>
           </View>
         )}

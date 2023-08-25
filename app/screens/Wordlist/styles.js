@@ -1,3 +1,4 @@
+import BaseSetting from '@config/setting';
 import { BaseColors, FontFamily } from '@config/theme';
 import { StyleSheet } from 'react-native';
 
@@ -38,9 +39,9 @@ export default StyleSheet.create({
   },
   optionList: {
     color: BaseColors.textColor,
-    fontSize: 22,
-    lineHeight: 35,
-    fontWeight: '800',
+    fontSize: 32,
+    lineHeight: 40,
+    fontWeight: '700',
     textAlign: 'center',
   },
   wordcontainer: {
@@ -51,9 +52,10 @@ export default StyleSheet.create({
     flex: 0.5,
   },
   attemptBtn: {
-    width: '100%',
+    height: BaseSetting.nWidth / 2,
+    flex: 0.5,
     alignItems: 'center',
-    marginBottom: 30,
+    justifyContent: 'flex-end',
   },
   imgContainer: {
     justifyContent: 'center',
@@ -69,11 +71,13 @@ export default StyleSheet.create({
   },
 
   subtitleText: {
-    fontSize: 16,
-    fontWeight: '400',
-    lineHeight: 24,
-    marginTop: 15,
-    fontFamily: FontFamily.regular,
+    alignSelf: 'center',
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: '700',
+    lineHeight: 30,
+    // marginTop: 15,
+    fontFamily: FontFamily.bold,
     color: BaseColors.textColor,
   },
 
@@ -100,6 +104,11 @@ export default StyleSheet.create({
   nextBtn: {
     marginTop: 15,
     width: '80%',
+  },
+  btnContainer: {
+    justifyContent: 'flex-end',
+    flex: 0.8,
+    marginTop: 30,
   },
   stop: {
     fontSize: 16,
