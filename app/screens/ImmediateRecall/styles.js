@@ -6,7 +6,7 @@ export default StyleSheet.create({
     flex: 1,
   },
   titleText: {
-    marginTop: 20,
+    marginBottom: 10,
     fontSize: 20,
     fontWeight: '700',
     lineHeight: 30,
@@ -73,7 +73,6 @@ export default StyleSheet.create({
   },
   btnContainer: {
     marginTop: 30,
-    alignItems: 'center',
   },
   button: {
     height: 55,
@@ -87,7 +86,8 @@ export default StyleSheet.create({
     backgroundColor: BaseColors.white,
   },
   imgcontainer: {
-    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 30,
   },

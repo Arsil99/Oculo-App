@@ -14,26 +14,7 @@ import { BaseColors } from '@config/theme';
 import BaseSetting from '@config/setting';
 import Button from '@components/Button';
 
-const screens = [
-  {
-    image: Images.rememberword,
-  },
-  {
-    image: Images.speech,
-  },
-  {
-    image: Images.typetobox,
-  },
-];
-
 const ImmediateRecall = ({ navigation }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const { image } = screens[activeIndex];
-
-  const dotCount = 3;
-
-  const isLastScreen = activeIndex === screens.length - 1;
-
   return (
     <View style={styles.main}>
       <StatusBar
@@ -41,100 +22,53 @@ const ImmediateRecall = ({ navigation }) => {
         translucent={false}
         backgroundColor={'#0000'}
       />
-      <HeaderBar
-        HeaderText={'Immediate Recall'}
-        HeaderCenter
-        rightComponent={
-          !isLastScreen && (
-            <TouchableOpacity activeOpacity={BaseSetting.buttonOpacity}>
-              <Text>Skip</Text>
-            </TouchableOpacity>
-          )
-        }
-        leftText={'Cancel'}
-        leftBtnPress={() => {
-          navigation.goBack();
-        }}
-      />
+      <HeaderBar HeaderText={'Immediate Recall'} HeaderCenter />
 
       <ScrollView
         contentContainerStyle={styles.topcontainer}
         showsVerticalScrollIndicator={false}
       >
         <View>
-          <Text style={styles.titlesubText}>
-            Thank you for adding your symptoms’{'\n'} severity.
-          </Text>
           <Text style={styles.titleText}>Instructions</Text>
           <Text style={styles.titlesubText}>
-            This task will assess how well you can remember a word list. When
-            the test begins, you will see a list of words appear on the screen.
-            Remember these words. Once the response box appears on the screen,
-            do your best to report as many words as you can remember. You will
-            repeat the same word list three times.
+            Next we will test your memory. When the test begins, a list of words
+            will appear on the screen. Remember these words.{'\n'} {'\n'}On the
+            response screen, tap the microphone and repeat back as many words as
+            you can remember, in any order.{'\n'}
+            {'\n'} For Trials 2 & 3 you will see the same list again. Repeat
+            back as many words as you can remember in any order, even if you
+            said the word before.
           </Text>
           <Text style={styles.example}>Example:</Text>
         </View>
 
         <View style={styles.imgcontainer}>
-          <Image source={image} resizeMode="contain" style={styles.img2} />
-          <View style={styles.dotwithbordercontainer}>
-            {Array.from({ length: dotCount }, (_, index) => (
-              <TouchableOpacity
-                key={index}
-                activeOpacity={BaseSetting.buttonOpacity}
-                onPress={() => {
-                  setActiveIndex(index);
-                }}
-                style={[
-                  {
-                    borderColor:
-                      activeIndex === index
-                        ? BaseColors.primary
-                        : BaseColors.black20,
-                  },
-                  styles.row,
-                ]}
-              >
-                <View
-                  onPress={() => {
-                    setActiveIndex(index);
-                  }}
-                  style={[
-                    {
-                      borderWidth: activeIndex === index ? 1 : null,
-                      borderColor:
-                        activeIndex === index
-                          ? BaseColors.primary
-                          : BaseColors.black20,
-                    },
-                    styles.dot,
-                  ]}
-                >
-                  <View
-                    onPress={() => {
-                      setActiveIndex(index);
-                    }}
-                    style={[
-                      styles.round,
-                      {
-                        backgroundColor:
-                          activeIndex === index
-                            ? BaseColors.primary
-                            : '#B6B7B9',
-                      },
-                    ]}
-                  />
-                </View>
-              </TouchableOpacity>
-            ))}
-          </View>
+          {/* <Image source={Images.emoji5} resizeMode="contain" /> */}
+          <Image
+            source={Images.rememberword}
+            resizeMode="contain"
+            style={styles.img2}
+          />
+          <Image
+            source={Images.speech}
+            resizeMode="contain"
+            style={styles.img2}
+          />
+          <Image
+            source={Images.typetobox}
+            resizeMode="contain"
+            style={styles.img2}
+          />
         </View>
-        {isLastScreen ? (
-          <View style={styles.btnContainer}>
-            <Button shape="round" title={'Continue'} style={styles.button} />
-          </View>
-        ) : null}
+        <View style={styles.btnContainer}>
+          <Button
+            shape="round"
+            title={'Next'}
+            onPress={() => {
+              navigation?.navigate('Wordlist');
+            }}
+          />
+        </View>
       </ScrollView>
     </View>
   );
