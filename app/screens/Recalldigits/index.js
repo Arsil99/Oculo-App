@@ -159,14 +159,7 @@ export default function Recalldigits({ navigation }) {
         keyboardShouldPersistTaps="handled"
       >
         <StatusBar barStyle="dark-content" backgroundColor={BaseColors.white} />
-        <HeaderBar
-          HeaderText={'Recall Digits'}
-          HeaderCenter
-          leftText={'Cancel'}
-          leftBtnPress={() => {
-            navigation.goBack();
-          }}
-        />
+        <HeaderBar HeaderText={'Digits Backwards'} HeaderCenter />
         <View style={styles.mainDiv}>
           {loader ? (
             <ActivityIndicator

@@ -11,11 +11,18 @@ const ImmediateRecallmain = ({ navigation }) => {
   return (
     <View style={styles.main}>
       <StatusBar
-        barStyle="dark-content"
-        translucent={false}
-        backgroundColor={'#0000'}
+        barStyle="dark-content" // Set text/icons to dark color
+        backgroundColor={'#FFFFFF'} // White background
       />
-      <HeaderBar HeaderText={'Immediate Recall'} HeaderCenter />
+
+      <HeaderBar
+        HeaderText={'Digits Backwards'}
+        leftText={'Cancel'}
+        leftBtnPress={() => {
+          navigation.goBack();
+        }}
+        HeaderCenter
+      />
 
       <ScrollView
         contentContainerStyle={styles.topcontainer}
@@ -56,7 +63,7 @@ const ImmediateRecallmain = ({ navigation }) => {
             shape="round"
             title={'Next'}
             onPress={() => {
-              navigation?.navigate('Wordlist');
+              navigation?.navigate('Recalldigits');
             }}
           />
         </View>

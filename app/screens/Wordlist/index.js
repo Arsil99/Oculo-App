@@ -285,7 +285,7 @@ export default function Wordlist({ navigation }) {
         false,
       );
       if (response?.status) {
-        navigation.navigate('EventsStackNavigator');
+        navigation.navigate('ImmediateRecallmain');
         Toast.show({
           text1: response?.message.toString(),
           type: 'success',
