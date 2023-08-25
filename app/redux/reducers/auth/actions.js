@@ -15,6 +15,7 @@ const actions = {
   SET_ASK_PERMISSION: 'SET_ASK_PERMISSION',
   SET_ACTIVE_CHAT_USER: 'SET_ACTIVE_CHAT_USER',
   SET_BIO_METRIC: 'SET_BIO_METRIC',
+  SET_FCM_TOKEN: 'SET_FCM_TOKEN',
 
   setUserData: data => {
     return dispatch =>
@@ -36,6 +37,12 @@ const actions = {
     dispatch({
       type: actions.SET_ACCESSTOKEN,
       accessToken,
+    }),
+
+  setFcmToken: fcmToken => dispatch =>
+    dispatch({
+      type: actions.SET_FCM_TOKEN,
+      fcmToken,
     }),
 
   setBiometric: isBiometric => dispatch =>

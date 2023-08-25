@@ -24,7 +24,7 @@ import * as Keychain from 'react-native-keychain';
 
 const Login = ({ navigation }) => {
   const { setUserData, setAccessToken, setBiometric } = Authentication;
-  const { isBiometric, darkmode } = useSelector(state => state.auth);
+  const { isBiometric, darkmode, fcmToken } = useSelector(state => state.auth);
   const IOS = Platform.OS === 'ios';
   const emailRegex = BaseSetting?.emailRegex;
   const dispatch = useDispatch();
@@ -174,7 +174,7 @@ const Login = ({ navigation }) => {
       email: from === 'bio' ? id : email.trim(),
       password: from === 'bio' ? pass : password,
       platform: Platform.OS,
-      uuid: '123456',
+      uuid: fcmToken,
     };
     try {
       const resp = await getApiData(endPoints, 'POST', params, {}, false);
