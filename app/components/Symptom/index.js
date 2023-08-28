@@ -7,7 +7,7 @@ import { Images } from '@config';
 import { BaseColors } from '@config/theme';
 import HeaderBar from '@components/HeaderBar';
 
-const Symptom = ({ navigation, handleNextPress }) => {
+const Symptom = ({ navigation, eventId, handleNextPress }) => {
   return (
     <ScrollView style={styles.main}>
       <HeaderBar
@@ -58,7 +58,7 @@ const Symptom = ({ navigation, handleNextPress }) => {
             title={'Next'}
             style={styles.Assessment}
             onPress={() => {
-              navigation.navigate('Symptoms');
+              navigation.navigate('Symptoms', { event_id: eventId });
             }}
           />
         </View>

@@ -20,7 +20,8 @@ import styles from './styles';
 import { useSelector } from 'react-redux';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
-export default function Wordlist({ navigation }) {
+export default function Wordlist({ navigation, route }) {
+  const eventId = route?.params?.event_id;
   const { darkmode } = useSelector(state => state.auth);
   const [isListening, setIsListening] = useState(false);
   const [recognizedText, setRecognizedText] = useState('');
@@ -270,9 +271,7 @@ export default function Wordlist({ navigation }) {
         trial: item.trial,
       }));
       const data = {
-        // patient_id: 15,
-        event_id: 109, // static
-        // assessment_id: 68, //static
+        event_id: eventId,
         word_set_id: webId,
         answers: JSON.stringify(paramsArray),
         created_from: 'app',

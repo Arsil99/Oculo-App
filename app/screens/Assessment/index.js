@@ -5,7 +5,8 @@ import HeaderBar from '@components/HeaderBar';
 import Button from '@components/Button';
 import ChangeInfo from '@screens/ChangeInfo';
 
-const Assessment = ({ navigation }) => {
+const Assessment = ({ navigation, route }) => {
+  const eventId = route?.params?.event_id;
   return (
     <View style={styles.main}>
       <StatusBar
@@ -61,7 +62,7 @@ const Assessment = ({ navigation }) => {
             title={'Begin Assessment'}
             style={styles.Assessment}
             onPress={() => {
-              navigation?.navigate('ChangeInfo');
+              navigation?.navigate('ChangeInfo', { event_id: eventId });
             }}
           />
         </View>

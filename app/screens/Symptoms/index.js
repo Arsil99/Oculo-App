@@ -286,7 +286,7 @@ fixDurScreen	= t	Average fixation duration on screen
         false,
       );
       if (response?.status) {
-        navigation.navigate('Wordlist');
+        navigation.navigate('Wordlist', { event_id: eventId });
         Toast.show({
           text1: response?.message.toString(),
           type: 'success',

@@ -9,7 +9,8 @@ import { useState } from 'react';
 import { View, StatusBar, Text, TouchableOpacity } from 'react-native';
 import styles from './styles';
 
-export default function ChangeInfo({ navigation }) {
+export default function ChangeInfo({ navigation, route }) {
+  const eventId = route?.params?.event_id;
   const [buttonColor, setButtonColor] = useState(BaseColors.secondary);
   const [textColor, setTextColor] = useState(BaseColors.white);
   const [editHistory, setEditHistory] = useState(true);
@@ -119,6 +120,6 @@ export default function ChangeInfo({ navigation }) {
       </View>
     </View>
   ) : (
-    <Symptom navigation={navigation} />
+    <Symptom navigation={navigation} eventId={eventId} />
   );
 }
