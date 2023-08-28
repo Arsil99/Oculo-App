@@ -208,7 +208,7 @@ export default StyleSheet.create({
     height: 35,
     paddingHorizontal: 10,
     fontSize: 14,
-    color: BaseColors.white,
+    color: BaseColors.black,
     fontWeight: 'bold',
     borderTopWidth: 1,
     borderTopColor: BaseColors.primary,

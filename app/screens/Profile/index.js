@@ -468,6 +468,7 @@ export default function Profile({ navigation }) {
                   </View>
                 </View>
               </Modal>
+
               <Modal
                 animationType="slide"
                 transparent={true}
@@ -479,50 +480,10 @@ export default function Profile({ navigation }) {
                 <View style={styles.confirmmmodalcenteredView}>
                   <View style={styles.confirmmmodalView}>
                     <Text style={styles.confirmmodaltitleText}>
-                      Confirm Sign Out
+                      Are u sure?
                     </Text>
                     <Text style={styles.confirmmodalText}>
-                      Are you sure you want to sign out?
-                    </Text>
-                    <View style={styles.modalButtons}>
-                      <TouchableOpacity
-                        activeOpacity={BaseSetting.buttonOpacity}
-                        style={[styles.button, styles.confirmButton]}
-                        onPress={() => {
-                          setShowSignOutConfirmation(false);
-                          logout();
-                        }}
-                      >
-                        <Text style={styles.buttonText}>Confirm</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        activeOpacity={BaseSetting.buttonOpacity}
-                        style={[styles.button, styles.cancelButton]}
-                        onPress={() => {
-                          setShowSignOutConfirmation(false);
-                        }}
-                      >
-                        <Text style={styles.buttonText}>Cancel</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </View>
-              </Modal>
-              <Modal
-                animationType="slide"
-                transparent={true}
-                visible={showSignOutConfirmation}
-                onRequestClose={() => {
-                  setShowSignOutConfirmation(false);
-                }}
-              >
-                <View style={styles.confirmmmodalcenteredView}>
-                  <View style={styles.confirmmmodalView}>
-                    <Text style={styles.confirmmodaltitleText}>
-                      Confirm Sign Out
-                    </Text>
-                    <Text style={styles.confirmmodalText}>
-                      Are you sure you want to sign out?
+                      You want to sign out?
                     </Text>
                     <View style={styles.modalButtons}>
                       <TouchableOpacity

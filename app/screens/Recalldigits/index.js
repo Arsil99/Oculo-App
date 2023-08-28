@@ -91,7 +91,7 @@ export default function Recalldigits({ navigation }) {
 
       if (currentIndex === questionList.length - 1) {
         submitData({ ...data, answers: updatedAnswers });
-        navigation.goBack();
+        navigation.navigate('Events');
       } else {
         setCurrentIndex(currentIndex + 1);
       }
