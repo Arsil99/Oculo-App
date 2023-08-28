@@ -26,7 +26,6 @@ const Assessment = ({ navigation }) => {
       <View style={{ flex: 1, marginHorizontal: 25 }}>
         <View
           style={{
-            flex: 0.7,
             justifyContent: 'flex-end',
             marginTop: 20,
           }}

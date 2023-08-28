@@ -4,7 +4,6 @@ import { BaseColors, FontFamily } from '@config/theme';
 export default StyleSheet.create({
   main: {
     flex: 1,
-    backgroundColor: BaseColors.lightBg,
   },
   titleText: {
     marginBottom: 10,

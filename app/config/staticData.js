@@ -42,7 +42,7 @@ export const settings = [
   {
     id: '4',
     leftIcon: 'notification',
-    title: 'Notifications settings',
+    title: 'Notifications Settings',
     righttitle: <Icon name="right" size={15} />,
     switch: false,
     navto: 'NotificationSettings',
@@ -58,7 +58,7 @@ export const settings = [
   {
     id: '6',
     leftIcon: 'microphone',
-    title: 'Speech to text',
+    title: 'Speech To Text',
     slug: 'speech_to_text',
     righttitle: <Icon name="right" size={15} />,
     navto: 'VoiceInput',
