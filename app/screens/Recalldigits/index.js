@@ -7,6 +7,9 @@ import {
   ScrollView,
   Platform,
   ActivityIndicator,
+  BackHandler,
+  TouchableOpacity,
+  Modal,
 } from 'react-native';
 import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
@@ -18,6 +21,7 @@ import { TextInput } from 'react-native-gesture-handler';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
 export default function Recalldigits({ navigation, route }) {
+  const [confirmLoading, setConfirmLoading] = useState(false);
   const eventId = route?.params?.event_id;
   const [loader, setLoader] = useState(true);
   const [questionList, setQuestionList] = useState([]);
@@ -147,6 +151,30 @@ export default function Recalldigits({ navigation, route }) {
       setLoader(false);
     }
   };
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      handleBackPress,
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
+  const handleBackPress = () => {
+    setShowConfirmation(true);
+    return true;
+  };
+
+  const handleCancel = () => {
+    setShowConfirmation(false);
+  };
+
+  const handleConfirm = () => {
+    setShowConfirmation(false);
+    navigation.navigate('Events');
+  };
 
   return (
     <KeyboardAvoidingView
@@ -159,7 +187,14 @@ export default function Recalldigits({ navigation, route }) {
         keyboardShouldPersistTaps="handled"
       >
         <StatusBar barStyle="dark-content" backgroundColor={BaseColors.white} />
-        <HeaderBar HeaderText={'Digits Backwards'} HeaderCenter />
+        <HeaderBar
+          HeaderText={'Digits Backwards'}
+          HeaderCenter
+          leftText="Cancel"
+          leftBtnPress={() => {
+            handleBackPress();
+          }}
+        />
         <View style={styles.mainDiv}>
           {loader ? (
             <ActivityIndicator
@@ -225,6 +260,45 @@ export default function Recalldigits({ navigation, route }) {
             )}
           </View>
         </View>
+        {showConfirmation && (
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={showConfirmation}
+            onRequestClose={handleCancel}
+          >
+            <View style={styles.confirmationModalCenteredView}>
+              <View style={styles.confirmationModalView}>
+                <Text style={styles.confirmationModalTitleText}>
+                  Are you sure?
+                </Text>
+                <Text style={styles.confirmationModalText}>
+                  You want to leave this screen?
+                </Text>
+                <View style={styles.modalButtons}>
+                  <TouchableOpacity
+                    style={[styles.button, styles.confirmButton]}
+                    onPress={handleConfirm}
+                    // disabled={confirmLoading}
+                  >
+                    {confirmLoading ? (
+                      <ActivityIndicator color="white" size="small" />
+                    ) : (
+                      <Text style={styles.buttonText}>Confirm</Text>
+                    )}
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={[styles.button, styles.cancelButton]}
+                    onPress={handleCancel}
+                  >
+                    <Text style={styles.buttonText}>Cancel</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
+        )}
       </ScrollView>
     </KeyboardAvoidingView>
   );

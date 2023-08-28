@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import Button from '@components/Button';
 import HeaderBar from '@components/HeaderBar';
 import { BaseColors, FontFamily } from '@config/theme';
@@ -17,6 +15,9 @@ import {
   DeviceEventEmitter,
   Dimensions,
   InteractionManager,
+  BackHandler,
+  Modal,
+  ActivityIndicator,
 } from 'react-native';
 import Animated, {
   useAnimatedStyle,
@@ -45,6 +46,7 @@ let currentIndexEndTime = null;
 const baseUrl = 'https://eyetracking.oculo.app';
 
 const Symptoms = ({ navigation, route }) => {
+  const [confirmLoading, setConfirmLoading] = useState(false);
   const eventId = route?.params?.event_id;
   const [activeButtonIndex, setActiveButtonIndex] = useState(0);
 
@@ -290,7 +292,7 @@ fixDurScreen	= t	Average fixation duration on screen
         false,
       );
       if (response?.status) {
-        navigation.navigate('Wordlist', { event_id: eventId });
+        navigation.navigate('ImmediateRecall', { event_id: eventId });
         Toast.show({
           text1: response?.message.toString(),
           type: 'success',
@@ -504,6 +506,30 @@ fixDurScreen	= t	Average fixation duration on screen
     setActiveIndexes(newActiveIndexes);
   };
 
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      handleBackPress,
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
+  const handleBackPress = () => {
+    setShowConfirmation(true);
+    return true;
+  };
+
+  const handleCancel = () => {
+    setShowConfirmation(false);
+  };
+
+  const handleConfirm = () => {
+    setShowConfirmation(false);
+    navigation.navigate('Events');
+  };
   return (
     <View style={styles.main}>
       <StatusBar barStyle="dark-content" translucent={true} />
@@ -512,7 +538,7 @@ fixDurScreen	= t	Average fixation duration on screen
         HeaderCenter
         leftText="Cancel"
         leftBtnPress={() => {
-          navigation.goBack();
+          handleBackPress();
         }}
       />
       <ScrollView
@@ -594,27 +620,25 @@ fixDurScreen	= t	Average fixation duration on screen
                             />
                             {/* Marker Vertical Lines */}
                             <View style={styles.markerContainer}>
-                              {['', 0, 1, 2, 3, 4, 5, 6].map(
-                                (marker, i) => (
-                                  <View
-                                    style={
-                                      i === 0
-                                        ? null
-                                        : [
-                                            styles.marker,
-                                            {
-                                              backgroundColor:
-                                                prevTag[index] + 1 === i
-                                                  ? BaseColors.secondary
-                                                  : BaseColors.textGrey,
-                                              fontWeight: 'bold',
-                                            },
-                                          ]
-                                    }
-                                    key={marker.toString()}
-                                  />
-                                ),
-                              )}
+                              {['', 0, 1, 2, 3, 4, 5, 6].map((marker, i) => (
+                                <View
+                                  style={
+                                    i === 0
+                                      ? null
+                                      : [
+                                          styles.marker,
+                                          {
+                                            backgroundColor:
+                                              prevTag[index] + 1 === i
+                                                ? BaseColors.secondary
+                                                : BaseColors.textGrey,
+                                            fontWeight: 'bold',
+                                          },
+                                        ]
+                                  }
+                                  key={marker.toString()}
+                                />
+                              ))}
                             </View>
                           </View>
 
@@ -807,6 +831,45 @@ fixDurScreen	= t	Average fixation duration on screen
             })}
           />
         </>
+        {showConfirmation && (
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={showConfirmation}
+            onRequestClose={handleCancel}
+          >
+            <View style={styles.confirmationModalCenteredView}>
+              <View style={styles.confirmationModalView}>
+                <Text style={styles.confirmationModalTitleText}>
+                  Are you sure?
+                </Text>
+                <Text style={styles.confirmationModalText}>
+                  You want to leave this screen?
+                </Text>
+                <View style={styles.modalButtons}>
+                  <TouchableOpacity
+                    style={[styles.button, styles.confirmButton]}
+                    onPress={handleConfirm}
+                    // disabled={confirmLoading}
+                  >
+                    {confirmLoading ? (
+                      <ActivityIndicator color="white" size="small" />
+                    ) : (
+                      <Text style={styles.buttonText}>Confirm</Text>
+                    )}
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={[styles.button, styles.cancelButton]}
+                    onPress={handleCancel}
+                  >
+                    <Text style={styles.buttonText}>Cancel</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
+        )}
       </ScrollView>
     </View>
   );

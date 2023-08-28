@@ -15,12 +15,16 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
+  ActivityIndicator,
+  Modal,
+  BackHandler,
 } from 'react-native';
 import styles from './styles';
 import { useSelector } from 'react-redux';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
 export default function Wordlist({ navigation, route }) {
+  const [confirmLoading, setConfirmLoading] = useState(false);
   const eventId = route?.params?.event_id;
   const { darkmode } = useSelector(state => state.auth);
   const [isListening, setIsListening] = useState(false);
@@ -321,6 +325,31 @@ export default function Wordlist({ navigation, route }) {
       clearInterval(intervalId);
     };
   }, [viewType]);
+
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      handleBackPress,
+    );
+
+    return () => backHandler.remove();
+  }, [viewType]);
+
+  const handleBackPress = () => {
+    setShowConfirmation(true);
+    return true;
+  };
+
+  const handleCancel = () => {
+    setShowConfirmation(false);
+  };
+
+  const handleConfirm = () => {
+    setShowConfirmation(false);
+    navigation.navigate('Events');
+  };
   return (
     <KeyboardAvoidingView
       behavior={IOS ? 'padding' : 'height'}
@@ -352,14 +381,7 @@ export default function Wordlist({ navigation, route }) {
                 : BaseColors.lightBg,
             }}
           >
-            <HeaderBar
-              HeaderText={'Word List'}
-              HeaderCenter
-              leftText={'Cancel'}
-              leftBtnPress={() => {
-                navigation.goBack();
-              }}
-            />
+            <HeaderBar HeaderText={'Word List'} HeaderCenter />
 
             <View style={styles.mainDiv}>
               <View style={{ flex: 0.2 }}>
@@ -393,7 +415,7 @@ export default function Wordlist({ navigation, route }) {
               HeaderCenter
               leftText={'Cancel'}
               leftBtnPress={() => {
-                navigation.goBack();
+                handleBackPress();
               }}
             />
             <View style={styles.mainDiv}>
@@ -557,6 +579,46 @@ export default function Wordlist({ navigation, route }) {
                 />
               </View>
             </View>
+
+            {showConfirmation && (
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={showConfirmation}
+                onRequestClose={handleCancel}
+              >
+                <View style={styles.confirmationModalCenteredView}>
+                  <View style={styles.confirmationModalView}>
+                    <Text style={styles.confirmationModalTitleText}>
+                      Are you sure?
+                    </Text>
+                    <Text style={styles.confirmationModalText}>
+                      You want to leave this screen?
+                    </Text>
+                    <View style={styles.modalButtons}>
+                      <TouchableOpacity
+                        style={[styles.button, styles.confirmButton]}
+                        onPress={handleConfirm}
+                        // disabled={confirmLoading}
+                      >
+                        {confirmLoading ? (
+                          <ActivityIndicator color="white" size="small" />
+                        ) : (
+                          <Text style={styles.buttonText}>Confirm</Text>
+                        )}
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        activeOpacity={0.7}
+                        style={[styles.button, styles.cancelButton]}
+                        onPress={handleCancel}
+                      >
+                        <Text style={styles.buttonText}>Cancel</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+              </Modal>
+            )}
           </View>
         )}
       </ScrollView>

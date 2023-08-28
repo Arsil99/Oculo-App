@@ -1,20 +1,13 @@
-import {
-  View,
-  Text,
-  StatusBar,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
-import React, { useState } from 'react';
+import { View, Text, StatusBar, ScrollView } from 'react-native';
+import React from 'react';
 import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
 import { Image } from 'react-native';
 import { Images } from '@config';
-import { BaseColors } from '@config/theme';
-import BaseSetting from '@config/setting';
 import Button from '@components/Button';
 
-const ImmediateRecall = ({ navigation }) => {
+const ImmediateRecall = ({ navigation, route }) => {
+  const eventId = route?.params?.event_id;
   return (
     <View style={styles.main}>
       <StatusBar
@@ -65,7 +58,7 @@ const ImmediateRecall = ({ navigation }) => {
             shape="round"
             title={'Next'}
             onPress={() => {
-              navigation?.navigate('Wordlist');
+              navigation.navigate('Wordlist', { event_id: eventId });
             }}
           />
         </View>
