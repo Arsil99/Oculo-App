@@ -303,7 +303,28 @@ export default function Wordlist({ navigation, route }) {
       console.log('error =======>>>', error);
     }
   };
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      handleBackPress,
+    );
 
+    return () => backHandler.remove();
+  }, []);
+
+  const handleBackPress = () => {
+    setShowConfirmation(true);
+    return true;
+  };
+
+  const handleCancel = () => {
+    setShowConfirmation(false);
+  };
+
+  const handleConfirm = () => {
+    setShowConfirmation(false);
+    navigation.navigate('Events');
+  };
   useEffect(() => {
     let intervalId;
     if (viewType === 'voice') {
@@ -328,28 +349,6 @@ export default function Wordlist({ navigation, route }) {
 
   const [showConfirmation, setShowConfirmation] = useState(false);
 
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      handleBackPress,
-    );
-
-    return () => backHandler.remove();
-  }, [viewType]);
-
-  const handleBackPress = () => {
-    setShowConfirmation(true);
-    return true;
-  };
-
-  const handleCancel = () => {
-    setShowConfirmation(false);
-  };
-
-  const handleConfirm = () => {
-    setShowConfirmation(false);
-    navigation.navigate('Events');
-  };
   return (
     <KeyboardAvoidingView
       behavior={IOS ? 'padding' : 'height'}
@@ -381,7 +380,14 @@ export default function Wordlist({ navigation, route }) {
                 : BaseColors.lightBg,
             }}
           >
-            <HeaderBar HeaderText={'Word List'} HeaderCenter />
+            <HeaderBar
+              HeaderText={'Word List'}
+              HeaderCenter
+              leftText={'Cancel'}
+              leftBtnPress={() => {
+                handleBackPress();
+              }}
+            />
 
             <View style={styles.mainDiv}>
               <View style={{ flex: 0.2 }}>
@@ -579,47 +585,46 @@ export default function Wordlist({ navigation, route }) {
                 />
               </View>
             </View>
-
-            {showConfirmation && (
-              <Modal
-                animationType="slide"
-                transparent={true}
-                visible={showConfirmation}
-                onRequestClose={handleCancel}
-              >
-                <View style={styles.confirmationModalCenteredView}>
-                  <View style={styles.confirmationModalView}>
-                    <Text style={styles.confirmationModalTitleText}>
-                      Are you sure?
-                    </Text>
-                    <Text style={styles.confirmationModalText}>
-                      You want to leave this screen?
-                    </Text>
-                    <View style={styles.modalButtons}>
-                      <TouchableOpacity
-                        style={[styles.button, styles.confirmButton]}
-                        onPress={handleConfirm}
-                        // disabled={confirmLoading}
-                      >
-                        {confirmLoading ? (
-                          <ActivityIndicator color="white" size="small" />
-                        ) : (
-                          <Text style={styles.buttonText}>Confirm</Text>
-                        )}
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        activeOpacity={0.7}
-                        style={[styles.button, styles.cancelButton]}
-                        onPress={handleCancel}
-                      >
-                        <Text style={styles.buttonText}>Cancel</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </View>
-              </Modal>
-            )}
           </View>
+        )}
+        {showConfirmation && (
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={showConfirmation}
+            onRequestClose={handleCancel}
+          >
+            <View style={styles.confirmationModalCenteredView}>
+              <View style={styles.confirmationModalView}>
+                <Text style={styles.confirmationModalTitleText}>
+                  Are you sure?
+                </Text>
+                <Text style={styles.confirmationModalText}>
+                  You want to leave this screen?
+                </Text>
+                <View style={styles.modalButtons}>
+                  <TouchableOpacity
+                    style={[styles.button, styles.confirmButton]}
+                    onPress={handleConfirm}
+                    // disabled={confirmLoading}
+                  >
+                    {confirmLoading ? (
+                      <ActivityIndicator color="white" size="small" />
+                    ) : (
+                      <Text style={styles.buttonText}>Confirm</Text>
+                    )}
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={[styles.button, styles.cancelButton]}
+                    onPress={handleCancel}
+                  >
+                    <Text style={styles.buttonText}>Cancel</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
         )}
       </ScrollView>
     </KeyboardAvoidingView>
