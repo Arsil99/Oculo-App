@@ -3,10 +3,10 @@ import React from 'react';
 import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
 import Button from '@components/Button';
-import ChangeInfo from '@screens/ChangeInfo';
 
 const Assessment = ({ navigation, route }) => {
   const eventId = route?.params?.event_id;
+  const data = route?.params?.otherData;
   return (
     <View style={styles.main}>
       <StatusBar
@@ -34,7 +34,7 @@ const Assessment = ({ navigation, route }) => {
           <Text style={styles.titleText}>Assessment Details</Text>
           <View>
             <Text style={styles.titlesubText}>Event</Text>
-            <Text style={styles.titledetail}>Aug 03, 2022</Text>
+            <Text style={styles.titledetail}>{data?.createdAt}</Text>
           </View>
           <View>
             <Text style={styles.titlesubText}>Provider</Text>
@@ -42,7 +42,7 @@ const Assessment = ({ navigation, route }) => {
           </View>
           <View>
             <Text style={styles.titlesubText}>Assessment Type</Text>
-            <Text style={styles.titledetail}>Subsequent - 2/5</Text>
+            <Text style={styles.titledetail}>{data?.assmt_type}</Text>
           </View>
           <View>
             <Text style={styles.titlesubText}>Instructions</Text>

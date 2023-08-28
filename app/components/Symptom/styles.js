@@ -5,6 +5,7 @@ const windowHeight = Dimensions.get('window').height;
 export default StyleSheet.create({
   main: {
     flex: 1,
+    backgroundColor: BaseColors.white,
   },
   titleText: {
     fontSize: 24,
@@ -42,5 +43,9 @@ export default StyleSheet.create({
     height: windowHeight / 4.2,
     justifyContent: 'center',
     marginHorizontal: 20,
+  },
+  img2: {
+    height: 200,
+    width: 200,
   },
 });

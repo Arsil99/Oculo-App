@@ -7,13 +7,18 @@ import HeaderBar from '@components/HeaderBar';
 import { useSelector } from 'react-redux';
 import { BaseColors } from '@config/theme';
 import BaseSetting from '@config/setting';
+
 import { getApiData } from '@utils/apiHelper';
 
 export default function Events({ navigation }) {
   const [eventDetails, setEventDetails] = useState([]);
   useEffect(() => {
-    EventListData();
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      EventListData();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
   // display the questions list
   const EventListData = async () => {
     const endPoint = `${BaseSetting.endpoints.eventList}?created_from=app`;
@@ -51,6 +56,7 @@ export default function Events({ navigation }) {
         </Text>
 
         <CardList
+          rightArrow
           onPress={() => navigation.navigate('Callibration')}
           image={Images.emoji1}
           data={'Mar 30 2000'}
@@ -71,13 +77,42 @@ export default function Events({ navigation }) {
           return (
             <CardList
               key={index}
+              rightArrow={
+                item?.symptom_info +
+                  item?.immediate_recall +
+                  item?.digit_recall ===
+                3
+                  ? false
+                  : true
+              }
               onPress={() =>
-                navigation.navigate('Assessment', { event_id: item?.id })
+                item?.symptom_info +
+                  item?.immediate_recall +
+                  item?.digit_recall ===
+                3
+                  ? null
+                  : navigation.navigate(
+                      item?.symptom_info
+                        ? item?.immediate_recall
+                          ? 'Recalldigits'
+                          : 'Wordlist'
+                        : 'Assessment',
+                      { event_id: item?.id, otherData: item },
+                    )
               }
               image={Images.emoji1}
               data={item?.createdAt}
-              status={'Completed'}
-              assessment={'Assessment 4/5'}
+              status={`${
+                item?.symptom_info +
+                  item?.immediate_recall +
+                  item?.digit_recall ===
+                3
+                  ? 'Completed'
+                  : 'Pending'
+              }`}
+              assessment={`Assessment ${
+                item?.symptom_info + item?.immediate_recall + item?.digit_recall
+              }/3`}
             />
           );
         })}
@@ -89,10 +124,11 @@ export default function Events({ navigation }) {
             color: darkmode ? BaseColors.white : BaseColors.black90,
           }}
         >
-          Closed Events
+          Closed Events (Static)
         </Text>
 
         <CardList
+          rightArrow
           onPress={() => navigation.navigate('EventDetails')}
           image={Images.emoji1}
           data={'March 30, 2000'}
@@ -100,6 +136,7 @@ export default function Events({ navigation }) {
           assessment={'Assessment 4/5'}
         />
         <CardList
+          rightArrow
           onPress={() => navigation.navigate('EventDetails')}
           image={Images.emoji1}
           data={'March 30, 2000'}

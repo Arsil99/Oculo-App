@@ -55,7 +55,7 @@ export default StyleSheet.create({
   boldText: {
     marginTop: 30,
     fontWeight: '700',
-    fontSize: 20,
+    fontSize: 17,
     lineHeight: 30,
     fontFamily: FontFamily.bold,
     color: BaseColors.textColor,
@@ -129,9 +129,8 @@ export default StyleSheet.create({
     paddingHorizontal: 10,
   },
   marker: {
-    width: 1,
+    width: 1.5,
     height: 10,
-    backgroundColor: BaseColors.black40,
   },
   thumbStyle: {
     shadowColor: '#000',

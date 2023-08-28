@@ -17,7 +17,8 @@ import { getApiData } from '@utils/apiHelper';
 import { TextInput } from 'react-native-gesture-handler';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
-export default function Recalldigits({ navigation }) {
+export default function Recalldigits({ navigation, route }) {
+  const eventId = route?.params?.event_id;
   const [loader, setLoader] = useState(true);
   const [questionList, setQuestionList] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -28,8 +29,7 @@ export default function Recalldigits({ navigation }) {
   const textInputRef = useRef(null); // Create a ref for the text input
 
   const [data, setData] = useState({
-    event_id: 106, //Static
-    assessment_id: 68, //Static
+    event_id: eventId,
     answers: [],
     created_from: 'app',
   });

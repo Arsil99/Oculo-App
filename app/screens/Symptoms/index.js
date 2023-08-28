@@ -115,9 +115,10 @@ fixDurScreen	= t	Average fixation duration on screen
     QuestionListAPI();
   }, []);
 
+  const [prevTag, setPrevTag] = useState([]);
   // display the questions list
   const QuestionListAPI = async () => {
-    const endPoint = `${BaseSetting.endpoints.questionList}?event_type=5&list=a`;
+    const endPoint = `${BaseSetting.endpoints.questionList}?event_type=5&list=a&event_id=${eventId}`;
     try {
       const res = await getApiData(`${endPoint}`, 'GET');
 
@@ -127,10 +128,12 @@ fixDurScreen	= t	Average fixation duration on screen
         const p_question = [];
         const boolQue = [];
         const inputQue = [];
+        const prevTagArray = [];
         for (let i = 0; i < res?.data.length; i++) {
           if (res?.data[i]?.type === '4') {
             // scale list
             questionsArray.push(res?.data[i]?.question);
+            prevTagArray.push(res?.data[i]?.prev_key);
             metaName.push(res?.data[i]?.meta_name);
             p_question.push(res?.data[i]?.patient_question);
           }
@@ -143,6 +146,7 @@ fixDurScreen	= t	Average fixation duration on screen
             inputQue.push(res?.data[i]?.question);
           }
         }
+        setPrevTag(prevTagArray);
         setTag(questionsArray);
         setMeta(metaName);
         set_patient_question(p_question);
@@ -572,7 +576,7 @@ fixDurScreen	= t	Average fixation duration on screen
                         >
                           <Text style={styles.boldText}>
                             Report the severity level of {tag[index].label}:
-                            {patient_question[index]}
+                            &nbsp;{patient_question[index]}
                           </Text>
                           <View style={styles.sliderMarker}>
                             <Slider
@@ -591,9 +595,22 @@ fixDurScreen	= t	Average fixation duration on screen
                             {/* Marker Vertical Lines */}
                             <View style={styles.markerContainer}>
                               {['', 0, 1, 2, 3, 4, 5, 6].map(
-                                (marker, index) => (
+                                (marker, i) => (
                                   <View
-                                    style={index === 0 ? null : styles.marker}
+                                    style={
+                                      i === 0
+                                        ? null
+                                        : [
+                                            styles.marker,
+                                            {
+                                              backgroundColor:
+                                                prevTag[index] + 1 === i
+                                                  ? BaseColors.secondary
+                                                  : BaseColors.textGrey,
+                                              fontWeight: 'bold',
+                                            },
+                                          ]
+                                    }
                                     key={marker.toString()}
                                   />
                                 ),
@@ -602,12 +619,21 @@ fixDurScreen	= t	Average fixation duration on screen
                           </View>
 
                           <View style={styles.markerContainerNumber}>
-                            {['', 0, 1, 2, 3, 4, 5, 6].map((label, index) =>
-                              index === 0 ? (
+                            {['', 0, 1, 2, 3, 4, 5, 6].map((label, i) =>
+                              i === 0 ? (
                                 <Text key={label.toString()}>&nbsp;</Text>
                               ) : (
                                 <Text
-                                  style={styles.sliderLabel}
+                                  style={[
+                                    styles.sliderLabel,
+                                    {
+                                      color:
+                                        prevTag[index] + 1 === i
+                                          ? BaseColors.secondary
+                                          : BaseColors.textGrey,
+                                      fontWeight: 'bold',
+                                    },
+                                  ]}
                                   key={label.toString()}
                                 >
                                   {label}
@@ -734,9 +760,6 @@ fixDurScreen	= t	Average fixation duration on screen
                     );
                   })}
                 </View>
-                {/* <TouchableOpacity>
-                  <Button title="back" onPress={() => setTakeBoolean(false)} /> 
-                </TouchableOpacity> */}
               </View>
             )}
             <View style={styles.btnContainer}>
