@@ -172,7 +172,6 @@ export default function Recalldigits({ navigation, route }) {
   };
 
   const handleConfirm = () => {
-    setShowConfirmation(false);
     navigation.navigate('Events');
   };
 

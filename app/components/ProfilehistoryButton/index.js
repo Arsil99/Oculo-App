@@ -158,7 +158,7 @@ const ProfilehistoryButton = (props, ref) => {
     return (
       <View key={index}>
         {/* Render question */}
-        <Text style={styles.questionText}>{`=> ${item.patient_question}`}</Text>
+        <Text style={styles.questionText}>{`${item.patient_question}`}</Text>
         {/* Render answer options */}
         {item.type === '1' ? (
           <ScrollView

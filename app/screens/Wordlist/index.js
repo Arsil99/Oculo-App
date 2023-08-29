@@ -322,7 +322,6 @@ export default function Wordlist({ navigation, route }) {
   };
 
   const handleConfirm = () => {
-    setShowConfirmation(false);
     navigation.navigate('Events');
   };
   useEffect(() => {

@@ -527,7 +527,7 @@ fixDurScreen	= t	Average fixation duration on screen
   };
 
   const handleConfirm = () => {
-    setShowConfirmation(false);
+    // setShowConfirmation(false);
     navigation.navigate('Events');
   };
   return (
