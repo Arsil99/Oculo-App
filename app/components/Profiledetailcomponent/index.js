@@ -77,7 +77,8 @@ const Profiledetailcomponent = (props, ref) => {
   const [sexErr, setSexErr] = useState(false);
   const [sexErrMsg, setSexErrMsg] = useState('');
   const IOS = Platform.OS === 'ios';
-  const cInputRef = useRef();
+  const pInfo1 = useRef();
+  const pInfo2 = useRef();
   const cInputRef1 = useRef();
   const cInputRef2 = useRef();
   const cInputRef3 = useRef();
@@ -386,10 +387,10 @@ const Profiledetailcomponent = (props, ref) => {
             }}
             showError={ErrObj.firstNameErr}
             errorText={ErrObj.firstNameErrMsg}
-            onSubmitEditing={() => cInputRef.current.focus()}
+            onSubmitEditing={() => pInfo1.current.focus()}
           />
           <LabeledInput
-            ref={cInputRef}
+            ref={pInfo1}
             Label={'Middle Name'}
             usericon
             placeholder={'Enter Middle name'}
@@ -406,9 +407,10 @@ const Profiledetailcomponent = (props, ref) => {
             }}
             showError={ErrObj.middleNameErr}
             errorText={ErrObj.middleNameErrMsg}
+            onSubmitEditing={() => pInfo2.current.focus()}
           />
           <LabeledInput
-            ref={cInputRef}
+            ref={pInfo2}
             isRequired
             Label={'Last Name'}
             usericon
