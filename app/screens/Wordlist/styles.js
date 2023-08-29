@@ -53,7 +53,7 @@ export default StyleSheet.create({
     flex: 0.5,
   },
   attemptBtn: {
-    height: BaseSetting.nWidth / 2,
+    height: BaseSetting.nWidth / 3.5,
     flex: 0.5,
     alignItems: 'center',
     justifyContent: 'flex-end',

@@ -9,6 +9,7 @@ import { BaseColors } from '@config/theme';
 import BaseSetting from '@config/setting';
 
 import { getApiData } from '@utils/apiHelper';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function Events({ navigation }) {
   const [eventDetails, setEventDetails] = useState([]);
@@ -33,119 +34,121 @@ export default function Events({ navigation }) {
   };
   const { darkmode } = useSelector(state => state.auth);
   return (
-    <View
-      style={[
-        styles.main,
-        {
-          backgroundColor: darkmode
-            ? BaseColors.lightBlack
-            : BaseColors.lightBg,
-        },
-      ]}
-    >
+    <View style={{ flexGrow: 1 }}>
       <HeaderBar HeaderText={'Events'} HeaderCenter />
-      <View style={{ paddingHorizontal: 15 }}>
-        <Text
-          style={{
-            fontSize: 18,
-            marginVertical: 5,
-            color: darkmode ? BaseColors.white : BaseColors.black90,
-          }}
-        >
-          Eye Tracking
-        </Text>
+      <ScrollView
+        style={[
+          styles.main,
+          {
+            backgroundColor: darkmode
+              ? BaseColors.lightBlack
+              : BaseColors.lightBg,
+          },
+        ]}
+      >
+        <View style={{ paddingHorizontal: 15 }}>
+          <Text
+            style={{
+              fontSize: 18,
+              marginVertical: 5,
+              color: darkmode ? BaseColors.white : BaseColors.black90,
+            }}
+          >
+            Eye Tracking
+          </Text>
 
-        <CardList
-          rightArrow
-          onPress={() => navigation.navigate('Callibration')}
-          image={Images.emoji1}
-          data={'Mar 30 2000'}
-          status={'Completed'}
-          assessment={'Assessment 4/5'}
-        />
+          <CardList
+            rightArrow
+            onPress={() => navigation.navigate('Callibration')}
+            image={Images.emoji1}
+            data={'Mar 30 2000'}
+            status={'Completed'}
+            assessment={'Assessment 4/5'}
+          />
 
-        <Text
-          style={{
-            fontSize: 18,
-            marginVertical: 5,
-            color: darkmode ? BaseColors.white : BaseColors.black90,
-          }}
-        >
-          Open Events
-        </Text>
-        {eventDetails?.map((item, index) => {
-          return (
-            <CardList
-              key={index}
-              rightArrow={
-                item?.symptom_info +
-                  item?.immediate_recall +
-                  item?.digit_recall ===
-                3
-                  ? false
-                  : true
-              }
-              onPress={() =>
-                item?.symptom_info +
-                  item?.immediate_recall +
-                  item?.digit_recall ===
-                3
-                  ? null
-                  : navigation.navigate(
-                      item?.symptom_info
-                        ? item?.immediate_recall
-                          ? 'Recalldigits'
-                          : 'Wordlist'
-                        : 'Assessment',
-                      { event_id: item?.id, otherData: item },
-                    )
-              }
-              image={Images.emoji1}
-              data={item?.createdAt}
-              status={`${
-                item?.symptom_info +
-                  item?.immediate_recall +
-                  item?.digit_recall ===
-                3
-                  ? 'Completed'
-                  : 'Pending'
-              }`}
-              assessment={`Assessment ${
-                Number(item?.symptom_info) +
-                Number(item?.immediate_recall) +
-                Number(item?.digit_recall)
-              }/3`}
-            />
-          );
-        })}
+          <Text
+            style={{
+              fontSize: 18,
+              marginVertical: 5,
+              color: darkmode ? BaseColors.white : BaseColors.black90,
+            }}
+          >
+            Open Events
+          </Text>
+          {eventDetails?.map((item, index) => {
+            return (
+              <CardList
+                key={index}
+                rightArrow={
+                  item?.symptom_info +
+                    item?.immediate_recall +
+                    item?.digit_recall ===
+                  3
+                    ? false
+                    : true
+                }
+                onPress={() =>
+                  item?.symptom_info +
+                    item?.immediate_recall +
+                    item?.digit_recall ===
+                  3
+                    ? null
+                    : navigation.navigate(
+                        item?.symptom_info
+                          ? item?.immediate_recall
+                            ? 'Recalldigits'
+                            : 'Wordlist'
+                          : 'Assessment',
+                        { event_id: item?.id, otherData: item },
+                      )
+                }
+                image={Images.emoji1}
+                data={item?.createdAt}
+                status={`${
+                  item?.symptom_info +
+                    item?.immediate_recall +
+                    item?.digit_recall ===
+                  3
+                    ? 'Completed'
+                    : 'Pending'
+                }`}
+                assessment={`Assessment ${
+                  Number(item?.symptom_info) +
+                  Number(item?.immediate_recall) +
+                  Number(item?.digit_recall)
+                }/3`}
+              />
+            );
+          })}
 
-        <Text
-          style={{
-            fontSize: 18,
-            marginVertical: 5,
-            color: darkmode ? BaseColors.white : BaseColors.black90,
-          }}
-        >
-          Closed Events (Static)
-        </Text>
+          <Text
+            style={{
+              fontSize: 18,
+              marginVertical: 5,
+              color: darkmode ? BaseColors.white : BaseColors.black90,
+            }}
+          >
+            Closed Events (Static)
+          </Text>
 
-        <CardList
-          rightArrow
-          onPress={() => navigation.navigate('EventDetails')}
-          image={Images.emoji1}
-          data={'March 30, 2000'}
-          status={'Completed'}
-          assessment={'Assessment 4/5'}
-        />
-        <CardList
-          rightArrow
-          onPress={() => navigation.navigate('EventDetails')}
-          image={Images.emoji1}
-          data={'March 30, 2000'}
-          status={'Completed'}
-          assessment={'Assessment 4/5'}
-        />
-      </View>
+          <CardList
+            rightArrow
+            onPress={() => navigation.navigate('EventDetails')}
+            image={Images.emoji1}
+            data={'March 30, 2000'}
+            status={'Completed'}
+            assessment={'Assessment 4/5'}
+          />
+          <CardList
+            rightArrow
+            onPress={() => navigation.navigate('EventDetails')}
+            image={Images.emoji1}
+            data={'March 30, 2000'}
+            status={'Completed'}
+            assessment={'Assessment 4/5'}
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 }
