@@ -20,20 +20,23 @@
 	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.892302063818-amcdfrc051aqmge1fiprkqcqlq04k7ev</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Detect Your Eye Movement</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Detect Your Eye Movement</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Detect Your Eye Movement</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Detect Your Eye Movement</string>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>
@@ -45,12 +48,18 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Detect Your Eye Movement</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string></string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>We need access to your microphone to enable speech recognition.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Detect Your Eye Movement</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Detect Your Eye Movement</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>We need access to your speech recognition to convert speech to text.</string>
 	<key>UIAppFonts</key>
@@ -74,6 +83,11 @@
 		<string>Europa-Bold.ttf</string>
 		<string>Europa-Light.ttf</string>
 		<string>Europa-Regular.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
