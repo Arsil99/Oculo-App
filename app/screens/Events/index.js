@@ -111,7 +111,9 @@ export default function Events({ navigation }) {
                   : 'Pending'
               }`}
               assessment={`Assessment ${
-                item?.symptom_info + item?.immediate_recall + item?.digit_recall
+                Number(item?.symptom_info) +
+                Number(item?.immediate_recall) +
+                Number(item?.digit_recall)
               }/3`}
             />
           );

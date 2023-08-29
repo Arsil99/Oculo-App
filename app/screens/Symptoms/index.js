@@ -2,7 +2,7 @@ import Button from '@components/Button';
 import HeaderBar from '@components/HeaderBar';
 import { BaseColors, FontFamily } from '@config/theme';
 import { Slider } from '@miblanchard/react-native-slider';
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -14,7 +14,6 @@ import {
   NativeModules,
   DeviceEventEmitter,
   Dimensions,
-  InteractionManager,
   BackHandler,
   Modal,
   ActivityIndicator,
@@ -78,6 +77,55 @@ const Symptoms = ({ navigation, route }) => {
   const [text, setText] = useState('');
   const [textErrObj, setTextErrObj] = useState({ error: false, msg: '' });
   const [validBool, setValidBool] = useState(true);
+  const [physical, setPhysical] = useState(0);
+  const [mental, setMental] = useState(0);
+  const [percentage, setPercentage] = useState(0);
+  const [head, setHead] = useState([]);
+  const [pressureHead, setPressureHead] = useState([]);
+  const [neckPain, setNeckPain] = useState([]);
+  const [nauSea, setNausea] = useState([]);
+  const [dizz, setDizz] = useState([]);
+  const [blurred, setBlurred] = useState([]);
+  const [balance, setBalance] = useState([]);
+  const [sensitiveLight, setSensitiveLight] = useState([]);
+  const [sensitiveNoise, setSensitiveNoise] = useState([]);
+  const [feelingSlowed, setFeelingSlowed] = useState([]);
+  const [feelingLike, setFeelingLike] = useState([]);
+  const [feelRight, setFeelRight] = useState([]);
+  const [difficultyCon, setDifficultyCon] = useState([]);
+  const [difficultyRem, setDifficultyRem] = useState([]);
+  const [low, setLow] = useState([]);
+  const [confusion, setConfusion] = useState([]);
+  const [draw, setDraw] = useState([]);
+  const [emotional, setEmotional] = useState([]);
+  const [irritable, setIrritable] = useState([]);
+  const [sad, setSad] = useState([]);
+  const [nervous, setNervous] = useState([]);
+  const [trouble, setTrouble] = useState([]);
+  const stateArray = [
+    head,
+    pressureHead,
+    neckPain,
+    nauSea,
+    dizz,
+    blurred,
+    balance,
+    sensitiveLight,
+    sensitiveNoise,
+    feelingSlowed,
+    feelingLike,
+    feelRight,
+    difficultyCon,
+    difficultyRem,
+    low,
+    confusion,
+    draw,
+    emotional,
+    irritable,
+    sad,
+    nervous,
+    trouble,
+  ];
   /*
     TODO: 1 - Calculate and Push the Analytics
 fixAOI	      = Total # of fixations b/w 200-500ms duration within AOI
@@ -208,27 +256,91 @@ fixDurScreen	= t	Average fixation duration on screen
     }
   };
 
-  // temperory data
   const staticData = [
     {
       symptom: 'Physical_Activity',
       initialScore: false,
-      scoreChng: 2,
-      finalScore: true,
+      scoreChng: 0,
+      finalScore: physical,
     },
     {
       symptom: 'Mental_Activity',
       initialScore: false,
-      scoreChng: 2,
-      finalScore: 0,
+      scoreChng: 0,
+      finalScore: mental,
     },
     {
       symptom: 'Feel_Perfect',
       initialScore: 1,
       scoreChng: 3,
-      finalScore: 100,
+      finalScore: percentage,
     },
   ];
+
+  const updateStateDynamically = (state, sliderObject) => {
+    const existingIndex = state.findIndex(
+      item => item.symptom === sliderObject.symptom,
+    );
+
+    if (existingIndex !== -1) {
+      state[existingIndex] = {
+        ...state[existingIndex],
+        scoreChng: state[existingIndex].scoreChng + sliderObject.scoreChng,
+        finalScore: sliderObject.finalScore,
+      };
+    } else {
+      state.push(sliderObject);
+    }
+
+    return [...state];
+  };
+  const stateUpdater = (state, updatedState) => {
+    if (state === head) {
+      setHead(updatedState);
+    } else if (state === pressureHead) {
+      setPressureHead(updatedState);
+    } else if (state === neckPain) {
+      setNeckPain(updatedState);
+    } else if (state === nauSea) {
+      setNausea(updatedState);
+    } else if (state === dizz) {
+      setDizz(updatedState);
+    } else if ((state = blurred)) {
+      setBlurred(updatedState);
+    } else if ((state = balance)) {
+      setBalance(updatedState);
+    } else if ((state = sensitiveLight)) {
+      setSensitiveLight(updatedState);
+    } else if ((state = sensitiveNoise)) {
+      setSensitiveNoise(updatedState);
+    } else if ((state = feelingSlowed)) {
+      setFeelingSlowed(updatedState);
+    } else if ((state = feelingLike)) {
+      setFeelingLike(updatedState);
+    } else if ((state = feelRight)) {
+      setFeelRight(updatedState);
+    } else if ((state = difficultyCon)) {
+      setDifficultyCon(updatedState);
+    } else if ((state = difficultyRem)) {
+      setDifficultyRem(updatedState);
+    } else if ((state = low)) {
+      setLow(updatedState);
+    } else if ((state = confusion)) {
+      setConfusion(updatedState);
+    } else if ((state = draw)) {
+      setDraw(updatedState);
+    } else if ((state = emotional)) {
+      setEmotional(updatedState);
+    } else if ((state = irritable)) {
+      setIrritable(updatedState);
+    } else if ((state = sad)) {
+      setSad(updatedState);
+    } else if ((state = nervous)) {
+      setNervous(updatedState);
+    } else if ((state = trouble)) {
+      setTrouble(updatedState);
+    }
+  };
 
   // Handle On Symptom Change
   const handleSymptomChange = index => {
@@ -238,7 +350,23 @@ fixDurScreen	= t	Average fixation duration on screen
       scoreChng: count,
       finalScore: lastValue,
     };
-    symptomArray.push(sliderObject);
+
+    stateArray.forEach(state => {
+      const updatedState = updateStateDynamically(state, sliderObject);
+      stateUpdater(state, updatedState);
+    });
+
+    const updatedSymptomArray = [...symptomArray];
+    if (updatedSymptomArray[index - 1]) {
+      updatedSymptomArray[index - 1] = {
+        ...updatedSymptomArray[index - 1],
+        ...sliderObject,
+      };
+    } else {
+      updatedSymptomArray.push(sliderObject);
+    }
+
+    setSymptomArray(updatedSymptomArray);
     if (tag[index]) {
       currentIndexEndTime = getDate();
 
@@ -252,6 +380,12 @@ fixDurScreen	= t	Average fixation duration on screen
     }
     ResetValues();
   };
+
+  useEffect(() => {
+    const filteredArray = trouble.filter(item => item.symptom !== undefined);
+    setSymptomArray(filteredArray);
+  }, [activeButtonIndex]);
+
   const SubmitSymptom = () => {
     let valid = true;
     if (isEmpty(text)) {
@@ -501,6 +635,12 @@ fixDurScreen	= t	Average fixation duration on screen
 
   let checkValid = boolQuestion.length;
   const handleButtonPress = (item, bool, rowIndex, buttonIndex) => {
+    console.log(rowIndex, buttonIndex);
+    if (rowIndex === 0) {
+      setPhysical(!buttonIndex);
+    } else if (rowIndex === 1) {
+      setMental(!buttonIndex);
+    }
     const newActiveIndexes = [...activeIndexes];
     newActiveIndexes[rowIndex] = buttonIndex;
     setActiveIndexes(newActiveIndexes);
@@ -527,7 +667,7 @@ fixDurScreen	= t	Average fixation duration on screen
   };
 
   const handleConfirm = () => {
-    // setShowConfirmation(false);
+    setShowConfirmation(false);
     navigation.navigate('Events');
   };
   return (
@@ -774,8 +914,9 @@ fixDurScreen	= t	Average fixation duration on screen
                           keyboardType={'numeric'}
                           value={text}
                           onChangeText={e => {
-                            setText(e <= 100 ? e : null),
-                              setTextErrObj({ error: false, msg: '' });
+                            setText(e <= 100 ? e : null);
+                            setPercentage(e <= 100 ? e : null);
+                            setTextErrObj({ error: false, msg: '' });
                           }}
                           showError={textErrObj.error}
                           errorText={textErrObj.msg}
