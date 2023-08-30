@@ -16,6 +16,7 @@ const initialState = {
   askPermission: false,
   activeChatUser: null,
   isBiometric: false,
+  fcmToken: '',
 };
 
 export default function reducer(state = initialState, action) {
@@ -50,6 +51,11 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         accessToken: action.accessToken,
+      };
+    case types.SET_FCM_TOKEN:
+      return {
+        ...state,
+        fcmToken: action.fcmToken,
       };
     case types.SET_USERTYPE:
       return {

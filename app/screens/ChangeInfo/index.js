@@ -1,15 +1,19 @@
+import Button from '@components/Button';
 import HeaderBar from '@components/HeaderBar';
+import Symptom from '@components/Symptom';
 import BaseSetting from '@config/setting';
 import { BaseColors } from '@config/theme';
+import Symptoms from '@screens/Symptoms';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { View, StatusBar, Text, TouchableOpacity } from 'react-native';
 import styles from './styles';
 
-export default function ChangeInfo({ navigation }) {
+export default function ChangeInfo({ navigation, route }) {
+  const eventId = route?.params?.event_id;
   const [buttonColor, setButtonColor] = useState(BaseColors.secondary);
   const [textColor, setTextColor] = useState(BaseColors.white);
-  const [editHistory, setEditHistory] = useState(false);
+  const [editHistory, setEditHistory] = useState(true);
   const [rightHistoryText, setRightHistoryText] = useState('Edit');
 
   const handlePress = () => {
@@ -25,7 +29,7 @@ export default function ChangeInfo({ navigation }) {
     setEditHistory(!editHistory);
     setRightHistoryText(rightHistoryText === 'Edit' ? 'Save' : 'Edit');
   };
-  return (
+  return editHistory ? (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={BaseColors.white} />
 
@@ -104,7 +108,18 @@ export default function ChangeInfo({ navigation }) {
         ) : (
           <Text style={styles.subtitleText}>Yes</Text>
         )}
+        <View style={styles.btnContainer}>
+          <Button
+            shape="round"
+            title={'Next'}
+            onPress={() => {
+              setEditHistory(false);
+            }}
+          />
+        </View>
       </View>
     </View>
+  ) : (
+    <Symptom navigation={navigation} eventId={eventId} />
   );
 }

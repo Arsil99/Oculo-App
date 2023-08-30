@@ -57,7 +57,7 @@ const HeaderBar = ({
             <Text
               style={[
                 LeftTextStyle,
-                // { color: darkmode ? BaseColors.white : BaseColors.black90 },
+                { color: darkmode ? BaseColors.white : BaseColors.black90 },
               ]}
             >
               {leftText}

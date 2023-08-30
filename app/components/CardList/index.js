@@ -7,7 +7,14 @@ import BaseSetting from '@config/setting';
 import { useSelector } from 'react-redux';
 import { BaseColors } from '@config/theme';
 import Animated, { FadeInDown } from 'react-native-reanimated';
-export default function CardList({ image, data, status, assessment, onPress }) {
+export default function CardList({
+  image,
+  data,
+  status,
+  assessment,
+  onPress,
+  rightArrow,
+}) {
   const { darkmode } = useSelector(state => state.auth);
   return (
     <Animated.View entering={FadeInDown}>
@@ -52,7 +59,17 @@ export default function CardList({ image, data, status, assessment, onPress }) {
                   ]}
                 >
                   <View style={{ flexDirection: 'row' }}>
-                    <View style={styles.colorcontainer}></View>
+                    <View
+                      style={[
+                        styles.colorcontainer,
+                        {
+                          backgroundColor:
+                            status === 'Completed'
+                              ? BaseColors.secondary
+                              : BaseColors.lightorange,
+                        },
+                      ]}
+                    ></View>
                     <Text
                       style={{
                         color: darkmode ? BaseColors.white : BaseColors.black80,
@@ -93,15 +110,17 @@ export default function CardList({ image, data, status, assessment, onPress }) {
               </View>
             </View>
           </View>
-          <View>
-            <Icon
-              name="right"
-              size={15}
-              style={{
-                color: darkmode ? BaseColors.white : BaseColors.black80,
-              }}
-            />
-          </View>
+          {rightArrow && (
+            <View>
+              <Icon
+                name="right"
+                size={15}
+                style={{
+                  color: darkmode ? BaseColors.white : BaseColors.black80,
+                }}
+              />
+            </View>
+          )}
         </View>
       </TouchableOpacity>
     </Animated.View>

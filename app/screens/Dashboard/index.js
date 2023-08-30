@@ -38,80 +38,72 @@ const Dashboard = () => {
     );
   };
   return (
-    <ScrollView
-      contentContainerStyle={{ flexGrow: 1, backgroundColor: BaseColors.white }}
-      showsVerticalScrollIndicator={false}
-    >
+    <View>
       <HeaderBar HeaderText={'Event Aug 3'} HeaderCenter leftText="Back" />
-      <View style={styles.imageView}>
-        <Image source={Images.emoji5} resizeMode="contain" />
-        <Text style={styles.headtext}>Headache</Text>
-      </View>
-      <View style={styles.subheaderContainer}>
-        <View>
-          <Text style={styles.text}>Baseline</Text>
-          <Text style={[styles.number, { color: BaseColors.secondary }]}>
-            3
-          </Text>
-        </View>
-        <View>
-          <Text style={styles.text}>Highest</Text>
-          <Text style={[styles.number, { color: BaseColors.Severe }]}>5</Text>
-        </View>
-        <View>
-          <Text style={styles.text}>Recent</Text>
-          <Text style={[styles.number, { color: BaseColors.Intense }]}>4</Text>
-        </View>
-      </View>
-
-      <View style={styles.imageView}>
-        <Image
-          source={Images.graph}
-          resizeMode="contain"
-          style={{ width: '90%' }}
-        />
-      </View>
-      <FlatList
-        renderItem={renderItem}
-        data={data}
-        keyExtractor={item => item.index}
-        contentContainerStyle={styles.listContainer}
-        columnWrapperStyle={styles.columnwrapperstyle}
-        numColumns={3}
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+          marginTop: 2,
+          backgroundColor: BaseColors.white,
+        }}
         showsVerticalScrollIndicator={false}
-      />
+      >
+        <View style={styles.imageView}>
+          <Image source={Images.emoji5} resizeMode="contain" />
+          <Text style={styles.headtext}>Headache</Text>
+        </View>
+        <View style={styles.subheaderContainer}>
+          <View>
+            <Text style={styles.text}>Baseline</Text>
+            <Text style={[styles.number, { color: BaseColors.secondary }]}>
+              3
+            </Text>
+          </View>
+          <View>
+            <Text style={styles.text}>Highest</Text>
+            <Text style={[styles.number, { color: BaseColors.Severe }]}>5</Text>
+          </View>
+          <View>
+            <Text style={styles.text}>Recent</Text>
+            <Text style={[styles.number, { color: BaseColors.Intense }]}>
+              4
+            </Text>
+          </View>
+        </View>
 
-      <View style={styles.dotwithbordercontainer}>
-        {planData.map((item, index) => {
-          return (
-            <TouchableOpacity
-              activeOpacity={BaseSetting.buttonOpacity}
-              onPress={() => {
-                setActiveIndex(index);
-              }}
-              style={[
-                {
-                  borderColor:
-                    activeIndex === index
-                      ? BaseColors.primary
-                      : BaseColors.black20,
-                },
-                styles.row,
-              ]}
-            >
-              <View
+        <View style={styles.imageView}>
+          <Image
+            source={Images.graph}
+            resizeMode="contain"
+            style={{ width: '90%' }}
+          />
+        </View>
+        <FlatList
+          renderItem={renderItem}
+          data={data}
+          keyExtractor={item => item.index}
+          contentContainerStyle={styles.listContainer}
+          columnWrapperStyle={styles.columnwrapperstyle}
+          numColumns={3}
+          showsVerticalScrollIndicator={false}
+        />
+
+        <View style={styles.dotwithbordercontainer}>
+          {planData.map((item, index) => {
+            return (
+              <TouchableOpacity
+                activeOpacity={BaseSetting.buttonOpacity}
                 onPress={() => {
                   setActiveIndex(index);
                 }}
                 style={[
                   {
-                    borderWidth: activeIndex === index ? 1 : null,
                     borderColor:
                       activeIndex === index
                         ? BaseColors.primary
                         : BaseColors.black20,
                   },
-                  styles.dot,
+                  styles.row,
                 ]}
               >
                 <View
@@ -119,19 +111,37 @@ const Dashboard = () => {
                     setActiveIndex(index);
                   }}
                   style={[
-                    styles.round,
                     {
-                      backgroundColor:
-                        activeIndex === index ? BaseColors.primary : '#B6B7B9',
+                      borderWidth: activeIndex === index ? 1 : null,
+                      borderColor:
+                        activeIndex === index
+                          ? BaseColors.primary
+                          : BaseColors.black20,
                     },
+                    styles.dot,
                   ]}
-                />
-              </View>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-    </ScrollView>
+                >
+                  <View
+                    onPress={() => {
+                      setActiveIndex(index);
+                    }}
+                    style={[
+                      styles.round,
+                      {
+                        backgroundColor:
+                          activeIndex === index
+                            ? BaseColors.primary
+                            : '#B6B7B9',
+                      },
+                    ]}
+                  />
+                </View>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 

@@ -33,7 +33,7 @@ export default StyleSheet.create({
   btnContainer: {
     alignItems: 'center',
     justifyContent: 'flex-end',
-    flex: 0.2,
+    flex: 0.6,
   },
   Assessment: { width: '80%' },
 });

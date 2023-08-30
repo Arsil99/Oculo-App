@@ -1,10 +1,8 @@
-/* eslint-disable */ 
-
 import Button from '@components/Button';
 import HeaderBar from '@components/HeaderBar';
 import { BaseColors, FontFamily } from '@config/theme';
 import { Slider } from '@miblanchard/react-native-slider';
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -16,7 +14,9 @@ import {
   NativeModules,
   DeviceEventEmitter,
   Dimensions,
-  InteractionManager,
+  BackHandler,
+  Modal,
+  ActivityIndicator,
 } from 'react-native';
 import Animated, {
   useAnimatedStyle,
@@ -33,6 +33,9 @@ import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import axios from 'axios';
 import { getDate } from '@utils/CommonFunction';
 import BaseSetting from '@config/setting';
+import { getApiData } from '@utils/apiHelper';
+import LabeledInput from '@components/LabeledInput';
+import { isEmpty } from 'lodash';
 
 let MOVE_DOT = false;
 let currentIndexEyeTracking = [];
@@ -41,7 +44,9 @@ let currentIndexEndTime = null;
 
 const baseUrl = 'https://eyetracking.oculo.app';
 
-const Symptoms = ({ navigation }) => {
+const Symptoms = ({ navigation, route }) => {
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const eventId = route?.params?.event_id;
   const [activeButtonIndex, setActiveButtonIndex] = useState(0);
 
   const [sliderValue, setSliderValue] = useState(1);
@@ -60,7 +65,67 @@ const Symptoms = ({ navigation }) => {
   const eyeTrackingPoints = useState([]);
   const [deviceName, setDeviceName] = useState(null);
   const [bgImageURI, setBgImageURI] = useState(null);
-
+  const [tag, setTag] = useState([]);
+  const [symptomArray, setSymptomArray] = useState([]);
+  const [takeBoolean, setTakeBoolean] = useState(false);
+  const flatListRef = useRef(null);
+  const [meta, setMeta] = useState([]);
+  const [patient_question, set_patient_question] = useState([]);
+  const [boolQuestion, setBoolQuestion] = useState([]);
+  const [inputQuestion, setInputQuestion] = useState([]);
+  const [activeIndexes, setActiveIndexes] = useState([]);
+  const [text, setText] = useState('');
+  const [textErrObj, setTextErrObj] = useState({ error: false, msg: '' });
+  const [validBool, setValidBool] = useState(true);
+  const [physical, setPhysical] = useState(0);
+  const [mental, setMental] = useState(0);
+  const [percentage, setPercentage] = useState(0);
+  const [head, setHead] = useState([]);
+  const [pressureHead, setPressureHead] = useState([]);
+  const [neckPain, setNeckPain] = useState([]);
+  const [nauSea, setNausea] = useState([]);
+  const [dizz, setDizz] = useState([]);
+  const [blurred, setBlurred] = useState([]);
+  const [balance, setBalance] = useState([]);
+  const [sensitiveLight, setSensitiveLight] = useState([]);
+  const [sensitiveNoise, setSensitiveNoise] = useState([]);
+  const [feelingSlowed, setFeelingSlowed] = useState([]);
+  const [feelingLike, setFeelingLike] = useState([]);
+  const [feelRight, setFeelRight] = useState([]);
+  const [difficultyCon, setDifficultyCon] = useState([]);
+  const [difficultyRem, setDifficultyRem] = useState([]);
+  const [low, setLow] = useState([]);
+  const [confusion, setConfusion] = useState([]);
+  const [draw, setDraw] = useState([]);
+  const [emotional, setEmotional] = useState([]);
+  const [irritable, setIrritable] = useState([]);
+  const [sad, setSad] = useState([]);
+  const [nervous, setNervous] = useState([]);
+  const [trouble, setTrouble] = useState([]);
+  const stateArray = [
+    head,
+    pressureHead,
+    neckPain,
+    nauSea,
+    dizz,
+    blurred,
+    balance,
+    sensitiveLight,
+    sensitiveNoise,
+    feelingSlowed,
+    feelingLike,
+    feelRight,
+    difficultyCon,
+    difficultyRem,
+    low,
+    confusion,
+    draw,
+    emotional,
+    irritable,
+    sad,
+    nervous,
+    trouble,
+  ];
   /*
     TODO: 1 - Calculate and Push the Analytics
 fixAOI	      = Total # of fixations b/w 200-500ms duration within AOI
@@ -96,11 +161,52 @@ fixDurScreen	= t	Average fixation duration on screen
     setDeviceName(dName);
   });
 
-  const buttons = [
-    { id: 1, label: 'Headache', value: 1 },
-    { id: 2, label: 'Neck Pain', value: 1 },
-    { id: 2, label: 'Nausea', value: 1 },
-  ];
+  useEffect(() => {
+    QuestionListAPI();
+  }, []);
+
+  const [prevTag, setPrevTag] = useState([]);
+  // display the questions list
+  const QuestionListAPI = async () => {
+    const endPoint = `${BaseSetting.endpoints.questionList}?event_type=5&list=a&event_id=${eventId}`;
+    try {
+      const res = await getApiData(`${endPoint}`, 'GET');
+
+      if (res?.status) {
+        const questionsArray = [];
+        const metaName = [];
+        const p_question = [];
+        const boolQue = [];
+        const inputQue = [];
+        const prevTagArray = [];
+        for (let i = 0; i < res?.data.length; i++) {
+          if (res?.data[i]?.type === '4') {
+            // scale list
+            questionsArray.push(res?.data[i]?.question);
+            prevTagArray.push(res?.data[i]?.prev_key);
+            metaName.push(res?.data[i]?.meta_name);
+            p_question.push(res?.data[i]?.patient_question);
+          }
+          if (res?.data[i].type === '5') {
+            // boolean questions stored
+            boolQue.push(res?.data[i]?.question);
+          }
+          if (res?.data[i].type === '7') {
+            // input questions stored
+            inputQue.push(res?.data[i]?.question);
+          }
+        }
+        setPrevTag(prevTagArray);
+        setTag(questionsArray);
+        setMeta(metaName);
+        set_patient_question(p_question);
+        setBoolQuestion(boolQue);
+        setInputQuestion(inputQue);
+      }
+    } catch (error) {
+      console.log('📌 ⏩ file: index.js:24 ⏩ LangListAPI ⏩ error:', error);
+    }
+  };
 
   // Uploading Assessment Data to Server
   const handleUploadAssessmentData = async () => {
@@ -125,7 +231,11 @@ fixDurScreen	= t	Average fixation duration on screen
       formData.append('deviceSize', JSON.stringify(Dimensions.get('window')));
       formData.append(
         'aoiJson',
-        JSON.stringify({ calibration, aoiXY, eyeData: currentIndexEyeTracking }),
+        JSON.stringify({
+          calibration,
+          aoiXY,
+          eyeData: currentIndexEyeTracking,
+        }),
       );
       formData.append('dateTime', getDate());
 
@@ -146,21 +256,198 @@ fixDurScreen	= t	Average fixation duration on screen
     }
   };
 
+  const staticData = [
+    {
+      symptom: 'Physical_Activity',
+      initialScore: false,
+      scoreChng: 0,
+      finalScore: physical,
+    },
+    {
+      symptom: 'Mental_Activity',
+      initialScore: false,
+      scoreChng: 0,
+      finalScore: mental,
+    },
+    {
+      symptom: 'Feel_Perfect',
+      initialScore: 1,
+      scoreChng: 3,
+      finalScore: percentage,
+    },
+  ];
+
+  const updateStateDynamically = (state, sliderObject) => {
+    const existingIndex = state.findIndex(
+      item => item.symptom === sliderObject.symptom,
+    );
+
+    if (existingIndex !== -1) {
+      state[existingIndex] = {
+        ...state[existingIndex],
+        scoreChng: state[existingIndex].scoreChng + sliderObject.scoreChng,
+        finalScore: sliderObject.finalScore,
+      };
+    } else {
+      state.push(sliderObject);
+    }
+
+    return [...state];
+  };
+  const stateUpdater = (state, updatedState) => {
+    if (state === head) {
+      setHead(updatedState);
+    } else if (state === pressureHead) {
+      setPressureHead(updatedState);
+    } else if (state === neckPain) {
+      setNeckPain(updatedState);
+    } else if (state === nauSea) {
+      setNausea(updatedState);
+    } else if (state === dizz) {
+      setDizz(updatedState);
+    } else if ((state = blurred)) {
+      setBlurred(updatedState);
+    } else if ((state = balance)) {
+      setBalance(updatedState);
+    } else if ((state = sensitiveLight)) {
+      setSensitiveLight(updatedState);
+    } else if ((state = sensitiveNoise)) {
+      setSensitiveNoise(updatedState);
+    } else if ((state = feelingSlowed)) {
+      setFeelingSlowed(updatedState);
+    } else if ((state = feelingLike)) {
+      setFeelingLike(updatedState);
+    } else if ((state = feelRight)) {
+      setFeelRight(updatedState);
+    } else if ((state = difficultyCon)) {
+      setDifficultyCon(updatedState);
+    } else if ((state = difficultyRem)) {
+      setDifficultyRem(updatedState);
+    } else if ((state = low)) {
+      setLow(updatedState);
+    } else if ((state = confusion)) {
+      setConfusion(updatedState);
+    } else if ((state = draw)) {
+      setDraw(updatedState);
+    } else if ((state = emotional)) {
+      setEmotional(updatedState);
+    } else if ((state = irritable)) {
+      setIrritable(updatedState);
+    } else if ((state = sad)) {
+      setSad(updatedState);
+    } else if ((state = nervous)) {
+      setNervous(updatedState);
+    } else if ((state = trouble)) {
+      setTrouble(updatedState);
+    }
+  };
+
   // Handle On Symptom Change
   const handleSymptomChange = index => {
-    if (buttons[index]) {
+    const sliderObject = {
+      symptom: meta[index - 1],
+      initialScore: initValue,
+      scoreChng: count,
+      finalScore: lastValue,
+    };
+
+    stateArray.forEach(state => {
+      const updatedState = updateStateDynamically(state, sliderObject);
+      stateUpdater(state, updatedState);
+    });
+
+    const updatedSymptomArray = [...symptomArray];
+    if (updatedSymptomArray[index - 1]) {
+      updatedSymptomArray[index - 1] = {
+        ...updatedSymptomArray[index - 1],
+        ...sliderObject,
+      };
+    } else {
+      updatedSymptomArray.push(sliderObject);
+    }
+
+    setSymptomArray(updatedSymptomArray);
+    if (tag[index]) {
       currentIndexEndTime = getDate();
 
       // Upload the Assessment Data to Server
       handleUploadAssessmentData();
       currentIndexEyeTracking = [];
       setActiveButtonIndex(index);
+      flatListRef.current.scrollToIndex({ index, animated: true });
     } else {
-      Toast.show({
-        text1: 'Assessment Completed.',
-        type: 'success',
+      setTakeBoolean(true);
+    }
+    ResetValues();
+  };
+
+  useEffect(() => {
+    const filteredArray = trouble.filter(item => item.symptom !== undefined);
+    setSymptomArray(filteredArray);
+  }, [activeButtonIndex]);
+
+  const SubmitSymptom = () => {
+    let valid = true;
+    if (isEmpty(text)) {
+      valid = false;
+      setTextErrObj({
+        error: true,
+        msg: 'Please enter percentage',
       });
     }
+    if (activeIndexes.length === checkValid) {
+      setValidBool(true);
+    } else {
+      console.log('required =>', activeIndexes.length);
+    }
+    console.log(valid, validBool);
+    if (valid && validBool) {
+      createSymptom();
+    } else {
+      Toast.show({
+        text1: 'Please fill all informations.',
+        type: 'error',
+      });
+    }
+  };
+  // api integration for create call
+  const createSymptom = async () => {
+    const updatedSymptomArray = symptomArray.concat(staticData);
+    try {
+      const response = await getApiData(
+        BaseSetting.endpoints.symptom,
+        'POST',
+        {
+          event_id: eventId,
+          answers: JSON.stringify(updatedSymptomArray),
+          created_from: 'app',
+        },
+        '',
+        false,
+      );
+      if (response?.status) {
+        navigation.navigate('ImmediateRecall', { event_id: eventId });
+        Toast.show({
+          text1: response?.message.toString(),
+          type: 'success',
+        });
+      } else {
+        Toast.show({
+          text1: response?.message,
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      console.log('error =======>>>', error);
+    }
+  };
+
+  const ResetValues = () => {
+    setCount(0);
+    setInitValue(0);
+    setMilliseconds(0);
+    setLastValue(0);
+    setSliderValue(1);
   };
 
   useEffect(() => {
@@ -313,11 +600,75 @@ fixDurScreen	= t	Average fixation duration on screen
     };
   }, [navigation]);
 
+  // slider details state management
+  const [count, setCount] = useState(0);
+  const [initValue, setInitValue] = useState(0);
+  const [milliseconds, setMilliseconds] = useState(0);
+  const [lastValue, setLastValue] = useState(0);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setMilliseconds(prevMilliseconds => prevMilliseconds + 1);
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
   // On Slider Change Value
   const handleValueChange = newValue => {
     setSliderValue(newValue);
+    setLastValue(newValue - 2);
+    setCount(count + 1);
   };
 
+  useEffect(() => {
+    if (count === 1) {
+      setInitValue(sliderValue - 2);
+    }
+  }, [count]);
+
+  useEffect(() => {
+    setTextErrObj({ error: false, msg: '' });
+  }, []);
+
+  let checkValid = boolQuestion.length;
+  const handleButtonPress = (item, bool, rowIndex, buttonIndex) => {
+    console.log(rowIndex, buttonIndex);
+    if (rowIndex === 0) {
+      setPhysical(!buttonIndex);
+    } else if (rowIndex === 1) {
+      setMental(!buttonIndex);
+    }
+    const newActiveIndexes = [...activeIndexes];
+    newActiveIndexes[rowIndex] = buttonIndex;
+    setActiveIndexes(newActiveIndexes);
+  };
+
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      handleBackPress,
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
+  const handleBackPress = () => {
+    setShowConfirmation(true);
+    return true;
+  };
+
+  const handleCancel = () => {
+    setShowConfirmation(false);
+  };
+
+  const handleConfirm = () => {
+    navigation.navigate('Events');
+  };
   return (
     <View style={styles.main}>
       <StatusBar barStyle="dark-content" translucent={true} />
@@ -326,7 +677,7 @@ fixDurScreen	= t	Average fixation duration on screen
         HeaderCenter
         leftText="Cancel"
         leftBtnPress={() => {
-          navigation.goBack();
+          handleBackPress();
         }}
       />
       <ScrollView
@@ -336,137 +687,265 @@ fixDurScreen	= t	Average fixation duration on screen
       >
         <>
           <View>
-            <View>
-              <FlatList
-                data={buttons}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                renderItem={({ item, index }) => (
-                  <View style={styles.buttoncontainer}>
-                    <TouchableOpacity
-                      onPress={() => handleSymptomChange(index)}
-                      style={[
-                        {
-                          backgroundColor:
-                            activeButtonIndex === index
-                              ? BaseColors.secondary
-                              : BaseColors.inactive,
-                        },
-                        styles.yesbutton,
-                      ]}
-                      activeOpacity={BaseSetting.buttonOpacity}
-                    >
-                      <Text
-                        style={{
-                          color:
-                            activeButtonIndex === index
-                              ? BaseColors.white
-                              : BaseColors.textColor,
-                        }}
+            {!takeBoolean ? (
+              <View>
+                <FlatList
+                  data={tag}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  renderItem={({ item, index }) => (
+                    <View style={styles.buttoncontainer}>
+                      <TouchableOpacity
+                        onPress={() => handleSymptomChange(index)}
+                        style={[
+                          {
+                            backgroundColor:
+                              activeButtonIndex === index
+                                ? BaseColors.secondary
+                                : BaseColors.inactive,
+                          },
+                          styles.yesbutton,
+                        ]}
+                        activeOpacity={BaseSetting.buttonOpacity}
                       >
-                        {item.label}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
-                keyExtractor={item => item.id}
-              />
-              <Text style={styles.yesText}>
-                Please select the severity level you can also see the previous
-                severity level.
-              </Text>
-              {buttons?.map((item, index) => {
-                return (
-                  index === activeButtonIndex && (
-                    <>
-                      <View
-                        // onLayout={handleAOILayout}
-                        ref={aoiRef}
-                      >
-                        <Text style={styles.boldText}>
-                          Report the severity level of {buttons[index].label}:
+                        <Text
+                          style={[
+                            {
+                              color:
+                                activeButtonIndex === index
+                                  ? BaseColors.white
+                                  : BaseColors.textColor,
+                            },
+                            styles.btnText,
+                          ]}
+                        >
+                          {item}
                         </Text>
-                        <View style={styles.sliderMarker}>
-                          <Slider
-                            value={sliderValue}
-                            onValueChange={handleValueChange}
-                            minimumValue={1}
-                            maximumValue={8}
-                            thumbStyle={styles.thumbStyle}
-                            trackStyle={styles.trackStyle}
-                            minimumTrackTintColor={BaseColors.primary}
-                            maximumTrackTintColor={BaseColors.tabinActive}
-                            thumbTintColor={BaseColors.white}
-                            style={styles.slider}
-                            step={1}
-                          />
-                          {/* Marker Vertical Lines */}
-                          <View style={styles.markerContainer}>
-                            {['', 0, 1, 2, 3, 4, 5, 6].map((marker, index) => (
-                              <View
-                                style={index === 0 ? null : styles.marker}
-                                key={marker.toString()}
-                              />
-                            ))}
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                  keyExtractor={item => item.id}
+                  ref={flatListRef}
+                />
+                <Text style={styles.yesText}>
+                  Please select the severity level you can also see the previous
+                  severity level.
+                </Text>
+                {tag?.map((item, index) => {
+                  return (
+                    index === activeButtonIndex && (
+                      <>
+                        <View
+                          // onLayout={handleAOILayout}
+                          ref={aoiRef}
+                        >
+                          <Text style={styles.boldText}>
+                            Report the severity level of {tag[index].label}:
+                            &nbsp;{patient_question[index]}
+                          </Text>
+                          <View style={styles.sliderMarker}>
+                            <Slider
+                              value={sliderValue}
+                              onValueChange={handleValueChange}
+                              minimumValue={1}
+                              maximumValue={8}
+                              thumbStyle={styles.thumbStyle}
+                              trackStyle={styles.trackStyle}
+                              minimumTrackTintColor={BaseColors.primary}
+                              maximumTrackTintColor={BaseColors.tabinActive}
+                              thumbTintColor={BaseColors.white}
+                              style={styles.slider}
+                              step={1}
+                            />
+                            {/* Marker Vertical Lines */}
+                            <View style={styles.markerContainer}>
+                              {['', 0, 1, 2, 3, 4, 5, 6].map((marker, i) => (
+                                <View
+                                  style={
+                                    i === 0
+                                      ? null
+                                      : [
+                                          styles.marker,
+                                          {
+                                            backgroundColor:
+                                              prevTag[index] + 1 === i
+                                                ? BaseColors.secondary
+                                                : BaseColors.textGrey,
+                                            fontWeight: 'bold',
+                                          },
+                                        ]
+                                  }
+                                  key={marker.toString()}
+                                />
+                              ))}
+                            </View>
                           </View>
-                        </View>
 
-                        <View style={styles.markerContainerNumber}>
-                          {['', 0, 1, 2, 3, 4, 5, 6].map((label, index) =>
-                            index === 0 ? (
-                              <Text key={label.toString()}>&nbsp;</Text>
-                            ) : (
-                              <Text
-                                style={styles.sliderLabel}
-                                key={label.toString()}
-                              >
-                                {label}
+                          <View style={styles.markerContainerNumber}>
+                            {['', 0, 1, 2, 3, 4, 5, 6].map((label, i) =>
+                              i === 0 ? (
+                                <Text key={label.toString()}>&nbsp;</Text>
+                              ) : (
+                                <Text
+                                  style={[
+                                    styles.sliderLabel,
+                                    {
+                                      color:
+                                        prevTag[index] + 1 === i
+                                          ? BaseColors.secondary
+                                          : BaseColors.textGrey,
+                                      fontWeight: 'bold',
+                                    },
+                                  ]}
+                                  key={label.toString()}
+                                >
+                                  {label}
+                                </Text>
+                              ),
+                            )}
+                          </View>
+
+                          <View>
+                            <View style={styles.lables}>
+                              <Text style={{ fontFamily: FontFamily?.light }}>
+                                None
                               </Text>
-                            ),
-                          )}
-                        </View>
-
-                        <View>
-                          <View style={styles.lables}>
-                            <Text style={{ fontFamily: FontFamily?.light }}>
-                              None
-                            </Text>
-                            <Text style={{ fontFamily: FontFamily?.light }}>
-                              Mild
-                            </Text>
-                            <Text style={{ fontFamily: FontFamily?.light }}>
-                              Moderate
-                            </Text>
-                            <Text style={{ fontFamily: FontFamily?.light }}>
-                              Sever
-                            </Text>
+                              <Text style={{ fontFamily: FontFamily?.light }}>
+                                Mild
+                              </Text>
+                              <Text style={{ fontFamily: FontFamily?.light }}>
+                                Moderate
+                              </Text>
+                              <Text style={{ fontFamily: FontFamily?.light }}>
+                                Sever
+                              </Text>
+                            </View>
                           </View>
                         </View>
-                      </View>
-                      <View style={styles.topBox}>
-                        <View style={styles.outer}>
-                          <View style={styles.inner} />
-                          <Text>Previous Assessment</Text>
+                        <View style={styles.topBox}>
+                          <View style={styles.outer}>
+                            <View style={styles.inner} />
+                            <Text>Previous Assessment</Text>
+                          </View>
+                          <View style={styles.assessmentHead}>
+                            <View style={styles.assessmentData} />
+                            <Text>Current Assessment</Text>
+                          </View>
                         </View>
-                        <View style={styles.assessmentHead}>
-                          <View style={styles.assessmentData} />
-                          <Text>Current Assessment</Text>
-                        </View>
+                      </>
+                    )
+                  );
+                })}
+              </View>
+            ) : (
+              <View>
+                {boolQuestion?.map((item, rowIndex) => {
+                  const activeIndex = activeIndexes[rowIndex]; // Get the active index for this row
+
+                  return (
+                    <View key={rowIndex}>
+                      <Text style={{ fontSize: 18, marginVertical: 5 }}>
+                        {item}{' '}
+                        <Text style={{ color: BaseColors.orange }}>*</Text>
+                      </Text>
+                      <View style={{ flexDirection: 'row' }}>
+                        <TouchableOpacity
+                          style={[
+                            styles.btnStyle,
+                            {
+                              backgroundColor:
+                                activeIndex === 0
+                                  ? BaseColors.secondary
+                                  : BaseColors.white,
+                            },
+                          ]}
+                          onPress={() =>
+                            handleButtonPress(item, true, rowIndex, 0)
+                          }
+                        >
+                          <Text
+                            style={{
+                              color:
+                                activeIndex === 0
+                                  ? BaseColors.white
+                                  : BaseColors.textColor,
+                            }}
+                          >
+                            Yes
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[
+                            styles.btnStyle,
+                            {
+                              backgroundColor:
+                                activeIndex === 1
+                                  ? BaseColors.secondary
+                                  : BaseColors.white,
+                            },
+                          ]}
+                          onPress={() =>
+                            handleButtonPress(item, false, rowIndex, 1)
+                          }
+                        >
+                          <Text
+                            style={{
+                              color:
+                                activeIndex === 1
+                                  ? BaseColors.white
+                                  : BaseColors.textColor,
+                            }}
+                          >
+                            No
+                          </Text>
+                        </TouchableOpacity>
                       </View>
-                    </>
-                  )
-                );
-              })}
-            </View>
+                    </View>
+                  );
+                })}
+
+                <View>
+                  {inputQuestion?.map((item, index) => {
+                    return (
+                      <View>
+                        <Text style={{ fontSize: 18 }}>{item}</Text>
+                        <LabeledInput
+                          keyboardType={'numeric'}
+                          value={text}
+                          onChangeText={e => {
+                            setText(e <= 100 ? e : null);
+                            setPercentage(e <= 100 ? e : null);
+                            setTextErrObj({ error: false, msg: '' });
+                          }}
+                          showError={textErrObj.error}
+                          errorText={textErrObj.msg}
+                        />
+                      </View>
+                    );
+                  })}
+                </View>
+              </View>
+            )}
             <View style={styles.btnContainer}>
-              <Button
-                shape="round"
-                title={'Next'}
-                style={styles.signinbutton}
-                onPress={() => {
-                  handleSymptomChange(activeButtonIndex + 1);
-                }}
-              />
+              {!takeBoolean ? (
+                <Button
+                  shape="round"
+                  title={'Next'}
+                  style={styles.signinbutton}
+                  onPress={() => {
+                    handleSymptomChange(activeButtonIndex + 1);
+                  }}
+                />
+              ) : (
+                <Button
+                  shape="round"
+                  title={'Submit'}
+                  style={styles.signinbutton}
+                  onPress={() => {
+                    SubmitSymptom();
+                  }}
+                />
+              )}
             </View>
           </View>
 
@@ -492,6 +971,45 @@ fixDurScreen	= t	Average fixation duration on screen
             })}
           />
         </>
+        {showConfirmation && (
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={showConfirmation}
+            onRequestClose={handleCancel}
+          >
+            <View style={styles.confirmationModalCenteredView}>
+              <View style={styles.confirmationModalView}>
+                <Text style={styles.confirmationModalTitleText}>
+                  Are you sure?
+                </Text>
+                <Text style={styles.confirmationModalText}>
+                  You want to leave this screen?
+                </Text>
+                <View style={styles.modalButtons}>
+                  <TouchableOpacity
+                    style={[styles.button, styles.confirmButton]}
+                    onPress={handleConfirm}
+                    // disabled={confirmLoading}
+                  >
+                    {confirmLoading ? (
+                      <ActivityIndicator color="white" size="small" />
+                    ) : (
+                      <Text style={styles.buttonText}>Confirm</Text>
+                    )}
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={[styles.button, styles.cancelButton]}
+                    onPress={handleCancel}
+                  >
+                    <Text style={styles.buttonText}>Cancel</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
+        )}
       </ScrollView>
     </View>
   );

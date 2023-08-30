@@ -31,7 +31,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: 140,
-    marginBottom: 25,
   },
   yesbutton: {
     paddingHorizontal: 30,
@@ -43,6 +42,9 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderColor: BaseColors.black20,
   },
+  btnText: {
+    fontSize: 13,
+  },
   yesText: {
     marginTop: 20,
     fontWeight: '300',
@@ -53,7 +55,7 @@ export default StyleSheet.create({
   boldText: {
     marginTop: 30,
     fontWeight: '700',
-    fontSize: 20,
+    fontSize: 17,
     lineHeight: 30,
     fontFamily: FontFamily.bold,
     color: BaseColors.textColor,
@@ -76,7 +78,7 @@ export default StyleSheet.create({
     fontWeight: 'bold',
   },
   btnContainer: {
-    height: windowHeight / 4.2,
+    height: windowHeight / 3.2,
     justifyContent: 'flex-end',
     marginHorizontal: 20,
   },
@@ -127,9 +129,8 @@ export default StyleSheet.create({
     paddingHorizontal: 10,
   },
   marker: {
-    width: 1,
+    width: 1.5,
     height: 10,
-    backgroundColor: BaseColors.black40,
   },
   thumbStyle: {
     shadowColor: '#000',
@@ -176,5 +177,71 @@ export default StyleSheet.create({
     borderRadius: 5,
     backgroundColor: BaseColors.primary,
     marginRight: 5,
+  },
+  btnStyle: {
+    marginRight: 10,
+    borderColor: BaseColors.black80,
+    borderWidth: 1,
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    borderRadius: 25,
+    marginTop: 10,
+    marginBottom: 25,
+  },
+
+  confirmmodaltitleText: {
+    marginBottom: 10,
+    fontSize: 20,
+    fontWeight: '700',
+    lineHeight: 30,
+    fontFamily: FontFamily.bold,
+    color: BaseColors.black,
+  },
+  confirmmodalText: {
+    color: BaseColors.textColor,
+    marginBottom: 20,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  button: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginLeft: 10,
+  },
+  confirmButton: {
+    backgroundColor: BaseColors.primary,
+  },
+  cancelButton: {
+    backgroundColor: BaseColors.secondary,
+  },
+  buttonText: {
+    color: BaseColors.white,
+    fontWeight: 'bold',
+  },
+
+  confirmationModalCenteredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: BaseColors.black50,
+  },
+  confirmationModalView: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    width: '80%',
+  },
+  confirmationModalTitleText: {
+    fontSize: 18,
+    color: BaseColors.textColor,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  confirmationModalText: {
+    fontSize: 16,
+    marginBottom: 20,
   },
 });

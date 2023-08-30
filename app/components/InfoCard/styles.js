@@ -44,7 +44,7 @@ export default StyleSheet.create({
   topBorder: { borderTopLeftRadius: 12, borderTopRightRadius: 12 },
   otherBorder: {
     borderTopWidth: 0.7,
-    // borderColor: BaseColors.borderColor,
+    borderColor: BaseColors.borderColor,
   },
   radiusDesign: {
     borderBottomLeftRadius: 12,

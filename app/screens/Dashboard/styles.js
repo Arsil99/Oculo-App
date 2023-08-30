@@ -97,7 +97,7 @@ export default StyleSheet.create({
     alignSelf: 'center',
   },
   dotwithbordercontainer: {
-    flex: 2,
+    marginTop: 25,
     flexDirection: 'row',
     width: '80%',
     alignItems: 'flex-start',

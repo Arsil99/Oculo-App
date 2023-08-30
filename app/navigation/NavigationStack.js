@@ -44,6 +44,7 @@ import Wordlist from '@screens/Wordlist';
 import DigitalRecall from '@screens/DigitalRecall';
 import Recalldigits from '@screens/Recalldigits';
 import FaceidEnabled from '@screens/FaceidEnabled';
+import ImmediateRecallmain from '@screens/ImmediateRecallmain';
 
 const intitialNotificationState = {
   notification: null,
@@ -322,6 +323,11 @@ function App() {
           <Stack.Screen
             name="FaceidEnabled"
             component={FaceidEnabled}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ImmediateRecallmain"
+            component={ImmediateRecallmain}
             options={{ headerShown: false }}
           />
           <Stack.Screen

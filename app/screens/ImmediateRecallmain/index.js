@@ -4,18 +4,25 @@ import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
 import { Image } from 'react-native';
 import { Images } from '@config';
+
 import Button from '@components/Button';
 
-const ImmediateRecall = ({ navigation, route }) => {
-  const eventId = route?.params?.event_id;
+const ImmediateRecallmain = ({ navigation }) => {
   return (
     <View style={styles.main}>
       <StatusBar
-        barStyle="dark-content"
-        translucent={false}
-        backgroundColor={'#0000'}
+        barStyle="dark-content" // Set text/icons to dark color
+        backgroundColor={'#FFFFFF'} // White background
       />
-      <HeaderBar HeaderText={'Immediate Recall'} HeaderCenter />
+
+      <HeaderBar
+        HeaderText={'Digits Backwards'}
+        leftText={'Cancel'}
+        leftBtnPress={() => {
+          navigation.goBack();
+        }}
+        HeaderCenter
+      />
 
       <ScrollView
         contentContainerStyle={styles.topcontainer}
@@ -24,31 +31,29 @@ const ImmediateRecall = ({ navigation, route }) => {
         <View>
           <Text style={styles.titleText}>Instructions</Text>
           <Text style={styles.titlesubText}>
-            Next we will test your memory. When the test begins, a list of words
-            will appear on the screen. Remember these words.{'\n'} {'\n'}On the
-            response screen, tap the microphone and repeat back as many words as
-            you can remember, in any order.{'\n'}
-            {'\n'} For Trials 2 & 3 you will see the same list again. Repeat
-            back as many words as you can remember in any order, even if you
-            said the word before.
+            A list of numbers will appear on the screen. Remember these numbers.
+            {'\n'}
+            {'\n'}
+            When the number pad appears, do your best to report as many numbers
+            as you can remember in the exact reverse order as they appeared.
           </Text>
+          <Text style={styles.example}>Example:{'\n'}</Text>
+          <Text style={styles.subText}>
+            If you saw{'\n'} 1 2 3 {'\n'}
+            {'\n'}You would report {'\n'}3 2 1
+          </Text>
+
           <Text style={styles.example}>Example:</Text>
         </View>
 
         <View style={styles.imgcontainer}>
-          {/* <Image source={Images.emoji5} resizeMode="contain" /> */}
           <Image
-            source={Images.rememberword}
+            source={Images.digit}
             resizeMode="contain"
             style={styles.img2}
           />
           <Image
-            source={Images.speech}
-            resizeMode="contain"
-            style={styles.img2}
-          />
-          <Image
-            source={Images.typetobox}
+            source={Images.digitreverse}
             resizeMode="contain"
             style={styles.img2}
           />
@@ -58,7 +63,7 @@ const ImmediateRecall = ({ navigation, route }) => {
             shape="round"
             title={'Next'}
             onPress={() => {
-              navigation.navigate('Wordlist', { event_id: eventId });
+              navigation?.navigate('Recalldigits');
             }}
           />
         </View>
@@ -67,4 +72,4 @@ const ImmediateRecall = ({ navigation, route }) => {
   );
 };
 
-export default ImmediateRecall;
+export default ImmediateRecallmain;

@@ -10,7 +10,7 @@ export const items = [
 ];
 
 export const switchOptions = [
-  { id: 'detail', name: 'Detail' },
+  { id: 'detail', name: 'Details' },
   { id: 'history', name: 'History' },
   { id: 'account', name: 'Account' },
 ];
@@ -42,7 +42,7 @@ export const settings = [
   {
     id: '4',
     leftIcon: 'notification',
-    title: 'Notifications settings',
+    title: 'Notifications Settings',
     righttitle: <Icon name="right" size={15} />,
     switch: false,
     navto: 'NotificationSettings',
@@ -58,23 +58,14 @@ export const settings = [
   {
     id: '6',
     leftIcon: 'microphone',
-    title: 'Speech to text',
+    title: 'Speech To Text',
     slug: 'speech_to_text',
     righttitle: <Icon name="right" size={15} />,
     navto: 'VoiceInput',
     switch: false,
   },
   {
-    id: '8',
-    leftIcon: 'eye',
-    slug: 'Wordlist',
-    title: 'Wordlist',
-    navto: 'Wordlist',
-    righttitle: <Icon name="right" size={15} />,
-    switch: false,
-  },
-  {
-    id: '8',
+    id: '7',
     leftIcon: 'logout',
     slug: 'sign_out',
     title: 'Sign Out',

@@ -4,7 +4,9 @@ import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
 import Button from '@components/Button';
 
-const Assessment = ({ navigation }) => {
+const Assessment = ({ navigation, route }) => {
+  const eventId = route?.params?.event_id;
+  const data = route?.params?.otherData;
   return (
     <View style={styles.main}>
       <StatusBar
@@ -25,7 +27,6 @@ const Assessment = ({ navigation }) => {
       <View style={{ flex: 1, marginHorizontal: 25 }}>
         <View
           style={{
-            flex: 0.7,
             justifyContent: 'flex-end',
             marginTop: 20,
           }}
@@ -33,7 +34,7 @@ const Assessment = ({ navigation }) => {
           <Text style={styles.titleText}>Assessment Details</Text>
           <View>
             <Text style={styles.titlesubText}>Event</Text>
-            <Text style={styles.titledetail}>Aug 03, 2022</Text>
+            <Text style={styles.titledetail}>{data?.createdAt}</Text>
           </View>
           <View>
             <Text style={styles.titlesubText}>Provider</Text>
@@ -41,7 +42,7 @@ const Assessment = ({ navigation }) => {
           </View>
           <View>
             <Text style={styles.titlesubText}>Assessment Type</Text>
-            <Text style={styles.titledetail}>Subsequent - 2/5</Text>
+            <Text style={styles.titledetail}>{data?.assmt_type}</Text>
           </View>
           <View>
             <Text style={styles.titlesubText}>Instructions</Text>
@@ -60,6 +61,9 @@ const Assessment = ({ navigation }) => {
             shape="round"
             title={'Begin Assessment'}
             style={styles.Assessment}
+            onPress={() => {
+              navigation?.navigate('ChangeInfo', { event_id: eventId });
+            }}
           />
         </View>
       </View>

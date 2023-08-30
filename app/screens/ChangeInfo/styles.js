@@ -1,5 +1,6 @@
 import { BaseColors, FontFamily } from '@config/theme';
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
+const windowHeight = Dimensions.get('window').height;
 
 export default StyleSheet.create({
   container: {
@@ -77,5 +78,11 @@ export default StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: BaseColors.black20,
+  },
+  btnContainer: {
+    justifyContent: 'flex-end',
+    flex: 1,
+    height: windowHeight / 4.2,
+    marginHorizontal: 20,
   },
 });

@@ -20,6 +20,14 @@ export default StyleSheet.create({
     fontFamily: FontFamily.regular,
     color: BaseColors.textColor,
   },
+  subText: {
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: '400',
+    lineHeight: 24,
+    fontFamily: FontFamily.regular,
+    color: BaseColors.textColor,
+  },
   example: {
     marginTop: 20,
     fontSize: 20,
@@ -90,5 +98,6 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 30,
+    marginHorizontal: 20,
   },
 });

@@ -1,3 +1,4 @@
+import BaseSetting from '@config/setting';
 import { BaseColors, FontFamily } from '@config/theme';
 import { StyleSheet } from 'react-native';
 
@@ -7,6 +8,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 35,
+    marginTop: 10,
   },
   container: {
     flexGrow: 1,
@@ -15,13 +17,13 @@ export default StyleSheet.create({
   },
   mainDiv: {
     flex: 1,
-    backgroundColor: BaseColors.white,
     paddingVertical: 20,
     marginHorizontal: 20,
     borderRadius: 12,
     marginVertical: 20,
     paddingHorizontal: 25,
     shadowColor: BaseColors.black,
+
     shadowOffset: {
       width: 0,
       height: 1,
@@ -29,6 +31,7 @@ export default StyleSheet.create({
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
     elevation: 3,
+    backgroundColor: BaseColors.white,
   },
   counterTag: {
     justifyContent: 'center',
@@ -37,9 +40,9 @@ export default StyleSheet.create({
   },
   optionList: {
     color: BaseColors.textColor,
-    fontSize: 22,
-    lineHeight: 35,
-    fontWeight: '800',
+    fontSize: 32,
+    lineHeight: 40,
+    fontWeight: '700',
     textAlign: 'center',
   },
   wordcontainer: {
@@ -50,9 +53,10 @@ export default StyleSheet.create({
     flex: 0.5,
   },
   attemptBtn: {
-    width: '100%',
+    height: BaseSetting.nWidth / 3.5,
+    flex: 0.5,
     alignItems: 'center',
-    marginBottom: 30,
+    justifyContent: 'flex-end',
   },
   imgContainer: {
     justifyContent: 'center',
@@ -68,11 +72,13 @@ export default StyleSheet.create({
   },
 
   subtitleText: {
-    fontSize: 16,
-    fontWeight: '400',
-    lineHeight: 24,
-    marginTop: 15,
-    fontFamily: FontFamily.regular,
+    alignSelf: 'center',
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: '700',
+    lineHeight: 30,
+    // marginTop: 15,
+    fontFamily: FontFamily.bold,
     color: BaseColors.textColor,
   },
 
@@ -99,6 +105,11 @@ export default StyleSheet.create({
   nextBtn: {
     marginTop: 15,
     width: '80%',
+  },
+  btnContainer: {
+    justifyContent: 'flex-end',
+    flex: 0.8,
+    marginTop: 30,
   },
   stop: {
     fontSize: 16,
@@ -268,5 +279,61 @@ export default StyleSheet.create({
     borderRightColor: BaseColors.primary,
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
+  },
+
+  confirmmodaltitleText: {
+    marginBottom: 10,
+    fontSize: 20,
+    fontWeight: '700',
+    lineHeight: 30,
+    fontFamily: FontFamily.bold,
+    color: BaseColors.black,
+  },
+  confirmmodalText: {
+    color: BaseColors.textColor,
+    marginBottom: 20,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  button: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginLeft: 10,
+  },
+  confirmButton: {
+    backgroundColor: BaseColors.primary,
+  },
+  cancelButton: {
+    backgroundColor: BaseColors.secondary,
+  },
+  buttonText: {
+    color: BaseColors.white,
+    fontWeight: 'bold',
+  },
+
+  confirmationModalCenteredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: BaseColors.black50,
+  },
+  confirmationModalView: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    width: '80%',
+  },
+  confirmationModalTitleText: {
+    fontSize: 18,
+    color: BaseColors.textColor,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  confirmationModalText: {
+    fontSize: 16,
+    marginBottom: 20,
   },
 });
