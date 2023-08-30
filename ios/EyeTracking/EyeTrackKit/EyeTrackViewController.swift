@@ -10,6 +10,7 @@ import SceneKit
 import ARKit
 import WebKit
 import ARVideoKit
+import Vision
 //import React
 //import ReactNative
 
@@ -19,6 +20,7 @@ open class EyeTrackViewController: UIViewController, ARSCNViewDelegate, ARSessio
     public var eyeTrack: EyeTrack!
     public var recorder: RecordAR?
     public var isHidden: Bool?
+    var takePic = false;
     
     public func initialize(isHidden: Bool = false, eyeTrack: EyeTrack) {
         print("Eye Tracking Initialize called")
@@ -129,6 +131,69 @@ open class EyeTrackViewController: UIViewController, ARSCNViewDelegate, ARSessio
 
 
 extension EyeTrackViewController {
+  
+  func convert(ciImage: CIImage) -> UIImage? {
+      let context = CIContext(options: nil)
+      if let cgImage = context.createCGImage(ciImage, from: ciImage.extent) {
+          return UIImage(cgImage: cgImage)
+      }
+      return nil
+  }
+  
+//  func processARFrameForFaceLandmarks(_ frame: ARFrame) {
+////    let orient = UIApplication.shared.statusBarOrientation
+//    
+//    
+//    let width = CVPixelBufferGetWidth(frame.capturedImage)
+//    let height = CVPixelBufferGetHeight(frame.capturedImage)
+//    let transform = frame.displayTransform(
+//      for: UIApplication.shared.statusBarOrientation,
+//                viewportSize: CGSize(width: height, height: width)
+//    ).inverted()
+//    let ciImage = CIImage(cvPixelBuffer: frame.capturedImage).transformed(by: transform)
+//
+//    
+////    
+////    let viewportSize = sceneView.bounds.size
+////    let transform = frame.displayTransform(for: orient, viewportSize: viewportSize).inverted()
+////    var ciImage = CIImage(cvPixelBuffer: frame.capturedImage).transformed(by: transform)
+//    
+////    let ciImage = CIImage(cvPixelBuffer: frame.capturedImage).oriented()
+//    if (takePic) {
+//      takePic = false;
+//      if let uiImage = convert(ciImage: ciImage) {
+//          UIImageWriteToSavedPhotosAlbum(uiImage, nil, nil, nil)
+//      }
+//    }
+//      
+//      let faceLandmarksRequest = VNDetectFaceLandmarksRequest { (request, error) in
+//          if let results = request.results as? [VNFaceObservation] {
+//              for face in results {
+//                  // Process the landmarks for each face
+//                  if let leftEye = face.landmarks?.leftEye {
+//                      // Example: Get position of left eye
+//                      let eyePosition = self.averagePosition(from: leftEye.normalizedPoints, frameSize: frame.camera.imageResolution)
+//                      print("Left eye position:", eyePosition)
+//                  }
+//              }
+//          }
+//      }
+//      
+//    let requestHandler = VNImageRequestHandler(cvPixelBuffer: frame.capturedImage, orientation: .up, options: [:])
+//      try? requestHandler.perform([faceLandmarksRequest])
+//  }
+  
+  func averagePosition(from points: [CGPoint], frameSize: CGSize) -> CGPoint {
+      var sumX: CGFloat = 0
+      var sumY: CGFloat = 0
+      for point in points {
+          sumX += point.x * frameSize.width
+          sumY += point.y * frameSize.height
+      }
+      let count = CGFloat(points.count)
+      return CGPoint(x: sumX / count, y: sumY / count)
+  }
+  
 
     public func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         self.eyeTrack.face.node.transform = node.transform
@@ -144,6 +209,9 @@ extension EyeTrackViewController {
         }
         // Update Virtual Device position
         self.eyeTrack.device.node.transform = sceneTransformInfo
+      
+        guard let frame = sceneView.session.currentFrame else { return }
+//        processARFrameForFaceLandmarks(frame)
     }
 
     public func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
@@ -159,6 +227,11 @@ extension EyeTrackViewController {
             self.eyeTrack.update(anchor: anchor)
         }
     }
+  
+  public func session(_ session: ARSession, didUpdate frame: ARFrame) {
+      let ambientIntensity = frame.lightEstimate?.ambientIntensity
+      // Print the ambientIntensity to the debug log
+//      print("Ambient Intensity: \(ambientIntensity)")
+      self.eyeTrack.updateLightEstimate(ambientIntensity: ambientIntensity)
+  }
 }
-
-

@@ -18,6 +18,7 @@ export const BaseColors = {
   lightblue: '#F0FDFF',
   primaryLight: '#67ffff',
   primaryDark: '#00a49b',
+  primaryBlue: '#1C3E63',
   lightBlack: '#121212',
   lightRed: '#FEE9E6',
   lightBg: '#F4F7FB',

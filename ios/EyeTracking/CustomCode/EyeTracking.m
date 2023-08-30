@@ -9,4 +9,10 @@
   RCT_EXTERN_METHOD(stopTracking:
     (RCTResponseSenderBlock) callback
   )
+  RCT_EXTERN_METHOD(startEyePosition:
+    (RCTResponseSenderBlock) callback
+  )
+  RCT_EXTERN_METHOD(stopEyePosition:
+    (RCTResponseSenderBlock) callback
+  )
 @end

@@ -20,6 +20,6 @@ open class EyeTrackingEventEmitter: RCTEventEmitter {
   }
 
   open override func supportedEvents() -> [String] {
-    ["tracking", "onReady", "onPending", "onFailure"]      // etc.
+    ["tracking", "tracking_eye_pos", "onReady", "onPending", "onFailure"]      // etc.
   }
 }

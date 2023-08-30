@@ -50,9 +50,9 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   UIView *rootView = RCTAppSetupDefaultRootView(bridge, @"oculo", initProps);
 
   if (@available(iOS 13.0, *)) {
-    rootView.backgroundColor = [UIColor systemBackgroundColor];
+    rootView.backgroundColor = [UIColor clearColor];
   } else {
-    rootView.backgroundColor = [UIColor whiteColor];
+    rootView.backgroundColor = [UIColor clearColor];
   }
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -64,8 +64,11 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 
   // Commented original View Controller Code
   // UIViewController *rootViewController = [UIViewController new];
-  
-  rootViewController.view = rootView;
+//  [rootViewController.view addSubview:rootView];
+  rootView.frame = rootViewController.view.bounds;
+  rootView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+  [rootViewController.view addSubview:rootView];
+//  rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   return YES;

@@ -32,6 +32,7 @@
 		E8610FC22A58314600BBC77C /* EyeTrackingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8610FC12A58314600BBC77C /* EyeTrackingViewController.swift */; };
 		E8610FD22A5BCBC400BBC77C /* EyeTrackingEventEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8610FD12A5BCBC400BBC77C /* EyeTrackingEventEmitter.swift */; };
 		E8610FD42A5BCBD400BBC77C /* EyeTrackingEventEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = E8610FD32A5BCBD400BBC77C /* EyeTrackingEventEmitter.m */; };
+		E8ABCDFC2A9CC000006E0DED /* FaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ABCDFB2A9CC000006E0DED /* FaceView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +82,7 @@
 		E8610FC12A58314600BBC77C /* EyeTrackingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeTrackingViewController.swift; sourceTree = "<group>"; };
 		E8610FD12A5BCBC400BBC77C /* EyeTrackingEventEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EyeTrackingEventEmitter.swift; sourceTree = "<group>"; };
 		E8610FD32A5BCBD400BBC77C /* EyeTrackingEventEmitter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EyeTrackingEventEmitter.m; sourceTree = "<group>"; };
+		E8ABCDFB2A9CC000006E0DED /* FaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceView.swift; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -229,6 +231,7 @@
 		E8610FCA2A5BC73200BBC77C /* EyeTracking */ = {
 			isa = PBXGroup;
 			children = (
+				E8ABCDFA2A9CBFEA006E0DED /* positionTrack */,
 				E8610FCB2A5BC74700BBC77C /* CustomCode */,
 				E8610FAD2A58249F00BBC77C /* EyeTrackKit */,
 			);
@@ -245,6 +248,14 @@
 				E8610F972A56EBE900BBC77C /* EyeTracking.m */,
 			);
 			path = CustomCode;
+			sourceTree = "<group>";
+		};
+		E8ABCDFA2A9CBFEA006E0DED /* positionTrack */ = {
+			isa = PBXGroup;
+			children = (
+				E8ABCDFB2A9CC000006E0DED /* FaceView.swift */,
+			);
+			path = positionTrack;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -522,6 +533,7 @@
 			files = (
 				E8610FD22A5BCBC400BBC77C /* EyeTrackingEventEmitter.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+				E8ABCDFC2A9CC000006E0DED /* FaceView.swift in Sources */,
 				E8610F962A56EAF200BBC77C /* EyeTracking.swift in Sources */,
 				E8610FBA2A58249F00BBC77C /* Extension.swift in Sources */,
 				E8610FBF2A58249F00BBC77C /* Device.swift in Sources */,

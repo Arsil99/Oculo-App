@@ -1,14 +1,43 @@
+import { BaseColors } from '@config/theme';
 import { NativeModules } from 'react-native';
+import KeepAwake from 'react-native-keep-awake';
+import ScreenBrightness from 'react-native-screen-brightness';
 const { EyeTracking } = NativeModules;
+
+export const ET_DEFAULTS = {
+  dot_width: 48,
+  dot_height: 48,
+  dot_radius: 24,
+  dot_background_color: BaseColors?.PrimaryBlue,
+  pL: 20,
+  pR: 20,
+  pT: 20,
+  pB: 20,
+  minRequiredCoordinates: 100,
+  messages: {
+    ambientLightInfo:
+      'Checking the Ambient Lights, Please make sure to switch on the light to accurately track your eye movementns.',
+  },
+  cali: {
+    eyesDistance: 160,
+    DEF_MSG: 'Position Face for \n Calibration',
+    userEyeSize: 16,
+    userEyeBorder: 4,
+    userEyeBorderInvalidColor: BaseColors?.red,
+    userEyeBorderValidColor: BaseColors?.primary,
+    systemEyeCircleSize: 42,
+  },
+};
 
 // Init: Initiates the Eye Tracking
 // Call this when you want to start trackinig the EyeGaze
 export const init = () => {
   return new Promise(resolve => {
+    // On Eye Tracking start let's set Keep Awake and Brightness to full
+    KeepAwake.activate();
+    ScreenBrightness.setBrightness(1);
     // TODO: Adding Error Handling in Swift and JS
     EyeTracking.initTracking(result => {
-      console.log('Result => ', result);
-      console.log('Sym Called ===> Eye Tracking Started');
       resolve(true);
     });
   });
@@ -17,6 +46,22 @@ export const init = () => {
 export const stopTracking = () => {
   EyeTracking.stopTracking(result => {
     console.log('Result => ', result);
+  });
+};
+
+export const startEyePosTracking = () => {
+  return new Promise(resolve => {
+    EyeTracking.startEyePosition(result => {
+      resolve(true);
+    });
+  });
+};
+
+export const stopEyePosTracking = () => {
+  return new Promise(resolve => {
+    EyeTracking.stopEyePosition(result => {
+      resolve(true);
+    });
   });
 };
 
@@ -87,4 +132,49 @@ export const calculateAveragePosition = (xArray, yArray) => {
 
   // Return the average X and Y positions as an object
   return { x: avgX, y: avgY };
+};
+
+// Validating the Ambient Lighting
+export const validateLighting = ambientIntensity => {
+  if (ambientIntensity < 100) {
+    return {
+      status: 'Poor',
+      message:
+        'Lighting is too dim for optimal eye tracking. Please increase the light in the room.',
+    };
+  } else if (ambientIntensity >= 100 && ambientIntensity <= 500) {
+    return {
+      status: 'Moderate',
+      message:
+        'Lighting is moderate. It might work for eye tracking, but for optimal performance, consider increasing the light a bit.',
+    };
+  } else if (ambientIntensity > 500 && ambientIntensity <= 2000) {
+    return {
+      status: 'Good',
+      message: 'Lighting is good for eye tracking.',
+    };
+  } else if (ambientIntensity > 2000) {
+    return {
+      status: 'Very Bright',
+      message:
+        "Lighting is very bright. Consider ensuring it's not causing discomfort to the user or affecting the camera view with reflections or glare.",
+    };
+  }
+};
+
+export const formatObjectValues = obj => {
+  if (!obj) {
+    return '-';
+  }
+  const order = ['w', 'x', 'y', 'z'];
+
+  return order
+    .map(key => {
+      const value = obj[key];
+      if (typeof value === 'number') {
+        return `${key.toUpperCase()}: ${value.toFixed(4)}`;
+      }
+      return `${key.toUpperCase()}: ${value}`;
+    })
+    .join('\n');
 };

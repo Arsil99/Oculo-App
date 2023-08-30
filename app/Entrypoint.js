@@ -11,6 +11,7 @@ import Navigator from './navigation/index';
 import CTopNotify from '@components/CTopNotify';
 import CStatusBar from '@components/CStatusBar';
 import { persistor, store } from './redux/store/configureStore';
+import { EyeTracking } from '@components/EyeTracking';
 // import {initTranslate} from './lang/Translate';
 
 // const IOS = Platform.OS === 'ios';
@@ -106,6 +107,7 @@ class index extends Component {
             {processing && <CTopNotify title="Installing updates" />}
           </PersistGate>
           <NToast />
+          <EyeTracking />
         </Provider>
       </ThemeProvider>
     );

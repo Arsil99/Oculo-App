@@ -16,7 +16,8 @@ public class Face {
     public let rightEye: Eye
     public let leftEye: Eye
     public var transform: simd_float4x4 = simd_float4x4()
-
+    public var rightEyePosition: SCNVector3 = SCNVector3()
+    public var leftEyePosition: SCNVector3 = SCNVector3()
 
     public init(isShowRayHint: Bool = false) {
         // Node生成
@@ -32,6 +33,9 @@ public class Face {
         self.transform = anchor.transform
         self.leftEye.node.simdTransform = anchor.leftEyeTransform
         self.rightEye.node.simdTransform = anchor.rightEyeTransform
+        self.rightEyePosition = SCNVector3(anchor.rightEyeTransform.columns.3.x, anchor.rightEyeTransform.columns.3.y, anchor.rightEyeTransform.columns.3.z)
+        self.leftEyePosition = SCNVector3(anchor.leftEyeTransform.columns.3.x, anchor.leftEyeTransform.columns.3.y, anchor.leftEyeTransform.columns.3.z)
+
         // 瞬き情報更新
         self.leftEye.blink = anchor.blendShapes[.eyeBlinkLeft]?.floatValue ?? 0.0
         self.rightEye.blink = anchor.blendShapes[.eyeBlinkRight]?.floatValue ?? 0.0

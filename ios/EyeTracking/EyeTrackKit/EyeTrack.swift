@@ -21,6 +21,24 @@ public class EyeTrack: ObservableObject {
     @Published public var face: Face
     @Published public var info: EyeTrackInfo? = nil
     @Published public var isShowRayHint: Bool
+    @Published public var ambientIntensity: CGFloat?
+  
+    enum EyeState {
+        case open
+        case closed
+    }
+
+  
+    private var blinkCount = 0
+    private var lastEyeState: EyeState = .open
+    private let eyeThreshold: CGFloat = 0.7
+    private let maxBlinks = 3
+  
+    private var leScreenX = 0.0;
+    private var leScreenY = 0.0;
+    private var reScreenX = 0.0;
+    private var reScreenY = 0.0;
+
 
     private var sceneView: ARSCNView?
 
@@ -79,6 +97,32 @@ public class EyeTrack: ObservableObject {
         self.face = Face(isShowRayHint: false)
         self.sceneView?.scene.rootNode.replaceChildNode(old_face, with: self.face.node)
     }
+  
+    public func updateLightEstimate(ambientIntensity: CGFloat?) {
+         self.ambientIntensity = ambientIntensity
+    }
+  
+    public func getLight() -> CGFloat? {
+          return ambientIntensity
+    }
+  
+  public func isBlink() -> CGFloat? {
+    return lastEyeState == .open ? 0 : 1   // 0 = Open / 1 = Close
+  }
+  
+  public func getTotalBlinks() -> Int? {
+        return blinkCount
+  }
+  
+  public func getEyeXYonScreen() -> [String: CGFloat] {
+    return [
+    "leftEyeX": self.leScreenX,
+    "leftEyeY": self.leScreenY,
+    "rightEyeX": self.reScreenX,
+    "rightEyeY": self.reScreenY
+    ];
+  }
+
 
 
     // ARFaceAnchorを基に情報を更新
@@ -86,11 +130,25 @@ public class EyeTrack: ObservableObject {
         // 顔座標更新(眼球座標更新)
         self.face.update(anchor: anchor)
         // 瞬き判定
-        if self.face.leftEye.blink > blinkThreshold {
+        if self.face.leftEye.blink > blinkThreshold && lastEyeState == .open {
             logger.debug("Close")
+            blinkCount += 1
+            lastEyeState = .closed
         } else {
+            lastEyeState = .open
             updateLookAtPosition()
         }
+        
+      if let sceneView = self.sceneView { // Replace `yourARSCNViewInstance` with the actual instance of your ARSCNView
+        let leftEyeScreenPosition = sceneView.projectPoint(self.face.leftEyePosition)
+        self.leScreenX = CGFloat(leftEyeScreenPosition.x)
+        self.leScreenY = CGFloat(leftEyeScreenPosition.y)
+        let rightEyeScreenPosition = sceneView.projectPoint(self.face.rightEyePosition)
+        self.reScreenX = CGFloat(rightEyeScreenPosition.x)
+        self.reScreenY = CGFloat(rightEyeScreenPosition.y)
+      }
+
+      
         self.info = EyeTrackInfo(face: face, device: device, lookAtPoint: lookAtPoint, isTracked: anchor.isTracked)
         updateCallback(info)
     }
