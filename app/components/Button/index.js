@@ -7,8 +7,17 @@ import BaseSetting from '@config/setting';
 import PropTypes from 'prop-types';
 
 const Button = props => {
-  const { title, type, loading, shape, onPress, style, TextStyle, newOutline } =
-    props;
+  const {
+    title,
+    type,
+    loading,
+    shape,
+    onPress,
+    style,
+    TextStyle,
+    newOutline,
+    disabled,
+  } = props;
 
   const shapeStyle =
     shape === 'round'
@@ -29,6 +38,11 @@ const Button = props => {
       break;
     case 'primary':
       BStyle = styles.primary;
+      if (disabled) {
+        BStyle.backgroundColor = BaseColors.borderColor;
+      } else {
+        BStyle.backgroundColor = BaseColors.primary;
+      }
       TStyle = styles.txtWhite;
       indicatColor = BaseColors.white;
       break;
@@ -51,8 +65,9 @@ const Button = props => {
       activeOpacity={BaseSetting.buttonOpacity}
       style={[styles.default, shapeStyle, BStyle, style]}
       onPress={() => {
-        loading ? null : onPress();
+        loading || disabled ? null : onPress();
       }}
+      disabled={disabled}
     >
       {renderChildren()}
     </TouchableOpacity>
@@ -69,6 +84,7 @@ Button.propTypes = {
   onPress: PropTypes.func,
   style: PropTypes.object,
   TextStyle: PropTypes.object,
+  disabled: PropTypes.bool,
 };
 
 Button.defaultProps = {
@@ -79,4 +95,5 @@ Button.defaultProps = {
   onPress: () => {},
   style: {},
   TextStyle: {},
+  disabled: false,
 };
