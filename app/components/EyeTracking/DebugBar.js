@@ -46,7 +46,10 @@ export default function DebugBar(props) {
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      transform: [{ translateX: offset.value }],
+      transform: [
+        { translateX: offset.value },
+        { translateY: keyboardOffset.value },
+      ],
     };
   });
 
@@ -86,11 +89,7 @@ export default function DebugBar(props) {
     <Animated.View
       entering={SlideInLeft}
       exiting={SlideOutLeft}
-      style={[
-        styles.debugBar,
-        animatedStyle,
-        { transform: [{ translateY: keyboardOffset }] },
-      ]}
+      style={[styles.debugBar, animatedStyle]}
     >
       <ScrollView style={styles.infoScroll}>
         <View style={styles.infoRow}>
