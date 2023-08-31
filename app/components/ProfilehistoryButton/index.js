@@ -322,7 +322,7 @@ const ProfilehistoryButton = (props, ref) => {
         <Text
           style={[
             styles.titleText,
-            { color: darkmode ? BaseColors.white : BaseColors.black90 },
+            { color: darkmode ? BaseColors.white : BaseColors.black },
           ]}
         >
           Medical History
