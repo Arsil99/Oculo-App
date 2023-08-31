@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Dimensions,
+  Keyboard,
   ScrollView,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -14,14 +16,33 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import EyeTracking from '@redux/reducers/eyeTracking/actions';
 import { formatObjectValues } from '@utils/eyeTracking';
+import { useDispatch, useSelector } from 'react-redux';
 
 const ACTION_BTN_WIDTH = Dimensions.get('window').width - 60;
+const screenHeight = Dimensions.get('window').height;
 
 export default function DebugBar(props) {
-  const [isHidden, setIsHidden] = useState(false);
-  const offset = useSharedValue(0); // animation value
-  console.log('debugData ==> ', props.debugData);
+  const [isHidden, setIsHidden] = useState(true);
+  const offset = useSharedValue(-ACTION_BTN_WIDTH); // animation value
+  const keyboardOffset = useSharedValue(0); // animation value
+
+  const dispatch = useDispatch();
+  const { setCalTime } = EyeTracking;
+  const { calibrationTime } = useSelector(state => {
+    return state.eyeTracking;
+  });
+  const [textInputValue, setTextInputValue] = useState(calibrationTime);
+  const onTextInputChange = text => {
+    // setTextInputValue(calibrationTime);
+    dispatch(setCalTime(text));
+  };
+
+  // Update textInputValue whenever calibrationTime changes
+  useEffect(() => {
+    setTextInputValue(calibrationTime);
+  }, [calibrationTime]);
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -39,11 +60,37 @@ export default function DebugBar(props) {
     setIsHidden(false);
   };
 
+  useEffect(() => {
+    const keyboardShowListener = Keyboard.addListener(
+      'keyboardWillShow',
+      event => {
+        const keyboardHeight = screenHeight - event.endCoordinates.screenY;
+        keyboardOffset.value = withTiming(-keyboardHeight);
+      },
+    );
+
+    const keyboardHideListener = Keyboard.addListener(
+      'keyboardWillHide',
+      () => {
+        keyboardOffset.value = withTiming(0);
+      },
+    );
+
+    return () => {
+      keyboardShowListener.remove();
+      keyboardHideListener.remove();
+    };
+  }, [keyboardOffset]);
+
   return (
     <Animated.View
       entering={SlideInLeft}
       exiting={SlideOutLeft}
-      style={[styles.debugBar, animatedStyle]}
+      style={[
+        styles.debugBar,
+        animatedStyle,
+        { transform: [{ translateY: keyboardOffset }] },
+      ]}
     >
       <ScrollView style={styles.infoScroll}>
         <View style={styles.infoRow}>
@@ -80,6 +127,35 @@ export default function DebugBar(props) {
             <Text style={styles.dvalue}>
               {props.debugData.timestamp || '-'}
             </Text>
+          </View>
+        </View>
+        <View style={styles.infoRow}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Text style={styles.dlabel}>Calibration Time ( in MS. )</Text>
+            {/* <Text style={styles.dvalue}>{props.calibration_time || '-'}</Text> */}
+            <TextInput
+              placeholder="Calibration Time"
+              value={textInputValue}
+              onChangeText={onTextInputChange}
+              // inputMode="numeric"
+              keyboardType="decimal-pad"
+              returnKeyType="done"
+              style={{
+                borderWidth: 1,
+                borderColor: '#000',
+                fontSize: 16,
+                borderRadius: 10,
+                marginLeft: 10,
+                width: 80,
+                padding: 4,
+              }}
+            />
           </View>
         </View>
       </ScrollView>

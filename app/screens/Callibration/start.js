@@ -3,21 +3,25 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   StatusBar,
-  Animated,
-  Easing,
   DeviceEventEmitter,
-  NativeModules,
-  NativeEventEmitter,
-  Platform,
   Image,
   Text,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import KeepAwake from 'react-native-keep-awake';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+  Easing,
+  interpolate,
+  Extrapolation,
+  runOnJS
+} from 'react-native-reanimated';
+import * as Animatable from 'react-native-animatable';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import EyeTracking from '@redux/reducers/eyeTracking/actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
 import { BaseColors } from '@config/theme';
@@ -27,10 +31,26 @@ import {
   calculateAveragePosition,
   calculateScreenX,
   calculateScreenY,
+  ET_DEFAULTS,
+  validateLighting,
 } from '@utils/eyeTracking';
 import { Images } from '@config';
 import Button from '@components/Button';
 
+Animatable.initializeRegistryWithDefinitions({
+  customPulse: {
+    from: {
+      transform: [{ scale: 1 } ],
+      backgroundColor: BaseColors.primaryBlue,
+    },
+    to: {
+      transform: [ {scale: 1.2 }],
+      backgroundColor: BaseColors.black,
+    },
+  }
+});
+
+let positionArray = {};
 let lastPosition = 'CENTER';
 let CALIBRATED_POSITIONS = {
   CENTER: { x: [], y: [] },
@@ -54,32 +74,41 @@ const emptyCalibrations = {
   BL: null,
 };
 
+let lastEyeTrackEvent = null;
+
 export default function CalibrationStart() {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
   const { setCalibration, resetCalibration } = EyeTracking;
+  const { calibrationTime } = useSelector(state => {
+    return state.eyeTracking;
+  });
   const dispatch = useDispatch();
 
-  const animatedValue = useRef(new Animated.Value(0)).current;
-  const tXValue = useRef(new Animated.Value(-10)).current;
-  const tYValue = useRef(new Animated.Value(-10)).current;
+  const animatedValue = useSharedValue(0);
+  const tXValue = useSharedValue(0);
+  const tYValue = useSharedValue(0);
   const [viewWidth, setViewWidth] = useState(0);
   const [viewHeight, setViewHeight] = useState(0);
+  const [showingToast, setShowingToast] = useState(false);
   const [dynamicDot, setDynamicDot] = useState(false);
-  const [caliStatus, setCaliStatus] = useState(false);
+  const [lightsPassed, setLightsPassed] = useState(false);
+  const [caliStatus, setCaliStatus] = useState(true);
   const [nativeTracking, setNativeTracking] = useState(true);
   let [calibrations, setCalibrations] = useState(emptyCalibrations);
-
-  //
-  // DONE: 1. Listening Eye Gaze X and Y from Native Code to Javascript code: DONE:
-  // DONE: 2. Upon Listener -> Map Eye Gaze X and Y to Calibrated Point: DONE:
-  // DONE: 3. Once it's calibrated: Store to Redux: DONE:
-  // TODO: 4. On Question Screens Define AOI: and Provide Example to calculate Data required for Analytics
-  // TODO: 5. Anaylytics Data, Heatmap, Sequence to be tracked and sent to Backend: TASKS Added in Symptoms screen
-  // DONE: 6. Restart Calibration option to be added
-  // LATER: 7. Optimise Code
-  // LATER: 8. Find if head is moved
-  // LATER: 9. If Head is moved, then Eye Tracking will not be accurate
+  // /* AOI Code */
+  // const { calibration } = useSelector(state => {
+  //   return state.eyeTracking;
+  // });
+  
+  useEffect(() => {
+    console.log('Lignt Passed Changed to', lightsPassed);
+    if (lightsPassed) {
+      console.log('TRACK_EYES => YES');
+      TRACK_EYES = true;
+      startCalibration();
+    }
+  }, [lightsPassed, startCalibration])
 
   // Let's stop Native Eye Tracking when user navigates back
   React.useEffect(() => {
@@ -92,66 +121,62 @@ export default function CalibrationStart() {
   }, [navigation]);
 
   // On Screen Init
-  useEffect(() => {
-    // Let's Keep the Screen wake
-    KeepAwake.activate();
-
-    // Define Track Listener Function
-    const trackListener = event => {
-      if (!caliStatus) {
-        return;
-      }
-      // console.log('EyeTracking Event: Received event:', caliStatus, event);
-
-      // Let's log X and Y for Calibration
-      if (TRACK_EYES) {
-        // Adding Eye Gaze X and Y to the Array of Calibrated Data
-        CALIBRATED_POSITIONS[lastPosition].x.push(event.centerEyeLookAtPoint.x);
-        CALIBRATED_POSITIONS[lastPosition].y.push(event.centerEyeLookAtPoint.y);
-      }
-
-      // ADDED For TESTING PURPOSE: Let's move the dot using Eye Gaze.
-      if (MOVE_DOT) {
-        console.log(
-          'Moving Dot: ',
-          event.centerEyeLookAtPoint.x,
-          ViewWidth,
-          'Y: ',
-          event.centerEyeLookAtPoint.y,
-          ViewHeight,
-        );
-        const newXValue = calculateScreenX(
-          event.centerEyeLookAtPoint.x,
-          CALIBRATED_POSITIONS,
-          ViewWidth,
-        );
-        const newYValue = calculateScreenY(
-          event.centerEyeLookAtPoint.y,
-          CALIBRATED_POSITIONS,
-          ViewHeight,
-        );
-
-        // Let's move a fake red circle to test if Eye Tracking works or not
-        if (!isNaN(newXValue) && !isNaN(newYValue)) {
-          tXValue.setValue(newXValue);
-          tYValue.setValue(newYValue);
+  useFocusEffect(
+    React.useCallback(() => {
+      // Define Track Listener Function
+      const trackListener = event => {
+        lastEyeTrackEvent = event;
+        // console.log('Track Listener Function: ==> ', TRACK_EYES, event);
+        // EyeTrackingCmp.setDebugInfo(event);
+        if (!caliStatus) {
+          return;
         }
-      }
-    };
 
-    // Setup Emitter based on Device OS
-    const emitter =
-      Platform.OS === 'ios'
-        ? new NativeEventEmitter(NativeModules.EyeTrackingEventEmitter)
-        : DeviceEventEmitter;
+        // Let's log X and Y for Calibration
+        if (TRACK_EYES) {
+          // Adding Eye Gaze X and Y to the Array of Calibrated Data
+          CALIBRATED_POSITIONS[lastPosition].x.push(event.centerEyeLookAtPoint.x);
+          CALIBRATED_POSITIONS[lastPosition].y.push(event.centerEyeLookAtPoint.y);
+        }
 
-    // Let's listen to Tracking Event
-    const subscription = emitter.addListener('tracking', trackListener);
+        // ADDED For TESTING PURPOSE: Let's move the dot using Eye Gaze.
+        if (MOVE_DOT) {
+          // console.log(
+          //   'Moving Dot: ',
+          //   event.centerEyeLookAtPoint.x,
+          //   ViewWidth,
+          //   'Y: ',
+          //   event.centerEyeLookAtPoint.y,
+          //   ViewHeight,
+          //   CALIBRATED_POSITIONS
+          // );
+          const newXValue = calculateScreenX(
+            event.centerEyeLookAtPoint.x,
+            CALIBRATED_POSITIONS,
+            ViewWidth,
+          );
+          const newYValue = calculateScreenY(
+            event.centerEyeLookAtPoint.y,
+            CALIBRATED_POSITIONS,
+            ViewHeight,
+          );
 
-    return () => {
-      subscription.remove();
-    };
-  }, [dispatch, tXValue, tYValue, caliStatus]);
+          // Let's move a fake red circle to test if Eye Tracking works or not
+          if (!isNaN(newXValue) && !isNaN(newYValue)) {
+            tXValue.value = newXValue;
+            tYValue.value = newYValue;
+          }
+        }
+      };
+
+      // Let's listen to Tracking Event
+      const subscription = DeviceEventEmitter.addListener('eyeTrackingEvent', trackListener);
+
+      return () => {
+        subscription.remove();
+      };
+    }, [dispatch, tXValue, tYValue, caliStatus, startCalibration, lightsPassed, viewWidth, lastPosition, TRACK_EYES])
+  );
 
   useEffect(() => {
     if (nativeTracking) {
@@ -175,10 +200,12 @@ export default function CalibrationStart() {
       if (viewWidth > 0) {
         // On Screen Init let's clear Redux
         dispatch(resetCalibration());
+        console.log('TRACK_EYES => YES');
         TRACK_EYES = true;
         startCalibration();
       }
     } else {
+      console.log('TRACK_EYES => NO');
       TRACK_EYES = false;
       stopCalibration();
     }
@@ -193,8 +220,8 @@ export default function CalibrationStart() {
 
   const nextCalibration = () => {
     const keys = Object.keys(calibrations);
-    console.log('keys: ', keys);
-    console.log('keys Cals: ', calibrations);
+    console.log('nextCalibration => keys: ', keys);
+    console.log('nextCalibration => keys Cals: ', calibrations);
 
     for (const key of keys) {
       if (calibrations[key] === null) {
@@ -203,6 +230,7 @@ export default function CalibrationStart() {
     }
 
     if (lastPosition !== 'CENTER') {
+      console.log('nextCalibration => TRACK_EYES => NO');
       TRACK_EYES = false;
       return 'CENTER';
     }
@@ -237,8 +265,48 @@ export default function CalibrationStart() {
   };
 
   const startCalibration = () => {
+    console.log('startCalibration => started', lightsPassed);
+    // First time let's check the lighting
+    if (!lightsPassed) {
+      if (!showingToast) {
+        Toast.show({
+          text1: ET_DEFAULTS.messages.ambientLightInfo,
+          type: 'info',
+          autoHide: false
+        });
+        setShowingToast(true);
+      }
+      if (lastEyeTrackEvent) {
+        const lightValidation = validateLighting(lastEyeTrackEvent.light);
+        console.log('startCalibration =>lightValidation ==> ', lightValidation);
+        if (lightValidation && lightValidation.status === 'Moderate' || lightValidation.status == 'Good') {
+          console.log('startCalibration =>Light Validation Passed ==> ');
+          setLightsPassed(true);
+          Toast.hide();
+          Toast.show({
+            text1: lightValidation.message,
+            type: 'success',
+          });
+        } else {
+          Toast.hide();
+          Toast.show({
+            text1: lightValidation.message,
+            type: 'error',
+          });
+          timeoutVar = setTimeout(() => {
+            startCalibration();
+          }, 1000);
+        }
+      } else {
+        timeoutVar = setTimeout(() => {
+          startCalibration();
+        }, 500);
+      }
+      return;
+    }
+
     const nextCalibrationPosition = nextCalibration();
-    console.log('Next Calibration ==> ', nextCalibrationPosition);
+    console.log('startCalibration =>Next Calibration ==> ', nextCalibrationPosition);
 
     if (nextCalibrationPosition !== null) {
       // Let's move dot to next location
@@ -251,17 +319,17 @@ export default function CalibrationStart() {
       // Set Time Out then move to the next location
       timeoutVar = setTimeout(() => {
         startCalibration();
-      }, 2000);
+      }, parseInt(calibrationTime) || 2000);
     } else {
       // Done! Let's go!
       // Navigate to the next screen
-      console.log('All Calibrations Done');
-
+      console.log('startCalibration =>All Calibrations Done');
+      console.log('startCalibration =>TRACK_EYES => NO');
       TRACK_EYES = false;
-      console.log('Final Calibrations are: ', CALIBRATED_POSITIONS);
+      console.log('startCalibration =>Final Calibrations are: ', CALIBRATED_POSITIONS);
       const keys = Object.keys(calibrations);
       for (const key of keys) {
-        if (CALIBRATED_POSITIONS[key] !== null) {
+        if (CALIBRATED_POSITIONS[key] !== null && positionArray[key] && positionArray[key].left) {
           const avgPos = calculateAveragePosition(
             CALIBRATED_POSITIONS[key].x,
             CALIBRATED_POSITIONS[key].y,
@@ -285,10 +353,10 @@ export default function CalibrationStart() {
       const testing = false;
 
       if (!testing) {
-        console.log('Navigating to other screen');
+        console.log('startCalibration =>Navigating to other screen');
         setCaliStatus(false);
         handleNavigation('other');
-        navigation?.navigate('Symptoms');
+        navigation?.navigate('Symptoms' , { event_id: 126 });
         // Toast.show({
         //   text1: 'Calibrations Done Successfully!',
         //   type: 'success',
@@ -299,7 +367,7 @@ export default function CalibrationStart() {
         setDynamicDot(true);
       }
 
-      console.log('CALIBRATED_POSITIONS AVG', CALIBRATED_POSITIONS);
+      console.log('startCalibration =>CALIBRATED_POSITIONS AVG', CALIBRATED_POSITIONS);
     }
   };
 
@@ -314,13 +382,14 @@ export default function CalibrationStart() {
       BR: { x: [], y: [] },
       BL: { x: [], y: [] },
     };
+    console.log('TRACK_EYES => NO');
     TRACK_EYES = false;
     MOVE_DOT = false;
     calibrations = emptyCalibrations;
     // TODO: Fix setCalibration not working
     setCalibration(emptyCalibrations);
-    tXValue.setValue(-10);
-    tYValue.setValue(-10);
+    tXValue.value = -10;
+    tYValue.value = -10;
     setDynamicDot(false);
   };
 
@@ -333,80 +402,112 @@ export default function CalibrationStart() {
     setViewHeight(height);
   };
 
+  const setTrackingTrue = () => {
+    TRACK_EYES = true;
+  }
+
   const moveDot = position => {
     // Set Position Array
-    const positionArray = {
+    positionArray = {
       TL: {
-        left: 0,
-        top: 0,
+        left: ET_DEFAULTS.pL,
+        top: ET_DEFAULTS.pT,
       },
       TR: {
-        left: viewWidth - 20,
-        top: 10,
+        left: viewWidth - (ET_DEFAULTS.dot_width + ET_DEFAULTS.pR),
+        top: ET_DEFAULTS.pT,
       },
       BL: {
-        left: 0,
-        top: viewHeight - 20,
+        left: ET_DEFAULTS.pL,
+        top: viewHeight - ET_DEFAULTS.dot_height,
       },
       BR: {
-        left: viewWidth - 20,
-        top: viewHeight - 20,
+        left: viewWidth - (ET_DEFAULTS.dot_width + ET_DEFAULTS.pR),
+        top: viewHeight - ET_DEFAULTS.dot_height,
       },
       CENTER: {
-        left: viewWidth / 2 - 10,
-        top: viewHeight / 2 - 10,
+        left: viewWidth / 2 - (ET_DEFAULTS.dot_width/2),
+        top: viewHeight / 2 - (ET_DEFAULTS.dot_height/2),
       },
-    };
-
+    }
     console.log('Position ==> ', position);
+    if (!positionArray[position]) {
+      Toast.show({
+        text1: 'Dot Positions are nnot set correctly.',
+        type: 'error',
+      });
+      return;
+    }
     console.log('Position Array ==> ', positionArray[position]);
     console.log('Position viewWidth ==> ', viewWidth);
+    console.log('T_DEFAULTS.width + ET_DEFAULTS.pL => ', (ET_DEFAULTS.dot_width + ET_DEFAULTS.pL))
     // Moving Dot
+    console.log('TRACK_EYES => NO');
     TRACK_EYES = false;
-    Animated.timing(tXValue, {
-      toValue: positionArray[position].left,
+    tXValue.value = withTiming(positionArray[position].left, {
       duration: 300,
-      useNativeDriver: true,
       easing: Easing.linear,
-    }).start(() => {
-      TRACK_EYES = true;
+    }, (finished) => {
+      if (finished) {
+        runOnJS(setTrackingTrue)();
+      }
     });
-    Animated.timing(tYValue, {
-      toValue: positionArray[position].top,
+    
+    tYValue.value = withTiming(positionArray[position].top, {
       duration: 300,
-      useNativeDriver: true,
       easing: Easing.linear,
-    }).start();
+    });
   };
 
-  const dotStyle = {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: BaseColors.primary,
-    position: 'absolute',
-    transform: [
-      {
-        scale: animatedValue.interpolate({
-          inputRange: [0, 0.5, 1],
-          outputRange: [1, 1.5, 1], // Adjust the values to change the dot's path
-        }),
-      },
-      {
-        translateX: tXValue,
-      },
-      {
-        translateY: tYValue,
-      },
-    ],
+  const blueDotStyle = {
+      width: ET_DEFAULTS.cali.caliBigDotSize,
+      height: ET_DEFAULTS.cali.caliBigDotSize,
+      borderRadius: ET_DEFAULTS.cali.caliBigDotSize/2,
+      backgroundColor: BaseColors.primary,
+      alignItems: 'center',
+      justifyContent: 'center',
+      position: 'absolute',
   };
+
+  const blueDotAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          scale: interpolate(animatedValue.value, [0, 0.5, 1], [1, 1.5, 1], {
+            extrapolateRight: Extrapolation.CLAMP,
+          }
+          ),
+        },
+        {
+          translateX: tXValue.value,
+        },
+        {
+          translateY: tYValue.value,
+        },
+      ],
+    }
+    });
+
+  const dotAnimatedStyle = useAnimatedStyle(() =>  { 
+    return {
+      transform: [
+        {
+          translateX: tXValue.value,
+        },
+        {
+          translateY: tYValue.value,
+        },
+      ],
+    }
+  });
 
   return (
     <View
       style={[
         styles.main,
         {
-          backgroundColor: caliStatus ? BaseColors.black : '#0005',
+          // backgroundColor: caliStatus ? BaseColors.borderColor : '#0005',
+          backgroundColor: '#0001',
           paddingBottom: insets.bottom,
         },
       ]}
@@ -417,7 +518,7 @@ export default function CalibrationStart() {
         translucent={true}
       />
       <HeaderBar
-        HeaderText={caliStatus ? 'Follow the Red Dot' : 'Set Your Face'}
+        HeaderText={caliStatus ? 'Calibration' : 'Set Your Face'}
         isTransperant
         HeaderCenter
         leftText="Cancel"
@@ -496,10 +597,19 @@ export default function CalibrationStart() {
           </View>
         )}
 
-        {caliStatus && <Animated.View style={dotStyle} />}
+        {caliStatus && !dynamicDot && <Animated.View style={[blueDotStyle, blueDotAnimatedStyle]} >
+            <Animatable.View
+              style={styles.smallDotStyle}
+              animation="customPulse"
+              direction='alternate'
+              easing="ease-in-out"
+              iterationCount="infinite"
+              duration={400}
+            />
+          </Animated.View>}
         {dynamicDot && (
           <Animated.View
-            style={{
+            style={[{
               width: 20,
               height: 20,
               borderRadius: 10,
@@ -507,17 +617,34 @@ export default function CalibrationStart() {
               position: 'absolute',
               left: 0,
               top: 0,
-              transform: [
-                {
-                  translateX: tXValue,
-                },
-                {
-                  translateY: tYValue,
-                },
-              ],
-            }}
+            },
+            dotAnimatedStyle
+          ]}
           />
         )}
+        {dynamicDot && positionArray.TL && positionArray.TL.left &&
+        (<>
+          <Animated.View style={[{ transform: [ {translateX: positionArray.TL.left},{translateY: positionArray.TL.top} ]}, blueDotStyle]} >
+              <View
+                style={styles.smallDotStyle}
+              />
+          </Animated.View>
+          <Animated.View style={[blueDotStyle, { transform: [ {translateX: positionArray.TR.left},{translateY: positionArray.TR.top} ]}]} >
+              <View
+                style={styles.smallDotStyle}
+              />
+          </Animated.View>
+          <Animated.View style={[blueDotStyle, { transform: [ {translateX: positionArray.BL.left},{translateY: positionArray.BL.top} ]}]} >
+              <View
+                style={styles.smallDotStyle}
+              />
+          </Animated.View>
+          <Animated.View style={[blueDotStyle, { transform: [ {translateX: positionArray.BR.left},{translateY: positionArray.BR.top} ]}]} >
+              <View
+                style={styles.smallDotStyle}
+              />
+          </Animated.View>
+        </>)}
       </View>
     </View>
   );

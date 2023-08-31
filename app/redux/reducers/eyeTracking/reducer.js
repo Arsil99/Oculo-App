@@ -2,6 +2,7 @@ import types from './actions';
 
 const initialState = {
   calibration: {},
+  calibrationTime: 2000,
 };
 
 export default function reducer(state = initialState, action) {
@@ -19,6 +20,13 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         calibration: {},
+      };
+
+    case types.SET_CAL_TIME:
+      console.log(`${types.SET_CAL_TIME} => `);
+      return {
+        ...state,
+        calibrationTime: action.time,
       };
 
     default:

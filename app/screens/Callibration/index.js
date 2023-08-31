@@ -25,6 +25,7 @@ import {
   stopEyePosTracking,
 } from '@utils/eyeTracking';
 import { EyeTracking } from '@components/EyeTracking';
+import { useFocusEffect } from '@react-navigation/native';
 
 const { Value } = Animated;
 
@@ -159,71 +160,118 @@ export default function Callibration({ navigation }) {
     });
   };
 
-  useEffect(() => {
-    const trackListener = event => {
-      const { leCenter, reCenter } = event;
+  useFocusEffect(
+    React.useCallback(() => {
+      const trackListener = event => {
+        const { leCenter, reCenter } = event;
 
-      let isValid = false;
+        let isValid = false;
 
-      // Assuming the Y value determines the position
-      const avgEyeY = (leCenter.y + reCenter.y) / 2;
-      const eyesDistance = Math.abs(reCenter.x - leCenter.x);
+        // Assuming the Y value determines the position
+        const avgEyeY = (leCenter.y + reCenter.y) / 2;
+        const eyesDistance = Math.abs(reCenter.x - leCenter.x);
 
-      leftEyeX.value = event.leCenter.x - ET_DEFAULTS.cali.userEyeSize / 2;
-      leftEyeY.value = event.leCenter.y - ET_DEFAULTS.cali.userEyeSize / 2;
-      rightEyeX.value = event.reCenter.x - ET_DEFAULTS.cali.userEyeSize / 2;
-      rightEyeY.value = event.reCenter.y - ET_DEFAULTS.cali.userEyeSize / 2;
+        leftEyeX.value = event.leCenter.x - ET_DEFAULTS.cali.userEyeSize / 2;
+        leftEyeY.value = event.leCenter.y - ET_DEFAULTS.cali.userEyeSize / 2;
+        rightEyeX.value = event.reCenter.x - ET_DEFAULTS.cali.userEyeSize / 2;
+        rightEyeY.value = event.reCenter.y - ET_DEFAULTS.cali.userEyeSize / 2;
 
-      // Pseudocode
-      if (avgEyeY > whiteLineY + ET_DEFAULTS.cali.dot_height / 2) {
-        setInstruction('Move your head up');
-      } else if (avgEyeY < whiteLineY - +(ET_DEFAULTS.cali.dot_height / 2)) {
-        setInstruction('Move your head down');
-      }
+        // Pseudocode
+        if (avgEyeY > whiteLineY + ET_DEFAULTS.cali.systemEyeCircleSize / 2) {
+          setInstruction(ET_DEFAULTS.cali.validationMsg.head_up);
+        } else if (
+          avgEyeY <
+          whiteLineY - ET_DEFAULTS.cali.systemEyeCircleSize / 2
+        ) {
+          setInstruction(ET_DEFAULTS.cali.validationMsg.head_down);
+        }
+        // Check if eyes are within the circle views
+        else if (leftCirclePosition && rightCirclePosition) {
+          const isLeftEyeInside =
+            leCenter.x > leftCirclePosition.x &&
+            leCenter.x <
+              leftCirclePosition.x + ET_DEFAULTS.cali.systemEyeCircleSize / 2 &&
+            leCenter.y > leftCirclePosition.y &&
+            leCenter.y <
+              leftCirclePosition.y + ET_DEFAULTS.cali.systemEyeCircleSize / 2;
 
-      // Check if eyes are within the circle views
-      else if (leftCirclePosition && rightCirclePosition) {
-        const isLeftEyeInside =
-          leCenter.x > leftCirclePosition.x &&
-          leCenter.x < leftCirclePosition.x + leftCirclePosition.width &&
-          leCenter.y > leftCirclePosition.y &&
-          leCenter.y < leftCirclePosition.y + leftCirclePosition.height;
+          const isRightEyeInside =
+            reCenter.x > rightCirclePosition.x &&
+            reCenter.x <
+              rightCirclePosition.x +
+                ET_DEFAULTS.cali.systemEyeCircleSize / 2 &&
+            reCenter.y > rightCirclePosition.y &&
+            reCenter.y <
+              rightCirclePosition.y + ET_DEFAULTS.cali.systemEyeCircleSize / 2;
 
-        const isRightEyeInside =
-          reCenter.x > rightCirclePosition.x &&
-          reCenter.x < rightCirclePosition.x + rightCirclePosition.width &&
-          reCenter.y > rightCirclePosition.y &&
-          reCenter.y < rightCirclePosition.y + rightCirclePosition.height;
-
-        if (!isLeftEyeInside) {
-          setInstruction('Align your left eye with the circle.');
-        } else if (!isRightEyeInside) {
-          setInstruction('Align your right eye with the circle.');
-        } else {
           // Check distance between eyes and adjust user's position
           const circleDistance = Math.abs(
             rightCirclePosition.x - leftCirclePosition.x,
           );
-
-          console.log(
-            'Track Listener Distance => ',
-            circleDistance,
-            eyesDistance,
-            rightCirclePosition.x,
-            leftCirclePosition.x,
-            reCenter.x,
-            leCenter.x,
-          );
-          if (eyesDistance < circleDistance + ET_DEFAULTS.cali.dot_height / 2) {
-            setInstruction('Move a bit closer to the device.');
+          // console.log(
+          //   'Track Listener Distance => ',
+          //   eyesDistance,
+          //   circleDistance,
+          //   circleDistance + ET_DEFAULTS.cali.systemEyeCircleSize,
+          //   'Eye Y',
+          //   avgEyeY,
+          //   whiteLineY,
+          //   ET_DEFAULTS.cali.systemEyeCircleSize / 2,
+          //   'LE CICLE X',
+          //   leftCirclePosition.x,
+          //   'LE X: ',
+          //   leCenter.x,
+          //   'LE CICLE Y',
+          //   leftCirclePosition.y,
+          //   'LE Y: ',
+          //   leCenter.y,
+          //   'RE CICLE X',
+          //   rightCirclePosition.x,
+          //   'isLeftEyeInside: ',
+          //   isLeftEyeInside,
+          //   'RE X: ',
+          //   reCenter.x,
+          //   'RE CICLE Y',
+          //   rightCirclePosition.y,
+          //   'RE Y: ',
+          //   reCenter.y,
+          //   'isRightEyeInside: ',
+          //   isRightEyeInside,
+          //   'size: ',
+          //   ET_DEFAULTS.cali.systemEyeCircleSize,
+          //   'ACT Width: ',
+          //   leftCirclePosition.width,
+          // );
+          let distance_msg = '';
+          let distance_valid = false;
+          if (
+            eyesDistance <
+            circleDistance - ET_DEFAULTS.cali.systemEyeCircleSize
+          ) {
+            distance_msg = ET_DEFAULTS.cali.validationMsg.move_closer;
           } else if (
             eyesDistance >
-            circleDistance - ET_DEFAULTS.cali.dot_height / 2
+            circleDistance + ET_DEFAULTS.cali.systemEyeCircleSize
           ) {
-            setInstruction('Move a bit away from the device.');
+            distance_msg = ET_DEFAULTS.cali.validationMsg.move_away;
           } else {
-            isValid = true;
-            setInstruction('Perfect! Stay still.');
+            distance_valid = true;
+            // distance_msg = 'Perfect! Stay still. ';
+          }
+
+          if (!isLeftEyeInside) {
+            setInstruction(
+              distance_msg + ET_DEFAULTS.cali.validationMsg.align_left,
+            );
+          } else if (!isRightEyeInside) {
+            setInstruction(
+              distance_msg + ET_DEFAULTS.cali.validationMsg.align_right,
+            );
+          } else {
+            if (distance_valid) {
+              isValid = true;
+              setInstruction(ET_DEFAULTS.cali.validationMsg.success);
+            }
           }
         }
         eyePosition.value = isValid ? 1 : 0;
@@ -232,34 +280,37 @@ export default function Callibration({ navigation }) {
         if (isValid !== isValidPosition) {
           setValidPosition(isValid);
         }
-      }
-    };
-    // Setup Emitter based on Device OS
-    const emitter =
-      Platform.OS === 'ios'
-        ? new NativeEventEmitter(NativeModules.EyeTrackingEventEmitter)
-        : DeviceEventEmitter;
+      };
+      // Setup Emitter based on Device OS
+      const emitter =
+        Platform.OS === 'ios'
+          ? new NativeEventEmitter(NativeModules.EyeTrackingEventEmitter)
+          : DeviceEventEmitter;
 
-    // Let's listen to Tracking Event
-    const subscription = emitter.addListener('tracking_eye_pos', trackListener);
+      // Let's listen to Tracking Event
+      const subscription = emitter.addListener(
+        'tracking_eye_pos',
+        trackListener,
+      );
 
-    return () => {
-      subscription.remove();
-    };
-  }, [
-    eyePosition,
-    whiteLineY,
-    setInstruction,
-    leftEyeX,
-    leftEyeY,
-    rightEyeX,
-    rightEyeY,
-    leftCirclePosition,
-    rightCirclePosition,
-    leftEyeAnimation,
-    rightEyeAnimation,
-    isValidPosition,
-  ]);
+      return () => {
+        subscription.remove();
+      };
+    }, [
+      eyePosition,
+      whiteLineY,
+      setInstruction,
+      leftEyeX,
+      leftEyeY,
+      rightEyeX,
+      rightEyeY,
+      leftCirclePosition,
+      rightCirclePosition,
+      leftEyeAnimation,
+      rightEyeAnimation,
+      isValidPosition,
+    ]),
+  );
 
   // Let's stop Native Eye Tracking when user navigates back
   React.useEffect(() => {
@@ -410,7 +461,6 @@ export default function Callibration({ navigation }) {
           onPress={() => {
             if (isValidPosition) {
               stopEyePosTracking();
-              // EyeTracking.showDebug(false);
               navigation?.navigate('CallibrationStart');
             }
           }}

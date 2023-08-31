@@ -37,7 +37,7 @@ import { getApiData } from '@utils/apiHelper';
 import LabeledInput from '@components/LabeledInput';
 import { isEmpty } from 'lodash';
 
-let MOVE_DOT = false;
+let MOVE_DOT = true;
 let currentIndexEyeTracking = [];
 let currentIndexStartTime = null;
 let currentIndexEndTime = null;
@@ -513,6 +513,8 @@ fixDurScreen	= t	Average fixation duration on screen
               });
             },
           );
+        } else {
+          console.log('Sym Called ===> View Ref not found');
         }
       });
     };
@@ -530,51 +532,48 @@ fixDurScreen	= t	Average fixation duration on screen
       await getViewMeasurements();
       console.log('Sym Called ===> Start 3');
 
-      // Setup Emitter based on Device OS
-      const emitter =
-        Platform.OS === 'ios'
-          ? new NativeEventEmitter(NativeModules.EyeTrackingEventEmitter)
-          : DeviceEventEmitter;
-
       console.log('Calibration in Redux => ', calibration);
 
       // Let's listen to Tracking Event
-      subscription = emitter.addListener('tracking', event => {
-        console.log('Sym Called ==> Event Received');
+      subscription = DeviceEventEmitter.addListener(
+        'eyeTrackingEvent',
+        event => {
+          console.log('Sym Called ==> Event Received');
 
-        // ADDED For TESTING PURPOSE: Let's move the dot using Eye Gaze.
-        if (MOVE_DOT) {
-          const newXValue = calculateScreenX(
-            event.centerEyeLookAtPoint.x,
-            calibration,
-            calibration.viewWidth,
-          );
-          const newYValue = calculateScreenY(
-            event.centerEyeLookAtPoint.y,
-            calibration,
-            calibration.viewHeight,
-          );
+          // ADDED For TESTING PURPOSE: Let's move the dot using Eye Gaze.
+          if (MOVE_DOT) {
+            const newXValue = calculateScreenX(
+              event.centerEyeLookAtPoint.x,
+              calibration,
+              calibration.viewWidth,
+            );
+            const newYValue = calculateScreenY(
+              event.centerEyeLookAtPoint.y,
+              calibration,
+              calibration.viewHeight,
+            );
 
-          // Let's move a fake red circle to test if Eye Tracking works or not
-          if (!isNaN(newXValue) && !isNaN(newYValue)) {
-            tXValue.value = newXValue;
-            tYValue.value = newYValue;
-            if (currentIndexStartTime == null) {
-              currentIndexStartTime = getDate();
+            // Let's move a fake red circle to test if Eye Tracking works or not
+            if (!isNaN(newXValue) && !isNaN(newYValue)) {
+              tXValue.value = newXValue;
+              tYValue.value = newYValue;
+              if (currentIndexStartTime == null) {
+                currentIndexStartTime = getDate();
+              }
+              currentIndexEyeTracking.push({
+                // ...event,
+                eventData: event,
+                screenX: newXValue,
+                screenY: newYValue,
+                actualX: event.centerEyeLookAtPoint.x,
+                actualY: event.centerEyeLookAtPoint.y,
+                time: new Date().getTime(),
+                dateTime: getDate(),
+              });
             }
-            currentIndexEyeTracking.push({
-              // ...event,
-              eventData: event,
-              screenX: newXValue,
-              screenY: newYValue,
-              actualX: event.centerEyeLookAtPoint.x,
-              actualY: event.centerEyeLookAtPoint.y,
-              time: new Date().getTime(),
-              dateTime: getDate(),
-            });
           }
-        }
-      });
+        },
+      );
       MOVE_DOT = true;
     };
 

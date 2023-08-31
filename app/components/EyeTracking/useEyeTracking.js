@@ -1,5 +1,11 @@
-import React from 'react';
-import { mergeIfDefined } from './utils';
+import React, { useEffect } from 'react';
+import {
+  DeviceEventEmitter,
+  NativeEventEmitter,
+  NativeModules,
+  Platform,
+} from 'react-native';
+import { getDate } from '@utils/CommonFunction';
 
 export const DEFAULT_OPTIONS = {
   debug: false,
@@ -30,6 +36,30 @@ export function useEyeTracking({ defaultOptions }) {
   const setDebugInfo = React.useCallback(debugInfo => {
     setDebugData(debugInfo);
   }, []);
+
+  useEffect(() => {
+    // Define Track Listener Function
+    // Setup Emitter based on Device OS
+    const emitter =
+      Platform.OS === 'ios'
+        ? new NativeEventEmitter(NativeModules.EyeTrackingEventEmitter)
+        : DeviceEventEmitter;
+
+    const trackListener = event => {
+      event.timestamp = getDate();
+      // console.log('Listeniing from EyeTracking CMP', event);
+      DeviceEventEmitter.emit('eyeTrackingEvent', event);
+      setDebugData(event);
+    };
+
+    // Let's listen to Tracking Event
+    const subscription = emitter.addListener('tracking', trackListener);
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
   return {
     isDebug,
     isTracking,

@@ -2,7 +2,6 @@ import { StyleSheet, Platform } from 'react-native';
 import { BaseColors, FontFamily } from '@config/theme';
 import BaseSetting from '@config/setting';
 
-const IOS = Platform.OS === 'ios';
 const styles = StyleSheet.create({
   main: { flex: 1 },
   imgStyle: { height: '100%', width: '100%', position: 'absolute' },
@@ -46,6 +45,13 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     justifyContent: 'center',
+  },
+  smallDotStyle: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: BaseColors?.primaryBlue,
+    // marginHorizontal: 5,
   },
 });
 

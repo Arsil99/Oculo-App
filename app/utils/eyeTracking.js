@@ -26,6 +26,16 @@ export const ET_DEFAULTS = {
     userEyeBorderInvalidColor: BaseColors?.red,
     userEyeBorderValidColor: BaseColors?.primary,
     systemEyeCircleSize: 42,
+    caliBigDotSize: 48,
+    validationMsg: {
+      head_up: 'Move your head up',
+      head_down: 'Move your head down',
+      move_closer: 'Move a bit closer to the device.',
+      move_away: 'Move a bit away from the device.',
+      align_left: 'Align your left eye with the circle.',
+      align_right: 'Align your right eye with the circle.',
+      success: 'Perfect! Stay still.',
+    },
   },
 };
 
