@@ -8,16 +8,9 @@ const BaseSetting = {
   name: 'oculo',
   displayName: 'oculo',
   appVersionCode: '1',
-  stripeKey:
-    'pk_test_51LUNEAJ3MbCXRvepo5YEabpEZATKZv1ci3u3SEW7FW4N4moKnu0gxrOgqK5DQCX5N1xNYvRJfSiuWoyJYy7K74gw00kcTXSt8T',
+  stripeKey: '',
   // bugsnagApiKey: "",
   baseUrl,
-  zohoUrl: devMode
-    ? 'http://192.168.0.124:8000/zoho/'
-    : 'https://jointroops.com/zoho/',
-  socketURL: devMode
-    ? 'http://192.168.0.124:33969/'
-    : 'http://165.22.59.159:30000/', // LOCAL URL
   api: baseUrl,
   nWidth: Dimensions.get('window').width,
   nHeight: Dimensions.get('window').height,
