@@ -263,6 +263,20 @@ export default function Recalldigits({ navigation, route }) {
   const handleConfirm = () => {
     navigation.navigate('Events');
   };
+  // Define an array of trial text based on digit length and position
+  const trialTexts = [
+    '3 Digits A',
+    '3 Digits B',
+    '4 Digits A',
+    '4 Digits B',
+    '5 Digits A',
+    '5 Digits B',
+    '6 Digits A',
+    '6 Digits B',
+  ];
+
+  // Calculate the current trial text based on the length of the current digit
+  const currentTrialText = trialTexts[currentIndex] || 'Unknown Trial';
 
   return (
     <KeyboardAvoidingView
@@ -293,13 +307,12 @@ export default function Recalldigits({ navigation, route }) {
           ) : (
             <View style={{ flex: 1 }}>
               <View style={{ flex: 0.1 }}>
+                <Text style={styles.subtitleText}>{currentTrialText}</Text>
                 {showInput ? (
-                  <Text style={styles.subtitleText}>
-                    Trial {currentIndex + 1}/12{'\n'}Report backwards
-                  </Text>
+                  <Text style={styles.subtitleText}>Report backwards</Text>
                 ) : (
                   <Text style={styles.subtitleText}>
-                    Trial {currentIndex + 1}/12{'\n'} Remember these numbers
+                    Remember these numbers
                   </Text>
                 )}
               </View>
@@ -338,6 +351,12 @@ export default function Recalldigits({ navigation, route }) {
 
           <View>
             {(currentIndex === questionList.length - 1) & showInput ? (
+              <Button
+                shape="round"
+                title={'Submit'}
+                onPress={onToggleDisplay}
+              />
+            ) : showInput ? (
               <Button
                 shape="round"
                 title={'Submit'}
