@@ -7,6 +7,7 @@ import { isEmpty } from 'lodash';
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Authentication from '@redux/reducers/auth/actions';
+import { BaseColors } from '@config/theme';
 
 const SplashScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -71,7 +72,12 @@ const SplashScreen = ({ navigation }) => {
             opacity: fadeAnim,
           }}
         >
-          <Image source={Images.updatedlogo} height={100} width={100} />
+          <Image
+            source={Images.updatedlogo}
+            height={100}
+            width={100}
+            tintColor={BaseColors.primary}
+          />
         </Animated.View>
       </View>
     </>

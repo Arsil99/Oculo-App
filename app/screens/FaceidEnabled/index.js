@@ -17,6 +17,7 @@ import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
 import { useDispatch, useSelector } from 'react-redux';
 import Authentication from '@redux/reducers/auth/actions';
+import { BaseColors } from '@config/theme';
 
 const FaceidEnabled = ({ navigation, route }) => {
   const { setBiometric } = Authentication;
@@ -159,6 +160,7 @@ const FaceidEnabled = ({ navigation, route }) => {
             source={Images.updatedlogo}
             resizeMode="contain"
             style={styles.img}
+            tintColor={BaseColors.primary}
           />
         </View>
         <View style={styles.imgContainer}>

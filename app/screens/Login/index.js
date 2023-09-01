@@ -30,8 +30,8 @@ const Login = ({ navigation }) => {
   const dispatch = useDispatch();
   const cInputRef = useRef();
 
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState(__DEV__ ? 'sunny1@mailinator.com' : '');
+  const [password, setPassword] = useState(__DEV__ ? '123456789' : '');
   const [loader, setLoader] = useState(false);
 
   const [emailErrObj, setEmailErrObj] = useState({ error: false, msg: '' });
@@ -338,6 +338,7 @@ const Login = ({ navigation }) => {
             source={Images.updatedlogo}
             resizeMode="contain"
             style={styles.img}
+            tintColor={BaseColors.primary}
           />
         </View>
         <View style={styles.inputcontainer}>

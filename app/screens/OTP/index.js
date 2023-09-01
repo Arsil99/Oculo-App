@@ -172,6 +172,7 @@ export default function OTP({ navigation, route }) {
         <Image
           source={Images.updatedlogo}
           style={{ marginBottom: 25, marginTop: -5 }}
+          tintColor={BaseColors.primary}
         />
         <Text style={{ fontSize: 18 }}>Code has sent to</Text>
         <Text style={{ fontSize: 18 }}>{email}</Text>

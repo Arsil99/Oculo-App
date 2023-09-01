@@ -20,6 +20,7 @@ import { getApiData } from '@utils/apiHelper';
 import LabeledInput from '@components/LabeledInput';
 import { isEmpty, isNull } from 'lodash';
 import { useSelector } from 'react-redux';
+import { BaseColors } from '@config/theme';
 
 const errObj = {
   p_phoneErr: false,
@@ -119,6 +120,7 @@ const TwofactorEnabled = ({ navigation }) => {
             source={Images.updatedlogo}
             resizeMode="contain"
             style={styles.img}
+            tintColor={BaseColors.primary}
           />
         </View>
         <View style={styles.imgContainer}>

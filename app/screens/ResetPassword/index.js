@@ -18,6 +18,7 @@ import Authentication from '@redux/reducers/auth/actions';
 import { useDispatch } from 'react-redux';
 import { removeCredentials, storeCredentials } from '@utils/CommonFunction';
 import HeaderBar from '@components/HeaderBar';
+import { BaseColors } from '@config/theme';
 
 const ResetPassword = ({ navigation, route }) => {
   const { setUserData, setAccessToken, setBiometric } = Authentication;
@@ -239,6 +240,7 @@ const ResetPassword = ({ navigation, route }) => {
               source={Images.updatedlogo}
               resizeMode="contain"
               style={styles.img}
+              tintColor={BaseColors.primary}
             />
           </View>
         ) : null}

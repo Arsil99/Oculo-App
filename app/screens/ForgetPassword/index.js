@@ -15,6 +15,7 @@ import BaseSetting from '@config/setting';
 import { Platform } from 'react-native';
 import { getApiData } from '@utils/apiHelper';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { BaseColors } from '@config/theme';
 
 const ForgetPassword = ({ navigation }) => {
   const IOS = Platform.OS === 'ios';
@@ -109,6 +110,7 @@ const ForgetPassword = ({ navigation }) => {
             source={Images.updatedlogo}
             resizeMode="contain"
             style={styles.img}
+            tintColor={BaseColors.primary}
           />
         </View>
         <View style={styles.inputcontainer}>
