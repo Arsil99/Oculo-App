@@ -102,6 +102,11 @@ const Symptoms = ({ navigation, route }) => {
   const [sad, setSad] = useState([]);
   const [nervous, setNervous] = useState([]);
   const [trouble, setTrouble] = useState([]);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [next, setNext] = useState(0);
+  const [validPhysical, setValidPhysical] = useState(false);
+  const [vaildMental, setValidMental] = useState(false);
   const stateArray = [
     head,
     pressureHead,
@@ -202,6 +207,7 @@ fixDurScreen	= t	Average fixation duration on screen
         set_patient_question(p_question);
         setBoolQuestion(boolQue);
         setInputQuestion(inputQue);
+        setLoading(false);
       }
     } catch (error) {
       console.log('📌 ⏩ file: index.js:24 ⏩ LangListAPI ⏩ error:', error);
@@ -344,41 +350,48 @@ fixDurScreen	= t	Average fixation duration on screen
 
   // Handle On Symptom Change
   const handleSymptomChange = index => {
-    const sliderObject = {
-      symptom: meta[index - 1],
-      initialScore: initValue,
-      scoreChng: count,
-      finalScore: lastValue,
-    };
-
-    stateArray.forEach(state => {
-      const updatedState = updateStateDynamically(state, sliderObject);
-      stateUpdater(state, updatedState);
-    });
-
-    const updatedSymptomArray = [...symptomArray];
-    if (updatedSymptomArray[index - 1]) {
-      updatedSymptomArray[index - 1] = {
-        ...updatedSymptomArray[index - 1],
-        ...sliderObject,
+    if (!count && index > activeButtonIndex) {
+      Toast.show({
+        text1: 'Please select any range.',
+        type: 'error',
+      });
+    } else {
+      const sliderObject = {
+        symptom: meta[index - 1],
+        initialScore: initValue,
+        scoreChng: count,
+        finalScore: lastValue,
       };
-    } else {
-      updatedSymptomArray.push(sliderObject);
-    }
 
-    setSymptomArray(updatedSymptomArray);
-    if (tag[index]) {
-      currentIndexEndTime = getDate();
+      stateArray.forEach(state => {
+        const updatedState = updateStateDynamically(state, sliderObject);
+        stateUpdater(state, updatedState);
+      });
 
-      // Upload the Assessment Data to Server
-      handleUploadAssessmentData();
-      currentIndexEyeTracking = [];
-      setActiveButtonIndex(index);
-      flatListRef.current.scrollToIndex({ index, animated: true });
-    } else {
-      setTakeBoolean(true);
+      const updatedSymptomArray = [...symptomArray];
+      if (updatedSymptomArray[index - 1]) {
+        updatedSymptomArray[index - 1] = {
+          ...updatedSymptomArray[index - 1],
+          ...sliderObject,
+        };
+      } else {
+        updatedSymptomArray.push(sliderObject);
+      }
+
+      setSymptomArray(updatedSymptomArray);
+      if (tag[index]) {
+        currentIndexEndTime = getDate();
+
+        // Upload the Assessment Data to Server
+        handleUploadAssessmentData();
+        currentIndexEyeTracking = [];
+        setActiveButtonIndex(index);
+        flatListRef.current.scrollToIndex({ index, animated: true });
+      } else {
+        setTakeBoolean(true);
+      }
+      ResetValues();
     }
-    ResetValues();
   };
 
   useEffect(() => {
@@ -633,19 +646,20 @@ fixDurScreen	= t	Average fixation duration on screen
   }, []);
 
   let checkValid = boolQuestion.length;
+
   const handleButtonPress = (item, bool, rowIndex, buttonIndex) => {
     console.log(rowIndex, buttonIndex);
     if (rowIndex === 0) {
       setPhysical(!buttonIndex);
+      setValidPhysical(true);
     } else if (rowIndex === 1) {
+      setValidMental(true);
       setMental(!buttonIndex);
     }
     const newActiveIndexes = [...activeIndexes];
     newActiveIndexes[rowIndex] = buttonIndex;
     setActiveIndexes(newActiveIndexes);
   };
-
-  const [showConfirmation, setShowConfirmation] = useState(false);
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -668,6 +682,20 @@ fixDurScreen	= t	Average fixation duration on screen
   const handleConfirm = () => {
     navigation.navigate('Events');
   };
+
+  const checkNext = () => {
+    if (validPhysical) {
+      setNext(next + 1);
+      setValidPhysical(false);
+    } else if (vaildMental) {
+      setNext(next + 1);
+    } else {
+      Toast.show({
+        text1: 'Select your answer',
+        type: 'error',
+      });
+    }
+  };
   return (
     <View style={styles.main}>
       <StatusBar barStyle="dark-content" translucent={true} />
@@ -685,268 +713,294 @@ fixDurScreen	= t	Average fixation duration on screen
         ref={aoiRootView}
       >
         <>
-          <View>
-            {!takeBoolean ? (
-              <View>
-                <FlatList
-                  data={tag}
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  renderItem={({ item, index }) => (
-                    <View style={styles.buttoncontainer}>
-                      <TouchableOpacity
-                        onPress={() => handleSymptomChange(index)}
-                        style={[
-                          {
-                            backgroundColor:
-                              activeButtonIndex === index
-                                ? BaseColors.secondary
-                                : BaseColors.inactive,
-                          },
-                          styles.yesbutton,
-                        ]}
-                        activeOpacity={BaseSetting.buttonOpacity}
-                      >
-                        <Text
-                          style={[
-                            {
-                              color:
-                                activeButtonIndex === index
-                                  ? BaseColors.white
-                                  : BaseColors.textColor,
-                            },
-                            styles.btnText,
-                          ]}
-                        >
-                          {item}
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                  keyExtractor={item => item.id}
-                  ref={flatListRef}
-                />
-                <Text style={styles.yesText}>
-                  Please select the severity level you can also see the previous
-                  severity level.
-                </Text>
-                {tag?.map((item, index) => {
-                  return (
-                    index === activeButtonIndex && (
-                      <>
-                        <View
-                          // onLayout={handleAOILayout}
-                          ref={aoiRef}
-                        >
-                          <Text style={styles.boldText}>
-                            Report the severity level of {tag[index].label}:
-                            &nbsp;{patient_question[index]}
-                          </Text>
-                          <View style={styles.sliderMarker}>
-                            <Slider
-                              value={sliderValue}
-                              onValueChange={handleValueChange}
-                              minimumValue={1}
-                              maximumValue={8}
-                              thumbStyle={styles.thumbStyle}
-                              trackStyle={styles.trackStyle}
-                              minimumTrackTintColor={BaseColors.primary}
-                              maximumTrackTintColor={BaseColors.tabinActive}
-                              thumbTintColor={BaseColors.white}
-                              style={styles.slider}
-                              step={1}
-                            />
-                            {/* Marker Vertical Lines */}
-                            <View style={styles.markerContainer}>
-                              {['', 0, 1, 2, 3, 4, 5, 6].map((marker, i) => (
-                                <View
-                                  style={
-                                    i === 0
-                                      ? null
-                                      : [
-                                          styles.marker,
-                                          {
-                                            backgroundColor:
-                                              prevTag[index] + 1 === i
-                                                ? BaseColors.secondary
-                                                : BaseColors.textGrey,
-                                            fontWeight: 'bold',
-                                          },
-                                        ]
-                                  }
-                                  key={marker.toString()}
-                                />
-                              ))}
-                            </View>
-                          </View>
-
-                          <View style={styles.markerContainerNumber}>
-                            {['', 0, 1, 2, 3, 4, 5, 6].map((label, i) =>
-                              i === 0 ? (
-                                <Text key={label.toString()}>&nbsp;</Text>
-                              ) : (
-                                <Text
-                                  style={[
-                                    styles.sliderLabel,
-                                    {
-                                      color:
-                                        prevTag[index] + 1 === i
-                                          ? BaseColors.secondary
-                                          : BaseColors.textGrey,
-                                      fontWeight: 'bold',
-                                    },
-                                  ]}
-                                  key={label.toString()}
-                                >
-                                  {label}
-                                </Text>
-                              ),
-                            )}
-                          </View>
-
-                          <View>
-                            <View style={styles.lables}>
-                              <Text style={{ fontFamily: FontFamily?.light }}>
-                                None
-                              </Text>
-                              <Text style={{ fontFamily: FontFamily?.light }}>
-                                Mild
-                              </Text>
-                              <Text style={{ fontFamily: FontFamily?.light }}>
-                                Moderate
-                              </Text>
-                              <Text style={{ fontFamily: FontFamily?.light }}>
-                                Sever
-                              </Text>
-                            </View>
-                          </View>
-                        </View>
-                        <View style={styles.topBox}>
-                          <View style={styles.outer}>
-                            <View style={styles.inner} />
-                            <Text>Previous Assessment</Text>
-                          </View>
-                          <View style={styles.assessmentHead}>
-                            <View style={styles.assessmentData} />
-                            <Text>Current Assessment</Text>
-                          </View>
-                        </View>
-                      </>
-                    )
-                  );
-                })}
-              </View>
-            ) : (
-              <View>
-                {boolQuestion?.map((item, rowIndex) => {
-                  const activeIndex = activeIndexes[rowIndex]; // Get the active index for this row
-
-                  return (
-                    <View key={rowIndex}>
-                      <Text style={{ fontSize: 18, marginVertical: 5 }}>
-                        {item}{' '}
-                        <Text style={{ color: BaseColors.orange }}>*</Text>
-                      </Text>
-                      <View style={{ flexDirection: 'row' }}>
-                        <TouchableOpacity
-                          style={[
-                            styles.btnStyle,
-                            {
-                              backgroundColor:
-                                activeIndex === 0
-                                  ? BaseColors.secondary
-                                  : BaseColors.white,
-                            },
-                          ]}
-                          onPress={() =>
-                            handleButtonPress(item, true, rowIndex, 0)
-                          }
-                        >
-                          <Text
-                            style={{
-                              color:
-                                activeIndex === 0
-                                  ? BaseColors.white
-                                  : BaseColors.textColor,
-                            }}
-                          >
-                            Yes
-                          </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          style={[
-                            styles.btnStyle,
-                            {
-                              backgroundColor:
-                                activeIndex === 1
-                                  ? BaseColors.secondary
-                                  : BaseColors.white,
-                            },
-                          ]}
-                          onPress={() =>
-                            handleButtonPress(item, false, rowIndex, 1)
-                          }
-                        >
-                          <Text
-                            style={{
-                              color:
-                                activeIndex === 1
-                                  ? BaseColors.white
-                                  : BaseColors.textColor,
-                            }}
-                          >
-                            No
-                          </Text>
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                  );
-                })}
-
+          {loading ? (
+            <View style={styles.loadingIndicator}>
+              <ActivityIndicator size={'large'} />
+            </View>
+          ) : (
+            <View>
+              {!takeBoolean ? (
                 <View>
-                  {inputQuestion?.map((item, index) => {
-                    return (
-                      <View>
-                        <Text style={{ fontSize: 18 }}>{item}</Text>
-                        <LabeledInput
-                          keyboardType={'numeric'}
-                          value={text}
-                          onChangeText={e => {
-                            setText(e <= 100 ? e : null);
-                            setPercentage(e <= 100 ? e : null);
-                            setTextErrObj({ error: false, msg: '' });
-                          }}
-                          showError={textErrObj.error}
-                          errorText={textErrObj.msg}
-                        />
+                  <FlatList
+                    data={tag}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    renderItem={({ item, index }) => (
+                      <View style={styles.buttoncontainer}>
+                        <TouchableOpacity
+                          onPress={() => handleSymptomChange(index)}
+                          style={[
+                            {
+                              backgroundColor:
+                                activeButtonIndex === index
+                                  ? BaseColors.secondary
+                                  : BaseColors.inactive,
+                            },
+                            styles.yesbutton,
+                          ]}
+                          activeOpacity={BaseSetting.buttonOpacity}
+                        >
+                          <Text
+                            style={[
+                              {
+                                color:
+                                  activeButtonIndex === index
+                                    ? BaseColors.white
+                                    : BaseColors.textColor,
+                              },
+                              styles.btnText,
+                            ]}
+                          >
+                            {item}
+                          </Text>
+                        </TouchableOpacity>
                       </View>
+                    )}
+                    keyExtractor={item => item.id}
+                    ref={flatListRef}
+                  />
+                  <Text style={styles.yesText}>
+                    Please select the severity level you can also see the
+                    previous severity level.
+                  </Text>
+                  {tag?.map((item, index) => {
+                    return (
+                      index === activeButtonIndex && (
+                        <>
+                          <View
+                            // onLayout={handleAOILayout}
+                            ref={aoiRef}
+                          >
+                            <Text style={styles.boldText}>
+                              Report the severity level of {tag[index].label}:
+                              &nbsp;{patient_question[index]}
+                            </Text>
+                            <View style={styles.sliderMarker}>
+                              <Slider
+                                value={sliderValue}
+                                onValueChange={handleValueChange}
+                                minimumValue={1}
+                                maximumValue={8}
+                                thumbStyle={styles.thumbStyle}
+                                trackStyle={styles.trackStyle}
+                                minimumTrackTintColor={BaseColors.primary}
+                                maximumTrackTintColor={BaseColors.tabinActive}
+                                thumbTintColor={BaseColors.white}
+                                style={styles.slider}
+                                step={1}
+                              />
+                              {/* Marker Vertical Lines */}
+                              <View style={styles.markerContainer}>
+                                {['', 0, 1, 2, 3, 4, 5, 6].map((marker, i) => (
+                                  <View
+                                    style={
+                                      i === 0
+                                        ? null
+                                        : [
+                                            styles.marker,
+                                            {
+                                              backgroundColor:
+                                                prevTag[index] + 1 === i
+                                                  ? BaseColors.secondary
+                                                  : BaseColors.textGrey,
+                                              fontWeight: 'bold',
+                                            },
+                                          ]
+                                    }
+                                    key={marker.toString()}
+                                  />
+                                ))}
+                              </View>
+                            </View>
+
+                            <View style={styles.markerContainerNumber}>
+                              {['', 0, 1, 2, 3, 4, 5, 6].map((label, i) =>
+                                i === 0 ? (
+                                  <Text key={label.toString()}>&nbsp;</Text>
+                                ) : (
+                                  <Text
+                                    style={[
+                                      styles.sliderLabel,
+                                      {
+                                        color:
+                                          prevTag[index] + 1 === i
+                                            ? BaseColors.secondary
+                                            : BaseColors.textGrey,
+                                        fontWeight: 'bold',
+                                      },
+                                    ]}
+                                    key={label.toString()}
+                                  >
+                                    {label}
+                                  </Text>
+                                ),
+                              )}
+                            </View>
+
+                            <View>
+                              <View style={styles.lables}>
+                                <Text style={{ fontFamily: FontFamily?.light }}>
+                                  None
+                                </Text>
+                                <Text style={{ fontFamily: FontFamily?.light }}>
+                                  Mild
+                                </Text>
+                                <Text style={{ fontFamily: FontFamily?.light }}>
+                                  Moderate
+                                </Text>
+                                <Text style={{ fontFamily: FontFamily?.light }}>
+                                  Sever
+                                </Text>
+                              </View>
+                            </View>
+                          </View>
+                          <View style={styles.topBox}>
+                            <View style={styles.outer}>
+                              <View style={styles.inner} />
+                              <Text>Previous Assessment</Text>
+                            </View>
+                            <View style={styles.assessmentHead}>
+                              <View style={styles.assessmentData} />
+                              <Text>Current Assessment</Text>
+                            </View>
+                          </View>
+                        </>
+                      )
                     );
                   })}
                 </View>
-              </View>
-            )}
-            <View style={styles.btnContainer}>
-              {!takeBoolean ? (
-                <Button
-                  shape="round"
-                  title={'Next'}
-                  style={styles.signinbutton}
-                  onPress={() => {
-                    handleSymptomChange(activeButtonIndex + 1);
-                  }}
-                />
               ) : (
-                <Button
-                  shape="round"
-                  title={'Submit'}
-                  style={styles.signinbutton}
-                  onPress={() => {
-                    SubmitSymptom();
+                <View
+                  style={{
+                    height: BaseSetting.nHeight / 2,
                   }}
-                />
+                >
+                  {boolQuestion
+                    ?.map((item, rowIndex) => {
+                      const activeIndex = activeIndexes[rowIndex]; // Get the active index for this row
+
+                      return (
+                        <View key={rowIndex}>
+                          <Text style={{ fontSize: 18, marginVertical: 5 }}>
+                            {item}{' '}
+                            <Text style={{ color: BaseColors.orange }}>*</Text>
+                          </Text>
+                          <View style={{ flexDirection: 'row' }}>
+                            <TouchableOpacity
+                              style={[
+                                styles.btnStyle,
+                                {
+                                  backgroundColor:
+                                    activeIndex === 0
+                                      ? BaseColors.secondary
+                                      : BaseColors.white,
+                                },
+                              ]}
+                              onPress={() =>
+                                handleButtonPress(item, true, rowIndex, 0)
+                              }
+                            >
+                              <Text
+                                style={{
+                                  color:
+                                    activeIndex === 0
+                                      ? BaseColors.white
+                                      : BaseColors.textColor,
+                                }}
+                              >
+                                Yes
+                              </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              style={[
+                                styles.btnStyle,
+                                {
+                                  backgroundColor:
+                                    activeIndex === 1
+                                      ? BaseColors.secondary
+                                      : BaseColors.white,
+                                },
+                              ]}
+                              onPress={() =>
+                                handleButtonPress(item, false, rowIndex, 1)
+                              }
+                            >
+                              <Text
+                                style={{
+                                  color:
+                                    activeIndex === 1
+                                      ? BaseColors.white
+                                      : BaseColors.textColor,
+                                }}
+                              >
+                                No
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      );
+                    })
+                    .slice(next, next + 1)}
+                  {next === 2 && (
+                    <View>
+                      {inputQuestion?.map((item, index) => {
+                        return (
+                          <View>
+                            <Text style={{ fontSize: 18 }}>{item}</Text>
+                            <LabeledInput
+                              keyboardType={'numeric'}
+                              value={text}
+                              onChangeText={e => {
+                                setText(e <= 100 ? e : null);
+                                setPercentage(e <= 100 ? e : null);
+                                setTextErrObj({ error: false, msg: '' });
+                              }}
+                              showError={textErrObj.error}
+                              errorText={textErrObj.msg}
+                            />
+                          </View>
+                        );
+                      })}
+                    </View>
+                  )}
+                </View>
               )}
+              <View style={styles.btnContainer}>
+                {!takeBoolean ? (
+                  <Button
+                    shape="round"
+                    title={'Next'}
+                    style={styles.signinbutton}
+                    onPress={() => {
+                      handleSymptomChange(activeButtonIndex + 1);
+                    }}
+                  />
+                ) : (
+                  next !== 2 && (
+                    <Button
+                      shape="round"
+                      title={'Next'}
+                      style={styles.signinbutton}
+                      onPress={() => {
+                        // SubmitSymptom();
+                        checkNext();
+                      }}
+                    />
+                  )
+                )}
+                {next === 2 && (
+                  <Button
+                    shape="round"
+                    title={'Submit'}
+                    style={styles.signinbutton}
+                    onPress={() => {
+                      SubmitSymptom();
+                    }}
+                  />
+                )}
+              </View>
             </View>
-          </View>
+          )}
 
           <Animated.View
             style={useAnimatedStyle(() => {

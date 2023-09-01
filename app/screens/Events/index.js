@@ -7,9 +7,10 @@ import HeaderBar from '@components/HeaderBar';
 import { useSelector } from 'react-redux';
 import { BaseColors } from '@config/theme';
 import BaseSetting from '@config/setting';
-
+import { isEmpty, isArray } from 'lodash';
 import { getApiData } from '@utils/apiHelper';
 import { ScrollView } from 'react-native-gesture-handler';
+import NoData from '@components/NoData';
 
 export default function Events({ navigation }) {
   const [eventDetails, setEventDetails] = useState([]);
@@ -56,7 +57,6 @@ export default function Events({ navigation }) {
           >
             Eye Tracking
           </Text>
-
           <CardList
             rightArrow
             onPress={() => navigation.navigate('Callibration')}
@@ -65,7 +65,6 @@ export default function Events({ navigation }) {
             status={'Completed'}
             assessment={'Assessment 4/5'}
           />
-
           <Text
             style={{
               fontSize: 18,
@@ -75,51 +74,55 @@ export default function Events({ navigation }) {
           >
             Open Events
           </Text>
-          {eventDetails?.map((item, index) => {
-            return (
-              <CardList
-                key={index}
-                rightArrow={
-                  item?.symptom_info +
-                    item?.immediate_recall +
-                    item?.digit_recall ===
-                  3
-                    ? false
-                    : true
-                }
-                onPress={() =>
-                  item?.symptom_info +
-                    item?.immediate_recall +
-                    item?.digit_recall ===
-                  3
-                    ? null
-                    : navigation.navigate(
-                        item?.symptom_info
-                          ? item?.immediate_recall
-                            ? 'Recalldigits'
-                            : 'Wordlist'
-                          : 'Assessment',
-                        { event_id: item?.id, otherData: item },
-                      )
-                }
-                image={Images.emoji1}
-                data={item?.createdAt}
-                status={`${
-                  item?.symptom_info +
-                    item?.immediate_recall +
-                    item?.digit_recall ===
-                  3
-                    ? 'Completed'
-                    : 'Pending'
-                }`}
-                assessment={`Assessment ${
-                  Number(item?.symptom_info) +
-                  Number(item?.immediate_recall) +
-                  Number(item?.digit_recall)
-                }/3`}
-              />
-            );
-          })}
+          {!isEmpty(eventDetails) && isArray(eventDetails) ? (
+            eventDetails?.map((item, index) => {
+              return (
+                <CardList
+                  key={index}
+                  rightArrow={
+                    item?.symptom_info +
+                      item?.immediate_recall +
+                      item?.digit_recall ===
+                    3
+                      ? false
+                      : true
+                  }
+                  onPress={() =>
+                    item?.symptom_info +
+                      item?.immediate_recall +
+                      item?.digit_recall ===
+                    3
+                      ? null
+                      : navigation.navigate(
+                          item?.symptom_info
+                            ? item?.immediate_recall
+                              ? 'Recalldigits'
+                              : 'Wordlist'
+                            : 'Assessment',
+                          { event_id: item?.id, otherData: item },
+                        )
+                  }
+                  image={Images.emoji1}
+                  data={item?.createdAt}
+                  status={`${
+                    item?.symptom_info +
+                      item?.immediate_recall +
+                      item?.digit_recall ===
+                    3
+                      ? 'Completed'
+                      : 'Pending'
+                  }`}
+                  assessment={`Assessment ${
+                    Number(item?.symptom_info) +
+                    Number(item?.immediate_recall) +
+                    Number(item?.digit_recall)
+                  }/3`}
+                />
+              );
+            })
+          ) : (
+            <NoData title={'Events are not available'} />
+          )}
 
           <Text
             style={{
@@ -130,7 +133,6 @@ export default function Events({ navigation }) {
           >
             Closed Events (Static)
           </Text>
-
           <CardList
             rightArrow
             onPress={() => navigation.navigate('EventDetails')}

@@ -26,6 +26,11 @@ export default StyleSheet.create({
     shadowRadius: 2.22,
     elevation: 3,
   },
+  loadingIndicator: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   buttoncontainer: {
     marginTop: 5,
     flexDirection: 'row',
