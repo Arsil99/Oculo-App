@@ -29,6 +29,7 @@ export default function Recalldigits({ navigation, route }) {
   const [showInput, setShowInput] = useState(false);
   const [userInputs, setUserInputs] = useState([]);
   const [manualInputValue, setManualInputValue] = useState('');
+  const [firstInputIncorrect, setFirstInputIncorrect] = useState(false);
   const [inputError, setInputError] = useState('');
   const textInputRef = useRef(null); // Create a ref for the text input
 
@@ -53,7 +54,6 @@ export default function Recalldigits({ navigation, route }) {
   }, []);
 
   const inputStartTimes = useRef([]); // Ref to store start times
-  const [sumitbutton, setSumitbutton] = useState('Next');
 
   const onToggleDisplay = () => {
     if (!showInput) {
@@ -93,21 +93,110 @@ export default function Recalldigits({ navigation, route }) {
       setManualInputValue('');
       setInputError('');
 
-      if (currentIndex === questionList.length - 1) {
-        submitData({ ...data, answers: updatedAnswers });
-        navigation.navigate('Events');
+      if (currentIndex % 2 === 0) {
+        const currentItem = questionList[currentIndex];
+        if (
+          currentItem &&
+          manualInputValue ===
+            (String(currentItem).split('').reverse().join('') || '')
+        ) {
+          // User input is correct for the first digit in the set
+          const nextIndex = currentIndex + 2; // Move to the next set
+
+          // Update the first digit's answer
+          const answer = {
+            digit: currentItem,
+            fixAOI: 12,
+            viewed: 12,
+            fixDurAOI: 12,
+            fixScreen: 12,
+            durScreen: elapsedMilliseconds,
+            userResponse: manualInputValue,
+          };
+
+          const secondDigitAnswer = {
+            digit: null,
+            fixAOI: null,
+            viewed: null,
+            fixDurAOI: null,
+            fixScreen: null,
+            durScreen: null,
+            userResponse: null,
+          };
+
+          const updatedAnswers = [...data.answers];
+          updatedAnswers[currentIndex] = answer;
+          updatedAnswers[currentIndex + 1] = secondDigitAnswer;
+          setData({ ...data, answers: updatedAnswers });
+
+          if (nextIndex >= questionList.length) {
+            // No more sets, submit data as correct and show success message
+            submitData({ ...data, answers: updatedAnswers });
+            Toast.show({
+              text1: 'Data submitted successfully with correct input.',
+              type: 'success',
+            });
+            navigation.navigate('Events');
+          } else {
+            setCurrentIndex(nextIndex);
+          }
+        } else {
+          // User input is incorrect for the first digit
+          setCurrentIndex(currentIndex + 1);
+        }
       } else {
-        setCurrentIndex(currentIndex + 1);
+        const currentItem = questionList[currentIndex];
+        if (
+          currentItem &&
+          manualInputValue ===
+            (String(currentItem).split('').reverse().join('') || '')
+        ) {
+          // User input is correct for the second digit in the set
+          const nextIndex = currentIndex + 1; // Move to the next set
+
+          // Update the second digit's answer
+          const answer = {
+            digit: currentItem,
+            fixAOI: 12,
+            viewed: 12,
+            fixDurAOI: 12,
+            fixScreen: 12,
+            durScreen: elapsedMilliseconds,
+            userResponse: manualInputValue,
+          };
+
+          const updatedAnswers = [...data.answers];
+          updatedAnswers[currentIndex] = answer;
+          setData({ ...data, answers: updatedAnswers });
+
+          if (nextIndex >= questionList.length) {
+            // No more sets, submit data as correct and show success message
+            submitData({ ...data, answers: updatedAnswers });
+            Toast.show({
+              text1: 'Data submitted successfully with correct input.',
+              type: 'success',
+            });
+            navigation.navigate('Events');
+          } else {
+            setCurrentIndex(nextIndex);
+          }
+        } else {
+          // User input is incorrect for the second digit, submit data as wrong and show success message
+          submitData({ ...data, answers: updatedAnswers });
+          Toast.show({
+            text1: 'Data submitted successfully.',
+            type: 'success',
+          });
+          navigation.navigate('Events');
+        }
       }
     }
 
     setShowInput(!showInput);
-    setSumitbutton(
-      currentIndex === questionList.length - 2 ? 'Submit' : 'Next',
-    );
   };
 
   async function submitData(val) {
+    console.log('🚀 ~ file: index.js:183 ~ submitData ~ val:', val);
     try {
       val['answers'] = JSON.stringify(val.answers);
       const response = await getApiData(

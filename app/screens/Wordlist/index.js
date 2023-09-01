@@ -210,7 +210,7 @@ export default function Wordlist({ navigation, route }) {
   // object data stored in array
   const pushOperation = e => {
     answers.push({
-      trial: e === 1 ? 'app_trial_1' : e === 2 ? 'app_trial_2' : 'app_trial_3',
+      trial: e === 1 ? 'trial_1' : e === 2 ? 'trial_2' : 'trial_3',
       userResponse:
         current_voice_attempt.voiceInput1 +
         ', ' +
