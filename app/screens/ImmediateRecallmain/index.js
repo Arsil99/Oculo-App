@@ -7,7 +7,8 @@ import { Images } from '@config';
 
 import Button from '@components/Button';
 
-const ImmediateRecallmain = ({ navigation }) => {
+const ImmediateRecallmain = ({ navigation, route }) => {
+  const eventId = route?.params?.event_id;
   return (
     <View style={styles.main}>
       <StatusBar
@@ -63,7 +64,7 @@ const ImmediateRecallmain = ({ navigation }) => {
             shape="round"
             title={'Next'}
             onPress={() => {
-              navigation?.navigate('Recalldigits');
+              navigation?.navigate('Recalldigits', { event_id: eventId });
             }}
           />
         </View>
