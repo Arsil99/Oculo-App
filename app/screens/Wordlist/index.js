@@ -288,7 +288,7 @@ export default function Wordlist({ navigation, route }) {
         false,
       );
       if (response?.status) {
-        navigation.navigate('ImmediateRecallmain', { event_id: eventId });
+        navigation.navigate('Assessment', { event_id: eventId });
         Toast.show({
           text1: response?.message.toString(),
           type: 'success',

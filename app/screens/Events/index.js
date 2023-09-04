@@ -14,6 +14,7 @@ import NoData from '@components/NoData';
 
 export default function Events({ navigation }) {
   const [eventDetails, setEventDetails] = useState([]);
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       EventListData();
@@ -96,8 +97,8 @@ export default function Events({ navigation }) {
                       : navigation.navigate(
                           item?.symptom_info
                             ? item?.immediate_recall
-                              ? 'Recalldigits'
-                              : 'Wordlist'
+                              ? 'Assessment'
+                              : 'Assessment'
                             : 'Assessment',
                           { event_id: item?.id, otherData: item },
                         )

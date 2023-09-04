@@ -3,10 +3,12 @@ import React from 'react';
 import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
 import Button from '@components/Button';
+import ImmediateRecall from '@screens/ImmediateRecall';
 
 const Assessment = ({ navigation, route }) => {
   const eventId = route?.params?.event_id;
   const data = route?.params?.otherData;
+  console.log('🚀 ~ file: index.js:11 ~ Assessment ~ data:', data);
   return (
     <View style={styles.main}>
       <StatusBar
@@ -16,7 +18,16 @@ const Assessment = ({ navigation, route }) => {
       />
 
       <HeaderBar
-        HeaderText={'Assessment 2'}
+        HeaderText={
+          data?.symptom_info + data?.immediate_recall + data?.digit_recall === 0
+            ? 'Assessment 1'
+            : data?.symptom_info +
+                data?.immediate_recall +
+                data?.digit_recall ===
+              1
+            ? 'Assessment 2'
+            : 'Assessment 3'
+        }
         HeaderCenter
         leftText="Back"
         leftBtnPress={() => {
@@ -62,7 +73,21 @@ const Assessment = ({ navigation, route }) => {
             title={'Begin Assessment'}
             style={styles.Assessment}
             onPress={() => {
-              navigation?.navigate('ChangeInfo', { event_id: eventId });
+              navigation?.navigate(
+                data?.symptom_info +
+                  data?.immediate_recall +
+                  data?.digit_recall ===
+                  0
+                  ? 'ChangeInfo'
+                  : data?.symptom_info +
+                      data?.immediate_recall +
+                      data?.digit_recall ===
+                    1
+                  ? 'ImmediateRecall'
+                  : 'ImmediateRecallmain',
+                { event_id: eventId },
+                { event_id: data?.id, otherData: data },
+              );
             }}
           />
         </View>

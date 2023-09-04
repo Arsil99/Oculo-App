@@ -439,7 +439,7 @@ fixDurScreen	= t	Average fixation duration on screen
         false,
       );
       if (response?.status) {
-        navigation.navigate('ImmediateRecall', { event_id: eventId });
+        navigation.navigate('Assessment', { event_id: eventId });
         Toast.show({
           text1: response?.message.toString(),
           type: 'success',
