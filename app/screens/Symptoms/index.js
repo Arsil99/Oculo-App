@@ -268,18 +268,24 @@ fixDurScreen	= t	Average fixation duration on screen
       initialScore: false,
       scoreChng: 0,
       finalScore: physical,
+      durScreen: 1,
+      pageRevisitInt: 1,
     },
     {
       symptom: 'Mental_Activity',
       initialScore: false,
       scoreChng: 0,
       finalScore: mental,
+      durScreen: 1,
+      pageRevisitInt: 1,
     },
     {
       symptom: 'Feel_Perfect',
       initialScore: 1,
       scoreChng: 3,
       finalScore: percentage,
+      durScreen: duration,
+      pageRevisitInt: 1,
     },
   ];
 
@@ -292,6 +298,9 @@ fixDurScreen	= t	Average fixation duration on screen
       state[existingIndex] = {
         ...state[existingIndex],
         scoreChng: state[existingIndex].scoreChng + sliderObject.scoreChng,
+        durScreen: state[existingIndex].durScreen + sliderObject.durScreen,
+        pageRevisitInt:
+          state[existingIndex].pageRevisitInt + sliderObject.pageRevisitInt,
         finalScore: sliderObject.finalScore,
       };
     } else {
@@ -348,6 +357,21 @@ fixDurScreen	= t	Average fixation duration on screen
     }
   };
 
+  // time count for each screen
+
+  useEffect(() => {
+    setRevisit(revisit => revisit + 1);
+    const intervalId = setInterval(() => {
+      setDuration(duration => duration + 1);
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  const [revisit, setRevisit] = useState(0);
+
   // Handle On Symptom Change
   const handleSymptomChange = index => {
     if (!count && index > activeButtonIndex) {
@@ -361,6 +385,8 @@ fixDurScreen	= t	Average fixation duration on screen
         initialScore: initValue,
         scoreChng: count,
         finalScore: lastValue,
+        durScreen: duration,
+        pageRevisitInt: revisit,
       };
 
       stateArray.forEach(state => {
@@ -390,6 +416,7 @@ fixDurScreen	= t	Average fixation duration on screen
       } else {
         setTakeBoolean(true);
       }
+      setDuration(0);
       ResetValues();
     }
   };
@@ -614,6 +641,7 @@ fixDurScreen	= t	Average fixation duration on screen
 
   // slider details state management
   const [count, setCount] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [initValue, setInitValue] = useState(0);
   const [milliseconds, setMilliseconds] = useState(0);
   const [lastValue, setLastValue] = useState(0);
@@ -685,9 +713,11 @@ fixDurScreen	= t	Average fixation duration on screen
 
   const checkNext = () => {
     if (validPhysical) {
+      setDuration(1);
       setNext(next + 1);
       setValidPhysical(false);
     } else if (vaildMental) {
+      setDuration(1);
       setNext(next + 1);
     } else {
       Toast.show({

@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, ActivityIndicator } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import styles from './styles';
 import CardList from '@components/CardList';
@@ -14,7 +14,7 @@ import NoData from '@components/NoData';
 
 export default function Events({ navigation }) {
   const [eventDetails, setEventDetails] = useState([]);
-
+  const [loader, setLoader] = useState(true);
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       EventListData();
@@ -29,6 +29,7 @@ export default function Events({ navigation }) {
       const res = await getApiData(`${endPoint}`, 'GET');
       if (res?.status) {
         setEventDetails(res?.data?.events);
+        setLoader(false);
       }
     } catch (error) {
       console.log('📌 ⏩ file: index.js:24 ⏩ LangListAPI ⏩ error:', error);
@@ -75,7 +76,10 @@ export default function Events({ navigation }) {
           >
             Open Events
           </Text>
-          {!isEmpty(eventDetails) && isArray(eventDetails) ? (
+
+          {loader ? (
+            <ActivityIndicator size={'large'} />
+          ) : !isEmpty(eventDetails) && isArray(eventDetails) ? (
             eventDetails?.map((item, index) => {
               return (
                 <CardList
