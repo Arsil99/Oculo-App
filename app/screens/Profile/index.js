@@ -483,7 +483,7 @@ export default function Profile({ navigation }) {
                       styles.confirmmmodalView,
                       {
                         backgroundColor: darkmode
-                          ? BaseColors.primary
+                          ? BaseColors.textColor
                           : BaseColors.white,
                       },
                     ]}
@@ -512,15 +512,7 @@ export default function Profile({ navigation }) {
                     </Text>
                     <View style={styles.modalButtons}>
                       <TouchableOpacity
-                        style={[
-                          styles.button,
-                          styles.confirmButton,
-                          {
-                            backgroundColor: darkmode
-                              ? BaseColors.black
-                              : BaseColors.primary,
-                          },
-                        ]}
+                        style={[styles.button, styles.confirmButton]}
                         onPress={async () => {
                           setConfirmLoading(true); // Start loading
 

@@ -156,18 +156,30 @@ const ProfilehistoryButton = (props, ref) => {
 
   const renderQuestion = (item, index, type_arr) => {
     return (
-      <View key={index}>
+      <View
+        key={index}
+        style={[
+          {
+            backgroundColor: darkmode ? BaseColors.black : BaseColors.white,
+          },
+        ]}
+      >
         {/* Render question */}
-        <Text style={styles.questionText}>{`${item.patient_question}`}</Text>
+        <Text
+          style={[
+            styles.questionText,
+            {
+              color: darkmode ? BaseColors.white : BaseColors.black,
+            },
+          ]}
+        >{`${item.patient_question}`}</Text>
         {/* Render answer options */}
         {item.type === '1' ? (
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
             scrollEnabled={editHistory}
-            style={{
-              width: '100%',
-            }}
+            style={[{ width: '100%' }]}
           >
             {editHistory ? (
               type_arr.map((it1, ind1) => {
@@ -182,6 +194,8 @@ const ProfilehistoryButton = (props, ref) => {
                           backgroundColor:
                             item?.answer === it1?.value
                               ? BaseColors.secondary
+                              : darkmode
+                              ? BaseColors.textColor
                               : BaseColors.transparent,
                           borderColor: BaseColors.borderColor,
                           marginRight: 40,
@@ -193,6 +207,8 @@ const ProfilehistoryButton = (props, ref) => {
                         style={{
                           color:
                             item?.answer === it1?.value
+                              ? BaseColors.white
+                              : darkmode
                               ? BaseColors.white
                               : BaseColors.textColor,
                         }}
@@ -206,7 +222,12 @@ const ProfilehistoryButton = (props, ref) => {
                 );
               })
             ) : (
-              <Text style={{ fontWeight: 'bold' }}>{`Ans: ${
+              <Text
+                style={{
+                  fontWeight: 'bold',
+                  color: darkmode ? BaseColors.white : BaseColors.textColor,
+                }}
+              >{`Ans: ${
                 item?.answer === 1
                   ? 'Yes'
                   : item?.answer === 0
@@ -239,9 +260,12 @@ const ProfilehistoryButton = (props, ref) => {
               }}
             />
           ) : (
-            <Text style={{ fontWeight: 'bold' }}>{`Ans: ${
-              item?.answer || '-'
-            }`}</Text>
+            <Text
+              style={{
+                fontWeight: 'bold',
+                color: darkmode ? BaseColors.white : BaseColors.textColor,
+              }}
+            >{`Ans: ${item?.answer || '-'}`}</Text>
           )
         ) : item.type === '3' ? (
           // Render another text input for type 3
@@ -259,9 +283,12 @@ const ProfilehistoryButton = (props, ref) => {
               }}
             />
           ) : (
-            <Text style={{ fontWeight: 'bold' }}>{`Ans: ${
-              item?.answer || '-'
-            }`}</Text>
+            <Text
+              style={{
+                fontWeight: 'bold',
+                color: darkmode ? BaseColors.white : BaseColors.textColor,
+              }}
+            >{`Ans: ${item?.answer || '-'}`}</Text>
           )
         ) : item.type === '4' ? (
           // Render a scale or something for type 4
@@ -280,6 +307,8 @@ const ProfilehistoryButton = (props, ref) => {
                           (item.answer == 1 && optionIndex === 0) ||
                           (item.answer == 0 && optionIndex === 1)
                             ? BaseColors.secondary
+                            : darkmode
+                            ? BaseColors.textColor
                             : 'transparent',
                       },
                       styles.yesbutton,
@@ -291,6 +320,8 @@ const ProfilehistoryButton = (props, ref) => {
                           (item.answer == 1 && optionIndex === 0) ||
                           (item.answer == 0 && optionIndex === 1)
                             ? BaseColors.white
+                            : darkmode
+                            ? BaseColors.white
                             : BaseColors.textColor,
                       }}
                     >
@@ -300,7 +331,12 @@ const ProfilehistoryButton = (props, ref) => {
                 </View>
               ))
             ) : (
-              <Text style={{ fontWeight: 'bold' }}>{`Ans: ${
+              <Text
+                style={{
+                  fontWeight: 'bold',
+                  color: darkmode ? BaseColors.white : BaseColors.textColor,
+                }}
+              >{`Ans: ${
                 item.answer == 1 ? 'Yes' : item.answer == 0 ? 'No' : '-'
               }`}</Text>
             )}
@@ -328,7 +364,14 @@ const ProfilehistoryButton = (props, ref) => {
           Medical History
         </Text>
       </View>
-      <View style={styles.mainDiv}>
+      <View
+        style={[
+          styles.mainDiv,
+          {
+            backgroundColor: darkmode ? BaseColors.black : BaseColors.white,
+          },
+        ]}
+      >
         {loader ? (
           <ActivityIndicator
             size={'large'}
