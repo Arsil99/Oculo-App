@@ -86,8 +86,8 @@ const Profiledetailcomponent = (props, ref) => {
   const { userData, darkmode } = useSelector(state => state.auth);
   console.log('======>>userData', userData);
   const sexData = [
-    { label: 'Female', value: '0=female' },
-    { label: 'Male', value: '1=male' },
+    { label: 'Female', value: '0=Female' },
+    { label: 'Male', value: '1=Male' },
     { label: 'Intersex', value: '2=Intersex' },
   ];
 
@@ -118,9 +118,9 @@ const Profiledetailcomponent = (props, ref) => {
     setBirthDate(moment(userData?.dob).format('DD-MM-YYYY'));
     setSexValue(
       userData?.sex === '0'
-        ? '0=female'
+        ? '0=Female'
         : userData?.sex === '1'
-        ? '1=male'
+        ? '1=Male'
         : userData?.sex === '2'
         ? '2=Intersex'
         : null,
@@ -317,7 +317,7 @@ const Profiledetailcomponent = (props, ref) => {
           <Text
             style={[
               styles.titleText,
-              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+              { color: darkmode ? BaseColors.white : BaseColors.black },
             ]}
           >
             Patient Information
@@ -558,7 +558,7 @@ const Profiledetailcomponent = (props, ref) => {
           <Text
             style={[
               styles.titleText,
-              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+              { color: darkmode ? BaseColors.white : BaseColors.black },
             ]}
           >
             Contact Information
