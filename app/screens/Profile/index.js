@@ -478,16 +478,49 @@ export default function Profile({ navigation }) {
                 }}
               >
                 <View style={styles.confirmmmodalcenteredView}>
-                  <View style={styles.confirmmmodalView}>
-                    <Text style={styles.confirmmodaltitleText}>
-                      Are u sure?
+                  <View
+                    style={[
+                      styles.confirmmmodalView,
+                      {
+                        backgroundColor: darkmode
+                          ? BaseColors.primary
+                          : BaseColors.white,
+                      },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.confirmmodaltitleText,
+                        {
+                          color: darkmode
+                            ? BaseColors.white
+                            : BaseColors.black90,
+                        },
+                      ]}
+                    >
+                      Are you sure?
                     </Text>
-                    <Text style={styles.confirmmodalText}>
+                    <Text
+                      style={[
+                        styles.confirmmodalText,
+                        {
+                          color: darkmode ? BaseColors.white : BaseColors.black,
+                        },
+                      ]}
+                    >
                       You want to sign out?
                     </Text>
                     <View style={styles.modalButtons}>
                       <TouchableOpacity
-                        style={[styles.button, styles.confirmButton]}
+                        style={[
+                          styles.button,
+                          styles.confirmButton,
+                          {
+                            backgroundColor: darkmode
+                              ? BaseColors.black
+                              : BaseColors.primary,
+                          },
+                        ]}
                         onPress={async () => {
                           setConfirmLoading(true); // Start loading
 
