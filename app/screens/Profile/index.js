@@ -64,19 +64,28 @@ export default function Profile({ navigation }) {
       id: '1',
       leftIcon: 'user',
       title: 'First Name',
-      righttitle: userData?.firstname,
+      righttitle:
+        userData?.firstname?.length > 15
+          ? userData?.firstname?.substring(0, 15) + '.....'
+          : userData?.firstname,
     },
     {
       id: '2',
       leftIcon: 'user',
       title: 'Middle Name',
-      righttitle: userData?.middlename,
+      righttitle:
+        userData?.middlename?.length > 15
+          ? userData?.middlename?.substring(0, 15) + '.....'
+          : userData?.middlename,
     },
     {
       id: '7',
       leftIcon: 'user',
       title: 'Last Name',
-      righttitle: userData?.lastname,
+      righttitle:
+        userData?.lastname?.length > 15
+          ? userData?.lastname?.substring(0, 15) + '.....'
+          : userData?.lastname,
     },
     {
       id: '3',

@@ -44,7 +44,12 @@ export default function Home({ navigation }) {
           />
         </View>
         <View style={styles.title}>
-          <Text style={styles.name}>Hi, {userData?.firstname}</Text>
+          <Text style={styles.name}>
+            Hi,{' '}
+            {userData?.firstname?.length > 15
+              ? userData?.firstname?.substring(0, 15) + '.....'
+              : userData?.firstname}
+          </Text>
           <Text
             style={[
               styles.welcomeText,
