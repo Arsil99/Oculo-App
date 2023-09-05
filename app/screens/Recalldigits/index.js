@@ -136,7 +136,7 @@ export default function Recalldigits({ navigation, route }) {
               text1: 'Data submitted successfully with correct input.',
               type: 'success',
             });
-            navigation.navigate('Events');
+            navigation.navigate('Comment', { eventId: eventId });
           } else {
             setCurrentIndex(nextIndex);
           }
@@ -176,7 +176,7 @@ export default function Recalldigits({ navigation, route }) {
               text1: 'Data submitted successfully with correct input.',
               type: 'success',
             });
-            navigation.navigate('Events');
+            navigation.navigate('Comment', { eventId: eventId });
           } else {
             setCurrentIndex(nextIndex);
           }
@@ -187,7 +187,6 @@ export default function Recalldigits({ navigation, route }) {
             text1: 'Data submitted successfully.',
             type: 'success',
           });
-          navigation.navigate('Events');
         }
       }
     }
@@ -212,6 +211,7 @@ export default function Recalldigits({ navigation, route }) {
           text1: response?.message,
           type: 'success',
         });
+        navigation.navigate('Comment', { eventId: eventId });
       } else {
         Toast.show({
           text1: response?.message,
@@ -261,7 +261,7 @@ export default function Recalldigits({ navigation, route }) {
   };
 
   const handleConfirm = () => {
-    navigation.navigate('Events');
+    navigation.navigate('Comment', { eventId: eventId });
   };
   // Define an array of trial text based on digit length and position
   const trialTexts = [
