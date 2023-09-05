@@ -3,7 +3,6 @@ import React from 'react';
 import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
 import Button from '@components/Button';
-import ImmediateRecall from '@screens/ImmediateRecall';
 
 const Assessment = ({ navigation, route }) => {
   const eventId = route?.params?.event_id;

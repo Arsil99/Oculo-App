@@ -38,6 +38,7 @@ const BaseSetting = {
     symptom: '/assessment/create-symptom-inventory',
     eventList: '/event/list',
     comment: '/assessment/add-assess-comment',
+    createTreatmentInfo: '/assessment/create-treatment-info',
   },
 
   geolocationOptions: {
