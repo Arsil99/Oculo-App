@@ -6,6 +6,7 @@ export default StyleSheet.create({
   main: {
     backgroundColor: BaseColors.white,
     flex: 1,
+    marginTop: 25,
   },
   titleText: {
     fontSize: 24,
