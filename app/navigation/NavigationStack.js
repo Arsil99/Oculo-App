@@ -45,7 +45,7 @@ import DigitalRecall from '@screens/DigitalRecall';
 import Recalldigits from '@screens/Recalldigits';
 import FaceidEnabled from '@screens/FaceidEnabled';
 import ImmediateRecallmain from '@screens/ImmediateRecallmain';
-
+import Comment from '@screens/Comment';
 const intitialNotificationState = {
   notification: null,
   openedNotification: null,
@@ -333,6 +333,11 @@ function App() {
           <Stack.Screen
             name="VoiceInput"
             component={VoiceInput}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Comment"
+            component={Comment}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

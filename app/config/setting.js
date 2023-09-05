@@ -37,6 +37,7 @@ const BaseSetting = {
     sendnumberarray: '/assessment/create-digit-recall',
     symptom: '/assessment/create-symptom-inventory',
     eventList: '/event/list',
+    comment: '/assessment/add-assess-comment',
   },
 
   geolocationOptions: {
