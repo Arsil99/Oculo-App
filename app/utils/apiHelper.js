@@ -50,8 +50,11 @@ export const getApiData = async (
       data: isFormData ? query || {} : data || {},
     });
 
-    if (response?.data?.code == 'authentication_failed') {
-      console.log('hiii');
+    if (
+      response?.data?.code === 402 ||
+      response?.data?.code === 404 ||
+      response?.data?.code === 403
+    ) {
       logout();
       return;
     }
@@ -157,7 +160,13 @@ export function getApiDataProgress(
         try {
           console.log('Response Text => ', oReq.responseText);
           const resposeJson = JSON.parse(oReq.responseText);
-          if (resposeJson && resposeJson.code === 'authentication_failed') {
+          if (
+            resposeJson &&
+            (resposeJson.code === 400 ||
+              resposeJson.code === 404 ||
+              resposeJson.code === 403 ||
+              resposeJson.code === 402)
+          ) {
             // if (endpoint === 'logout') {
             logout();
             // }
