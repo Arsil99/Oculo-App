@@ -107,6 +107,7 @@ const Symptoms = ({ navigation, route }) => {
   const [next, setNext] = useState(0);
   const [validPhysical, setValidPhysical] = useState(false);
   const [vaildMental, setValidMental] = useState(false);
+  const [timer, setTimer] = useState([0, 0, 0]);
   const stateArray = [
     head,
     pressureHead,
@@ -261,33 +262,6 @@ fixDurScreen	= t	Average fixation duration on screen
       console.error('Handle Assessment: Error uploading data:', error.message);
     }
   };
-
-  const staticData = [
-    {
-      symptom: 'Physical_Activity',
-      initialScore: false,
-      scoreChng: 0,
-      finalScore: physical,
-      durScreen: 1,
-      pageRevisitInt: 1,
-    },
-    {
-      symptom: 'Mental_Activity',
-      initialScore: false,
-      scoreChng: 0,
-      finalScore: mental,
-      durScreen: 1,
-      pageRevisitInt: 1,
-    },
-    {
-      symptom: 'Feel_Perfect',
-      initialScore: 1,
-      scoreChng: 3,
-      finalScore: percentage,
-      durScreen: duration,
-      pageRevisitInt: 1,
-    },
-  ];
 
   const updateStateDynamically = (state, sliderObject) => {
     const existingIndex = state.findIndex(
@@ -452,7 +426,7 @@ fixDurScreen	= t	Average fixation duration on screen
   };
   // api integration for create call
   const createSymptom = async () => {
-    const updatedSymptomArray = symptomArray.concat(staticData);
+    const updatedSymptomArray = symptomArray.concat(lastThreeSymptoms);
     try {
       const response = await getApiData(
         BaseSetting.endpoints.symptom,
@@ -726,6 +700,51 @@ fixDurScreen	= t	Average fixation duration on screen
       });
     }
   };
+
+  // count timing for last three symptoms
+  useEffect(() => {
+    let interval;
+    if (takeBoolean && next >= 0 && next <= 2) {
+      interval = setInterval(() => {
+        setTimer(prevTimer => {
+          const updatedTimer = [...prevTimer];
+          updatedTimer[next]++;
+          return updatedTimer;
+        });
+      }, 1000);
+    }
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [next, takeBoolean]);
+
+  const lastThreeSymptoms = [
+    {
+      symptom: 'Physical_Activity',
+      initialScore: false,
+      scoreChng: 0,
+      finalScore: physical,
+      durScreen: timer[0],
+      pageRevisitInt: 1,
+    },
+    {
+      symptom: 'Mental_Activity',
+      initialScore: false,
+      scoreChng: 0,
+      finalScore: mental,
+      durScreen: timer[1],
+      pageRevisitInt: 1,
+    },
+    {
+      symptom: 'Feel_Perfect',
+      initialScore: 1,
+      scoreChng: 3,
+      finalScore: percentage,
+      durScreen: timer[2],
+      pageRevisitInt: 1,
+    },
+  ];
   return (
     <View style={styles.main}>
       <StatusBar barStyle="dark-content" translucent={true} />

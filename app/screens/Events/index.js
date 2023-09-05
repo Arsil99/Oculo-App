@@ -128,32 +128,6 @@ export default function Events({ navigation }) {
           ) : (
             <NoData title={'Events are not available'} />
           )}
-
-          <Text
-            style={{
-              fontSize: 18,
-              marginVertical: 5,
-              color: darkmode ? BaseColors.white : BaseColors.black90,
-            }}
-          >
-            Closed Events (Static)
-          </Text>
-          <CardList
-            rightArrow
-            onPress={() => navigation.navigate('EventDetails')}
-            image={Images.emoji1}
-            data={'March 30, 2000'}
-            status={'Completed'}
-            assessment={'Assessment 4/5'}
-          />
-          <CardList
-            rightArrow
-            onPress={() => navigation.navigate('EventDetails')}
-            image={Images.emoji1}
-            data={'March 30, 2000'}
-            status={'Completed'}
-            assessment={'Assessment 4/5'}
-          />
         </View>
       </ScrollView>
     </View>
