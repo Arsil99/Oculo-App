@@ -267,7 +267,7 @@ export default function ChangeInfo({ navigation, route }) {
                 shape="round"
                 title={'Next'}
                 onPress={() => {
-                  // setEditHistory(false);
+                  setEditHistory(false);
                   submitData();
                 }}
               />
