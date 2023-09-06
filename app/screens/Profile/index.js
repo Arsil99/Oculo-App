@@ -91,7 +91,7 @@ export default function Profile({ navigation }) {
       id: '3',
       leftIcon: 'calendar',
       title: 'Date of Birth',
-      righttitle: moment(userData?.dob).format('DD-MM-YYYY'),
+      righttitle: moment(userData?.dob).format('MM-DD-YYYY'),
     },
     {
       id: '4',

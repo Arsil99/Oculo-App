@@ -39,6 +39,7 @@ export default function Events({ navigation }) {
   return (
     <View style={{ flexGrow: 1 }}>
       <HeaderBar HeaderText={'Events'} HeaderCenter />
+      <View style={{ paddingTop: 3 }} />
       <ScrollView
         style={[
           styles.main,
