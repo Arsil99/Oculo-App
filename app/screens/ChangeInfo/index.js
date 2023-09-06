@@ -17,7 +17,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
 export default function ChangeInfo({ navigation, route }) {
-  const { userData } = useSelector(state => state.auth);
+  const { userData, darkmode } = useSelector(state => state.auth);
   const [selectedValues, setSelectedValues] = useState({}); // Initialize selectedValues as an empty object
   const eventId = route?.params?.event_id;
   const [response, setResponse] = useState('');
@@ -174,7 +174,14 @@ export default function ChangeInfo({ navigation, route }) {
   };
 
   return editHistory ? (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: darkmode ? BaseColors.textColor : BaseColors.lightBg,
+        },
+      ]}
+    >
       <StatusBar barStyle="dark-content" backgroundColor={BaseColors.white} />
 
       <HeaderBar
@@ -196,12 +203,23 @@ export default function ChangeInfo({ navigation, route }) {
             }
             activeOpacity={BaseSetting.buttonOpacity}
           >
-            <Text>{rightHistoryText}</Text>
+            <Text
+              style={{
+                color: darkmode ? BaseColors.white : BaseColors.textColor,
+              }}
+            >
+              {rightHistoryText}
+            </Text>
           </TouchableOpacity>
         }
       />
 
-      <View style={styles.mainDiv}>
+      <View
+        style={[
+          styles.mainDiv,
+          { backgroundColor: darkmode ? BaseColors.black : BaseColors.white },
+        ]}
+      >
         {loader ? (
           <ActivityIndicator
             size={'large'}
@@ -210,7 +228,12 @@ export default function ChangeInfo({ navigation, route }) {
           />
         ) : (
           <ScrollView showsVerticalScrollIndicator={false}>
-            <Text style={styles.subtitleText}>
+            <Text
+              style={[
+                styles.subtitleText,
+                { color: darkmode ? BaseColors.white : BaseColors.textColor },
+              ]}
+            >
               {questionList.length > 0 ? questionList[0].question : ''}
             </Text>
             {editHistory ? (

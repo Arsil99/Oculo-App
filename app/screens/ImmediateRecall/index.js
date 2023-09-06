@@ -5,11 +5,21 @@ import HeaderBar from '@components/HeaderBar';
 import { Image } from 'react-native';
 import { Images } from '@config';
 import Button from '@components/Button';
+import { useSelector } from 'react-redux';
+import { BaseColors } from '@config/theme';
 
 const ImmediateRecall = ({ navigation, route }) => {
+  const { userData, darkmode } = useSelector(state => state.auth);
   const eventId = route?.params?.event_id;
   return (
-    <View style={styles.main}>
+    <View
+      style={[
+        styles.main,
+        {
+          backgroundColor: darkmode ? BaseColors.black : BaseColors.white,
+        },
+      ]}
+    >
       <StatusBar
         barStyle="dark-content"
         translucent={false}

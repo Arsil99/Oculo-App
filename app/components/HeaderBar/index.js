@@ -119,18 +119,30 @@ const HeaderBar = ({
           ) : rightText ? (
             <TouchableOpacity
               activeOpacity={isEmpty(rightText) ? 1 : BaseSetting.buttonOpacity}
-              style={styles.imageCon}
+              style={[styles.imageCon]}
               onPress={() => {
                 if (!isEmpty(rightText)) {
                   rightBtnPress && rightBtnPress();
                 }
               }}
             >
-              <Text style={LeftTextStyle}>{rightText}</Text>
+              <Text
+                style={
+                  ([LeftTextStyle],
+                  {
+                    color: darkmode ? BaseColors.white : BaseColors.textColor,
+                  })
+                }
+              >
+                {rightText}
+              </Text>
             </TouchableOpacity>
           ) : null}
         </View>
       </View>
+      {/* <View
+        style={{ borderBottomColor: BaseColors.white, borderBottomWidth: 0.5 }}
+      ></View> */}
     </View>
   );
 };

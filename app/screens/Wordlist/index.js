@@ -254,7 +254,14 @@ export default function Wordlist({ navigation, route }) {
   const CounterTag = () => {
     return (
       <View style={styles.counterTag}>
-        <Text style={styles.subtitleText}>
+        <Text
+          style={[
+            styles.subtitleText,
+            {
+              color: darkmode ? BaseColors.white : BaseColors.textColor,
+            },
+          ]}
+        >
           {` Trial ${counter} / 3`}
           {'\n'}What do you remember?{'\n'}
         </Text>
@@ -365,10 +372,7 @@ export default function Wordlist({ navigation, route }) {
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        <StatusBar
-          barStyle={!darkmode ? 'dark-content' : null}
-          backgroundColor={darkmode ? BaseColors.black : BaseColors.white}
-        />
+        <StatusBar barStyle="light-content" translucent={true} />
 
         {viewType === 'list' ? (
           <View
@@ -388,9 +392,25 @@ export default function Wordlist({ navigation, route }) {
               }}
             />
 
-            <View style={styles.mainDiv}>
+            <View
+              style={[
+                styles.mainDiv,
+                {
+                  backgroundColor: darkmode
+                    ? BaseColors.black
+                    : BaseColors.white,
+                },
+              ]}
+            >
               <View style={{ flex: 0.2 }}>
-                <Text style={styles.subtitleText}>
+                <Text
+                  style={[
+                    styles.subtitleText,
+                    {
+                      color: darkmode ? BaseColors.white : BaseColors.textColor,
+                    },
+                  ]}
+                >
                   Trial {+1}/3{'\n'}Remember these words{'\n'}
                 </Text>
                 <Text
@@ -423,7 +443,16 @@ export default function Wordlist({ navigation, route }) {
                 handleBackPress();
               }}
             />
-            <View style={styles.mainDiv}>
+            <View
+              style={[
+                styles.mainDiv,
+                {
+                  backgroundColor: darkmode
+                    ? BaseColors.black
+                    : BaseColors.white,
+                },
+              ]}
+            >
               <CounterTag />
               {isSpeak && inputTextIntegration()}
               {/* textarea */}
@@ -443,6 +472,9 @@ export default function Wordlist({ navigation, route }) {
                         ? BaseColors.lightBlack
                         : BaseColors.white,
                     },
+                    {
+                      color: darkmode ? BaseColors.white : BaseColors.textColor,
+                    },
                   ]}
                   value={
                     input1
@@ -460,6 +492,9 @@ export default function Wordlist({ navigation, route }) {
                       backgroundColor: darkmode
                         ? BaseColors.lightBlack
                         : BaseColors.white,
+                    },
+                    {
+                      color: darkmode ? BaseColors.white : BaseColors.textColor,
                     },
                   ]}
                   value={
@@ -479,6 +514,9 @@ export default function Wordlist({ navigation, route }) {
                         ? BaseColors.lightBlack
                         : BaseColors.white,
                     },
+                    {
+                      color: darkmode ? BaseColors.white : BaseColors.textColor,
+                    },
                   ]}
                   value={
                     input3
@@ -496,6 +534,9 @@ export default function Wordlist({ navigation, route }) {
                       backgroundColor: darkmode
                         ? BaseColors.lightBlack
                         : BaseColors.white,
+                    },
+                    {
+                      color: darkmode ? BaseColors.white : BaseColors.textColor,
                     },
                   ]}
                   value={
@@ -515,6 +556,9 @@ export default function Wordlist({ navigation, route }) {
                       backgroundColor: darkmode
                         ? BaseColors.lightBlack
                         : BaseColors.white,
+                    },
+                    {
+                      color: darkmode ? BaseColors.white : BaseColors.textColor,
                     },
                   ]}
                   value={

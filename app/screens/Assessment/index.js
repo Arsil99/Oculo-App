@@ -3,13 +3,23 @@ import React from 'react';
 import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
 import Button from '@components/Button';
+import { useSelector } from 'react-redux';
+import { BaseColors } from '@config/theme';
 
 const Assessment = ({ navigation, route }) => {
+  const { darkmode } = useSelector(state => state.auth);
   const eventId = route?.params?.event_id;
   const data = route?.params?.otherData;
 
   return (
-    <View style={styles.main}>
+    <View
+      style={[
+        styles.main,
+        {
+          backgroundColor: darkmode ? BaseColors.lightBlack : BaseColors.white,
+        },
+      ]}
+    >
       <HeaderBar
         HeaderText={
           data?.symptom_info + data?.immediate_recall + data?.digit_recall === 0
@@ -27,6 +37,9 @@ const Assessment = ({ navigation, route }) => {
           navigation.goBack();
         }}
       />
+      <View
+        style={{ borderBottomColor: BaseColors.white, borderBottomWidth: 0.3 }}
+      ></View>
 
       <View style={{ flex: 1, marginHorizontal: 25 }}>
         <View
@@ -35,22 +48,101 @@ const Assessment = ({ navigation, route }) => {
             marginTop: 20,
           }}
         >
-          <Text style={styles.titleText}>Assessment Details</Text>
+          <Text
+            style={[
+              styles.titleText,
+              {
+                color: darkmode ? BaseColors.white : BaseColors.textColor,
+              },
+            ]}
+          >
+            Assessment Details
+          </Text>
           <View>
-            <Text style={styles.titlesubText}>Event</Text>
-            <Text style={styles.titledetail}>{data?.createdAt}</Text>
+            <Text
+              style={[
+                styles.titlesubText,
+                {
+                  color: darkmode ? BaseColors.white : BaseColors.textColor,
+                },
+              ]}
+            >
+              Event
+            </Text>
+            <Text
+              style={[
+                styles.titledetail,
+                {
+                  color: darkmode ? BaseColors.white : BaseColors.textColor,
+                },
+              ]}
+            >
+              {data?.createdAt}
+            </Text>
           </View>
           <View>
-            <Text style={styles.titlesubText}>Provider</Text>
-            <Text style={styles.titledetail}>Seth Rollins</Text>
+            <Text
+              style={[
+                styles.titlesubText,
+                {
+                  color: darkmode ? BaseColors.white : BaseColors.textColor,
+                },
+              ]}
+            >
+              Provider
+            </Text>
+            <Text
+              style={[
+                styles.titledetail,
+                {
+                  color: darkmode ? BaseColors.white : BaseColors.textColor,
+                },
+              ]}
+            >
+              Seth Rollins
+            </Text>
           </View>
           <View>
-            <Text style={styles.titlesubText}>Assessment Type</Text>
-            <Text style={styles.titledetail}>{data?.assmt_type}</Text>
+            <Text
+              style={[
+                styles.titlesubText,
+                {
+                  color: darkmode ? BaseColors.white : BaseColors.textColor,
+                },
+              ]}
+            >
+              Assessment Type
+            </Text>
+            <Text
+              style={[
+                styles.titledetail,
+                {
+                  color: darkmode ? BaseColors.white : BaseColors.textColor,
+                },
+              ]}
+            >
+              {data?.assmt_type}
+            </Text>
           </View>
           <View>
-            <Text style={styles.titlesubText}>Instructions</Text>
-            <Text style={styles.titledetail}>
+            <Text
+              style={[
+                styles.titlesubText,
+                {
+                  color: darkmode ? BaseColors.white : BaseColors.textColor,
+                },
+              ]}
+            >
+              Instructions
+            </Text>
+            <Text
+              style={[
+                styles.titledetail,
+                {
+                  color: darkmode ? BaseColors.white : BaseColors.textColor,
+                },
+              ]}
+            >
               Pellentesque metus neque, egestas id tincidunt et, porttitor quis
               libero. Suspendisse placerat sollicitudin finibus. Ut lorem quam,
               aliquam cursus diam fermentum, volutpat mollis enim. Sed eu dui

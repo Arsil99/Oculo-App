@@ -45,6 +45,7 @@ let currentIndexEndTime = null;
 const baseUrl = 'https://eyetracking.oculo.app';
 
 const Symptoms = ({ navigation, route }) => {
+  const { darkmode } = useSelector(state => state.auth);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const eventId = route?.params?.event_id;
   const [activeButtonIndex, setActiveButtonIndex] = useState(0);
@@ -746,7 +747,14 @@ fixDurScreen	= t	Average fixation duration on screen
     },
   ];
   return (
-    <View style={styles.main}>
+    <View
+      style={[
+        styles.main,
+        {
+          backgroundColor: darkmode ? BaseColors.lightBlack : BaseColors.white,
+        },
+      ]}
+    >
       <StatusBar barStyle="dark-content" translucent={true} />
       <HeaderBar
         HeaderText={'Symptoms'}
@@ -757,7 +765,12 @@ fixDurScreen	= t	Average fixation duration on screen
         }}
       />
       <ScrollView
-        contentContainerStyle={styles.scrollcontainer}
+        contentContainerStyle={[
+          styles.scrollcontainer,
+          {
+            backgroundColor: darkmode ? BaseColors.black : BaseColors.white,
+          },
+        ]}
         showsVerticalScrollIndicator={false}
         ref={aoiRootView}
       >
@@ -808,7 +821,14 @@ fixDurScreen	= t	Average fixation duration on screen
                     keyExtractor={item => item.id}
                     ref={flatListRef}
                   />
-                  <Text style={styles.yesText}>
+                  <Text
+                    style={[
+                      styles.yesText,
+                      {
+                        color: darkmode ? BaseColors.white : BaseColors.black90,
+                      },
+                    ]}
+                  >
                     Please select the severity level you can also see the
                     previous severity level.
                   </Text>
@@ -820,7 +840,16 @@ fixDurScreen	= t	Average fixation duration on screen
                             // onLayout={handleAOILayout}
                             ref={aoiRef}
                           >
-                            <Text style={styles.boldText}>
+                            <Text
+                              style={[
+                                styles.boldText,
+                                {
+                                  color: darkmode
+                                    ? BaseColors.white
+                                    : BaseColors.black90,
+                                },
+                              ]}
+                            >
                               Report the severity level of {tag[index].label}:
                               &nbsp;{patient_question[index]}
                             </Text>
@@ -888,16 +917,44 @@ fixDurScreen	= t	Average fixation duration on screen
 
                             <View>
                               <View style={styles.lables}>
-                                <Text style={{ fontFamily: FontFamily?.light }}>
+                                <Text
+                                  style={{
+                                    fontFamily: FontFamily?.light,
+                                    color: darkmode
+                                      ? BaseColors.white
+                                      : BaseColors.black90,
+                                  }}
+                                >
                                   None
                                 </Text>
-                                <Text style={{ fontFamily: FontFamily?.light }}>
+                                <Text
+                                  style={{
+                                    fontFamily: FontFamily?.light,
+                                    color: darkmode
+                                      ? BaseColors.white
+                                      : BaseColors.black90,
+                                  }}
+                                >
                                   Mild
                                 </Text>
-                                <Text style={{ fontFamily: FontFamily?.light }}>
+                                <Text
+                                  style={{
+                                    fontFamily: FontFamily?.light,
+                                    color: darkmode
+                                      ? BaseColors.white
+                                      : BaseColors.black90,
+                                  }}
+                                >
                                   Moderate
                                 </Text>
-                                <Text style={{ fontFamily: FontFamily?.light }}>
+                                <Text
+                                  style={{
+                                    fontFamily: FontFamily?.light,
+                                    color: darkmode
+                                      ? BaseColors.white
+                                      : BaseColors.black90,
+                                  }}
+                                >
                                   Sever
                                 </Text>
                               </View>
@@ -906,11 +963,29 @@ fixDurScreen	= t	Average fixation duration on screen
                           <View style={styles.topBox}>
                             <View style={styles.outer}>
                               <View style={styles.inner} />
-                              <Text>Previous Assessment</Text>
+                              <Text
+                                style={{
+                                  fontFamily: FontFamily?.light,
+                                  color: darkmode
+                                    ? BaseColors.white
+                                    : BaseColors.black90,
+                                }}
+                              >
+                                Previous Assessment
+                              </Text>
                             </View>
                             <View style={styles.assessmentHead}>
                               <View style={styles.assessmentData} />
-                              <Text>Current Assessment</Text>
+                              <Text
+                                style={{
+                                  fontFamily: FontFamily?.light,
+                                  color: darkmode
+                                    ? BaseColors.white
+                                    : BaseColors.black90,
+                                }}
+                              >
+                                Current Assessment
+                              </Text>
                             </View>
                           </View>
                         </>
