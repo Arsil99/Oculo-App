@@ -14,6 +14,13 @@ export default StyleSheet.create({
     alignItems: 'flex-start',
     marginBottom: 5,
   },
+  userDp: {
+    height: 120,
+    width: 120,
+    borderRadius: 60,
+    alignSelf: 'center',
+    marginVertical: 20,
+  },
   titleText: {
     fontSize: 20,
     fontWeight: '700',

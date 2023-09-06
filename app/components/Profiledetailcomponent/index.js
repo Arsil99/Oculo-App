@@ -28,6 +28,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import Authentication from '@redux/reducers/auth/actions';
 import Icon1 from 'react-native-vector-icons/Feather';
 import { getApiDataProgress } from '@utils/apiHelper';
+import { Images } from '@config';
 
 const errObj = {
   firstNameErr: false,
@@ -115,7 +116,7 @@ const Profiledetailcomponent = (props, ref) => {
     setLastName(userData?.lastname);
     setPatientPhone(userData?.phone);
     setPatientEmail(userData?.email);
-    setBirthDate(moment(userData?.dob).format('DD-MM-YYYY'));
+    setBirthDate(moment(userData?.dob).format('MM-DD-YYYY'));
     setSexValue(
       userData?.sex === '0'
         ? '0=Female'
@@ -152,10 +153,11 @@ const Profiledetailcomponent = (props, ref) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
-    setBirthDate(moment(currentDate).format('DD-MM-YYYY'));
-
-    const formattedDate = currentDate.toLocaleDateString('en-GB');
-    setBirthDate(formattedDate);
+    if (event?.type === 'set') {
+      setBirthDate(moment(currentDate).format('MM-DD-YYYY'));
+      const formattedDate = currentDate.toLocaleDateString('en-GB');
+      setBirthDate(formattedDate);
+    }
 
     // Reset the error state when a valid date is selected
     setDateOfBirthErr(false);
@@ -342,23 +344,15 @@ const Profiledetailcomponent = (props, ref) => {
                     : selectedImage?.path,
                 }}
                 resizeMode="cover"
-                style={{
-                  height: 120,
-                  width: 120,
-                  borderRadius: 60,
-                  borderWidth: 1,
-                }}
+                style={styles.profilePic}
               />
             ) : (
               <View style={styles.placeholderImage}>
-                {/* Add the content you want to display as a placeholder */}
-                <View>
-                  <Icon1
-                    name="user"
-                    style={{ fontSize: 31, color: BaseColors.primary }}
-                  />
-                </View>
-                {/* You can also use an Icon component or any other content here */}
+                <Image
+                  source={Images.avatar}
+                  resizeMode="cover"
+                  style={styles.userDp}
+                />
               </View>
             )}
             <TouchableOpacity

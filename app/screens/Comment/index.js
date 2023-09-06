@@ -14,6 +14,7 @@ const Comment = ({ navigation, route }) => {
       const params = {
         event_id: eventId,
         comment: commentText,
+        created_from: 'app',
       };
       const response = await getApiData(
         BaseSetting.endpoints.comment,

@@ -2,13 +2,14 @@ import React from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import styles from './styles';
 import BaseSetting from '@config/setting';
-import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { BaseColors } from '@config/theme';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Icon1 from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/FontAwesome';
 import { Switch } from 'react-native-gesture-handler';
+import { isNull } from 'lodash';
+import { Images } from '@config';
 
 const InfoCard = props => {
   const { userData } = useSelector(state => {
@@ -18,7 +19,8 @@ const InfoCard = props => {
   const { darkmode, isBiometric } = useSelector(state => {
     return state.auth;
   });
-  const navigation = useNavigation();
+  const noProfilePic =
+    isNull(userData.profile_pic) || userData.profile_pic === undefined;
 
   return (
     <View
@@ -52,15 +54,11 @@ const InfoCard = props => {
         >
           {mainTitle === 'Patient Information' ? (
             <Image
-              source={{ uri: userData.profile_pic }} // Use the 'profile_pic' from userData
+              source={
+                noProfilePic ? Images.avatar : { uri: userData.profile_pic }
+              }
               resizeMode="cover"
-              style={{
-                height: 120,
-                width: 120,
-                borderRadius: 60,
-                alignSelf: 'center',
-                marginVertical: 20,
-              }}
+              style={styles.userDp}
             />
           ) : null}
         </View>

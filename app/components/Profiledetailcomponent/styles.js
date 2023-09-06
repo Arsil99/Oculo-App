@@ -19,6 +19,13 @@ export default StyleSheet.create({
     borderTopWidth: 0.7,
     borderColor: BaseColors.borderColor,
   },
+  userDp: {
+    height: 120,
+    width: 120,
+    borderRadius: 60,
+    alignSelf: 'center',
+    marginVertical: 20,
+  },
   genderBox: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -48,6 +55,12 @@ export default StyleSheet.create({
 
     fontFamily: FontFamily.regular,
     fontSize: 14,
+  },
+  profilePic: {
+    height: 120,
+    width: 120,
+    borderRadius: 60,
+    borderWidth: 1,
   },
   settingItem: {
     backgroundColor: 'white',
