@@ -1,4 +1,4 @@
-import { View, Text, StatusBar } from 'react-native';
+import { View, Text } from 'react-native';
 import React from 'react';
 import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
@@ -7,15 +7,9 @@ import Button from '@components/Button';
 const Assessment = ({ navigation, route }) => {
   const eventId = route?.params?.event_id;
   const data = route?.params?.otherData;
-  console.log('🚀 ~ file: index.js:11 ~ Assessment ~ data:', data);
+
   return (
     <View style={styles.main}>
-      <StatusBar
-        barStyle="dark-content"
-        translucent={true}
-        backgroundColor={'#0000'}
-      />
-
       <HeaderBar
         HeaderText={
           data?.symptom_info + data?.immediate_recall + data?.digit_recall === 0
