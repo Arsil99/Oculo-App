@@ -6,16 +6,21 @@ import { Image } from 'react-native';
 import { Images } from '@config';
 
 import Button from '@components/Button';
+import { useSelector } from 'react-redux';
+import { BaseColors } from '@config/theme';
 
 const ImmediateRecallmain = ({ navigation, route }) => {
+  const { darkmode } = useSelector(state => state.auth);
   const eventId = route?.params?.event_id;
   return (
-    <View style={styles.main}>
-      <StatusBar
-        barStyle="dark-content" // Set text/icons to dark color
-        backgroundColor={'#FFFFFF'} // White background
-      />
-
+    <View
+      style={[
+        styles.main,
+        {
+          backgroundColor: darkmode ? BaseColors.lightBlack : BaseColors.white,
+        },
+      ]}
+    >
       <HeaderBar
         HeaderText={'Digits Backwards'}
         leftText={'Cancel'}
@@ -24,27 +29,67 @@ const ImmediateRecallmain = ({ navigation, route }) => {
         }}
         HeaderCenter
       />
-
+      <View
+        style={{ borderBottomColor: BaseColors.white, borderBottomWidth: 0.3 }}
+      />
       <ScrollView
-        contentContainerStyle={styles.topcontainer}
+        contentContainerStyle={[
+          styles.topcontainer,
+          {
+            backgroundColor: darkmode
+              ? BaseColors.lightBlack
+              : BaseColors.white,
+          },
+        ]}
         showsVerticalScrollIndicator={false}
       >
         <View>
-          <Text style={styles.titleText}>Instructions</Text>
-          <Text style={styles.titlesubText}>
+          <Text
+            style={[
+              styles.titleText,
+              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+            ]}
+          >
+            Instructions
+          </Text>
+          <Text
+            style={[
+              styles.titlesubText,
+              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+            ]}
+          >
             A list of numbers will appear on the screen. Remember these numbers.
             {'\n'}
             {'\n'}
             When the number pad appears, do your best to report as many numbers
             as you can remember in the exact reverse order as they appeared.
           </Text>
-          <Text style={styles.example}>Example:{'\n'}</Text>
-          <Text style={styles.subText}>
+          <Text
+            style={[
+              styles.example,
+              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+            ]}
+          >
+            Example:{'\n'}
+          </Text>
+          <Text
+            style={[
+              styles.subText,
+              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+            ]}
+          >
             If you saw{'\n'} 1 2 3 {'\n'}
             {'\n'}You would report {'\n'}3 2 1
           </Text>
 
-          <Text style={styles.example}>Example:</Text>
+          <Text
+            style={[
+              styles.example,
+              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+            ]}
+          >
+            Example:
+          </Text>
         </View>
 
         <View style={styles.imgcontainer}>

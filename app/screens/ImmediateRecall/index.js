@@ -16,24 +16,40 @@ const ImmediateRecall = ({ navigation, route }) => {
       style={[
         styles.main,
         {
-          backgroundColor: darkmode ? BaseColors.black : BaseColors.white,
+          backgroundColor: darkmode ? BaseColors.lightBlack : BaseColors.white,
         },
       ]}
     >
-      <StatusBar
-        barStyle="dark-content"
-        translucent={false}
-        backgroundColor={'#0000'}
-      />
       <HeaderBar HeaderText={'Immediate Recall'} HeaderCenter />
-
+      <View
+        style={{ borderBottomColor: BaseColors.white, borderBottomWidth: 0.3 }}
+      />
       <ScrollView
-        contentContainerStyle={styles.topcontainer}
+        contentContainerStyle={[
+          styles.topcontainer,
+          {
+            backgroundColor: darkmode
+              ? BaseColors.lightBlack
+              : BaseColors.white,
+          },
+        ]}
         showsVerticalScrollIndicator={false}
       >
         <View>
-          <Text style={styles.titleText}>Instructions</Text>
-          <Text style={styles.titlesubText}>
+          <Text
+            style={[
+              styles.titleText,
+              { color: darkmode ? BaseColors.white : BaseColors.textColor },
+            ]}
+          >
+            Instructions
+          </Text>
+          <Text
+            style={[
+              styles.titlesubText,
+              { color: darkmode ? BaseColors.white : BaseColors.textColor },
+            ]}
+          >
             Next we will test your memory. When the test begins, a list of words
             will appear on the screen. Remember these words.{'\n'} {'\n'}On the
             response screen, tap the microphone and repeat back as many words as
@@ -42,7 +58,14 @@ const ImmediateRecall = ({ navigation, route }) => {
             back as many words as you can remember in any order, even if you
             said the word before.
           </Text>
-          <Text style={styles.example}>Example:</Text>
+          <Text
+            style={[
+              styles.example,
+              { color: darkmode ? BaseColors.white : BaseColors.textColor },
+            ]}
+          >
+            Example:
+          </Text>
         </View>
 
         <View style={styles.imgcontainer}>

@@ -19,8 +19,10 @@ import BaseSetting from '@config/setting';
 import { getApiData } from '@utils/apiHelper';
 import { TextInput } from 'react-native-gesture-handler';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { useSelector } from 'react-redux';
 
 export default function Recalldigits({ navigation, route }) {
+  const { darkmode } = useSelector(state => state.auth);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const eventId = route?.params?.event_id;
   const [loader, setLoader] = useState(true);
@@ -280,14 +282,20 @@ export default function Recalldigits({ navigation, route }) {
   return (
     <KeyboardAvoidingView
       behavior={IOS ? 'padding' : 'height'}
-      style={styles.container}
+      style={[
+        styles.container,
+        {
+          backgroundColor: darkmode
+            ? BaseColors.lightBlack
+            : BaseColors.lightBg,
+        },
+      ]}
     >
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        <StatusBar barStyle="dark-content" backgroundColor={BaseColors.white} />
         <HeaderBar
           HeaderText={'Digits Backwards'}
           HeaderCenter
@@ -296,7 +304,14 @@ export default function Recalldigits({ navigation, route }) {
             handleBackPress();
           }}
         />
-        <View style={styles.mainDiv}>
+        <View
+          style={[
+            styles.mainDiv,
+            {
+              backgroundColor: darkmode ? BaseColors.black : BaseColors.white,
+            },
+          ]}
+        >
           {loader ? (
             <ActivityIndicator
               size={'large'}
@@ -306,11 +321,40 @@ export default function Recalldigits({ navigation, route }) {
           ) : (
             <View style={{ flex: 1 }}>
               <View style={{ flex: 0.1 }}>
-                <Text style={styles.subtitleText}>{currentTrialText}</Text>
+                <Text
+                  style={[
+                    styles.subtitleText,
+                    {
+                      color: darkmode ? BaseColors.white : BaseColors.textColor,
+                    },
+                  ]}
+                >
+                  {currentTrialText}
+                </Text>
                 {showInput ? (
-                  <Text style={styles.subtitleText}>Report backwards</Text>
+                  <Text
+                    style={[
+                      styles.subtitleText,
+                      {
+                        color: darkmode
+                          ? BaseColors.white
+                          : BaseColors.textColor,
+                      },
+                    ]}
+                  >
+                    Report backwards
+                  </Text>
                 ) : (
-                  <Text style={styles.subtitleText}>
+                  <Text
+                    style={[
+                      styles.subtitleText,
+                      {
+                        color: darkmode
+                          ? BaseColors.white
+                          : BaseColors.textColor,
+                      },
+                    ]}
+                  >
                     Remember these numbers
                   </Text>
                 )}
@@ -328,17 +372,44 @@ export default function Recalldigits({ navigation, route }) {
                       }}
                       // placeholder="Enter digits"
                       // placeholderTextColor={BaseColors.black20}
-                      style={styles.numbercontainer}
+                      style={[
+                        styles.numbercontainer,
+                        {
+                          color: darkmode
+                            ? BaseColors.white
+                            : BaseColors.textColor,
+                        },
+                      ]}
                     />
 
                     {inputError && (
-                      <Text style={styles.errorTxt}>{inputError}</Text>
+                      <Text
+                        style={[
+                          styles.errorTxt,
+                          {
+                            color: darkmode
+                              ? BaseColors.white
+                              : BaseColors.textColor,
+                          },
+                        ]}
+                      >
+                        {inputError}
+                      </Text>
                     )}
                   </View>
                 ) : (
                   <View>
                     <View style={styles.numbercontainer}>
-                      <Text style={styles.titleText}>
+                      <Text
+                        style={[
+                          styles.titleText,
+                          {
+                            color: darkmode
+                              ? BaseColors.white
+                              : BaseColors.textColor,
+                          },
+                        ]}
+                      >
                         {questionList[currentIndex]}
                       </Text>
                     </View>
