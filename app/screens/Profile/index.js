@@ -104,14 +104,16 @@ export default function Profile({ navigation }) {
       leftIcon: 'mars-stroke-h',
       title: 'Pronouns',
       righttitle:
-        userData?.sex === '0'
+        userData?.pronouns === '1'
           ? 'She/Her/Hers'
-          : userData?.sex === '1'
+          : userData?.pronouns === '2'
           ? 'He/Him/His'
-          : userData?.sex === '2'
+          : userData?.pronouns === '3'
           ? 'They/Them/Their'
-          : userData?.sex === '3'
-          ? 'Ze/Zir/Zirs:Ze/Hir/Hirs'
+          : userData?.pronouns === '4'
+          ? 'Ze/Zir/Zirs'
+          : userData?.pronouns === '5'
+          ? 'Ze/Hir/Hirs'
           : '_',
     },
     {

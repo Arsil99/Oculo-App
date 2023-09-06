@@ -85,6 +85,7 @@ const Profiledetailcomponent = (props, ref) => {
   const cInputRef3 = useRef();
   const cInputRef4 = useRef();
   const { userData, darkmode } = useSelector(state => state.auth);
+  const emailRegex = BaseSetting?.emailRegex;
   console.log('======>>userData', userData);
   const sexData = [
     { label: 'Female', value: '0=Female' },
@@ -116,6 +117,8 @@ const Profiledetailcomponent = (props, ref) => {
     setLastName(userData?.lastname);
     setPatientPhone(userData?.phone);
     setPatientEmail(userData?.email);
+    setGuardianEmail(userData?.emergency_email);
+    setGuardianPhone(userData?.emergency_phone);
     setBirthDate(moment(userData?.dob).format('MM-DD-YYYY'));
     setSexValue(
       userData?.sex === '0'
@@ -127,14 +130,16 @@ const Profiledetailcomponent = (props, ref) => {
         : null,
     );
     setSelectedDropdownValue(
-      userData?.sex === '0'
+      userData?.pronouns === '1'
         ? '1=She/Her/Hers'
-        : userData?.sex === '1'
+        : userData?.pronouns === '2'
         ? '2=He/Him/His'
-        : userData?.sex === '2'
+        : userData?.pronouns === '3'
         ? '3=They/Them/Their'
-        : userData?.sex === '3'
-        ? '4=Ze/Zir/Zirs:Ze/Hir/Hirs'
+        : userData?.pronouns === '4'
+        ? '4=Ze/Zir/Zirs'
+        : userData?.pronouns === '5'
+        ? 'Ze/Hir/Hirs'
         : null,
     );
     setValue(userData?.gender);
@@ -196,7 +201,22 @@ const Profiledetailcomponent = (props, ref) => {
     if (isEmpty(patientPhone) || isNull(patientPhone)) {
       Valid = false;
       error.p_phoneErr = true;
-      error.p_phoneErrMsg = 'Enter patient phone number';
+      error.p_phoneErrMsg = 'Enter phone number';
+    } else if (patientPhone.length < 10) {
+      Valid = false;
+      error.p_phoneErr = true;
+      error.p_phoneErrMsg = 'Enter valid phone number';
+    }
+
+    // guardian phone
+    if (isEmpty(guardianPhone) || isNull(guardianPhone)) {
+      Valid = false;
+      error.g_phoneErr = true;
+      error.g_phoneErrMsg = 'Enter phone number';
+    } else if (guardianPhone.length < 10) {
+      Valid = false;
+      error.g_phoneErr = true;
+      error.g_phoneErrMsg = 'Enter valid phone number';
     }
     if (isEmpty(birthDate) || isNull(birthDate)) {
       Valid = false;
@@ -220,6 +240,21 @@ const Profiledetailcomponent = (props, ref) => {
       Valid = false;
       error.p_emailErr = true;
       error.p_emailErrMsg = 'Enter patient email';
+    } else if (!emailRegex.test(patientemail)) {
+      Valid = false;
+      error.p_emailErr = true;
+      error.p_emailErrMsg = 'Please enter valid emaill';
+    }
+
+    // guardian email
+    if (isEmpty(guardianemail) || isNull(guardianemail)) {
+      Valid = false;
+      error.g_emailErr = true;
+      error.g_emailErrMsg = 'Enter guardian email';
+    } else if (!emailRegex.test(guardianemail)) {
+      Valid = false;
+      error.g_emailErr = true;
+      error.g_emailErrMsg = 'Please enter valid emaill';
     }
 
     setErrObj(error);
@@ -270,7 +305,6 @@ const Profiledetailcomponent = (props, ref) => {
         'POST',
         data,
       );
-
       // Check the status of the response.
       if (response?.status) {
         dispatch(setUserData(response?.data));

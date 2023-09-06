@@ -18,6 +18,7 @@ export default function TabSwitch(props) {
   const {
     insideTab,
     tabSize,
+    threePack,
     subTabSize,
     tabs,
     onTabChange,
@@ -70,7 +71,7 @@ export default function TabSwitch(props) {
                   translateX: translateValue,
                 },
               ],
-              marginLeft: -5,
+              marginLeft: threePack ? 0 : -6,
               width: subTabSize,
               borderBottomWidth: !insideTab ? 4 : 0,
               borderRadius: insideTab ? 50 : 0,
