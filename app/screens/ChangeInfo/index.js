@@ -18,7 +18,7 @@ import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
 export default function ChangeInfo({ navigation, route }) {
   const { userData } = useSelector(state => state.auth);
-
+  const [selectedValues, setSelectedValues] = useState({}); // Initialize selectedValues as an empty object
   const eventId = route?.params?.event_id;
   const [response, setResponse] = useState('');
   const [editHistory, setEditHistory] = useState(true);
@@ -69,31 +69,55 @@ export default function ChangeInfo({ navigation, route }) {
     }
   };
 
-  const handleCheckBoxToggle = (id, question) => {
-    if (question === 'Other') {
-      // Special case for "Other" question
+  const handleCheckBoxToggle = (id, metaName, question) => {
+    const updatedValues = { ...selectedValues };
 
+    if (question === 'Other') {
       setShowCustomResponse(!showCustomResponse);
+      setIsNoneSelected(false);
+      setSelectedQuestions([]);
+      // Set the "Other" answer to 1 when it's selected and 0 when it's not selected
+      updatedValues[metaName] = showCustomResponse ? 0 : 1;
+
+      // Set the value of "Add_Ther_Comm" to the content of the regular text input
+      updatedValues.Add_Ther_Comm = response;
     } else if (question === 'None') {
+      // Clear the value of other options when "None" is selected
+      Object.keys(updatedValues).forEach(key => {
+        if (key !== metaName) {
+          updatedValues[key] = 0;
+        }
+      });
+
+      // Set the value for "None" to 1 when it's selected
+      updatedValues[metaName] = isNoneSelected ? 0 : 1;
+
+      // Update the state for selected questions and other related states
+      setSelectedValues(updatedValues);
       setIsNoneSelected(!isNoneSelected);
-      // Clear all selected checkboxes and hide the "Other" TextInput
       setSelectedQuestions([]);
       setShowCustomResponse(false);
-      // Clear the response and responseError
       setResponse('');
       setResponseError('');
     } else {
-      // Toggle other checkbox selections
+      // Toggle the selected value between 1 and 0
+      updatedValues[metaName] = updatedValues[metaName] === 1 ? 0 : 1;
+
       setSelectedQuestions(prevSelected => {
         if (prevSelected.includes(id)) {
           return prevSelected.filter(qId => qId !== id);
         } else {
           setIsNoneSelected(false);
+          setResponse('');
+          setResponseError('');
           return [...prevSelected, id];
         }
       });
     }
+
+    setSelectedValues(updatedValues);
   };
+
   const [responseError, setResponseError] = useState('');
   const submitData = async () => {
     setLoader(true);
@@ -106,16 +130,26 @@ export default function ChangeInfo({ navigation, route }) {
     }
 
     let endPoints = BaseSetting.endpoints.createTreatmentInfo;
-    const data = {
-      patient_id: userData.id || '',
-      event_id: eventId || '',
+    const dataObject = {
+      event_id: eventId,
+
+      Add_Ther: 2,
+      Add_Vest_Ther: selectedValues['Vestibular Therapy'] === 1 ? 1 : 0,
+      Add_Visi_Ther: selectedValues['Vision Therapy'] === 1 ? 1 : 0,
+      Add_Cogn_Ther:
+        selectedValues['Cognitive/Behavioral Therapy'] === 1 ? 1 : 0,
+      Add_Chir_Ther: selectedValues['Chiropractic'] === 1 ? 1 : 0,
+      Add_Other_Ther: otherResponse === '' ? 0 : otherResponse, // Use the value of otherResponse here
+      Add_None_Ther: selectedValues['None'] === 1 ? 1 : 0,
+      Add_Ther_Comm: response, // Use the value of response here
       created_from: 'app',
-      selectedQuestions: selectedQuestions, // Array of selected questions
-      response: response, // Value of the response text input
-      otherResponse: otherResponse, // Value of the "Other" text input
     };
+    console.log(
+      '🚀 ~ file: index.js:153 ~ submitData ~ dataObject:',
+      dataObject,
+    );
     try {
-      const resp = await getApiData(endPoints, 'POST', data, {}, false);
+      const resp = await getApiData(endPoints, 'POST', dataObject, {}, false);
       console.log('🚀 ~ file: index.js:94 ~ submitData ~ resp:', resp);
       if (resp?.status) {
         Toast.show({
@@ -138,6 +172,7 @@ export default function ChangeInfo({ navigation, route }) {
       setLoader(false);
     }
   };
+
   return editHistory ? (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={BaseColors.white} />
@@ -180,31 +215,32 @@ export default function ChangeInfo({ navigation, route }) {
             </Text>
             {editHistory ? (
               <View style={styles.buttoncontainer}>
-                <FlatList
-                  data={questionList.slice(1)}
-                  keyExtractor={item => item.id}
-                  renderItem={({ item }) => (
-                    <View style={styles.row}>
-                      <CheckBox
-                        title={item.question}
-                        checked={
-                          item.question === 'Other'
-                            ? showCustomResponse
-                            : item.question === 'None'
-                            ? isNoneSelected
-                            : selectedQuestions.includes(item.id)
+                {questionList.slice(1).map(item => (
+                  <View style={styles.row} key={item.id}>
+                    <CheckBox
+                      title={item.question}
+                      checked={
+                        item.question === 'Other'
+                          ? showCustomResponse
+                          : item.question === 'None'
+                          ? isNoneSelected
+                          : selectedQuestions.includes(item.id)
+                      }
+                      onPress={() => {
+                        if (item.question === 'Other') {
+                          setShowCustomResponse(!showCustomResponse);
                         }
-                        onPress={() => {
-                          if (item.question === 'Other') {
-                            setShowCustomResponse(!showCustomResponse);
-                          } else {
-                            handleCheckBoxToggle(item.id, item.question);
-                          }
-                        }}
-                      />
-                    </View>
-                  )}
-                />
+                        if (item.question === 'None') {
+                          setIsNoneSelected(!isNoneSelected);
+                          setSelectedQuestions([]);
+                          setShowCustomResponse(false);
+                        } else {
+                          handleCheckBoxToggle(item.id, item.question);
+                        }
+                      }}
+                    />
+                  </View>
+                ))}
                 {showCustomResponse && (
                   <LabeledInput
                     Label={'Please Describe Other'}
