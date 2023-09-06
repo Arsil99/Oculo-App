@@ -41,7 +41,7 @@ export const settings = [
   },
   {
     id: '4',
-    leftIcon: 'notification',
+    leftIcon: 'bell-o',
     title: 'Notifications Settings',
     righttitle: <Icon name="right" size={15} />,
     switch: false,
@@ -66,7 +66,7 @@ export const settings = [
   },
   {
     id: '7',
-    leftIcon: 'logout',
+    leftIcon: 'sign-out',
     slug: 'sign_out',
     title: 'Sign Out',
     righttitle: <Icon name="right" size={15} />,
@@ -84,7 +84,7 @@ export const legal = [
   },
   {
     id: '2',
-    leftIcon: 'unknowfile1',
+    leftIcon: 'file',
     title: 'Privacy Policy',
     righttitle: <Icon name="right" size={15} />,
     navto: 'PrivacyPolicy',

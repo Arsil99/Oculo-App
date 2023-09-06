@@ -62,7 +62,7 @@ export default function Profile({ navigation }) {
   const patientdata = [
     {
       id: '1',
-      leftIcon: 'user',
+      leftIcon: 'user-o',
       title: 'First Name',
       righttitle:
         userData?.firstname?.length > 15
@@ -71,7 +71,7 @@ export default function Profile({ navigation }) {
     },
     {
       id: '2',
-      leftIcon: 'user',
+      leftIcon: 'user-o',
       title: 'Middle Name',
       righttitle:
         userData?.middlename?.length > 15
@@ -80,7 +80,7 @@ export default function Profile({ navigation }) {
     },
     {
       id: '7',
-      leftIcon: 'user',
+      leftIcon: 'user-o',
       title: 'Last Name',
       righttitle:
         userData?.lastname?.length > 15
@@ -95,13 +95,13 @@ export default function Profile({ navigation }) {
     },
     {
       id: '4',
-      leftIcon: 'man',
+      leftIcon: 'transgender',
       title: 'Gender',
       righttitle: userData?.gender ? userData.gender : '_',
     },
     {
       id: '5',
-      leftIcon: 'man',
+      leftIcon: 'mars-stroke-h',
       title: 'Pronouns',
       righttitle:
         userData?.sex === '0'
@@ -116,13 +116,13 @@ export default function Profile({ navigation }) {
     },
     {
       id: '6',
-      leftIcon: 'man',
+      leftIcon: 'transgender-alt',
       title: 'Sex',
       righttitle:
         userData?.sex === '0'
-          ? 'female'
+          ? 'Female'
           : userData?.sex === '1'
-          ? 'male'
+          ? 'Male'
           : userData?.sex === '2'
           ? 'Intersex'
           : '_',
@@ -138,7 +138,7 @@ export default function Profile({ navigation }) {
     },
     {
       id: '2',
-      leftIcon: 'mail',
+      leftIcon: 'envelope-o',
       title: 'Patient Email',
       righttitle: userData?.email,
     },
@@ -150,7 +150,7 @@ export default function Profile({ navigation }) {
     },
     {
       id: '4',
-      leftIcon: 'mail',
+      leftIcon: 'envelope-o',
       title: 'Guardian email',
       righttitle: userData?.emergency_email ? userData?.emergency_email : '_',
     },
