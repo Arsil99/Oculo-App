@@ -15,13 +15,16 @@ import BaseSetting from '@config/setting';
 import { getApiData } from '@utils/apiHelper';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import Authentication from '@redux/reducers/auth/actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { removeCredentials, storeCredentials } from '@utils/CommonFunction';
 import HeaderBar from '@components/HeaderBar';
 import { BaseColors } from '@config/theme';
 
 const ResetPassword = ({ navigation, route }) => {
   const { setUserData, setAccessToken, setBiometric } = Authentication;
+  const { darkmode } = useSelector(state => {
+    return state.auth;
+  });
   const IOS = Platform.OS === 'ios';
   const from = route?.params?.from || '';
   const email = route?.params?.email || '';
@@ -213,7 +216,12 @@ const ResetPassword = ({ navigation, route }) => {
   return (
     <KeyboardAvoidingView
       behavior={IOS ? 'padding' : 'height'}
-      style={styles.container}
+      style={[
+        styles.container,
+        {
+          backgroundColor: darkmode ? BaseColors.lightBlack : BaseColors.white,
+        },
+      ]}
     >
       {from === 'profile' && (
         <HeaderBar
