@@ -191,27 +191,6 @@ export default function ChangeInfo({ navigation, route }) {
         leftBtnPress={() => {
           navigation.goBack();
         }}
-        rightComponent={
-          <TouchableOpacity
-            onPress={() =>
-              rightHistoryText === 'Edit'
-                ? (setEditHistory(!editHistory),
-                  setRightHistoryText(
-                    rightHistoryText === 'Edit' ? 'Save' : 'Edit',
-                  ))
-                : HandleHistoryUpdateBtn()
-            }
-            activeOpacity={BaseSetting.buttonOpacity}
-          >
-            <Text
-              style={{
-                color: darkmode ? BaseColors.white : BaseColors.textColor,
-              }}
-            >
-              {rightHistoryText}
-            </Text>
-          </TouchableOpacity>
-        }
       />
 
       <View
