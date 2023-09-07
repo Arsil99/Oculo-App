@@ -17,7 +17,6 @@ const ProfilehistoryButton = (props, ref) => {
   const { darkmode, userData } = useSelector(state => state.auth);
   const isFocused = useIsFocused();
   const { editHistory, handleSuccess } = props;
-
   const [loader, setLoader] = useState(true);
   const [data, setData] = useState({});
   const [questionList, setQuestionList] = useState([]);
@@ -410,7 +409,7 @@ const ProfilehistoryButton = (props, ref) => {
                   ? questionList.map((itemM, indexM) => {
                       return (
                         item?.parent_meta_name === itemM?.meta_name &&
-                        itemM?.answer === 1 &&
+                        itemM?.answer === 0 &&
                         renderQuestion(item, index, type_arr)
                       );
                     })
