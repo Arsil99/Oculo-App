@@ -246,7 +246,7 @@ export default StyleSheet.create({
     marginBottom: 10,
   },
   confirmationModalText: {
-    fontSize: 16,
+    color: BaseColors.textColor,
     marginBottom: 20,
   },
 });

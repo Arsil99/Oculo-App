@@ -445,11 +445,34 @@ export default function Recalldigits({ navigation, route }) {
             onRequestClose={handleCancel}
           >
             <View style={styles.confirmationModalCenteredView}>
-              <View style={styles.confirmationModalView}>
-                <Text style={styles.confirmationModalTitleText}>
+              <View
+                style={[
+                  styles.confirmationModalView,
+                  {
+                    backgroundColor: darkmode
+                      ? BaseColors.textColor
+                      : BaseColors.white,
+                  },
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.confirmationModalTitleText,
+                    {
+                      color: darkmode ? BaseColors.white : BaseColors.black,
+                    },
+                  ]}
+                >
                   Are you sure?
                 </Text>
-                <Text style={styles.confirmationModalText}>
+                <Text
+                  style={[
+                    styles.confirmationModalText,
+                    {
+                      color: darkmode ? BaseColors.white : BaseColors.black,
+                    },
+                  ]}
+                >
                   You want to leave this screen?
                 </Text>
                 <View style={styles.modalButtons}>
