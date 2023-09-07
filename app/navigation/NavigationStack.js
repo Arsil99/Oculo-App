@@ -46,6 +46,7 @@ import Recalldigits from '@screens/Recalldigits';
 import FaceidEnabled from '@screens/FaceidEnabled';
 import ImmediateRecallmain from '@screens/ImmediateRecallmain';
 import Comment from '@screens/Comment';
+import AuthenticationFactor from '@screens/Authentication';
 const intitialNotificationState = {
   notification: null,
   openedNotification: null,
@@ -338,6 +339,11 @@ function App() {
           <Stack.Screen
             name="Comment"
             component={Comment}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="AuthenticationFactor"
+            component={AuthenticationFactor}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

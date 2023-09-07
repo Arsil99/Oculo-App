@@ -425,8 +425,6 @@ export default function Profile({ navigation }) {
                     return null;
                   } else if (item?.slug === 'sign_out') {
                     setShowSignOutConfirmation(true); // Show the confirmation modal
-                  } else if (item?.slug === 'two_fa') {
-                    setModalVisible(!modalVisible);
                   } else {
                     if (item.navto === 'ResetPassword') {
                       navigation.navigate(item.navto, { from: 'profile' });

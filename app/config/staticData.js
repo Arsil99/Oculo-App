@@ -27,9 +27,10 @@ export const settings = [
     id: '2',
     leftIcon: 'unlock',
     slug: 'two_fa',
-    title: 'Two Factor Enabled',
+    title: 'Two Factor Authentication',
     righttitle: <Icon name="right" size={15} />,
     switch: false,
+    navto: 'AuthenticationFactor',
   },
   {
     id: '3',
@@ -55,17 +56,9 @@ export const settings = [
     // righttitle: '',
     switch: true,
   },
+
   {
     id: '6',
-    leftIcon: 'microphone',
-    title: 'Speech To Text',
-    slug: 'speech_to_text',
-    righttitle: <Icon name="right" size={15} />,
-    navto: 'VoiceInput',
-    switch: false,
-  },
-  {
-    id: '7',
     leftIcon: 'sign-out',
     slug: 'sign_out',
     title: 'Sign Out',

@@ -39,6 +39,7 @@ const BaseSetting = {
     eventList: '/event/list',
     comment: '/assessment/add-assess-comment',
     createTreatmentInfo: '/assessment/create-treatment-info',
+    authentication: '/patient/change-2fa',
   },
 
   geolocationOptions: {
