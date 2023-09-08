@@ -182,7 +182,7 @@ const Profiledetailcomponent = (props, ref) => {
   const HandleDetailUpdateBtn = () => {
     const error = { ...ErrObj };
     let Valid = true;
-    // setEdit(!edit), setRightText(rightText === 'Edit' ? 'Save' : 'Edit');
+
     // first name
     if (isEmpty(firstName) || isNull(firstName)) {
       Valid = false;
@@ -209,11 +209,7 @@ const Profiledetailcomponent = (props, ref) => {
     }
 
     // guardian phone
-    if (isEmpty(guardianPhone) || isNull(guardianPhone)) {
-      Valid = false;
-      error.g_phoneErr = true;
-      error.g_phoneErrMsg = 'Enter phone number';
-    } else if (guardianPhone.length < 10) {
+    if (!isEmpty(guardianPhone) && guardianPhone.length < 10) {
       Valid = false;
       error.g_phoneErr = true;
       error.g_phoneErrMsg = 'Enter valid phone number';
@@ -247,11 +243,7 @@ const Profiledetailcomponent = (props, ref) => {
     }
 
     // guardian email
-    if (isEmpty(guardianemail) || isNull(guardianemail)) {
-      Valid = false;
-      error.g_emailErr = true;
-      error.g_emailErrMsg = 'Enter guardian email';
-    } else if (!emailRegex.test(guardianemail)) {
+    if (!isEmpty(guardianemail) && !emailRegex.test(guardianemail)) {
       Valid = false;
       error.g_emailErr = true;
       error.g_emailErrMsg = 'Please enter valid emaill';
