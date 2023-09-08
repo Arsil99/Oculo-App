@@ -1,26 +1,22 @@
 import { Dimensions } from 'react-native';
 const devMode = __DEV__;
 const baseUrl = devMode
-  ? 'http://192.168.0.156:5000/v1'
+  ? 'http://192.168.0.135:5000/v1'
   : 'https://api.oculo.app/v1';
 
 const BaseSetting = {
   name: 'oculo',
   displayName: 'oculo',
   appVersionCode: '1',
-  stripeKey: '',
-  // bugsnagApiKey: "",
   baseUrl,
   api: baseUrl,
   nWidth: Dimensions.get('window').width,
   nHeight: Dimensions.get('window').height,
-  // imgUrl: devMode ? 'http://192.168.0.124:8000' : 'https://jointroops.com',
   timeOut: 30000,
   MAPS_API_CALL_KEY: '',
   emailRegex:
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
   buttonOpacity: 0.8,
-
   endpoints: {
     login: '/patient/login',
     generateOtp: '/user/generate-otp',
