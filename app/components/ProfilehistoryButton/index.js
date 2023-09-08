@@ -407,9 +407,12 @@ const ProfilehistoryButton = (props, ref) => {
                       ];
                 return item?.parent_meta_name
                   ? questionList.map((itemM, indexM) => {
+                      console.log('itemM', itemM);
                       return (
                         item?.parent_meta_name === itemM?.meta_name &&
-                        itemM?.answer === 0 &&
+                        (itemM?.meta_name === 'None_Ther'
+                          ? itemM?.answer === 0
+                          : itemM?.answer === 1) &&
                         renderQuestion(item, index, type_arr)
                       );
                     })
