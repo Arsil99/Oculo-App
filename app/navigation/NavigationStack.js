@@ -47,6 +47,8 @@ import FaceidEnabled from '@screens/FaceidEnabled';
 import ImmediateRecallmain from '@screens/ImmediateRecallmain';
 import Comment from '@screens/Comment';
 import AuthenticationFactor from '@screens/Authentication';
+import NewEvent from '@screens/NewEvent';
+
 const intitialNotificationState = {
   notification: null,
   openedNotification: null,
@@ -336,14 +338,15 @@ function App() {
             component={VoiceInput}
             options={{ headerShown: false }}
           />
+
           <Stack.Screen
             name="Comment"
             component={Comment}
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="AuthenticationFactor"
-            component={AuthenticationFactor}
+            name="NewEvent"
+            component={NewEvent}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

@@ -100,7 +100,8 @@ export default function Home({ navigation }) {
           </View>
           <Animated.View entering={FadeIn} style={styles.requestBtn}>
             <Button
-              onPress={() => navigation.navigate('Dashboard')}
+              // onPress={() => navigation.navigate('Dashboard')}
+              onPress={() => navigation.navigate('NewEvent')}
               shape="round"
               title={'Request Another Baseline'}
               // onPress={validation}
