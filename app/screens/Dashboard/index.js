@@ -8,8 +8,10 @@ import { BaseColors } from '@config/theme';
 import { useState } from 'react';
 import HeaderBar from '@components/HeaderBar';
 import BaseSetting from '@config/setting';
+import { useSelector } from 'react-redux';
 
 const Dashboard = () => {
+  const { darkmode } = useSelector(state => state.auth);
   const [activeIndex, setActiveIndex] = useState(0);
   const data = [
     { color: BaseColors.secondary, name: 'None' },
@@ -32,46 +34,84 @@ const Dashboard = () => {
               styles.colorcontainer,
             ]}
           />
-          <Text style={styles.lighttext}>{item.name}</Text>
+          <Text
+            style={[
+              styles.lighttext,
+              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+            ]}
+          >
+            {item.name}
+          </Text>
         </View>
       </View>
     );
   };
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <HeaderBar HeaderText={'Event Aug 3'} HeaderCenter leftText="Back" />
       <ScrollView
-        contentContainerStyle={{
-          flexGrow: 1,
-          marginTop: 2,
-          backgroundColor: BaseColors.white,
-        }}
+        contentContainerStyle={[
+          styles.scrollcontainer,
+          {
+            backgroundColor: darkmode
+              ? BaseColors.lightBlack
+              : BaseColors.white,
+          },
+        ]}
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.imageView}>
           <Image source={Images.emoji5} resizeMode="contain" />
-          <Text style={styles.headtext}>Headache</Text>
+          <Text
+            style={[
+              styles.headtext,
+              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+            ]}
+          >
+            Headache
+          </Text>
         </View>
         <View style={styles.subheaderContainer}>
           <View>
-            <Text style={styles.text}>Baseline</Text>
+            <Text
+              style={[
+                styles.text,
+                { color: darkmode ? BaseColors.white : BaseColors.black90 },
+              ]}
+            >
+              Baseline
+            </Text>
             <Text style={[styles.number, { color: BaseColors.secondary }]}>
               3
             </Text>
           </View>
           <View>
-            <Text style={styles.text}>Highest</Text>
+            <Text
+              style={[
+                styles.text,
+                { color: darkmode ? BaseColors.white : BaseColors.black90 },
+              ]}
+            >
+              Highest
+            </Text>
             <Text style={[styles.number, { color: BaseColors.Severe }]}>5</Text>
           </View>
           <View>
-            <Text style={styles.text}>Recent</Text>
+            <Text
+              style={[
+                styles.text,
+                { color: darkmode ? BaseColors.white : BaseColors.black90 },
+              ]}
+            >
+              Recent
+            </Text>
             <Text style={[styles.number, { color: BaseColors.Intense }]}>
               4
             </Text>
           </View>
         </View>
 
-        <View style={styles.imageView}>
+        <View style={styles.imageViewcenter}>
           <Image
             source={Images.graph}
             resizeMode="contain"

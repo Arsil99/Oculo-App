@@ -7,6 +7,18 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  scrollcontainer: {
+    borderWidth: 1,
+    flexGrow: 1,
+    marginTop: 1,
+  },
+  imageViewcenter: {
+    marginTop: 20,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    backgroundColor: 'white',
+    padding: 10,
+  },
   headtext: {
     fontSize: 24,
     marginTop: 10,
@@ -97,12 +109,12 @@ export default StyleSheet.create({
     alignSelf: 'center',
   },
   dotwithbordercontainer: {
-    marginTop: 25,
     flexDirection: 'row',
     width: '80%',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     alignSelf: 'center',
+    paddingBottom: 20,
   },
   columnwrapperstyle: { width: '100%' },
 });
