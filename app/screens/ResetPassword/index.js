@@ -27,6 +27,7 @@ const ResetPassword = ({ navigation, route }) => {
   });
   const IOS = Platform.OS === 'ios';
   const from = route?.params?.from || '';
+  const isPassword = route?.params?.isPassword || '';
   const email = route?.params?.email || '';
   const token = route?.params?.token || '';
   const dispatch = useDispatch();
@@ -53,9 +54,11 @@ const ResetPassword = ({ navigation, route }) => {
   const resetPass = async () => {
     setLoader(true);
     let endPoints =
-      from !== 'profile'
-        ? BaseSetting.endpoints.resetPassword // from OTP screen
-        : BaseSetting.endpoints.changePassword; // from Profile to change password
+      from === 'profile'
+        ? BaseSetting.endpoints.changePassword // from OTP screen
+        : isPassword
+        ? BaseSetting.endpoints.createPassword
+        : BaseSetting.endpoints.resetPassword; // from Profile to change password
     let params = {};
     if (from !== 'profile') {
       params = {
@@ -68,6 +71,10 @@ const ResetPassword = ({ navigation, route }) => {
         newPassword: retypepassword,
         confirmPassword: retypepassword,
       };
+
+      if (isPassword) {
+        params = { ...params, email: email };
+      }
     }
 
     try {
@@ -123,7 +130,7 @@ const ResetPassword = ({ navigation, route }) => {
       if (resp?.status) {
         storeCredentials(email, retypepassword);
         navigation.reset({
-          routes: [{ name: 'FaceidEnabled' }],
+          routes: [{ name: IOS ? 'FaceidEnabled' : 'TwofactorEnabled' }],
         });
         dispatch(setUserData(resp?.data?.userData?.personal_info));
         dispatch(setAccessToken(resp?.data?.auth_token));

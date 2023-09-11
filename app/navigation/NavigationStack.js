@@ -349,6 +349,11 @@ function App() {
             component={NewEvent}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="AuthenticationFactor"
+            component={AuthenticationFactor}
+            options={{ headerShown: false }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </NotificationContext.Provider>

@@ -188,6 +188,7 @@ const Login = ({ navigation }) => {
                 params: {
                   email: from === 'bio' ? id : email,
                   from: 'tfa',
+                  isPassword: 1,
                 },
               },
             ],
