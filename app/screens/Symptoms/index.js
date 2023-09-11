@@ -799,6 +799,9 @@ fixDurScreen	= t	Average fixation duration on screen
                                   : BaseColors.inactive,
                             },
                             styles.yesbutton,
+                            {
+                              width: item.length < 10 ? 131 : item.length * 12,
+                            },
                           ]}
                           activeOpacity={BaseSetting.buttonOpacity}
                         >
@@ -824,6 +827,7 @@ fixDurScreen	= t	Average fixation duration on screen
                   <Text
                     style={[
                       styles.yesText,
+
                       {
                         color: darkmode ? BaseColors.white : BaseColors.black90,
                       },
@@ -850,8 +854,8 @@ fixDurScreen	= t	Average fixation duration on screen
                                 },
                               ]}
                             >
-                              Report the severity level of {tag[index].label}:
-                              &nbsp;{patient_question[index]}
+                              Report the severity level of:{' '}
+                              {patient_question[index]}
                             </Text>
                             <View style={styles.sliderMarker}>
                               <Slider

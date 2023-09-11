@@ -34,16 +34,16 @@ export default StyleSheet.create({
   buttoncontainer: {
     marginTop: 5,
     flexDirection: 'row',
+    marginRight: 10,
     justifyContent: 'space-between',
-    width: 140,
   },
   yesbutton: {
     paddingHorizontal: 30,
-    width: 131,
+
     height: 36,
     borderRadius: 18,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
     borderWidth: 1,
     borderColor: BaseColors.black20,
   },

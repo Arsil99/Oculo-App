@@ -22,7 +22,7 @@ const NewEvent = () => {
 
   async function handlePostData() {
     const currentDate = getCurrentDate();
-    console.log('hi');
+
     try {
       const response = await getApiData(
         BaseSetting.endpoints.createEvent,
