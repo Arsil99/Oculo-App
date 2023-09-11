@@ -12,7 +12,6 @@ export default StyleSheet.create({
     backgroundColor: BaseColors.white,
   },
   genderTitle: {
-    marginLeft: 10,
     fontFamily: FontFamily.regular,
   },
 });

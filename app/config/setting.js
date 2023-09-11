@@ -1,7 +1,7 @@
 import { Dimensions } from 'react-native';
 const devMode = __DEV__;
 const baseUrl = devMode
-  ? 'http://192.168.0.135:5000/v1'
+  ? 'http://192.168.0.105:5000/v1'
   : 'https://api.oculo.app/v1';
 
 const BaseSetting = {
@@ -36,6 +36,7 @@ const BaseSetting = {
     comment: '/assessment/add-assess-comment',
     createTreatmentInfo: '/assessment/create-treatment-info',
     authentication: '/patient/change-2fa',
+    createEvent: '/event/create-event',
   },
 
   geolocationOptions: {
