@@ -800,7 +800,7 @@ fixDurScreen	= t	Average fixation duration on screen
                             },
                             styles.yesbutton,
                             {
-                              width: item.length < 10 ? 131 : item.length * 12,
+                              width: item.length < 12 ? 131 : item.length * 12,
                             },
                           ]}
                           activeOpacity={BaseSetting.buttonOpacity}
