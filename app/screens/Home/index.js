@@ -9,6 +9,9 @@ import { useSelector } from 'react-redux';
 import { BaseColors } from '@config/theme';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import SpiderWebChart from '@components/SpiderWebChart';
+import { getApiData } from '@utils/apiHelper';
+import BaseSetting from '@config/setting';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
 export default function Home({ navigation }) {
   const switchOptions = [
@@ -24,6 +27,25 @@ export default function Home({ navigation }) {
   const { userData, darkmode } = useSelector(state => state.auth);
   console.log('🚀 ~ file: index.js:23 ~ Home ~ userData:', userData);
 
+  async function handlegetData() {
+    const endPoint = BaseSetting.endpoints.createRequest;
+    try {
+      const response = await getApiData(`${endPoint}`, 'GET');
+      if (response?.status) {
+        Toast.show({
+          text1: response?.message.toString(),
+          type: 'success',
+        });
+      } else {
+        Toast.show({
+          text1: response?.message,
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      console.log('error =======>>>', error);
+    }
+  }
   return (
     // MAIN CONTAINER
     <View
@@ -100,8 +122,7 @@ export default function Home({ navigation }) {
           </View>
           <Animated.View entering={FadeIn} style={styles.requestBtn}>
             <Button
-              // onPress={() => navigation.navigate('Dashboard')}
-              onPress={() => navigation.navigate('NewEvent')}
+              onPress={handlegetData}
               shape="round"
               title={'Request Another Baseline'}
               // onPress={validation}

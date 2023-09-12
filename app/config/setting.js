@@ -36,7 +36,7 @@ const BaseSetting = {
     comment: '/assessment/add-assess-comment',
     createTreatmentInfo: '/assessment/create-treatment-info',
     authentication: '/patient/change-2fa',
-    createEvent: '/event/create-event',
+    createRequest: '/event/create-request',
   },
 
   geolocationOptions: {
