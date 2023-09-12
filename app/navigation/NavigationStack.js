@@ -48,6 +48,7 @@ import ImmediateRecallmain from '@screens/ImmediateRecallmain';
 import Comment from '@screens/Comment';
 import AuthenticationFactor from '@screens/Authentication';
 import NewEvent from '@screens/NewEvent';
+import Symptom from '@screens/Symptom';
 
 const intitialNotificationState = {
   notification: null,
@@ -271,6 +272,11 @@ function App() {
           <Stack.Screen
             name="CallibrationStart"
             component={CallibrationStart}
+            options={{ headerShown: false, gestureEnabled: false }}
+          />
+          <Stack.Screen
+            name="Symptom"
+            component={Symptom}
             options={{ headerShown: false, gestureEnabled: false }}
           />
           <Stack.Screen
