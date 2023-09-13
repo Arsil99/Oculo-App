@@ -47,7 +47,6 @@ import FaceidEnabled from '@screens/FaceidEnabled';
 import ImmediateRecallmain from '@screens/ImmediateRecallmain';
 import Comment from '@screens/Comment';
 import AuthenticationFactor from '@screens/Authentication';
-import NewEvent from '@screens/NewEvent';
 import Symptom from '@screens/Symptom';
 
 const intitialNotificationState = {
@@ -350,11 +349,7 @@ function App() {
             component={Comment}
             options={{ headerShown: false }}
           />
-          <Stack.Screen
-            name="NewEvent"
-            component={NewEvent}
-            options={{ headerShown: false }}
-          />
+
           <Stack.Screen
             name="AuthenticationFactor"
             component={AuthenticationFactor}
