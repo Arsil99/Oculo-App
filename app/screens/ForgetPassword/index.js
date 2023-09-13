@@ -16,8 +16,10 @@ import { Platform } from 'react-native';
 import { getApiData } from '@utils/apiHelper';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { BaseColors } from '@config/theme';
+import { useSelector } from 'react-redux';
 
 const ForgetPassword = ({ navigation }) => {
+  const { darkmode } = useSelector(state => state.auth);
   const IOS = Platform.OS === 'ios';
   const emailRegex = BaseSetting?.emailRegex;
 
@@ -98,7 +100,12 @@ const ForgetPassword = ({ navigation }) => {
   return (
     <KeyboardAvoidingView
       behavior={IOS ? 'padding' : 'height'}
-      style={styles.container}
+      style={[
+        styles.container,
+        {
+          backgroundColor: darkmode ? BaseColors.lightBlack : BaseColors.white,
+        },
+      ]}
     >
       <ScrollView
         contentContainerStyle={{ flex: 1 }}
