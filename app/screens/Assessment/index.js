@@ -11,6 +11,72 @@ const Assessment = ({ navigation, route }) => {
   const eventId = route?.params?.event_id;
   const data = route?.params?.otherData;
 
+  const navigatetoscreen = () => {
+    if (data.digit_recall === 0) {
+      // Navigate to digit_recall screen
+      navigation.navigate('ImmediateRecallmain', {
+        event_id: data?.id,
+        otherData: data,
+      });
+    } else if (data.digit_recall === 1) {
+      null;
+    } else if (data.digit_recall === null) {
+      null;
+    }
+
+    if (data.immediate_recall === 0) {
+      // Navigate to immediate_recall screen
+      navigation.navigate('ImmediateRecall', {
+        event_id: data?.id,
+        otherData: data,
+      });
+    } else if (data.immediate_recall === 1) {
+      navigation.navigate('ImmediateRecallmain', {
+        event_id: data?.id,
+        otherData: data,
+      });
+    } else if (data.immediate_recall === null) {
+      navigation.navigate('ImmediateRecallmain', {
+        event_id: data?.id,
+        otherData: data,
+      });
+    }
+
+    if (data.symptom_info === 0) {
+      // Navigate to symptoms screen
+      navigation.navigate('Symptom', {
+        event_id: data?.id,
+        otherData: data,
+      });
+    } else if (data.symptom_info === 1) {
+      navigation.navigate('ImmediateRecall', {
+        event_id: data?.id,
+        otherData: data,
+      });
+    } else if (data.symptom_info === null) {
+      navigation.navigate('ImmediateRecall', {
+        event_id: data?.id,
+        otherData: data,
+      });
+    }
+    if (data.treatment_info === 0) {
+      // Navigate to treatment_info screen
+      navigation.navigate('ChangeInfo', {
+        event_id: data?.id,
+        otherData: data,
+      });
+    } else if (data.treatment_info === 1) {
+      navigation.navigate('Symptom', {
+        event_id: data?.id,
+        otherData: data,
+      });
+    } else if (data.treatment_info === null) {
+      navigation.navigate('Symptom', {
+        event_id: data?.id,
+        otherData: data,
+      });
+    }
+  };
   return (
     <View
       style={[
@@ -22,14 +88,25 @@ const Assessment = ({ navigation, route }) => {
     >
       <HeaderBar
         HeaderText={
-          data?.symptom_info + data?.immediate_recall + data?.digit_recall === 0
+          data?.symptom_info +
+            data?.immediate_recall +
+            data?.digit_recall +
+            data.treatment_info ===
+          0
             ? 'Assessment 1'
             : data?.symptom_info +
                 data?.immediate_recall +
-                data?.digit_recall ===
+                data?.digit_recall +
+                data.treatment_info ===
               1
             ? 'Assessment 2'
-            : 'Assessment 3'
+            : data?.symptom_info +
+                data?.immediate_recall +
+                data?.digit_recall +
+                data.treatment_info ===
+              2
+            ? 'Assessment 3'
+            : 'Assessment 4'
         }
         HeaderCenter
         leftText="Back"
@@ -157,23 +234,7 @@ const Assessment = ({ navigation, route }) => {
             shape="round"
             title={'Begin Assessment'}
             style={styles.Assessment}
-            onPress={() => {
-              navigation?.navigate(
-                data?.symptom_info +
-                  data?.immediate_recall +
-                  data?.digit_recall ===
-                  0
-                  ? 'ChangeInfo'
-                  : data?.symptom_info +
-                      data?.immediate_recall +
-                      data?.digit_recall ===
-                    1
-                  ? 'ImmediateRecall'
-                  : 'ImmediateRecallmain',
-                { event_id: eventId },
-                { event_id: data?.id, otherData: data },
-              );
-            }}
+            onPress={navigatetoscreen}
           />
         </View>
       </View>

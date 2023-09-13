@@ -13,15 +13,10 @@ import { ScrollView } from 'react-native-gesture-handler';
 import NoData from '@components/NoData';
 
 export default function Events({ navigation }) {
+  const { darkmode } = useSelector(state => state.auth);
   const [eventDetails, setEventDetails] = useState([]);
   const [loader, setLoader] = useState(true);
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      EventListData();
-    });
 
-    return unsubscribe;
-  }, [navigation]);
   // display the questions list
   const EventListData = async () => {
     const endPoint = `${BaseSetting.endpoints.eventList}?created_from=app`;
@@ -35,7 +30,19 @@ export default function Events({ navigation }) {
       console.log('📌 ⏩ file: index.js:24 ⏩ LangListAPI ⏩ error:', error);
     }
   };
-  const { darkmode } = useSelector(state => state.auth);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      EventListData();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+  useEffect(() => {
+    // Call EventListData when the component mounts initially.
+    EventListData();
+  }, []);
+
   return (
     <View style={{ flexGrow: 1 }}>
       <HeaderBar HeaderText={'Events'} HeaderCenter />
@@ -86,43 +93,44 @@ export default function Events({ navigation }) {
                 <CardList
                   key={index}
                   rightArrow={
-                    item?.symptom_info +
-                      item?.immediate_recall +
-                      item?.digit_recall ===
-                    3
+                    (item.symptom_info ?? 1) +
+                      (item.immediate_recall ?? 1) +
+                      (item.digit_recall ?? 1) +
+                      (item.treatment_info ?? 1) ===
+                    4
                       ? false
                       : true
                   }
                   onPress={() =>
-                    item?.symptom_info +
-                      item?.immediate_recall +
-                      item?.digit_recall ===
-                    3
+                    (item.symptom_info ?? 1) +
+                      (item.immediate_recall ?? 1) +
+                      (item.digit_recall ?? 1) +
+                      (item.treatment_info ?? 1) ===
+                    4
                       ? null
                       : navigation.navigate(
-                          item?.symptom_info
-                            ? item?.immediate_recall
-                              ? 'Assessment'
-                              : 'Assessment'
-                            : 'Assessment',
+                          'Assessment',
+
                           { event_id: item?.id, otherData: item },
                         )
                   }
                   image={Images.emoji1}
                   data={item?.createdAt}
                   status={`${
-                    item?.symptom_info +
-                      item?.immediate_recall +
-                      item?.digit_recall ===
-                    3
+                    (item.symptom_info ?? 1) +
+                      (item.immediate_recall ?? 1) +
+                      (item.digit_recall ?? 1) +
+                      (item.treatment_info ?? 1) ===
+                    4
                       ? 'Completed'
                       : 'Pending'
                   }`}
                   assessment={`Assessment ${
-                    Number(item?.symptom_info) +
-                    Number(item?.immediate_recall) +
-                    Number(item?.digit_recall)
-                  }/3`}
+                    Number(item.symptom_info ?? 1) +
+                    Number(item.immediate_recall ?? 1) +
+                    Number(item.digit_recall ?? 1) +
+                    Number(item.treatment_info ?? 1)
+                  }/4`}
                 />
               );
             })

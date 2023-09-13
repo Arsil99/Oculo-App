@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { BaseColors } from '@config/theme';
 
 const ImmediateRecallmain = ({ navigation, route }) => {
+  const data = route?.params?.otherData;
   const { darkmode } = useSelector(state => state.auth);
   const eventId = route?.params?.event_id;
   return (
@@ -109,7 +110,10 @@ const ImmediateRecallmain = ({ navigation, route }) => {
             shape="round"
             title={'Next'}
             onPress={() => {
-              navigation?.navigate('Recalldigits', { event_id: eventId });
+              navigation?.navigate('Recalldigits', {
+                event_id: eventId,
+                otherData: data,
+              });
             }}
           />
         </View>

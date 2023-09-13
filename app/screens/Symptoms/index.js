@@ -45,9 +45,11 @@ let currentIndexEndTime = null;
 const baseUrl = 'https://eyetracking.oculo.app';
 
 const Symptoms = ({ navigation, route }) => {
+  const data = route?.params?.otherData;
   const { darkmode } = useSelector(state => state.auth);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const eventId = route?.params?.event_id;
+  const eventId = data?.id;
+
   const [activeButtonIndex, setActiveButtonIndex] = useState(0);
 
   const [sliderValue, setSliderValue] = useState(1);
@@ -441,7 +443,12 @@ fixDurScreen	= t	Average fixation duration on screen
         false,
       );
       if (response?.status) {
-        navigation.navigate('Wordlist', { event_id: eventId });
+        data.immediate_recall === 0
+          ? navigation.navigate('ImmediateRecall', {
+              event_id: eventId,
+              otherData: data,
+            })
+          : null;
         Toast.show({
           text1: response?.message.toString(),
           type: 'success',

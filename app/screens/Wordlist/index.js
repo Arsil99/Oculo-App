@@ -24,6 +24,7 @@ import { useSelector } from 'react-redux';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
 export default function Wordlist({ navigation, route }) {
+  const DATA = route?.params?.otherData;
   const [confirmLoading, setConfirmLoading] = useState(false);
   const eventId = route?.params?.event_id;
   const { darkmode } = useSelector(state => state.auth);
@@ -295,7 +296,12 @@ export default function Wordlist({ navigation, route }) {
         false,
       );
       if (response?.status) {
-        navigation.navigate('Recalldigits', { event_id: eventId });
+        DATA.digit_recall === 0
+          ? navigation.navigate('ImmediateRecallmain', {
+              event_id: eventId,
+              otherData: data,
+            })
+          : navigation.navigate('Events');
         Toast.show({
           text1: response?.message.toString(),
           type: 'success',

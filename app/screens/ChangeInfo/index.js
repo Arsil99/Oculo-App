@@ -7,7 +7,7 @@ import { getApiData } from '@utils/apiHelper';
 import { isArray, isEmpty } from 'lodash';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
-import { ActivityIndicator, FlatList } from 'react-native';
+import { ActivityIndicator, FlatList, Image } from 'react-native';
 import { View, StatusBar, Text, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import styles from './styles';
@@ -15,8 +15,10 @@ import { CheckBox } from 'react-native-elements';
 import LabeledInput from '@components/LabeledInput';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { Images } from '@config';
 
 export default function ChangeInfo({ navigation, route }) {
+  const data = route?.params?.otherData;
   const { userData, darkmode } = useSelector(state => state.auth);
   const [selectedValues, setSelectedValues] = useState({}); // Initialize selectedValues as an empty object
   const eventId = route?.params?.event_id;
@@ -29,6 +31,8 @@ export default function ChangeInfo({ navigation, route }) {
   const [otherResponse, setOtherResponse] = useState('');
   const [showCustomResponse, setShowCustomResponse] = useState(false);
   const [isNoneSelected, setIsNoneSelected] = useState(false);
+  const [isAtLeastOneCheckboxSelected, setIsAtLeastOneCheckboxSelected] =
+    useState(false);
 
   const handleOtherResponseChange = text => {
     setOtherResponse(text);
@@ -116,9 +120,30 @@ export default function ChangeInfo({ navigation, route }) {
     }
 
     setSelectedValues(updatedValues);
+    const isAtLeastOneSelected = Object.values(updatedValues).some(
+      value => value === 1,
+    );
+    setIsAtLeastOneCheckboxSelected(isAtLeastOneSelected);
   };
 
   const [responseError, setResponseError] = useState('');
+
+  const validateForm = () => {
+    const selectedOptions = Object.values(selectedValues);
+
+    if (selectedOptions.every(value => value !== 1)) {
+      // No checkbox is selected, show an error message
+      Toast.show({
+        text1: 'Please select at least one checkbox.',
+        type: 'error',
+      });
+      return false;
+    }
+
+    submitData();
+    return true; // At least one checkbox is selected, form is valid
+  };
+
   const submitData = async () => {
     setLoader(true);
     if (response.trim() === '') {
@@ -173,7 +198,7 @@ export default function ChangeInfo({ navigation, route }) {
     }
   };
 
-  return editHistory ? (
+  return (
     <View
       style={[
         styles.container,
@@ -215,62 +240,66 @@ export default function ChangeInfo({ navigation, route }) {
             >
               {questionList.length > 0 ? questionList[0].question : ''}
             </Text>
-            {editHistory ? (
-              <View style={styles.buttoncontainer}>
-                {questionList.slice(1).map(item => (
-                  <View style={styles.row} key={item.id}>
-                    <CheckBox
-                      title={item.question}
-                      checked={
-                        item.question === 'Other'
-                          ? showCustomResponse
-                          : item.question === 'None'
-                          ? isNoneSelected
-                          : selectedQuestions.includes(item.id)
+
+            <View style={styles.buttoncontainer}>
+              {questionList.slice(1).map(item => (
+                <View style={styles.row} key={item.id}>
+                  <CheckBox
+                    title={item.question}
+                    checked={
+                      item.question === 'Other'
+                        ? showCustomResponse
+                        : item.question === 'None'
+                        ? isNoneSelected
+                        : selectedQuestions.includes(item.id)
+                    }
+                    onPress={() => {
+                      if (item.question === 'Other') {
+                        setShowCustomResponse(!showCustomResponse);
                       }
-                      onPress={() => {
-                        if (item.question === 'Other') {
-                          setShowCustomResponse(!showCustomResponse);
-                        }
-                        if (item.question === 'None') {
-                          setIsNoneSelected(!isNoneSelected);
-                          setSelectedQuestions([]);
-                          setShowCustomResponse(false);
-                        } else {
-                          handleCheckBoxToggle(item.id, item.question);
-                        }
-                      }}
-                    />
-                  </View>
-                ))}
-                {showCustomResponse && (
-                  <LabeledInput
-                    Label={'Please Describe Other'}
-                    LabledTextStyle={styles.textInput}
-                    placeholder="Enter your other response here"
-                    onChangeText={handleOtherResponseChange}
-                    value={otherResponse}
+                      if (item.question === 'None') {
+                        setIsNoneSelected(!isNoneSelected);
+                        setSelectedQuestions([]);
+                        setShowCustomResponse(false);
+                      } else {
+                        handleCheckBoxToggle(item.id, item.question);
+                      }
+                    }}
                   />
-                )}
+                </View>
+              ))}
+              {showCustomResponse && (
                 <LabeledInput
-                  Label={'Please Describe'}
+                  Label={'Please Describe Other'}
                   LabledTextStyle={styles.textInput}
-                  placeholder="Enter your response here"
-                  onChangeText={handleResponseChange}
-                  value={response}
+                  placeholder="Enter your other response here"
+                  onChangeText={handleOtherResponseChange}
+                  value={otherResponse}
                 />
-                <Text style={styles.errorText}>{responseError}</Text>
-              </View>
-            ) : (
-              <Text style={styles.subtitleText}>Yes</Text>
-            )}
+              )}
+              <LabeledInput
+                Label={'Please Describe'}
+                LabledTextStyle={styles.textInput}
+                placeholder="Enter your response here"
+                onChangeText={handleResponseChange}
+                value={response}
+              />
+              <Text style={styles.errorText}>{responseError}</Text>
+            </View>
+
             <View style={styles.btnContainer}>
               <Button
                 shape="round"
                 title={'Next'}
                 onPress={() => {
                   setEditHistory(false);
-                  submitData();
+                  validateForm();
+                  data.symptom_info === 0
+                    ? navigation.navigate('Symptom', {
+                        event_id: data?.id,
+                        otherData: data,
+                      })
+                    : null;
                 }}
               />
             </View>
@@ -278,7 +307,5 @@ export default function ChangeInfo({ navigation, route }) {
         )}
       </View>
     </View>
-  ) : (
-    <Symptom navigation={navigation} eventId={eventId} />
   );
 }

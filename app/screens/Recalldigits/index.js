@@ -135,7 +135,7 @@ export default function Recalldigits({ navigation, route }) {
             // No more sets, submit data as correct and show success message
             submitData({ ...data, answers: updatedAnswers });
             Toast.show({
-              text1: 'Data submitted successfully with correct input.',
+              text1: 'Data submitted successfully.',
               type: 'success',
             });
           } else {
@@ -174,7 +174,7 @@ export default function Recalldigits({ navigation, route }) {
             // No more sets, submit data as correct and show success message
             submitData({ ...data, answers: updatedAnswers });
             Toast.show({
-              text1: 'Data submitted successfully with correct input.',
+              text1: 'Data submitted successfully.',
               type: 'success',
             });
           } else {
