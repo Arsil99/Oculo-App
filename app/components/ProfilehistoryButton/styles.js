@@ -53,6 +53,13 @@ export default StyleSheet.create({
     color: BaseColors.black,
     marginTop: 25,
   },
+  questionTexttype8: {
+    fontSize: 16,
+    fontWeight: '400',
+    marginTop: -5,
+    fontFamily: FontFamily.regular,
+    color: BaseColors.black,
+  },
   subtitleText: {
     fontSize: 16,
     fontWeight: '400',

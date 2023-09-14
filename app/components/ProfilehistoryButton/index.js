@@ -12,6 +12,7 @@ import { useIsFocused } from '@react-navigation/native';
 import styles from './styles';
 import { useSelector } from 'react-redux';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { CheckBox } from 'react-native-elements';
 
 const ProfilehistoryButton = (props, ref) => {
   const { darkmode, userData } = useSelector(state => state.auth);
@@ -20,6 +21,10 @@ const ProfilehistoryButton = (props, ref) => {
   const [loader, setLoader] = useState(true);
   const [data, setData] = useState({});
   const [questionList, setQuestionList] = useState([]);
+  console.log(
+    '🚀 ~ file: index.js:23 ~ ProfilehistoryButton ~ questionList:',
+    questionList,
+  );
 
   useEffect(() => {
     QuestionListAPI();
@@ -153,6 +158,40 @@ const ProfilehistoryButton = (props, ref) => {
     }
   }
 
+  const handleCheckBoxChange = index => {
+    // Make a copy of the current state or data
+    const updatedQuestions = [...questionList];
+
+    // Toggle the isChecked value for the clicked question
+    updatedQuestions[index].isChecked = !updatedQuestions[index].isChecked;
+
+    // If the clicked question is "None," deselect all other questions
+    if (
+      updatedQuestions[index].meta_name === 'None_Ther' &&
+      updatedQuestions[index].isChecked
+    ) {
+      updatedQuestions.forEach((item, i) => {
+        if (i !== index) {
+          item.isChecked = false;
+        }
+      });
+    } else if (
+      updatedQuestions[index].meta_name !== 'None_Ther' &&
+      updatedQuestions[index].isChecked
+    ) {
+      // If the clicked question is not "None" and is checked, deselect the "None" question
+      const noneIndex = updatedQuestions.findIndex(
+        item => item.meta_name === 'None_Ther',
+      );
+      if (noneIndex !== -1) {
+        updatedQuestions[noneIndex].isChecked = false;
+      }
+    }
+
+    // Update the state or data with the modified question list
+    setQuestionList(updatedQuestions);
+  };
+
   const renderQuestion = (item, index, type_arr) => {
     return (
       <View
@@ -164,16 +203,34 @@ const ProfilehistoryButton = (props, ref) => {
         ]}
       >
         {/* Render question */}
-        <Text
-          style={[
-            styles.questionText,
-            {
-              color: darkmode ? BaseColors.white : BaseColors.black,
-            },
-          ]}
-        >{`${item.patient_question}`}</Text>
+        {item.type === '8' && item.meta_name !== 'Prev_Ther' ? (
+          editHistory ? (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View>
+                <CheckBox
+                  title={item.question}
+                  checked={item.isChecked || false} // A boolean prop indicating whether the checkbox is checked
+                  onPress={() => handleCheckBoxChange(index)} // Use onPress instead of onChange
+                />
+              </View>
+            </View>
+          ) : null
+        ) : (
+          <Text
+            style={[
+              styles.questionText,
+              {
+                color: darkmode ? BaseColors.white : BaseColors.black,
+              },
+            ]}
+          >
+            {`${item.patient_question}`}
+            <Text style={{ color: BaseColors.red, marginTop: -13 }}> *</Text>
+          </Text>
+        )}
         {/* Render answer options */}
         {item.type === '1' ? (
+          // Render Yes/No buttons
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -266,7 +323,32 @@ const ProfilehistoryButton = (props, ref) => {
               }}
             >{`Ans: ${item?.answer || '-'}`}</Text>
           )
-        ) : item.type === '3' ? (
+        ) : item.meta_name === 'Other_Ther' && item.isChecked ? (
+          // Render text input for type 2
+          editHistory ? (
+            <LabeledInput
+              placeholder="Enter your response here"
+              value={item.answer?.toString() || ''}
+              onChangeText={text => getAnswer(text, index)}
+              style={{
+                borderWidth: 1,
+                borderColor: 'gray',
+                padding: 8,
+                marginVertical: 5,
+                borderRadius: 5,
+              }}
+            />
+          ) : (
+            <Text
+              style={{
+                fontWeight: 'bold',
+                color: darkmode ? BaseColors.white : BaseColors.textColor,
+              }}
+            >{`Ans: ${item?.answer || '-'}`}</Text>
+          )
+        ) : item.type === '3' &&
+          item.meta_name === 'Prev_Ther_Comm' &&
+          !item.isChecked ? (
           // Render another text input for type 3
           editHistory ? (
             <LabeledInput
@@ -292,7 +374,7 @@ const ProfilehistoryButton = (props, ref) => {
         ) : item.type === '4' ? (
           // Render a scale or something for type 4
           <Text>Scale</Text>
-        ) : (
+        ) : item.type === '5' ? (
           // Render buttons for type 5
           <View style={{ flexDirection: 'row' }}>
             {editHistory ? (
@@ -340,7 +422,7 @@ const ProfilehistoryButton = (props, ref) => {
               }`}</Text>
             )}
           </View>
-        )}
+        ) : null}
         {/* Render error message if any */}
         {item.error ? (
           <Text style={{ color: BaseColors.red, marginBottom: 5 }}>

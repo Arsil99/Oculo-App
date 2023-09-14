@@ -40,7 +40,7 @@ export default StyleSheet.create({
     color: BaseColors.textColor,
   },
   btnContainer: {
-    height: windowHeight / 4.2,
+    height: windowHeight / 5,
     justifyContent: 'center',
     marginHorizontal: 20,
   },

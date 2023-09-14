@@ -12,7 +12,14 @@ const Symptom = ({ navigation, eventId, route }) => {
   const data = route?.params?.otherData;
   const { darkmode } = useSelector(state => state.auth);
   return (
-    <ScrollView style={styles.main}>
+    <ScrollView
+      style={[
+        styles.main,
+        {
+          backgroundColor: darkmode ? BaseColors.lightBlack : BaseColors.white,
+        },
+      ]}
+    >
       <HeaderBar
         HeaderText={'Symptoms'}
         HeaderCenter
