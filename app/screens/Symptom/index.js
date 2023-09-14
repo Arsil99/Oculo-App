@@ -18,7 +18,7 @@ const Symptom = ({ navigation, eventId, route }) => {
         HeaderCenter
         leftText={'Back'}
         leftBtnPress={() => {
-          navigation.goBack();
+          navigation.navigate('Events');
         }}
       />
       <View

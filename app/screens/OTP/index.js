@@ -24,6 +24,7 @@ export default function OTP({ navigation, route }) {
   const email = route?.params?.email || '';
   const phone = route?.params?.phone || '';
   const medium = route?.params?.medium || '';
+  console.log('🚀 ~ file: index.js:27 ~ OTP ~ medium:', medium);
   const password = route?.params?.password || '';
   const from = route?.params?.from || '';
   const [timer, setTimer] = useState(60);
@@ -175,7 +176,9 @@ export default function OTP({ navigation, route }) {
           tintColor={BaseColors.primary}
         />
         <Text style={{ fontSize: 18 }}>Code has sent to</Text>
-        <Text style={{ fontSize: 18 }}>{email}</Text>
+        <Text style={{ fontSize: 18 }}>
+          {medium === 'Email' ? email : phone}
+        </Text>
       </View>
       <View style={{ height: 100, marginVertical: 25 }}>
         <OTPInputView

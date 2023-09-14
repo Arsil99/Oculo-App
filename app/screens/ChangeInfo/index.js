@@ -23,7 +23,6 @@ export default function ChangeInfo({ navigation, route }) {
   const [selectedValues, setSelectedValues] = useState({}); // Initialize selectedValues as an empty object
   const eventId = route?.params?.event_id;
   const [response, setResponse] = useState('');
-  const [editHistory, setEditHistory] = useState(true);
   const [rightHistoryText, setRightHistoryText] = useState('Edit');
   const [loader, setLoader] = useState(true);
   const [questionList, setQuestionList] = useState([]);
@@ -41,11 +40,6 @@ export default function ChangeInfo({ navigation, route }) {
   const handleResponseChange = text => {
     setResponse(text);
     setResponseError('');
-  };
-
-  const HandleHistoryUpdateBtn = () => {
-    setEditHistory(!editHistory);
-    setRightHistoryText(rightHistoryText === 'Edit' ? 'Save' : 'Edit');
   };
 
   useEffect(() => {
@@ -197,7 +191,31 @@ export default function ChangeInfo({ navigation, route }) {
       setLoader(false);
     }
   };
+  const handleSubmit = () => {
+    const selectedOptions = Object.values(selectedValues);
 
+    if (selectedOptions.every(value => value !== 1)) {
+      // No checkbox is selected, show an error message
+      Toast.show({
+        text1: 'Please select at least one checkbox.',
+        type: 'error',
+      });
+    } else if (response.trim() === '') {
+      setResponseError('Please enter a description before submitting.');
+    } else {
+      // Clear the validation error message if the input is valid
+      setResponseError('');
+      submitData(); // Submit data if validation passes
+
+      // Navigate to the 'Symptom' screen if data.symptom_info === 0
+      if (data.symptom_info === 0) {
+        navigation.navigate('Symptom', {
+          event_id: data?.id,
+          otherData: data,
+        });
+      }
+    }
+  };
   return (
     <View
       style={[
@@ -212,9 +230,9 @@ export default function ChangeInfo({ navigation, route }) {
       <HeaderBar
         HeaderText={'Treatment Information'}
         HeaderCenter
-        leftText={editHistory ? 'Cancel' : ''}
+        leftText={'Cancel'}
         leftBtnPress={() => {
-          navigation.goBack();
+          navigation.navigate('Events');
         }}
       />
 
@@ -292,14 +310,7 @@ export default function ChangeInfo({ navigation, route }) {
                 shape="round"
                 title={'Next'}
                 onPress={() => {
-                  setEditHistory(false);
-                  validateForm();
-                  data.symptom_info === 0
-                    ? navigation.navigate('Symptom', {
-                        event_id: data?.id,
-                        otherData: data,
-                      })
-                    : null;
+                  handleSubmit();
                 }}
               />
             </View>

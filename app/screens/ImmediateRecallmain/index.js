@@ -26,7 +26,7 @@ const ImmediateRecallmain = ({ navigation, route }) => {
         HeaderText={'Digits Backwards'}
         leftText={'Cancel'}
         leftBtnPress={() => {
-          navigation.goBack();
+          navigation.navigate('Events');
         }}
         HeaderCenter
       />

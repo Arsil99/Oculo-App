@@ -21,7 +21,14 @@ const ImmediateRecall = ({ navigation, route }) => {
         },
       ]}
     >
-      <HeaderBar HeaderText={'Immediate Recall'} HeaderCenter />
+      <HeaderBar
+        HeaderText={'Immediate Recall'}
+        leftText={'Cancel'}
+        leftBtnPress={() => {
+          navigation.navigate('Events');
+        }}
+        HeaderCenter
+      />
       <View
         style={{ borderBottomColor: BaseColors.white, borderBottomWidth: 0.3 }}
       />

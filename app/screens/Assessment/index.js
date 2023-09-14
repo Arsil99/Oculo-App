@@ -77,6 +77,7 @@ const Assessment = ({ navigation, route }) => {
       });
     }
   };
+
   return (
     <View
       style={[
@@ -88,23 +89,11 @@ const Assessment = ({ navigation, route }) => {
     >
       <HeaderBar
         HeaderText={
-          data?.symptom_info +
-            data?.immediate_recall +
-            data?.digit_recall +
-            data.treatment_info ===
-          0
+          data.treatment_info === 0
             ? 'Assessment 1'
-            : data?.symptom_info +
-                data?.immediate_recall +
-                data?.digit_recall +
-                data.treatment_info ===
-              1
+            : data?.symptom_info === 0
             ? 'Assessment 2'
-            : data?.symptom_info +
-                data?.immediate_recall +
-                data?.digit_recall +
-                data.treatment_info ===
-              2
+            : data?.immediate_recall === 0
             ? 'Assessment 3'
             : 'Assessment 4'
         }
@@ -117,7 +106,6 @@ const Assessment = ({ navigation, route }) => {
       <View
         style={{ borderBottomColor: BaseColors.white, borderBottomWidth: 0.3 }}
       ></View>
-
       <View style={{ flex: 1, marginHorizontal: 25 }}>
         <View
           style={{
