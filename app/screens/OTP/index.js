@@ -19,6 +19,7 @@ import { useDispatch } from 'react-redux';
 import { isEmpty } from 'lodash';
 import { storeCredentials } from '@utils/CommonFunction';
 import { BaseColors } from '@config/theme';
+import BackgroundTimer from 'react-native-background-timer';
 
 export default function OTP({ navigation, route }) {
   const email = route?.params?.email || '';
@@ -32,11 +33,12 @@ export default function OTP({ navigation, route }) {
   const [resend, setResend] = useState(false);
   useEffect(() => {
     if (timer > 0) {
-      const interval = setInterval(() => {
+      BackgroundTimer.start();
+      const interval = BackgroundTimer.setInterval(() => {
         setTimer(prevTimer => prevTimer - 1);
       }, 1000);
 
-      return () => clearInterval(interval);
+      return () => BackgroundTimer.clearInterval(interval);
     }
   }, [timer, resend]);
 
@@ -206,7 +208,10 @@ export default function OTP({ navigation, route }) {
         loading={loader}
       />
       <View style={styles.resend}>
-        <TouchableOpacity onPress={() => resend && generateOTP()}>
+        <TouchableOpacity
+          disabled={!resend ? true : false}
+          onPress={() => resend && generateOTP()}
+        >
           <Text
             style={{
               color: resend ? BaseColors.primary : BaseColors.lightGrey,

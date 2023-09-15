@@ -43,7 +43,7 @@ const TwofactorEnabled = ({ navigation }) => {
   // generate OTP
   const generateOTP = async () => {
     setLoader(true);
-    let endPoints = BaseSetting.endpoints.generateOtp;
+    let endPoints = BaseSetting.endpoints.enable2FA;
     const params = {
       value: value === 'Email' ? userData?.email : patientPhone,
       type: value === 'Email' ? 'email' : 'phone',

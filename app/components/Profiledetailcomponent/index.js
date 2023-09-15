@@ -271,7 +271,7 @@ const Profiledetailcomponent = (props, ref) => {
       first_name: firstName,
       middle_name: middleName,
       last_name: lastName,
-      dob: birthDate,
+      dob: birthDate.replace(/\//g, '-'),
       phone: patientPhone,
       email: patientemail,
       user_id: userData?.id?.toString(),
@@ -362,25 +362,17 @@ const Profiledetailcomponent = (props, ref) => {
           ]}
         >
           <View style={styles.topBar}>
-            {userData.profile_pic ? (
-              <Image
-                source={{
-                  uri: isNull(selectedImage)
-                    ? userData.profile_pic
-                    : selectedImage?.path,
-                }}
-                resizeMode="cover"
-                style={styles.profilePic}
-              />
-            ) : (
-              <View style={styles.placeholderImage}>
-                <Image
-                  source={Images.avatar}
-                  resizeMode="cover"
-                  style={styles.userDp}
-                />
-              </View>
-            )}
+            <Image
+              source={
+                !isNull(userData?.profile_pic)
+                  ? { uri: userData?.profile_pic }
+                  : selectedImage?.path !== undefined
+                  ? { uri: selectedImage?.path }
+                  : Images.avatar
+              }
+              resizeMode="cover"
+              style={styles.profilePic}
+            />
             <TouchableOpacity
               onPress={handleImagePicker}
               activeOpacity={BaseSetting.buttonOpacity}
