@@ -48,4 +48,15 @@ export default StyleSheet.create({
     height: 200,
     width: 200,
   },
+  scrollViewStyle: {
+    flexGrow: 1,
+    paddingTop: 30,
+    paddingHorizontal: 25,
+    marginTop: 1,
+  },
+  imgContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
 });

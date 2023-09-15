@@ -12,7 +12,7 @@ const Symptom = ({ navigation, eventId, route }) => {
   const data = route?.params?.otherData;
   const { darkmode } = useSelector(state => state.auth);
   return (
-    <ScrollView
+    <View
       style={[
         styles.main,
         {
@@ -28,16 +28,18 @@ const Symptom = ({ navigation, eventId, route }) => {
           navigation.navigate('Events');
         }}
       />
-      <View
-        style={{
-          paddingTop: 30,
-          flexGrow: 1,
-          paddingHorizontal: 25,
-          marginTop: 1,
-          backgroundColor: darkmode ? BaseColors.lightBlack : BaseColors.white,
-        }}
+      <ScrollView
+        style={[
+          styles.scrollViewStyle,
+          {
+            backgroundColor: darkmode
+              ? BaseColors.lightBlack
+              : BaseColors.white,
+          },
+        ]}
+        keyboardShouldPersistTaps="handled"
       >
-        <View style={{ flex: 0.1 }}>
+        <View style={{ flex: 1 }}>
           <Text
             style={[
               styles.titleText,
@@ -72,13 +74,7 @@ const Symptom = ({ navigation, eventId, route }) => {
           >
             Example:
           </Text>
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 20,
-            }}
-          >
+          <View style={styles.imgContainer}>
             <Image
               source={Images.sliderimage}
               resizeMode="contain"
@@ -99,8 +95,8 @@ const Symptom = ({ navigation, eventId, route }) => {
             }}
           />
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 

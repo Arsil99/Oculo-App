@@ -1,23 +1,25 @@
 import Button from '@components/Button';
 import HeaderBar from '@components/HeaderBar';
-import Symptom from '@components/Symptom';
 import BaseSetting from '@config/setting';
 import { BaseColors } from '@config/theme';
 import { getApiData } from '@utils/apiHelper';
-import { isArray, isEmpty } from 'lodash';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
-import { ActivityIndicator, FlatList, Image } from 'react-native';
-import { View, StatusBar, Text, TouchableOpacity } from 'react-native';
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
+import { View, StatusBar, Text } from 'react-native';
 import { useSelector } from 'react-redux';
 import styles from './styles';
 import { CheckBox } from 'react-native-elements';
 import LabeledInput from '@components/LabeledInput';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
-import { Images } from '@config';
 
 export default function ChangeInfo({ navigation, route }) {
+  const IOS = Platform.OS === 'ios';
   const data = route?.params?.otherData;
   const { userData, darkmode } = useSelector(state => state.auth);
   const [selectedValues, setSelectedValues] = useState({}); // Initialize selectedValues as an empty object
@@ -236,7 +238,8 @@ export default function ChangeInfo({ navigation, route }) {
         }}
       />
 
-      <View
+      <KeyboardAvoidingView
+        behavior={IOS ? 'padding' : 'height'}
         style={[
           styles.mainDiv,
           { backgroundColor: darkmode ? BaseColors.black : BaseColors.white },
@@ -249,7 +252,10 @@ export default function ChangeInfo({ navigation, route }) {
             animating={true}
           />
         ) : (
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+          >
             <Text
               style={[
                 styles.subtitleText,
@@ -316,7 +322,7 @@ export default function ChangeInfo({ navigation, route }) {
             </View>
           </ScrollView>
         )}
-      </View>
+      </KeyboardAvoidingView>
     </View>
   );
 }
