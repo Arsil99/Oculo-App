@@ -163,7 +163,7 @@ const ProfilehistoryButton = (props, ref) => {
     const updatedQuestions = [...questionList];
     // Check if the clicked checkbox is the "None" checkbox
     if (updatedQuestions[index].meta_name === 'None_Ther') {
-      setIsNoneCheckboxSelected(updatedQuestions[index].isChecked);
+      setIsNoneCheckboxSelected(!isNoneCheckboxSelected);
     }
 
     // Toggle the isChecked value for the clicked question
@@ -371,7 +371,9 @@ const ProfilehistoryButton = (props, ref) => {
               }}
             >{`Ans: ${item?.answer || '-'}`}</Text>
           )
-        ) : isNoneCheckboxSelected && item.type === '3' ? (
+        ) : !isNoneCheckboxSelected &&
+          item.type === '3' &&
+          item.meta_name === 'Prev_Ther_Comm' ? (
           // Render another text input for type 3
           editHistory ? (
             <LabeledInput
@@ -496,7 +498,7 @@ const ProfilehistoryButton = (props, ref) => {
             {/* Your main content */}
             {questionList.length > 0 ? (
               // Check if isNoneCheckboxSelected is true
-              !isNoneCheckboxSelected ? (
+              isNoneCheckboxSelected ? (
                 // Create a copy of questionList and remove the last item
                 [...questionList].slice(0, -1).map((item, index) => {
                   const type_arr =
@@ -514,7 +516,7 @@ const ProfilehistoryButton = (props, ref) => {
                           { label: 'Undiagnosed', value: 2 },
                         ];
                   return item?.parent_meta_name
-                    ? questionList.map((itemM, indexM) => {
+                    ? [...questionList].slice(0, -1).map((itemM, indexM) => {
                         console.log('itemM', itemM);
                         return (
                           item?.parent_meta_name === itemM?.meta_name &&
