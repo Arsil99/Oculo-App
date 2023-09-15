@@ -35,7 +35,7 @@ import { getDate } from '@utils/CommonFunction';
 import BaseSetting from '@config/setting';
 import { getApiData } from '@utils/apiHelper';
 import LabeledInput from '@components/LabeledInput';
-import { isEmpty } from 'lodash';
+import { isEmpty, isUndefined } from 'lodash';
 
 let MOVE_DOT = true;
 let currentIndexEyeTracking = [];
@@ -349,29 +349,58 @@ fixDurScreen	= t	Average fixation duration on screen
 
   const [revisit, setRevisit] = useState(0);
 
+  // this function for handle symptoms while change from tabs
+  function symptomsChange(index) {
+    setActiveButtonIndex(index);
+    const nData = symptomArray[index];
+    if (nData) {
+      setSliderValue([nData?.finalScore + 2]); // this value set for slider
+    }
+  }
+
   // Handle On Symptom Change
   const handleSymptomChange = index => {
-    if (!count && index > activeButtonIndex) {
+    const updatedSymptomArray = [...symptomArray];
+    if (
+      (isEmpty(updatedSymptomArray[index - 1]) ||
+        isUndefined(updatedSymptomArray[index - 1])) &&
+      !count &&
+      index > activeButtonIndex
+    ) {
       Toast.show({
         text1: 'Please select any range.',
         type: 'error',
       });
     } else {
-      const sliderObject = {
-        symptom: meta[index - 1],
-        initialScore: initValue,
-        scoreChng: count,
-        finalScore: lastValue,
-        durScreen: duration,
-        pageRevisitInt: revisit,
-      };
+      let sliderObject = {};
+      if (updatedSymptomArray[index]) {
+        // this logic for manage data if user again come to a particular tab
+        const obj = { ...updatedSymptomArray[index] };
+        sliderObject = { ...updatedSymptomArray[index] };
+        sliderObject.durScreen = obj?.durScreen + duration;
+        sliderObject.finalScore = lastValue;
+        sliderObject.initialScore = obj?.finalScore;
+        sliderObject.pageRevisitIn = revisit;
+        sliderObject.scoreChng = count;
+        if (sliderObject) {
+          setSliderValue([sliderObject?.initialScore + 2]);
+        }
+      } else {
+        sliderObject = {
+          symptom: meta[index - 1],
+          initialScore: initValue,
+          scoreChng: count,
+          finalScore: lastValue,
+          durScreen: duration,
+          pageRevisitInt: revisit,
+        };
+      }
 
       stateArray.forEach(state => {
         const updatedState = updateStateDynamically(state, sliderObject);
         stateUpdater(state, updatedState);
       });
 
-      const updatedSymptomArray = [...symptomArray];
       if (updatedSymptomArray[index - 1]) {
         updatedSymptomArray[index - 1] = {
           ...updatedSymptomArray[index - 1],
@@ -389,12 +418,15 @@ fixDurScreen	= t	Average fixation duration on screen
         handleUploadAssessmentData();
         currentIndexEyeTracking = [];
         setActiveButtonIndex(index);
-        flatListRef.current.scrollToIndex({ index, animated: true });
+        flatListRef?.current?.scrollToIndex({ index, animated: true });
       } else {
         setTakeBoolean(true);
       }
-      setDuration(0);
-      ResetValues();
+      if (updatedSymptomArray[index]) {
+      } else {
+        setDuration(0);
+        ResetValues();
+      }
     }
   };
 
@@ -795,9 +827,18 @@ fixDurScreen	= t	Average fixation duration on screen
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     renderItem={({ item, index }) => (
-                      <View style={styles.buttoncontainer}>
+                      <View
+                        style={[
+                          styles.buttoncontainer,
+                          { opacity: index > activeButtonIndex ? 0.5 : 1 },
+                        ]}
+                      >
                         <TouchableOpacity
-                          onPress={() => handleSymptomChange(index)}
+                          onPress={() =>
+                            index > activeButtonIndex
+                              ? null
+                              : symptomsChange(index)
+                          }
                           style={[
                             {
                               backgroundColor:
@@ -810,7 +851,11 @@ fixDurScreen	= t	Average fixation duration on screen
                               width: item.length < 12 ? 131 : item.length * 12,
                             },
                           ]}
-                          activeOpacity={BaseSetting.buttonOpacity}
+                          activeOpacity={
+                            index > activeButtonIndex
+                              ? 1
+                              : BaseSetting.buttonOpacity
+                          }
                         >
                           <Text
                             style={[
