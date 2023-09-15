@@ -15,15 +15,15 @@ import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { CheckBox } from 'react-native-elements';
 
 const ProfilehistoryButton = (props, ref) => {
+  const [isNoneCheckboxSelected, setIsNoneCheckboxSelected] = useState(false);
   const { darkmode, userData } = useSelector(state => state.auth);
   const isFocused = useIsFocused();
   const { editHistory, handleSuccess } = props;
   const [loader, setLoader] = useState(true);
   const [data, setData] = useState({});
   const [questionList, setQuestionList] = useState([]);
-  console.log(
-    '🚀 ~ file: index.js:23 ~ ProfilehistoryButton ~ questionList:',
-    questionList,
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState(
+    new Array(questionList?.length).fill(false),
   );
 
   useEffect(() => {
@@ -161,6 +161,10 @@ const ProfilehistoryButton = (props, ref) => {
   const handleCheckBoxChange = index => {
     // Make a copy of the current state or data
     const updatedQuestions = [...questionList];
+    // Check if the clicked checkbox is the "None" checkbox
+    if (updatedQuestions[index].meta_name === 'None_Ther') {
+      setIsNoneCheckboxSelected(updatedQuestions[index].isChecked);
+    }
 
     // Toggle the isChecked value for the clicked question
     updatedQuestions[index].isChecked = !updatedQuestions[index].isChecked;
@@ -190,9 +194,19 @@ const ProfilehistoryButton = (props, ref) => {
 
     // Update the state or data with the modified question list
     setQuestionList(updatedQuestions);
+
+    // Update the selectedCheckboxes state based on the updated question list
+    const selected = updatedQuestions
+      .filter(item => item.isChecked)
+      .map(item => item.question); // Store question text in selectedCheckboxes
+
+    setSelectedCheckboxes(selected);
   };
 
   const renderQuestion = (item, index, type_arr) => {
+    const isNoneCheckbox = item.meta_name === 'None_Ther';
+    const isLastQuestion = index === questionList.length - 1;
+
     return (
       <View
         key={index}
@@ -214,7 +228,18 @@ const ProfilehistoryButton = (props, ref) => {
                 />
               </View>
             </View>
-          ) : null
+          ) : (
+            <Text
+              style={{
+                fontWeight: 'bold',
+                color: darkmode ? BaseColors.white : BaseColors.textColor,
+              }}
+            >
+              {selectedCheckboxes.includes(item.question)
+                ? `Ans: ${item.question}`
+                : null}
+            </Text>
+          )
         ) : (
           <Text
             style={[
@@ -346,9 +371,7 @@ const ProfilehistoryButton = (props, ref) => {
               }}
             >{`Ans: ${item?.answer || '-'}`}</Text>
           )
-        ) : item.type === '3' &&
-          item.meta_name === 'Prev_Ther_Comm' &&
-          !item.isChecked ? (
+        ) : isNoneCheckboxSelected && item.type === '3' ? (
           // Render another text input for type 3
           editHistory ? (
             <LabeledInput
@@ -472,34 +495,68 @@ const ProfilehistoryButton = (props, ref) => {
           >
             {/* Your main content */}
             {questionList.length > 0 ? (
-              questionList.map((item, index) => {
-                const type_arr =
-                  item?.meta_name === 'HI_Recov'
-                    ? [
-                        { label: '7 to 10 days', value: 1 },
-                        { label: '2 weeks to 1 month', value: 2 },
-                        { label: '1 to 6 months', value: 3 },
-                        { label: 'greater than 6 months', value: 4 },
-                        { label: 'greater than', value: 5 },
-                      ]
-                    : [
-                        { label: 'Yes', value: 1 },
-                        { label: 'No', value: 0 },
-                        { label: 'Undiagnosed', value: 2 },
-                      ];
-                return item?.parent_meta_name
-                  ? questionList.map((itemM, indexM) => {
-                      console.log('itemM', itemM);
-                      return (
-                        item?.parent_meta_name === itemM?.meta_name &&
-                        (itemM?.meta_name === 'None_Ther'
-                          ? itemM?.answer === 0
-                          : itemM?.answer === 1) &&
-                        renderQuestion(item, index, type_arr)
-                      );
-                    })
-                  : renderQuestion(item, index, type_arr);
-              })
+              // Check if isNoneCheckboxSelected is true
+              !isNoneCheckboxSelected ? (
+                // Create a copy of questionList and remove the last item
+                [...questionList].slice(0, -1).map((item, index) => {
+                  const type_arr =
+                    item?.meta_name === 'HI_Recov'
+                      ? [
+                          { label: '7 to 10 days', value: 1 },
+                          { label: '2 weeks to 1 month', value: 2 },
+                          { label: '1 to 6 months', value: 3 },
+                          { label: 'greater than 6 months', value: 4 },
+                          { label: 'greater than', value: 5 },
+                        ]
+                      : [
+                          { label: 'Yes', value: 1 },
+                          { label: 'No', value: 0 },
+                          { label: 'Undiagnosed', value: 2 },
+                        ];
+                  return item?.parent_meta_name
+                    ? questionList.map((itemM, indexM) => {
+                        console.log('itemM', itemM);
+                        return (
+                          item?.parent_meta_name === itemM?.meta_name &&
+                          (itemM?.meta_name === 'None_Ther'
+                            ? itemM?.answer === 0
+                            : itemM?.answer === 1) &&
+                          renderQuestion(item, index, type_arr)
+                        );
+                      })
+                    : renderQuestion(item, index, type_arr);
+                })
+              ) : (
+                // Use the original questionList without modifications
+                questionList.map((item, index) => {
+                  const type_arr =
+                    item?.meta_name === 'HI_Recov'
+                      ? [
+                          { label: '7 to 10 days', value: 1 },
+                          { label: '2 weeks to 1 month', value: 2 },
+                          { label: '1 to 6 months', value: 3 },
+                          { label: 'greater than 6 months', value: 4 },
+                          { label: 'greater than', value: 5 },
+                        ]
+                      : [
+                          { label: 'Yes', value: 1 },
+                          { label: 'No', value: 0 },
+                          { label: 'Undiagnosed', value: 2 },
+                        ];
+                  return item?.parent_meta_name
+                    ? questionList.map((itemM, indexM) => {
+                        console.log('itemM', itemM);
+                        return (
+                          item?.parent_meta_name === itemM?.meta_name &&
+                          (itemM?.meta_name === 'None_Ther'
+                            ? itemM?.answer === 0
+                            : itemM?.answer === 1) &&
+                          renderQuestion(item, index, type_arr)
+                        );
+                      })
+                    : renderQuestion(item, index, type_arr);
+                })
+              )
             ) : (
               <View
                 style={{

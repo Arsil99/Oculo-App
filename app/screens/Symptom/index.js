@@ -41,7 +41,7 @@ const Symptom = ({ navigation, eventId, route }) => {
           <Text
             style={[
               styles.titleText,
-              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+              { color: darkmode ? BaseColors.white : BaseColors.black },
             ]}
           >
             Report your symptoms
@@ -67,7 +67,7 @@ const Symptom = ({ navigation, eventId, route }) => {
           <Text
             style={[
               styles.titleText,
-              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+              { color: darkmode ? BaseColors.white : BaseColors.black },
             ]}
           >
             Example:

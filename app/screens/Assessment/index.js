@@ -31,15 +31,9 @@ const Assessment = ({ navigation, route }) => {
         otherData: data,
       });
     } else if (data.immediate_recall === 1) {
-      navigation.navigate('ImmediateRecallmain', {
-        event_id: data?.id,
-        otherData: data,
-      });
+      null;
     } else if (data.immediate_recall === null) {
-      navigation.navigate('ImmediateRecallmain', {
-        event_id: data?.id,
-        otherData: data,
-      });
+      null;
     }
 
     if (data.symptom_info === 0) {
@@ -49,15 +43,9 @@ const Assessment = ({ navigation, route }) => {
         otherData: data,
       });
     } else if (data.symptom_info === 1) {
-      navigation.navigate('ImmediateRecall', {
-        event_id: data?.id,
-        otherData: data,
-      });
+      null;
     } else if (data.symptom_info === null) {
-      navigation.navigate('ImmediateRecall', {
-        event_id: data?.id,
-        otherData: data,
-      });
+      null;
     }
     if (data.treatment_info === 0) {
       // Navigate to treatment_info screen
@@ -66,15 +54,9 @@ const Assessment = ({ navigation, route }) => {
         otherData: data,
       });
     } else if (data.treatment_info === 1) {
-      navigation.navigate('Symptom', {
-        event_id: data?.id,
-        otherData: data,
-      });
+      null;
     } else if (data.treatment_info === null) {
-      navigation.navigate('Symptom', {
-        event_id: data?.id,
-        otherData: data,
-      });
+      null;
     }
   };
 
@@ -95,7 +77,9 @@ const Assessment = ({ navigation, route }) => {
             ? 'Assessment 2'
             : data?.immediate_recall === 0
             ? 'Assessment 3'
-            : 'Assessment 4'
+            : data?.immediate_recall === 0
+            ? 'Assessment 4'
+            : 'Assessment'
         }
         HeaderCenter
         leftText="Back"
