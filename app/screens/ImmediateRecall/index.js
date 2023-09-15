@@ -29,9 +29,7 @@ const ImmediateRecall = ({ navigation, route }) => {
         }}
         HeaderCenter
       />
-      <View
-        style={{ borderBottomColor: BaseColors.white, borderBottomWidth: 0.3 }}
-      />
+
       <ScrollView
         contentContainerStyle={[
           styles.topcontainer,

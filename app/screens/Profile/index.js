@@ -334,12 +334,7 @@ export default function Profile({ navigation }) {
           subTabSize={BaseSetting.nWidth * 0.3}
         />
       </View>
-      <View
-        style={{
-          borderBottomColor: BaseColors.white30,
-          borderBottomWidth: 0.3,
-        }}
-      ></View>
+
       <KeyboardAvoidingView
         behavior={IOS ? 'padding' : 'height'}
         style={{

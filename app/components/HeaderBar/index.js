@@ -140,9 +140,14 @@ const HeaderBar = ({
           ) : null}
         </View>
       </View>
-      {/* <View
-        style={{ borderBottomColor: BaseColors.white, borderBottomWidth: 0.5 }}
-      ></View> */}
+      <View
+        style={{
+          borderBottomColor: !darkmode
+            ? BaseColors.white
+            : BaseColors.textColor,
+          borderBottomWidth: 0.5,
+        }}
+      ></View>
     </View>
   );
 };

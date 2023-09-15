@@ -240,14 +240,7 @@ const ResetPassword = ({ navigation, route }) => {
           }}
         />
       )}
-      {from === 'profile' && (
-        <View
-          style={{
-            borderBottomColor: BaseColors.white,
-            borderBottomWidth: 0.3,
-          }}
-        ></View>
-      )}
+
       <ScrollView
         contentContainerStyle={{
           flex: 1,

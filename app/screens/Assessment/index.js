@@ -87,9 +87,7 @@ const Assessment = ({ navigation, route }) => {
           navigation.goBack();
         }}
       />
-      <View
-        style={{ borderBottomColor: BaseColors.white, borderBottomWidth: 0.3 }}
-      ></View>
+
       <View style={{ flex: 1, marginHorizontal: 25 }}>
         <View
           style={{
