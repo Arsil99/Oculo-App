@@ -362,17 +362,26 @@ const Profiledetailcomponent = (props, ref) => {
           ]}
         >
           <View style={styles.topBar}>
-            <Image
-              source={
-                !isNull(userData?.profile_pic)
-                  ? { uri: userData?.profile_pic }
-                  : selectedImage?.path !== undefined
-                  ? { uri: selectedImage?.path }
-                  : Images.avatar
-              }
-              resizeMode="cover"
-              style={styles.profilePic}
-            />
+            {userData.profile_pic ? (
+              <Image
+                source={{
+                  uri: isNull(selectedImage)
+                    ? userData.profile_pic
+                    : selectedImage?.path,
+                }}
+                resizeMode="cover"
+                style={styles.profilePic}
+              />
+            ) : (
+              <View style={styles.placeholderImage}>
+                <Image
+                  source={Images.avatar}
+                  resizeMode="cover"
+                  style={styles.userDp}
+                />
+              </View>
+            )}
+
             <TouchableOpacity
               onPress={handleImagePicker}
               activeOpacity={BaseSetting.buttonOpacity}
