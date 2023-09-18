@@ -135,7 +135,7 @@ const ProfilehistoryButton = (props, ref) => {
         {
           patientId: userData.id,
           answers: JSON.stringify([data]),
-          created_from: 'App',
+          created_from: 'app',
         },
         '',
         false,
@@ -449,7 +449,10 @@ const ProfilehistoryButton = (props, ref) => {
           </View>
         ) : null}
         {/* Render error message if any */}
-        {item.error ? (
+        {/* Render error message if any */}
+        {item.error &&
+        !isNoneCheckboxSelected &&
+        index < questionList.length - 8 ? (
           <Text style={{ color: BaseColors.red, marginBottom: 5 }}>
             This question is mandatory
           </Text>
