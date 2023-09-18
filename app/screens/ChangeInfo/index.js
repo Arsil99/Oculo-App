@@ -82,24 +82,25 @@ export default function ChangeInfo({ navigation, route }) {
       // Set the value of "Add_Ther_Comm" to the content of the regular text input
       updatedValues.Add_Ther_Comm = response;
     } else if (question === 'None') {
-      // Clear the value of other options when "None" is selected
+      // If "None" is selected, set it to 1, and set all other options to 0
       Object.keys(updatedValues).forEach(key => {
-        if (key !== metaName) {
+        if (key === metaName || key === 'None') {
+          updatedValues[key] = isNoneSelected ? 0 : 1;
+        } else {
           updatedValues[key] = 0;
         }
       });
 
-      // Set the value for "None" to 1 when it's selected
-      updatedValues[metaName] = isNoneSelected ? 0 : 1;
-
       // Update the state for selected questions and other related states
       setSelectedValues(updatedValues);
       setIsNoneSelected(!isNoneSelected);
-      setSelectedQuestions([]);
       setShowCustomResponse(false);
       setResponse('');
       setResponseError('');
     } else {
+      // If a regular checkbox is selected, clear the "None" option
+      updatedValues['None'] = 0;
+
       // Toggle the selected value between 1 and 0
       updatedValues[metaName] = updatedValues[metaName] === 1 ? 0 : 1;
 
@@ -242,7 +243,11 @@ export default function ChangeInfo({ navigation, route }) {
         behavior={IOS ? 'padding' : 'height'}
         style={[
           styles.mainDiv,
-          { backgroundColor: darkmode ? BaseColors.black : BaseColors.white },
+          {
+            backgroundColor: darkmode
+              ? BaseColors.lightBlack
+              : BaseColors.white,
+          },
         ]}
       >
         {loader ? (
@@ -284,6 +289,7 @@ export default function ChangeInfo({ navigation, route }) {
                       if (item.question === 'None') {
                         setIsNoneSelected(!isNoneSelected);
                         setSelectedQuestions([]);
+                        setSelectedValues({ None: 1 });
                         setShowCustomResponse(false);
                       } else {
                         handleCheckBoxToggle(item.id, item.question);
