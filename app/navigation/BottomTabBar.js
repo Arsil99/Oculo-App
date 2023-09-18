@@ -14,7 +14,7 @@ import AIcon from 'react-native-vector-icons/AntDesign';
 import IIcon from 'react-native-vector-icons/Ionicons';
 import MIcon from 'react-native-vector-icons/MaterialIcons';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import FIcon from 'react-native-vector-icons/FontAwesome5';
+
 import * as Animatable from 'react-native-animatable';
 import { BaseColors, BaseStyles, FontFamily } from '@config/theme';
 import { useSelector } from 'react-redux';
@@ -98,9 +98,13 @@ export default function BottomTabBar({ state, descriptors, navigation }) {
               }}
             >
               {!isFocused ? (
-                <AIcon size={26} color={tabIconColor} name="calendar" />
+                <MCIcon
+                  size={26}
+                  color={tabIconColor}
+                  name="head-cog-outline"
+                />
               ) : (
-                <FIcon size={26} color={tabIconColor} name="calendar-alt" />
+                <MCIcon size={32} color={tabIconColor} name="head-cog" />
               )}
             </Text>
           </Animatable.View>

@@ -160,8 +160,6 @@ const Profiledetailcomponent = (props, ref) => {
     setDate(currentDate);
     if (event?.type === 'set') {
       setBirthDate(moment(currentDate).format('MM-DD-YYYY'));
-      const formattedDate = currentDate.toLocaleDateString('en-GB');
-      setBirthDate(formattedDate);
     }
 
     // Reset the error state when a valid date is selected
@@ -249,6 +247,19 @@ const Profiledetailcomponent = (props, ref) => {
       error.g_emailErrMsg = 'Please enter valid emaill';
     }
 
+    if (
+      isEmpty(firstName) ||
+      isEmpty(lastName) ||
+      isEmpty(birthDate) ||
+      isEmpty(sexValue) ||
+      isEmpty(patientPhone) ||
+      isEmpty(patientemail)
+    ) {
+      Toast.show({
+        text1: 'Please fill all required field',
+        type: 'error',
+      });
+    }
     setErrObj(error);
     if (Valid) {
       onSuccess();
@@ -275,10 +286,10 @@ const Profiledetailcomponent = (props, ref) => {
       phone: patientPhone,
       email: patientemail,
       user_id: userData?.id?.toString(),
-      emergency_phone: guardianPhone,
-      emergency_email: guardianemail,
+      emergency_phone: guardianPhone ? guardianPhone : null,
+      emergency_email: guardianemail ? guardianemail : null,
       gender: value,
-      pronouns: selectedpronounsKey,
+      pronouns: selectedpronounsKey ? selectedpronounsKey : null,
       sex: selectedsexKey,
     };
 
@@ -362,7 +373,7 @@ const Profiledetailcomponent = (props, ref) => {
           ]}
         >
           <View style={styles.topBar}>
-            {userData.profile_pic ? (
+            {selectedImage || userData.profile_pic ? (
               <Image
                 source={{
                   uri: isNull(selectedImage)
@@ -381,7 +392,6 @@ const Profiledetailcomponent = (props, ref) => {
                 />
               </View>
             )}
-
             <TouchableOpacity
               onPress={handleImagePicker}
               activeOpacity={BaseSetting.buttonOpacity}
@@ -389,6 +399,22 @@ const Profiledetailcomponent = (props, ref) => {
             >
               <Icon size={17} name="camera" color={BaseColors.white} />
             </TouchableOpacity>
+            {(selectedImage || userData?.profile_pic) && (
+              <TouchableOpacity
+                style={{ marginTop: -25, marginBottom: 10 }}
+                onPress={() => {
+                  setSelectedImage(null);
+                  const newUserData = {
+                    ...userData,
+                    profile_pic: undefined,
+                  };
+                  setSelectedImage(null);
+                  dispatch(setUserData(newUserData));
+                }}
+              >
+                <Text>Remove</Text>
+              </TouchableOpacity>
+            )}
           </View>
           <LabeledInput
             Label={'First Name'}
@@ -396,6 +422,7 @@ const Profiledetailcomponent = (props, ref) => {
             usericon
             placeholder={'Enter first name'}
             value={firstName}
+            maxLength={20}
             onChangeText={val => {
               setFirstName(val);
               setErrObj(old => {
@@ -416,6 +443,7 @@ const Profiledetailcomponent = (props, ref) => {
             usericon
             placeholder={'Enter Middle name'}
             value={middleName}
+            maxLength={20}
             onChangeText={val => {
               setMiddleName(val);
               setErrObj(old => {
@@ -434,6 +462,7 @@ const Profiledetailcomponent = (props, ref) => {
             ref={pInfo2}
             isRequired
             Label={'Last Name'}
+            maxLength={20}
             usericon
             placeholder={'Enter last name'}
             value={lastName}
@@ -497,28 +526,28 @@ const Profiledetailcomponent = (props, ref) => {
               onChange={onChange}
             />
           )}
-          <View>
-            <Text
-              style={[
-                styles.genderTitle,
-                { color: darkmode ? BaseColors.white : BaseColors.black90 },
-              ]}
-            >
-              Gender
-            </Text>
 
-            <View style={[styles.genderBox, { zIndex: 50 }]}>
-              <Dropdown
-                items={genderdata}
-                open={open}
-                setOpen={setOpen}
-                placeholder="Please select gender type"
-                value={value}
-                setValue={setValue}
-                // onValueChange={handleDropdownChange}
-              />
-            </View>
+          <Text
+            style={[
+              styles.genderTitle,
+              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+            ]}
+          >
+            Gender
+          </Text>
+
+          <View style={[styles.genderBox, { zIndex: 50 }]}>
+            <Dropdown
+              items={genderdata}
+              open={open}
+              setOpen={setOpen}
+              placeholder="Please select gender type"
+              value={value}
+              setValue={setValue}
+              // onValueChange={handleDropdownChange}
+            />
           </View>
+
           <Text
             style={[
               styles.genderTitle,
