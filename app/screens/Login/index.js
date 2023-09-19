@@ -30,7 +30,7 @@ const Login = ({ navigation }) => {
   const dispatch = useDispatch();
   const cInputRef = useRef();
 
-  const [email, setEmail] = useState(__DEV__ ? 'sunny1@mailinator.com' : '');
+  const [email, setEmail] = useState(__DEV__ ? 'ajay1@mailinator.com' : '');
   const [password, setPassword] = useState(__DEV__ ? '123456789' : '');
   const [loader, setLoader] = useState(false);
 
@@ -196,7 +196,13 @@ const Login = ({ navigation }) => {
           clearData();
           setLoader(false);
         } else if (resp?.data?.enable_2fa) {
-          generateOTP(from, id, pass);
+          generateOTP(
+            from,
+            id,
+            pass,
+            resp?.data?.personal_info?.phone,
+            resp?.data?.personal_info?.two_factor_type,
+          );
         } else {
           storeCredentials(
             from === 'bio' ? id : email,
@@ -228,7 +234,7 @@ const Login = ({ navigation }) => {
   };
 
   // generate OTP
-  const generateOTP = async (from, id, pass) => {
+  const generateOTP = async (from, id, pass, phone, factorType) => {
     setLoader(true);
     let endPoints = BaseSetting.endpoints.generateOtp;
     const params = {
@@ -245,8 +251,9 @@ const Login = ({ navigation }) => {
         navigation.navigate('OTP', {
           email: from === 'bio' ? id : email,
           from: 'tfa',
+          phone: phone,
           password: from === 'bio' ? pass : password,
-          medium: 'Email',
+          medium: factorType,
         });
       } else {
         Toast.show({

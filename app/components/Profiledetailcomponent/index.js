@@ -406,7 +406,7 @@ const Profiledetailcomponent = (props, ref) => {
                   setSelectedImage(null);
                   const newUserData = {
                     ...userData,
-                    profile_pic: undefined,
+                    profile_pic: null,
                   };
                   setSelectedImage(null);
                   dispatch(setUserData(newUserData));

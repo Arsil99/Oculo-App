@@ -179,7 +179,7 @@ export default function OTP({ navigation, route }) {
         />
         <Text style={{ fontSize: 18 }}>Code has sent to</Text>
         <Text style={{ fontSize: 18 }}>
-          {medium === 'Email' ? email : phone}
+          {medium === 'email' ? email : phone}
         </Text>
       </View>
       <View style={{ height: 100, marginVertical: 25 }}>
