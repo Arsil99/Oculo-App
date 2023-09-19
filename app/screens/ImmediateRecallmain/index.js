@@ -1,5 +1,5 @@
-import { View, Text, StatusBar, ScrollView } from 'react-native';
-import React from 'react';
+import { View, Text, StatusBar, ScrollView, BackHandler } from 'react-native';
+import React, { useEffect } from 'react';
 import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
 import { Image } from 'react-native';
@@ -13,6 +13,21 @@ const ImmediateRecallmain = ({ navigation, route }) => {
   const data = route?.params?.otherData;
   const { darkmode } = useSelector(state => state.auth);
   const eventId = route?.params?.event_id;
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      handleBackPress,
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
+  const handleBackPress = () => {
+    // setShowConfirmation(true);
+    navigation.navigate('Events');
+    return true;
+  };
+
   return (
     <View
       style={[
@@ -25,9 +40,9 @@ const ImmediateRecallmain = ({ navigation, route }) => {
       <HeaderBar
         HeaderText={'Digits Backwards'}
         leftText={'Cancel'}
-        leftBtnPress={() => {
-          navigation.navigate('Events');
-        }}
+        // leftBtnPress={() => {
+        //   navigation.navigate('Events');
+        // }}
         HeaderCenter
       />
 

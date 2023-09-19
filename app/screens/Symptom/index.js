@@ -1,5 +1,5 @@
-import { View, Text, ScrollView } from 'react-native';
-import React from 'react';
+import { View, Text, ScrollView, BackHandler } from 'react-native';
+import React, { useEffect } from 'react';
 import styles from './styles';
 import Button from '@components/Button';
 import { Image } from 'react-native';
@@ -11,6 +11,22 @@ import { useSelector } from 'react-redux';
 const Symptom = ({ navigation, eventId, route }) => {
   const data = route?.params?.otherData;
   const { darkmode } = useSelector(state => state.auth);
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      handleBackPress,
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
+  const handleBackPress = () => {
+    // setShowConfirmation(true);
+    navigation.navigate('Events');
+    return true;
+  };
+
   return (
     <View
       style={[
@@ -23,10 +39,10 @@ const Symptom = ({ navigation, eventId, route }) => {
       <HeaderBar
         HeaderText={'Symptoms'}
         HeaderCenter
-        leftText={'Back'}
-        leftBtnPress={() => {
-          navigation.navigate('Events');
-        }}
+        // leftText={'Back'}
+        // leftBtnPress={() => {
+        //   handleBackPress();
+        // }}
       />
       <ScrollView
         style={[

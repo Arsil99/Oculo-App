@@ -348,6 +348,32 @@ const ProfilehistoryButton = (props, ref) => {
               }}
             >{`Ans: ${item?.answer || '-'}`}</Text>
           )
+        ) : item.meta_name === 'Other_Med_Hx_Comm' ? (
+          // Render text input for type 2
+          editHistory ? (
+            <LabeledInput
+              placeholder="Enter your response here"
+              value={item?.answer?.toString() || ''}
+              onChangeText={text => {
+                // Handle text input change
+                getAnswer(text, index);
+              }}
+              style={{
+                borderWidth: 1,
+                borderColor: 'gray',
+                padding: 8,
+                marginVertical: 5,
+                borderRadius: 5,
+              }}
+            />
+          ) : (
+            <Text
+              style={{
+                fontWeight: 'bold',
+                color: darkmode ? BaseColors.white : BaseColors.textColor,
+              }}
+            >{`Ans: ${item?.answer || '-'}`}</Text>
+          )
         ) : item.meta_name === 'Other_Ther' && item.isChecked ? (
           // Render text input for type 2
           editHistory ? (
@@ -450,9 +476,7 @@ const ProfilehistoryButton = (props, ref) => {
         ) : null}
         {/* Render error message if any */}
         {/* Render error message if any */}
-        {item.error &&
-        !isNoneCheckboxSelected &&
-        index < questionList.length - 8 ? (
+        {item.error ? (
           <Text style={{ color: BaseColors.red, marginBottom: 5 }}>
             This question is mandatory
           </Text>

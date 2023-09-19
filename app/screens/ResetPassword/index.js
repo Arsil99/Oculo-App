@@ -206,7 +206,7 @@ const ResetPassword = ({ navigation, route }) => {
       valid = false;
       setRetypepassErrObj({
         error: true,
-        msg: 'Retype password must same as setpassword ',
+        msg: 'Retype password must same as set password ',
       });
     } else {
       setRetypepassErrObj({
