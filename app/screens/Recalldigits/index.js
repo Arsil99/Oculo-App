@@ -34,6 +34,7 @@ export default function Recalldigits({ navigation, route }) {
   const [firstInputIncorrect, setFirstInputIncorrect] = useState(false);
   const [inputError, setInputError] = useState('');
   const textInputRef = useRef(null); // Create a ref for the text input
+  const [firstSetIncorrect, setFirstSetIncorrect] = useState(false);
 
   const [data, setData] = useState({
     event_id: eventId,
@@ -60,7 +61,7 @@ export default function Recalldigits({ navigation, route }) {
   const onToggleDisplay = () => {
     if (!showInput) {
       // Start the timer when showing a digit
-      inputStartTimes.current[currentIndex] = Date.now(); // Record the start timeal
+      inputStartTimes.current[currentIndex] = Date.now(); // Record the start time
     } else {
       if (manualInputValue === '') {
         setInputError('Please enter digits before proceeding.');
@@ -144,6 +145,7 @@ export default function Recalldigits({ navigation, route }) {
         } else {
           // User input is incorrect for the first digit
           setCurrentIndex(currentIndex + 1);
+          setFirstSetIncorrect(true); // Set the flag for the first set being incorrect
         }
       } else {
         const currentItem = questionList[currentIndex];
@@ -182,6 +184,22 @@ export default function Recalldigits({ navigation, route }) {
           }
         } else {
           // User input is incorrect for the second digit, submit data as wrong and show success message
+          if (firstSetIncorrect) {
+            // If the first set was incorrect, set all other sets as null objects
+            for (let i = currentIndex + 1; i < questionList.length; i++) {
+              const nullAnswer = {
+                digit: null,
+                fixAOI: null,
+                viewed: null,
+                fixDurAOI: null,
+                fixScreen: null,
+                durScreen: null,
+                userResponse: null,
+              };
+              updatedAnswers[i] = nullAnswer;
+            }
+          }
+
           submitData({ ...data, answers: updatedAnswers });
           Toast.show({
             text1: 'Data submitted successfully.',
