@@ -47,7 +47,7 @@ const ProfilehistoryButton = (props, ref) => {
             QuestionArr.map(item1 => {
               if (
                 item?.parent_meta_name === item1?.meta_name &&
-                item1?.answer === 1
+                item1?.answer != 0
               ) {
                 dummy_obj[item?.meta_name] = item?.answer;
               }
@@ -102,9 +102,15 @@ const ProfilehistoryButton = (props, ref) => {
         dummy_Arr.map(item => {
           if (
             question?.parent_meta_name === item?.meta_name &&
-            item?.answer === 1
+            item?.answer != 0
           ) {
-            if (!isEmpty(question?.answer) || isNumber(question?.answer)) {
+            if (
+              !isEmpty(question?.answer) ||
+              isNumber(question?.answer) ||
+              question?.type === '6' ||
+              question?.type === '8' ||
+              question?.parent_meta_name === 'None_Ther'
+            ) {
               question.error = false;
             } else {
               question.error = true;
@@ -112,7 +118,11 @@ const ProfilehistoryButton = (props, ref) => {
             }
           }
         });
-      } else if (!isEmpty(question?.answer) || isNumber(question?.answer)) {
+      } else if (
+        !isEmpty(question?.answer) ||
+        isNumber(question?.answer) ||
+        question?.type === '6'
+      ) {
         question.error = false;
       } else {
         question.error = true;
@@ -217,7 +227,7 @@ const ProfilehistoryButton = (props, ref) => {
         ]}
       >
         {/* Render question */}
-        {item.type === '8' && item.meta_name !== 'Prev_Ther' ? (
+        {item.type === '8' ? (
           editHistory ? (
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <View>
@@ -229,16 +239,27 @@ const ProfilehistoryButton = (props, ref) => {
               </View>
             </View>
           ) : (
-            <Text
-              style={{
-                fontWeight: 'bold',
-                color: darkmode ? BaseColors.white : BaseColors.textColor,
-              }}
-            >
-              {selectedCheckboxes.includes(item.question)
-                ? `Ans: ${item.question}`
-                : null}
-            </Text>
+            <View style={{ flexDirection: 'row' }}>
+              <Text
+                style={{
+                  color: darkmode ? BaseColors.white : BaseColors.textColor,
+                }}
+              >{`${item.question} : `}</Text>
+              <Text
+                style={{
+                  fontWeight: 'bold',
+                  color: darkmode ? BaseColors.white : BaseColors.textColor,
+                }}
+              >
+                {`${
+                  item?.meta_name === 'Other_Ther'
+                    ? item?.answer
+                    : item?.answer == 1
+                    ? 'True'
+                    : 'False'
+                }`}
+              </Text>
+            </View>
           )
         ) : (
           <Text
@@ -301,6 +322,27 @@ const ProfilehistoryButton = (props, ref) => {
                     </TouchableOpacity>
                   </View>
                 );
+              })
+            ) : item?.meta_name === 'HI_Recov' ? (
+              [
+                { label: '7 to 10 days', value: 1 },
+                { label: '2 weeks to 1 month', value: 2 },
+                { label: '1 to 6 months', value: 3 },
+                { label: 'greater than 6 months', value: 4 },
+                { label: 'still recovering', value: 5 },
+              ].map(hiItem => {
+                if (item?.answer == hiItem?.value) {
+                  return (
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        color: darkmode
+                          ? BaseColors.white
+                          : BaseColors.textColor,
+                      }}
+                    >{`Ans: ${hiItem?.label}`}</Text>
+                  );
+                }
               })
             ) : (
               <Text
@@ -535,7 +577,7 @@ const ProfilehistoryButton = (props, ref) => {
                           { label: '2 weeks to 1 month', value: 2 },
                           { label: '1 to 6 months', value: 3 },
                           { label: 'greater than 6 months', value: 4 },
-                          { label: 'greater than', value: 5 },
+                          { label: 'still recovering', value: 5 },
                         ]
                       : [
                           { label: 'Yes', value: 1 },
@@ -565,7 +607,7 @@ const ProfilehistoryButton = (props, ref) => {
                           { label: '2 weeks to 1 month', value: 2 },
                           { label: '1 to 6 months', value: 3 },
                           { label: 'greater than 6 months', value: 4 },
-                          { label: 'greater than', value: 5 },
+                          { label: 'still recovering', value: 5 },
                         ]
                       : [
                           { label: 'Yes', value: 1 },
@@ -574,7 +616,6 @@ const ProfilehistoryButton = (props, ref) => {
                         ];
                   return item?.parent_meta_name
                     ? questionList.map((itemM, indexM) => {
-                        console.log('itemM', itemM);
                         return (
                           item?.parent_meta_name === itemM?.meta_name &&
                           (itemM?.meta_name === 'None_Ther'
