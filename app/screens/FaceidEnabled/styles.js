@@ -16,7 +16,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  imgStyle: { height: 150, width: 150 },
+  imgStyle: { width: 100 },
   btnContainer: {
     justifyContent: 'center',
     alignItems: 'center',

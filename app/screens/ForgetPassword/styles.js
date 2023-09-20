@@ -1,7 +1,7 @@
-import { Dimensions, Platform, StyleSheet } from "react-native";
-import { BaseColors, FontFamily } from "@config/theme";
+import { Dimensions, Platform, StyleSheet } from 'react-native';
+import { BaseColors, FontFamily } from '@config/theme';
 
-const IOS = Platform.OS === "ios";
+const IOS = Platform.OS === 'ios';
 export default StyleSheet.create({
   container: {
     flex: 1,
@@ -10,12 +10,12 @@ export default StyleSheet.create({
   },
   contentView: {
     flex: 0.35,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   inputcontainer: {
     flex: 0.4,
-    justifyContent: "flex-start",
+    justifyContent: 'flex-start',
   },
   forgotPasswordTextStyle: {
     fontSize: 17,
@@ -24,15 +24,11 @@ export default StyleSheet.create({
   },
   sendemail: {
     height: 55,
-    width: "100%",
+    width: '100%',
   },
   btnContainer: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 30,
-  },
-  img: {
-    marginTop: 30,
-    height: 55,
   },
 });

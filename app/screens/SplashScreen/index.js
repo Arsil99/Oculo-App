@@ -73,9 +73,9 @@ const SplashScreen = ({ navigation }) => {
           }}
         >
           <Image
-            source={Images.updatedlogo}
-            height={100}
-            width={100}
+            source={Images.logo}
+            resizeMode="contain"
+            style={styles.img}
             tintColor={BaseColors.primary}
           />
         </Animated.View>

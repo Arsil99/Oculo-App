@@ -253,7 +253,7 @@ const ResetPassword = ({ navigation, route }) => {
         {from !== 'profile' ? (
           <View style={styles.contentView}>
             <Image
-              source={Images.updatedlogo}
+              source={Images.logo}
               resizeMode="contain"
               style={styles.img}
               tintColor={BaseColors.primary}
