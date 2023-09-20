@@ -15,13 +15,14 @@ import { getApiData } from '@utils/apiHelper';
 import BaseSetting from '@config/setting';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import Authentication from '@redux/reducers/auth/actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { isEmpty } from 'lodash';
 import { storeCredentials } from '@utils/CommonFunction';
 import { BaseColors } from '@config/theme';
 import BackgroundTimer from 'react-native-background-timer';
 
 export default function OTP({ navigation, route }) {
+  const { userData, darkmode } = useSelector(state => state.auth);
   const email = route?.params?.email || '';
   const phone = route?.params?.phone || '';
   const medium = route?.params?.medium || '';
@@ -170,7 +171,16 @@ export default function OTP({ navigation, route }) {
     }
   }, [clearInput]);
   return (
-    <View style={styles.main}>
+    <View
+      style={[
+        styles.main,
+        {
+          backgroundColor: darkmode
+            ? BaseColors.lightBlack
+            : BaseColors.lightBg,
+        },
+      ]}
+    >
       <View style={{ alignItems: 'center' }}>
         <Image
           source={Images.logo}
@@ -182,8 +192,20 @@ export default function OTP({ navigation, route }) {
           }}
           tintColor={BaseColors.primary}
         />
-        <Text style={{ fontSize: 18 }}>Code has sent to</Text>
-        <Text style={{ fontSize: 18 }}>
+        <Text
+          style={{
+            fontSize: 18,
+            color: darkmode ? BaseColors.white : BaseColors.black90,
+          }}
+        >
+          Code has sent to
+        </Text>
+        <Text
+          style={{
+            fontSize: 18,
+            color: darkmode ? BaseColors.white : BaseColors.black90,
+          }}
+        >
           {medium === 'email' ? email : phone}
         </Text>
       </View>
@@ -195,7 +217,10 @@ export default function OTP({ navigation, route }) {
           onCodeChanged={value => setOtpInputValue(value)}
           code={otpInputValue}
           autoFocusOnLoad
-          codeInputFieldStyle={styles.underlineStyleBase}
+          codeInputFieldStyle={[
+            styles.underlineStyleBase,
+            { color: darkmode ? BaseColors.white : BaseColors.black90 },
+          ]}
           codeInputHighlightStyle={styles.underlineStyleHighLighted}
           onCodeFilled={code => {
             setCode(code);
@@ -219,7 +244,7 @@ export default function OTP({ navigation, route }) {
         >
           <Text
             style={{
-              color: resend ? BaseColors.primary : BaseColors.lightGrey,
+              color: darkmode ? BaseColors.white : BaseColors.black90,
             }}
           >
             Resent OTP {!resend && `: 00:${timer}`}
