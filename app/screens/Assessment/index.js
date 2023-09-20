@@ -7,8 +7,7 @@ import { useSelector } from 'react-redux';
 import { BaseColors } from '@config/theme';
 
 const Assessment = ({ navigation, route }) => {
-  const { darkmode } = useSelector(state => state.auth);
-  const eventId = route?.params?.event_id;
+  const { darkmode, userData } = useSelector(state => state.auth);
   const data = route?.params?.otherData;
 
   const navigatetoscreen = () => {
@@ -124,7 +123,7 @@ const Assessment = ({ navigation, route }) => {
                 },
               ]}
             >
-              {data?.createdAt}
+              {data?.title}
             </Text>
           </View>
           <View>
@@ -146,7 +145,7 @@ const Assessment = ({ navigation, route }) => {
                 },
               ]}
             >
-              Seth Rollins
+              {userData?.provider_name}
             </Text>
           </View>
           <View>

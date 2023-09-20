@@ -58,6 +58,7 @@ const Comment = ({ navigation, route }) => {
               placeholder="Share your comments..."
               style={styles.inputBar}
               value={commentText}
+              multiline
               onChangeText={value => setCommentText(value)}
             />
           </View>
