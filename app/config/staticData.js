@@ -14,7 +14,7 @@ export const switchOptions = [
 export const settings = [
   {
     id: '1',
-    leftIcon: 'aperture',
+    leftIcon: 'smile-o',
     title: 'Login With Face Id',
     slug: 'face_id',
     switch: true,
