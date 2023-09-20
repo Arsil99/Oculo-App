@@ -215,7 +215,7 @@ const ProfilehistoryButton = (props, ref) => {
 
   const renderQuestion = (item, index, type_arr) => {
     const isNoneCheckbox = item.meta_name === 'None_Ther';
-    const isLastQuestion = index === questionList.length - 1;
+    const isLastQuestion = index === questionList.length - 1; //temp
 
     return (
       <View
