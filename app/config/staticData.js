@@ -1,8 +1,4 @@
-import moment from 'moment';
 import Icon from 'react-native-vector-icons/AntDesign';
-import { store } from '../redux/store/configureStore';
-const authState = store?.getState() || {};
-const { userData } = authState?.auth || '';
 
 export const items = [
   { label: 'Email', value: 'Email' },
@@ -18,14 +14,14 @@ export const switchOptions = [
 export const settings = [
   {
     id: '1',
-    leftIcon: 'Meh',
+    leftIcon: 'aperture',
     title: 'Login With Face Id',
     slug: 'face_id',
     switch: true,
   },
   {
     id: '2',
-    leftIcon: 'unlock',
+    leftIcon: 'shield',
     slug: 'two_fa',
     title: 'Two Factor Authentication',
     righttitle: <Icon name="right" size={15} />,
@@ -50,7 +46,7 @@ export const settings = [
   },
   {
     id: '5',
-    leftIcon: 'calendar',
+    leftIcon: 'moon-o',
     title: 'Dark Theme',
     slug: 'dark_theme',
     // righttitle: '',
@@ -70,14 +66,14 @@ export const settings = [
 export const legal = [
   {
     id: '1',
-    leftIcon: 'key',
+    leftIcon: 'wpforms',
     title: 'Terms of Services',
     righttitle: <Icon name="right" size={15} />,
     navto: 'TermsofServices',
   },
   {
     id: '2',
-    leftIcon: 'file',
+    leftIcon: 'handshake-o',
     title: 'Privacy Policy',
     righttitle: <Icon name="right" size={15} />,
     navto: 'PrivacyPolicy',
