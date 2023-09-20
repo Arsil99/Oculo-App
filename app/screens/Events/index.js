@@ -114,7 +114,7 @@ export default function Events({ navigation }) {
                 Number(
                   item.treatment_info &&
                     !isNull(item.treatment_info) &&
-                    item.digit_recall == 1
+                    item.treatment_info == 1
                     ? 1
                     : 0,
                 );
