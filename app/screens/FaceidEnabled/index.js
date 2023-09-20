@@ -20,6 +20,7 @@ import Authentication from '@redux/reducers/auth/actions';
 import { BaseColors } from '@config/theme';
 
 const FaceidEnabled = ({ navigation, route }) => {
+  const { darkmode } = useSelector(state => state.auth);
   const { setBiometric } = Authentication;
   const [loader, setLoader] = useState(false);
   const IOS = Platform.OS === 'ios';
@@ -148,7 +149,12 @@ const FaceidEnabled = ({ navigation, route }) => {
   return (
     <KeyboardAvoidingView
       behavior={IOS ? 'padding' : 'height'}
-      style={styles.container}
+      style={[
+        styles.container,
+        {
+          backgroundColor: darkmode ? BaseColors.lightBlack : BaseColors.white,
+        },
+      ]}
     >
       <ScrollView
         contentContainerStyle={{ flex: 1 }}

@@ -10,6 +10,7 @@ import Authentication from '@redux/reducers/auth/actions';
 import { BaseColors } from '@config/theme';
 
 const SplashScreen = ({ navigation }) => {
+  const { darkmode } = useSelector(state => state.auth);
   const dispatch = useDispatch();
   const { setFcmToken } = Authentication;
   useEffect(() => {
@@ -66,7 +67,16 @@ const SplashScreen = ({ navigation }) => {
         translucent
         barStyle="dark-content"
       />
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          {
+            backgroundColor: darkmode
+              ? BaseColors.lightBlack
+              : BaseColors.white,
+          },
+        ]}
+      >
         <Animated.View
           style={{
             opacity: fadeAnim,

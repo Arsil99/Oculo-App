@@ -28,6 +28,7 @@ const errObj = {
 };
 
 const TwofactorEnabled = ({ navigation }) => {
+  const { darkmode } = useSelector(state => state.auth);
   const [value, setValue] = useState(null);
   const [open, setOpen] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -108,7 +109,12 @@ const TwofactorEnabled = ({ navigation }) => {
   return (
     <KeyboardAvoidingView
       behavior={IOS ? 'padding' : 'height'}
-      style={styles.container}
+      style={[
+        styles.container,
+        {
+          backgroundColor: darkmode ? BaseColors.lightBlack : BaseColors.white,
+        },
+      ]}
     >
       <ScrollView
         contentContainerStyle={{ flex: 1 }}

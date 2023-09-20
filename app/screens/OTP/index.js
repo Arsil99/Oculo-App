@@ -185,10 +185,9 @@ export default function OTP({ navigation, route }) {
         <Image
           source={Images.logo}
           style={{
-            marginBottom: 25,
-            marginTop: -5,
-            height: BaseSetting.nHeight / 16,
-            width: BaseSetting.nWidth / 1.8,
+            marginBottom: 20,
+            height: 55,
+            resizeMode: 'center',
           }}
           tintColor={BaseColors.primary}
         />
