@@ -60,7 +60,11 @@ export default function Home({ navigation }) {
       <View style={styles.topBar}>
         <View>
           <Image
-            source={{ uri: userData.profile_pic }} // Use the 'profile_pic' from userData
+            source={
+              userData?.profile_pic
+                ? { uri: userData?.profile_pic }
+                : Images.avatar
+            }
             resizeMode="cover"
             style={{ height: 60, width: 60, borderRadius: 30, borderWidth: 1 }}
           />

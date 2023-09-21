@@ -73,6 +73,7 @@ const Profiledetailcomponent = (props, ref) => {
   const [sexOpen, setSexOpen] = useState(false);
   const [sexValue, setSexValue] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [tempRemove, setTempRemove] = useState(false);
   const [dateOfBirthErr, setDateOfBirthErr] = useState(false);
   const [dateOfBirthErrMsg, setDateOfBirthErrMsg] = useState('');
   const [sexErr, setSexErr] = useState(false);
@@ -311,6 +312,13 @@ const Profiledetailcomponent = (props, ref) => {
       // Check the status of the response.
       if (response?.status) {
         dispatch(setUserData(response?.data));
+        if (tempRemove && isNull(selectedImage)) {
+          const newUserData = {
+            ...userData,
+            profile_pic: null,
+          };
+          dispatch(setUserData(newUserData));
+        }
         // Display a success message.
         setTimeout(() => {
           Toast.show({
@@ -373,13 +381,23 @@ const Profiledetailcomponent = (props, ref) => {
           ]}
         >
           <View style={styles.topBar}>
-            {selectedImage || userData.profile_pic ? (
+            {selectedImage ? (
               <Image
                 source={{
-                  uri: isNull(selectedImage)
-                    ? userData.profile_pic
-                    : selectedImage?.path,
+                  uri: selectedImage.path,
                 }}
+                resizeMode="cover"
+                style={styles.profilePic}
+              />
+            ) : userData.profile_pic ? (
+              <Image
+                source={
+                  !tempRemove
+                    ? {
+                        uri: userData.profile_pic,
+                      }
+                    : Images.avatar
+                }
                 resizeMode="cover"
                 style={styles.profilePic}
               />
@@ -399,6 +417,17 @@ const Profiledetailcomponent = (props, ref) => {
             >
               <Icon size={17} name="camera" color={BaseColors.white} />
             </TouchableOpacity>
+            {(selectedImage || userData?.profile_pic) && (
+              <TouchableOpacity
+                style={{ marginTop: -25, marginBottom: 10 }}
+                onPress={() => {
+                  setTempRemove(true);
+                  setSelectedImage(null);
+                }}
+              >
+                {!(isNull(selectedImage) && tempRemove) && <Text>Remove</Text>}
+              </TouchableOpacity>
+            )}
           </View>
           <LabeledInput
             Label={'First Name'}
