@@ -55,7 +55,6 @@ const AuthenticationFactor = ({ navigation }) => {
         type: value?.toString(),
         status: check ? 1 : 0,
       };
-
       try {
         const resp = await getApiData(endPoints, 'POST', params, {}, false);
         if (resp?.status) {
@@ -161,6 +160,7 @@ const AuthenticationFactor = ({ navigation }) => {
 
         <View style={styles.btnContainer}>
           <Button
+            disabled={value === 'email' || 'phone' ? false : true}
             shape="round"
             title={'Save'}
             style={styles.save}

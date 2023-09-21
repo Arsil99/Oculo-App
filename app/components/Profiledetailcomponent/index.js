@@ -399,22 +399,6 @@ const Profiledetailcomponent = (props, ref) => {
             >
               <Icon size={17} name="camera" color={BaseColors.white} />
             </TouchableOpacity>
-            {(selectedImage || userData?.profile_pic) && (
-              <TouchableOpacity
-                style={{ marginTop: -25, marginBottom: 10 }}
-                onPress={() => {
-                  setSelectedImage(null);
-                  const newUserData = {
-                    ...userData,
-                    profile_pic: null,
-                  };
-                  setSelectedImage(null);
-                  dispatch(setUserData(newUserData));
-                }}
-              >
-                <Text>Remove</Text>
-              </TouchableOpacity>
-            )}
           </View>
           <LabeledInput
             Label={'First Name'}
