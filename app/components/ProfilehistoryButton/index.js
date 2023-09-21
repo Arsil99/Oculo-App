@@ -3,7 +3,7 @@ import LabeledInput from '@components/LabeledInput';
 import BaseSetting from '@config/setting';
 import { BaseColors } from '@config/theme';
 import { getApiData } from '@utils/apiHelper';
-import { isArray, isEmpty, isNumber } from 'lodash';
+import { isArray, isEmpty, isNumber, isUndefined } from 'lodash';
 import React, { forwardRef, useEffect, useImperativeHandle } from 'react';
 import { useState } from 'react';
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
@@ -15,19 +15,18 @@ import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { CheckBox } from 'react-native-elements';
 
 const ProfilehistoryButton = (props, ref) => {
-  const [isNoneCheckboxSelected, setIsNoneCheckboxSelected] = useState(false);
   const { darkmode, userData } = useSelector(state => state.auth);
   const isFocused = useIsFocused();
   const { editHistory, handleSuccess } = props;
   const [loader, setLoader] = useState(true);
   const [data, setData] = useState({});
   const [questionList, setQuestionList] = useState([]);
-  const [selectedCheckboxes, setSelectedCheckboxes] = useState(
-    new Array(questionList?.length).fill(false),
-  );
+  const [other, setOther] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     QuestionListAPI();
+    setOther('');
   }, [isFocused, editHistory]);
 
   useImperativeHandle(ref, () => ({
@@ -43,11 +42,20 @@ const ProfilehistoryButton = (props, ref) => {
       !isEmpty(QuestionArr) &&
       QuestionArr.map(item => {
         if (!isEmpty(item?.answer) || isNumber(item?.answer)) {
+          if (item?.meta_name === 'Other_Ther') {
+            setOther(item?.answer === 0 ? '' : item?.answer);
+          }
           if (item?.parent_meta_name) {
             QuestionArr.map(item1 => {
               if (
                 item?.parent_meta_name === item1?.meta_name &&
                 item1?.answer != 0
+              ) {
+                dummy_obj[item?.meta_name] = item?.answer;
+              } else if (
+                item?.parent_meta_name === 'None_Ther' &&
+                item?.meta_name === 'Prev_Ther_Comm' &&
+                item1?.answer == 0
               ) {
                 dummy_obj[item?.meta_name] = item?.answer;
               }
@@ -67,6 +75,7 @@ const ProfilehistoryButton = (props, ref) => {
     try {
       const res = await getApiData(`${endPoint}`, 'GET');
       if (res?.status) {
+        console.log('res?.data =======>>>', res?.data);
         setQuestionList(res?.data);
         setInitialData(res?.data);
       } else {
@@ -95,15 +104,13 @@ const ProfilehistoryButton = (props, ref) => {
   function validation() {
     const dummy_Arr = [...questionList];
     let valid = true;
+    let checkBoxErr = false;
 
     dummy_Arr.map(question => {
       // Check if main answer is not selected
       if (question?.parent_meta_name) {
         dummy_Arr.map(item => {
-          if (
-            question?.parent_meta_name === item?.meta_name &&
-            item?.answer != 0
-          ) {
+          if (question?.parent_meta_name === item?.meta_name && item?.answer) {
             if (
               !isEmpty(question?.answer) ||
               isNumber(question?.answer) ||
@@ -121,7 +128,9 @@ const ProfilehistoryButton = (props, ref) => {
       } else if (
         !isEmpty(question?.answer) ||
         isNumber(question?.answer) ||
-        question?.type === '6'
+        question?.type === '6' ||
+        question?.type === '8' ||
+        question?.parent_meta_name === 'None_Ther'
       ) {
         question.error = false;
       } else {
@@ -131,13 +140,30 @@ const ProfilehistoryButton = (props, ref) => {
     });
 
     setQuestionList(dummy_Arr);
-
+    checkBoxErr = questionList.some(item => {
+      if (item?.type === '8') {
+        return item?.answer;
+      }
+    });
     if (valid) {
-      savePatientHistory();
+      if (checkBoxErr) {
+        if (
+          (data['Other_Ther'] && !isEmpty(other.toString())) ||
+          data['None_Ther']
+        ) {
+          savePatientHistory();
+          setError('');
+        } else {
+          setError('This question is mandatory');
+        }
+      } else {
+        setError('Please select at least one checkbox');
+      }
     }
   }
 
   async function savePatientHistory() {
+    data['Other_Ther'] = !isEmpty(other) ? other : 0;
     try {
       const response = await getApiData(
         BaseSetting.endpoints.savePatient,
@@ -168,55 +194,52 @@ const ProfilehistoryButton = (props, ref) => {
     }
   }
 
-  const handleCheckBoxChange = index => {
-    // Make a copy of the current state or data
-    const updatedQuestions = [...questionList];
-    // Check if the clicked checkbox is the "None" checkbox
-    if (updatedQuestions[index].meta_name === 'None_Ther') {
-      setIsNoneCheckboxSelected(!isNoneCheckboxSelected);
-    }
-
-    // Toggle the isChecked value for the clicked question
-    updatedQuestions[index].isChecked = !updatedQuestions[index].isChecked;
-
-    // If the clicked question is "None," deselect all other questions
-    if (
-      updatedQuestions[index].meta_name === 'None_Ther' &&
-      updatedQuestions[index].isChecked
-    ) {
-      updatedQuestions.forEach((item, i) => {
-        if (i !== index) {
-          item.isChecked = false;
+  const handleCheckBoxChange = (ans, index) => {
+    setQuestionList(prevQuestions => {
+      const updatedQuestions = [...prevQuestions];
+      // for type === "8"
+      if (ans && updatedQuestions[index]?.meta_name === 'None_Ther') {
+        // Uncheck "Add_None_Ther" checkbox when others are checked
+        updatedQuestions.forEach(que => {
+          if (que?.type === '8') {
+            data[que?.meta_name] = 0; // Uncheck other checkboxes
+          }
+        });
+        data['None_Ther'] = ans || 0;
+        data['Prev_Ther_Comm'] = '';
+      } else {
+        if (ans) {
+          // Uncheck "Add_None_Ther" when other checkboxes are checked
+          updatedQuestions.forEach(que => {
+            if (que?.meta_name === 'None_Ther') {
+              que.answer = 0;
+            }
+            if (que?.type === '8' && (index === 14 || !que?.answer)) {
+              data[que?.meta_name] = 0; // Uncheck other checkboxes
+            } else {
+              data['None_Ther'] = 0;
+            }
+          });
+          data[updatedQuestions[index]?.meta_name] = ans;
+        } else {
+          data[updatedQuestions[index]?.meta_name] = ans;
+          // if (!ans && !isUndefined(relatedQuestions)) {
+          //   data[relatedQuestions[relatedInd]?.metric_name] = relatedAns;
+          // }
         }
-      });
-    } else if (
-      updatedQuestions[index].meta_name !== 'None_Ther' &&
-      updatedQuestions[index].isChecked
-    ) {
-      // If the clicked question is not "None" and is checked, deselect the "None" question
-      const noneIndex = updatedQuestions.findIndex(
-        item => item.meta_name === 'None_Ther',
-      );
-      if (noneIndex !== -1) {
-        updatedQuestions[noneIndex].isChecked = false;
       }
-    }
 
-    // Update the state or data with the modified question list
-    setQuestionList(updatedQuestions);
+      updatedQuestions[index] = {
+        ...updatedQuestions[index],
+        answer: ans,
+        error: false,
+      };
 
-    // Update the selectedCheckboxes state based on the updated question list
-    const selected = updatedQuestions
-      .filter(item => item.isChecked)
-      .map(item => item.question); // Store question text in selectedCheckboxes
-
-    setSelectedCheckboxes(selected);
+      return updatedQuestions;
+    });
   };
 
-  const renderQuestion = (item, index, type_arr) => {
-    const isNoneCheckbox = item.meta_name === 'None_Ther';
-    const isLastQuestion = index === questionList.length - 1; //temp
-
+  const renderQuestion = (item, index, type_arr, a) => {
     return (
       <View
         key={index}
@@ -229,12 +252,26 @@ const ProfilehistoryButton = (props, ref) => {
         {/* Render question */}
         {item.type === '8' ? (
           editHistory ? (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+            >
               <View>
                 <CheckBox
                   title={item.question}
-                  checked={item.isChecked || false} // A boolean prop indicating whether the checkbox is checked
-                  onPress={() => handleCheckBoxChange(index)} // Use onPress instead of onChange
+                  checked={data[item.meta_name] || false} // A boolean prop indicating whether the checkbox is checked
+                  onPress={() => {
+                    handleCheckBoxChange(
+                      isUndefined(data[item?.meta_name]) ||
+                        !data[item?.meta_name]
+                        ? 1
+                        : 0,
+                      index,
+                    );
+                    setError('');
+                  }} // Use onPress instead of onChange
                 />
               </View>
             </View>
@@ -253,7 +290,7 @@ const ProfilehistoryButton = (props, ref) => {
               >
                 {`${
                   item?.meta_name === 'Other_Ther'
-                    ? item?.answer
+                    ? other || 'False'
                     : item?.answer == 1
                     ? 'True'
                     : 'False'
@@ -402,7 +439,7 @@ const ProfilehistoryButton = (props, ref) => {
               }}
               style={{
                 borderWidth: 1,
-                borderColor: 'gray',
+                // borderColor: 'gray',
                 padding: 8,
                 marginVertical: 5,
                 borderRadius: 5,
@@ -416,32 +453,7 @@ const ProfilehistoryButton = (props, ref) => {
               }}
             >{`Ans: ${item?.answer || '-'}`}</Text>
           )
-        ) : item.meta_name === 'Other_Ther' && item.isChecked ? (
-          // Render text input for type 2
-          editHistory ? (
-            <LabeledInput
-              placeholder="Enter your response here"
-              value={item.answer?.toString() || ''}
-              onChangeText={text => getAnswer(text, index)}
-              style={{
-                borderWidth: 1,
-                borderColor: 'gray',
-                padding: 8,
-                marginVertical: 5,
-                borderRadius: 5,
-              }}
-            />
-          ) : (
-            <Text
-              style={{
-                fontWeight: 'bold',
-                color: darkmode ? BaseColors.white : BaseColors.textColor,
-              }}
-            >{`Ans: ${item?.answer || '-'}`}</Text>
-          )
-        ) : !isNoneCheckboxSelected &&
-          item.type === '3' &&
-          item.meta_name === 'Prev_Ther_Comm' ? (
+        ) : item.meta_name === 'Prev_Ther_Comm' ? (
           // Render another text input for type 3
           editHistory ? (
             <LabeledInput
@@ -516,6 +528,38 @@ const ProfilehistoryButton = (props, ref) => {
             )}
           </View>
         ) : null}
+
+        {item.meta_name === 'None_Ther' && data['Other_Ther']
+          ? // Render text input for type 2
+            editHistory && (
+              <LabeledInput
+                placeholder="Enter other treatment"
+                value={other.toString()}
+                onChangeText={text => {
+                  setOther(text);
+                  setError('');
+                }}
+                style={{
+                  borderWidth: 1,
+                  borderColor: 'gray',
+                  padding: 8,
+                  marginVertical: 5,
+                  borderRadius: 5,
+                }}
+              />
+            )
+          : ''}
+        {editHistory && !isEmpty(error) && item?.meta_name === 'None_Ther' ? (
+          <Text
+            style={{
+              color: BaseColors.red,
+            }}
+          >
+            {error}
+          </Text>
+        ) : (
+          ''
+        )}
         {/* Render error message if any */}
         {/* Render error message if any */}
         {item.error ? (
@@ -566,67 +610,33 @@ const ProfilehistoryButton = (props, ref) => {
           >
             {/* Your main content */}
             {questionList.length > 0 ? (
-              // Check if isNoneCheckboxSelected is true
-              isNoneCheckboxSelected ? (
-                // Create a copy of questionList and remove the last item
-                [...questionList].slice(0, -1).map((item, index) => {
-                  const type_arr =
-                    item?.meta_name === 'HI_Recov'
-                      ? [
-                          { label: '7 to 10 days', value: 1 },
-                          { label: '2 weeks to 1 month', value: 2 },
-                          { label: '1 to 6 months', value: 3 },
-                          { label: 'greater than 6 months', value: 4 },
-                          { label: 'still recovering', value: 5 },
-                        ]
-                      : [
-                          { label: 'Yes', value: 1 },
-                          { label: 'No', value: 0 },
-                          { label: 'Undiagnosed', value: 2 },
-                        ];
-                  return item?.parent_meta_name
-                    ? [...questionList].slice(0, -1).map((itemM, indexM) => {
-                        console.log('itemM', itemM);
-                        return (
-                          item?.parent_meta_name === itemM?.meta_name &&
-                          (itemM?.meta_name === 'None_Ther'
-                            ? itemM?.answer === 0
-                            : itemM?.answer === 1) &&
-                          renderQuestion(item, index, type_arr)
-                        );
-                      })
-                    : renderQuestion(item, index, type_arr);
-                })
-              ) : (
-                // Use the original questionList without modifications
-                questionList.map((item, index) => {
-                  const type_arr =
-                    item?.meta_name === 'HI_Recov'
-                      ? [
-                          { label: '7 to 10 days', value: 1 },
-                          { label: '2 weeks to 1 month', value: 2 },
-                          { label: '1 to 6 months', value: 3 },
-                          { label: 'greater than 6 months', value: 4 },
-                          { label: 'still recovering', value: 5 },
-                        ]
-                      : [
-                          { label: 'Yes', value: 1 },
-                          { label: 'No', value: 0 },
-                          { label: 'Undiagnosed', value: 2 },
-                        ];
-                  return item?.parent_meta_name
-                    ? questionList.map((itemM, indexM) => {
-                        return (
-                          item?.parent_meta_name === itemM?.meta_name &&
-                          (itemM?.meta_name === 'None_Ther'
-                            ? itemM?.answer === 0
-                            : itemM?.answer === 1) &&
-                          renderQuestion(item, index, type_arr)
-                        );
-                      })
-                    : renderQuestion(item, index, type_arr);
-                })
-              )
+              questionList.map((item, index) => {
+                const type_arr =
+                  item?.meta_name === 'HI_Recov'
+                    ? [
+                        { label: '7 to 10 days', value: 1 },
+                        { label: '2 weeks to 1 month', value: 2 },
+                        { label: '1 to 6 months', value: 3 },
+                        { label: 'greater than 6 months', value: 4 },
+                        { label: 'still recovering', value: 5 },
+                      ]
+                    : [
+                        { label: 'Yes', value: 1 },
+                        { label: 'No', value: 0 },
+                        { label: 'Undiagnosed', value: 2 },
+                      ];
+                return item?.parent_meta_name
+                  ? questionList.map((itemM, indexM) => {
+                      return (
+                        item?.parent_meta_name === itemM?.meta_name &&
+                        (itemM?.meta_name === 'None_Ther'
+                          ? itemM?.answer == 0
+                          : itemM?.answer == 1) &&
+                        renderQuestion(item, index, type_arr, 1)
+                      );
+                    })
+                  : renderQuestion(item, index, type_arr, 2);
+              })
             ) : (
               <View
                 style={{
