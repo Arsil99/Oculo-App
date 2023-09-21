@@ -148,7 +148,9 @@ const ProfilehistoryButton = (props, ref) => {
     if (valid) {
       if (checkBoxErr) {
         if (
-          (data['Other_Ther'] && !isEmpty(other.toString())) ||
+          (data['Other_Ther'] &&
+            !isEmpty(other.toString()) &&
+            data['Prev_Ther_Comm']) ||
           data['None_Ther']
         ) {
           savePatientHistory();
@@ -263,6 +265,9 @@ const ProfilehistoryButton = (props, ref) => {
                   title={item.question}
                   checked={data[item.meta_name] || false} // A boolean prop indicating whether the checkbox is checked
                   onPress={() => {
+                    if (item?.meta_name == 'None_Ther') {
+                      setOther('');
+                    }
                     handleCheckBoxChange(
                       isUndefined(data[item?.meta_name]) ||
                         !data[item?.meta_name]
@@ -459,7 +464,10 @@ const ProfilehistoryButton = (props, ref) => {
             <LabeledInput
               placeholder="Enter your response here"
               value={item.answer?.toString() || ''}
-              onChangeText={text => getAnswer(text, index)}
+              onChangeText={text => {
+                getAnswer(text, index);
+                setError('');
+              }}
               style={{
                 borderWidth: 1,
                 borderColor: 'gray',
@@ -549,7 +557,25 @@ const ProfilehistoryButton = (props, ref) => {
               />
             )
           : ''}
-        {editHistory && !isEmpty(error) && item?.meta_name === 'None_Ther' ? (
+        {/* other treatment error message */}
+        {editHistory &&
+        !isEmpty(error) &&
+        item?.parent_meta_name === 'None_Ther' &&
+        item?.meta_name === 'Other_Ther' ? (
+          <Text
+            style={{
+              color: BaseColors.red,
+            }}
+          >
+            {error}
+          </Text>
+        ) : (
+          ''
+        )}
+        {editHistory &&
+        !isEmpty(error) &&
+        item?.parent_meta_name === 'None_Ther' &&
+        item?.meta_name === 'Prev_Ther_Comm' ? (
           <Text
             style={{
               color: BaseColors.red,
