@@ -139,6 +139,7 @@ export default function OTP({ navigation, route }) {
           });
         }
       } else {
+        setCode('');
         setOtpInputValue('');
         setClearInput(true);
         Toast.show({
