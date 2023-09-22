@@ -15,6 +15,13 @@ import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { CheckBox } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/AntDesign';
 
+const errorObj = {
+  otherErr: false,
+  otherMsg: '',
+  descErr: false,
+  descMg: '',
+};
+
 const ProfilehistoryButton = (props, ref) => {
   const { darkmode, userData } = useSelector(state => state.auth);
   const isFocused = useIsFocused();
@@ -23,7 +30,8 @@ const ProfilehistoryButton = (props, ref) => {
   const [data, setData] = useState({});
   const [questionList, setQuestionList] = useState([]);
   const [other, setOther] = useState('');
-  const [error, setError] = useState('');
+  console.log('other =======>>>', other);
+  const [errObj, setErrObj] = useState(errorObj);
 
   useEffect(() => {
     QuestionListAPI();
@@ -38,14 +46,13 @@ const ProfilehistoryButton = (props, ref) => {
 
   function setInitialData(QuestionArr) {
     const dummy_obj = {};
-
     isArray(QuestionArr) &&
       !isEmpty(QuestionArr) &&
       QuestionArr.map(item => {
         if (!isEmpty(item?.answer) || isNumber(item?.answer)) {
-          if (item?.meta_name === 'Other_Ther') {
-            setOther(item?.answer === 0 ? '' : item?.answer);
-          }
+          // if (item?.meta_name === 'Other_Ther') {
+          //   setOther(item?.answer == 0 ? '' : item?.answer);
+          // }
           if (item?.parent_meta_name) {
             QuestionArr.map(item1 => {
               if (
@@ -66,17 +73,14 @@ const ProfilehistoryButton = (props, ref) => {
           }
         }
       });
-
     setData(dummy_obj);
   }
 
   const QuestionListAPI = async () => {
-    setLoader(true);
     const endPoint = `${BaseSetting.endpoints.question}?patient_id=${userData?.id}&type=app`;
     try {
       const res = await getApiData(`${endPoint}`, 'GET');
       if (res?.status) {
-        console.log('res?.data =======>>>', res?.data);
         setQuestionList(res?.data);
         setInitialData(res?.data);
       } else {
@@ -97,7 +101,6 @@ const ProfilehistoryButton = (props, ref) => {
         item.error = false;
       }
     });
-
     setInitialData(dummy_Arr);
     setQuestionList(dummy_Arr);
   }
@@ -117,7 +120,7 @@ const ProfilehistoryButton = (props, ref) => {
               isNumber(question?.answer) ||
               question?.type === '6' ||
               question?.type === '8' ||
-              question?.parent_meta_name === 'None_Ther'
+              question?.parent_meta_name == 'None_Ther'
             ) {
               question.error = false;
             } else {
@@ -148,19 +151,31 @@ const ProfilehistoryButton = (props, ref) => {
     });
     if (valid) {
       if (checkBoxErr) {
+        let subValid = true;
+        const error = { ...errObj };
+        if (data['Other_Ther'] && isEmpty(other) && !data['None_Ther']) {
+          subValid = false;
+          error.otherErr = true;
+          error.otherMsg = 'Please enter other treatment';
+        }
         if (
-          (data['Other_Ther'] &&
-            !isEmpty(other.toString()) &&
-            data['Prev_Ther_Comm']) ||
-          data['None_Ther']
+          !data['None_Ther'] &&
+          (isUndefined(data['Prev_Ther_Comm']) ||
+            isEmpty(data['Prev_Ther_Comm']))
         ) {
+          subValid = false;
+          error.descErr = true;
+          error.descMg = 'Please enter description';
+        }
+        setErrObj(error);
+        if (subValid) {
           savePatientHistory();
-          setError('');
-        } else {
-          setError('This question is mandatory');
         }
       } else {
-        setError('Please select at least one checkbox');
+        Toast.show({
+          text1: 'Please select at least one checkbox',
+          type: 'error',
+        });
       }
     }
   }
@@ -226,9 +241,6 @@ const ProfilehistoryButton = (props, ref) => {
           data[updatedQuestions[index]?.meta_name] = ans;
         } else {
           data[updatedQuestions[index]?.meta_name] = ans;
-          // if (!ans && !isUndefined(relatedQuestions)) {
-          //   data[relatedQuestions[relatedInd]?.metric_name] = relatedAns;
-          // }
         }
       }
 
@@ -261,8 +273,11 @@ const ProfilehistoryButton = (props, ref) => {
                 alignItems: 'center',
               }}
             >
-              <View>
+              <View style={{ marginLeft: -10 }}>
                 <CheckBox
+                  containerStyle={{
+                    borderRadius: 12,
+                  }}
                   title={item.question}
                   checked={data[item.meta_name] || false} // A boolean prop indicating whether the checkbox is checked
                   onPress={() => {
@@ -276,7 +291,6 @@ const ProfilehistoryButton = (props, ref) => {
                         : 0,
                       index,
                     );
-                    setError('');
                   }} // Use onPress instead of onChange
                 />
               </View>
@@ -464,21 +478,34 @@ const ProfilehistoryButton = (props, ref) => {
         ) : item.meta_name === 'Prev_Ther_Comm' ? (
           // Render another text input for type 3
           editHistory ? (
-            <LabeledInput
-              placeholder="Enter your response here"
-              value={item.answer?.toString() || ''}
-              onChangeText={text => {
-                getAnswer(text, index);
-                setError('');
-              }}
-              style={{
-                borderWidth: 1,
-                borderColor: 'gray',
-                padding: 8,
-                marginVertical: 5,
-                borderRadius: 5,
-              }}
-            />
+            <>
+              <LabeledInput
+                placeholder="Enter your response here"
+                value={item.answer?.toString()}
+                onChangeText={text => {
+                  getAnswer(text, index);
+                  setErrObj({ ...errObj, descErr: false, descMg: '' });
+                }}
+                style={{
+                  borderWidth: 1,
+                  borderColor: 'gray',
+                  padding: 8,
+                  marginVertical: 5,
+                  borderRadius: 5,
+                }}
+              />
+              {errObj.descErr ? (
+                <Text
+                  style={{
+                    color: BaseColors.red,
+                  }}
+                >
+                  {errObj.descMg}
+                </Text>
+              ) : (
+                ''
+              )}
+            </>
           ) : (
             <Text
               style={{
@@ -543,53 +570,49 @@ const ProfilehistoryButton = (props, ref) => {
         {item.meta_name === 'None_Ther' && data['Other_Ther']
           ? // Render text input for type 2
             editHistory && (
-              <LabeledInput
-                placeholder="Enter other treatment"
-                value={other.toString()}
-                onChangeText={text => {
-                  setOther(text);
-                  setError('');
-                }}
-                style={{
-                  borderWidth: 1,
-                  borderColor: 'gray',
-                  padding: 8,
-                  marginVertical: 5,
-                  borderRadius: 5,
-                }}
-              />
+              <>
+                <Text
+                  style={{
+                    fontWeight: 'bold',
+                    color: darkmode ? BaseColors.white : BaseColors.textColor,
+                  }}
+                >
+                  Other treatment
+                  <Text style={{ color: BaseColors.red, marginTop: -13 }}>
+                    {' '}
+                    *
+                  </Text>
+                </Text>
+                <LabeledInput
+                  placeholder="Enter other treatment"
+                  value={other.toString()}
+                  onChangeText={text => {
+                    setOther(text);
+                    setErrObj({ ...errObj, otherErr: false, otherMsg: '' });
+                  }}
+                  style={{
+                    borderWidth: 1,
+                    borderColor: 'gray',
+                    padding: 8,
+                    marginVertical: 5,
+                    borderRadius: 5,
+                  }}
+                />
+                {/* other treatment error message */}
+                {errObj.otherErr ? (
+                  <Text
+                    style={{
+                      color: BaseColors.red,
+                    }}
+                  >
+                    {errObj.otherMsg}
+                  </Text>
+                ) : (
+                  ''
+                )}
+              </>
             )
           : ''}
-        {/* other treatment error message */}
-        {editHistory &&
-        !isEmpty(error) &&
-        item?.parent_meta_name === 'None_Ther' &&
-        item?.meta_name === 'Other_Ther' ? (
-          <Text
-            style={{
-              color: BaseColors.red,
-            }}
-          >
-            {error}
-          </Text>
-        ) : (
-          ''
-        )}
-        {editHistory &&
-        !isEmpty(error) &&
-        item?.parent_meta_name === 'None_Ther' &&
-        item?.meta_name === 'Prev_Ther_Comm' ? (
-          <Text
-            style={{
-              color: BaseColors.red,
-            }}
-          >
-            {error}
-          </Text>
-        ) : (
-          ''
-        )}
-        {/* Render error message if any */}
         {/* Render error message if any */}
         {item.error ? (
           <Text style={{ color: BaseColors.red, marginBottom: 5 }}>
