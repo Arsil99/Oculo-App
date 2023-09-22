@@ -8,11 +8,13 @@ import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Authentication from '@redux/reducers/auth/actions';
 import { BaseColors } from '@config/theme';
+import { getApiData } from '@utils/apiHelper';
+import BaseSetting from '@config/setting';
 
 const SplashScreen = ({ navigation }) => {
-  const { darkmode } = useSelector(state => state.auth);
+  const { darkmode, userData } = useSelector(state => state.auth);
   const dispatch = useDispatch();
-  const { setFcmToken } = Authentication;
+  const { setFcmToken, setUserData } = Authentication;
   useEffect(() => {
     requestUserPermission();
   }, []);
@@ -43,7 +45,6 @@ const SplashScreen = ({ navigation }) => {
       }
     }
   }
-  const { userData } = useSelector(state => state.auth);
   const [fadeAnim] = useState(new Animated.Value(0));
 
   useEffect(() => {
@@ -59,6 +60,22 @@ const SplashScreen = ({ navigation }) => {
       }
     }, 3000);
   }, []);
+
+  useEffect(() => {
+    getLatestData();
+  }, []);
+
+  const getLatestData = async () => {
+    const endPoint = `${BaseSetting.endpoints.getPatient}?created_from=app`;
+    try {
+      const res = await getApiData(`${endPoint}`, 'GET');
+      if (res?.status) {
+        dispatch(setUserData(res?.data));
+      }
+    } catch (error) {
+      console.log('📌 ⏩ file: index.js:24 ⏩ LangListAPI ⏩ error:', error);
+    }
+  };
 
   return (
     <>

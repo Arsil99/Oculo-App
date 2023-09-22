@@ -123,24 +123,24 @@ const Profiledetailcomponent = (props, ref) => {
     setGuardianPhone(userData?.emergency_phone);
     setBirthDate(moment(userData?.dob).format('MM-DD-YYYY'));
     setSexValue(
-      userData?.sex === '0'
+      userData?.sex == 0
         ? '0=Female'
-        : userData?.sex === '1'
+        : userData?.sex == 1
         ? '1=Male'
-        : userData?.sex === '2'
+        : userData?.sex == 2
         ? '2=Intersex'
         : null,
     );
     setSelectedDropdownValue(
-      userData?.pronouns === '1'
+      userData?.pronouns == 1
         ? '1=She/Her/Hers'
-        : userData?.pronouns === '2'
+        : userData?.pronouns == 2
         ? '2=He/Him/His'
-        : userData?.pronouns === '3'
+        : userData?.pronouns == 3
         ? '3=They/Them/Their'
-        : userData?.pronouns === '4'
+        : userData?.pronouns == 4
         ? '4=Ze/Zir/Zirs'
-        : userData?.pronouns === '5'
+        : userData?.pronouns == 5
         ? '5=Ze/Hir/Hirs'
         : null,
     );
@@ -303,6 +303,10 @@ const Profiledetailcomponent = (props, ref) => {
         ),
         type: selectedImage?.mime,
       };
+    } else if (tempRemove) {
+      data.profile_pic = null;
+    } else {
+      data.profile_pic = userData?.profile_pic;
     }
     try {
       const response = await getApiDataProgress(

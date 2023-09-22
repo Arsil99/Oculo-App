@@ -104,15 +104,15 @@ export default function Profile({ navigation }) {
       leftIcon: 'mars-stroke-h',
       title: 'Pronouns',
       righttitle:
-        userData?.pronouns === '1'
+        userData?.pronouns == '1'
           ? 'She/Her/Hers'
-          : userData?.pronouns === '2'
+          : userData?.pronouns == '2'
           ? 'He/Him/His'
-          : userData?.pronouns === '3'
+          : userData?.pronouns == '3'
           ? 'They/Them/Their'
-          : userData?.pronouns === '4'
+          : userData?.pronouns == '4'
           ? 'Ze/Zir/Zirs'
-          : userData?.pronouns === '5'
+          : userData?.pronouns == '5'
           ? 'Ze/Hir/Hirs'
           : '_',
     },
@@ -121,11 +121,11 @@ export default function Profile({ navigation }) {
       leftIcon: 'transgender-alt',
       title: 'Sex',
       righttitle:
-        userData?.sex === '0'
+        userData?.sex == '0'
           ? 'Female'
-          : userData?.sex === '1'
+          : userData?.sex == '1'
           ? 'Male'
-          : userData?.sex === '2'
+          : userData?.sex == '2'
           ? 'Intersex'
           : '_',
     },

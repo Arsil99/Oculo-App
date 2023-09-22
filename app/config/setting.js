@@ -38,6 +38,7 @@ const BaseSetting = {
     authentication: '/patient/change-2fa',
     createRequest: '/event/create-request',
     enable2FA: '/patient/enable-2fa',
+    getPatient: '/patient/get-patient',
   },
 
   geolocationOptions: {
