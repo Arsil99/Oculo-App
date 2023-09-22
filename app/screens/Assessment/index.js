@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import React from 'react';
 import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
@@ -89,11 +89,14 @@ const Assessment = ({ navigation, route }) => {
         }}
       />
 
-      <View style={{ flex: 1, marginHorizontal: 25 }}>
-        <View
-          style={{
-            justifyContent: 'flex-end',
-            marginTop: 20,
+      <View style={{ flex: 1, marginHorizontal: 20, paddingBottom: 10 }}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{
+            flexGrow: 1,
+            marginTop: 10,
+            paddingBottom: 50,
           }}
         >
           <Text
@@ -203,7 +206,7 @@ const Assessment = ({ navigation, route }) => {
               consequat v
             </Text>
           </View>
-        </View>
+        </ScrollView>
         <View style={styles.btnContainer}>
           <Button
             shape="round"

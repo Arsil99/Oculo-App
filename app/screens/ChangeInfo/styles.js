@@ -39,7 +39,6 @@ export default StyleSheet.create({
     fontSize: 16,
     fontWeight: '400',
     lineHeight: 24,
-    marginTop: 15,
     fontFamily: FontFamily.regular,
     color: BaseColors.black,
   },
@@ -56,17 +55,14 @@ export default StyleSheet.create({
     fontFamily: FontFamily.regular,
     color: BaseColors.textColor,
   },
-  textInput: {
-    marginTop: 20,
-  },
+
   buttoncontainer: {
     flexGrow: 1,
+    paddingHorizontal: 10,
+    paddingBottom: 10,
+    paddingTop: 10,
+  },
 
-    padding: 16,
-  },
-  row: {
-    marginBottom: 10,
-  },
   yesbutton: {
     paddingHorizontal: 30,
     height: 34,
@@ -86,13 +82,11 @@ export default StyleSheet.create({
     borderColor: BaseColors.black20,
   },
   btnContainer: {
-    marginTop: 20,
     justifyContent: 'flex-end',
-    flex: 1,
     // height: windowHeight / 4.2,
-    marginHorizontal: 20,
   },
   errorText: {
     color: BaseColors.red,
+    paddingBottom: 10,
   },
 });

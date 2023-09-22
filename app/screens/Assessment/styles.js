@@ -15,7 +15,7 @@ export default StyleSheet.create({
     color: BaseColors.black,
   },
   titlesubText: {
-    marginTop: 25,
+    marginTop: 10,
     fontSize: 20,
     fontWeight: '700',
     lineHeight: 30,
@@ -23,7 +23,7 @@ export default StyleSheet.create({
     color: BaseColors.textColor,
   },
   titledetail: {
-    marginTop: 7,
+    marginTop: 10,
     fontSize: 16,
     fontWeight: '400',
     lineHeight: 24,
@@ -33,7 +33,7 @@ export default StyleSheet.create({
   btnContainer: {
     alignItems: 'center',
     justifyContent: 'flex-end',
-    flex: 0.6,
+    // flex: 0.6,
   },
   Assessment: { width: '80%' },
 });

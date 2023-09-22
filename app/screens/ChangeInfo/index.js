@@ -9,45 +9,50 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
 } from 'react-native';
 import { View, StatusBar, Text } from 'react-native';
 import { useSelector } from 'react-redux';
 import styles from './styles';
 import { CheckBox } from 'react-native-elements';
 import LabeledInput from '@components/LabeledInput';
-import { ScrollView } from 'react-native-gesture-handler';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { isArray, isEmpty, isNull, isUndefined } from 'lodash';
+import CText from '@components/CText';
 
+const errorObj = {
+  treatmentErr: false,
+  treatmentMsg: '',
+  descriptionErr: false,
+  descriptionMsg: '',
+};
 export default function ChangeInfo({ navigation, route }) {
   const IOS = Platform.OS === 'ios';
   const data = route?.params?.otherData;
   const { userData, darkmode } = useSelector(state => state.auth);
-  const [selectedValues, setSelectedValues] = useState({}); // Initialize selectedValues as an empty object
+  const [selectedValues, setSelectedValues] = useState({});
   const eventId = route?.params?.event_id;
   const [response, setResponse] = useState('');
-  const [rightHistoryText, setRightHistoryText] = useState('Edit');
   const [loader, setLoader] = useState(true);
   const [questionList, setQuestionList] = useState([]);
-  const [selectedQuestions, setSelectedQuestions] = useState([]);
   const [otherResponse, setOtherResponse] = useState('');
-  const [showCustomResponse, setShowCustomResponse] = useState(false);
-  const [isNoneSelected, setIsNoneSelected] = useState(false);
-  const [isAtLeastOneCheckboxSelected, setIsAtLeastOneCheckboxSelected] =
-    useState(false);
+  const [err, setErr] = useState('');
+  const [errObj, setErrObj] = useState(errorObj);
 
   const handleOtherResponseChange = text => {
+    setErrObj({
+      ...errObj,
+      treatmentErr: false,
+      treatmentMsg: '',
+    });
     setOtherResponse(text);
-  };
-
-  const handleResponseChange = text => {
-    setResponse(text);
-    setResponseError('');
   };
 
   useEffect(() => {
     QuestionListAPI();
   }, []);
 
+  // this function is used for get a question list
   const QuestionListAPI = async (type, list) => {
     setLoader(true);
     const endPoint = `${
@@ -57,8 +62,25 @@ export default function ChangeInfo({ navigation, route }) {
     try {
       const res = await getApiData(`${endPoint}`, 'GET');
       if (res?.status) {
-        console.log('🚀 ~ file: index.js:60 ~ ChangeInfo ~ res:', res);
-        setQuestionList(res?.data);
+        if (!isEmpty(res?.data) && isArray(res?.data)) {
+          setQuestionList(res?.data);
+          response?.data.forEach(que => {
+            if (que?.type === '8') {
+              selectedValues[que?.meta_name] = que?.answer;
+              if (que?.meta_name === 'Add_Other_Ther') {
+                selectedValues['Add_Other_Ther'] = isEmpty(que?.answer)
+                  ? false
+                  : true;
+                setOtherResponse(!isEmpty(que?.answer) ? que?.answer : '');
+              }
+              if (que?.meta_name === 'Add_None_Ther' && !que?.answer) {
+                selectedValues['Add_Ther_Comm'] =
+                  que?.related_questions[0].answer || null;
+              }
+            }
+          });
+          setLoader(false);
+        }
       } else {
         setQuestionList([]);
       }
@@ -69,115 +91,130 @@ export default function ChangeInfo({ navigation, route }) {
     }
   };
 
-  const handleCheckBoxToggle = (id, metaName, question) => {
-    const updatedValues = { ...selectedValues };
-
-    if (question === 'Other') {
-      setShowCustomResponse(!showCustomResponse);
-      setIsNoneSelected(false);
-      setSelectedQuestions([]);
-      // Set the "Other" answer to 1 when it's selected and 0 when it's not selected
-      updatedValues[metaName] = showCustomResponse ? 0 : 1;
-
-      // Set the value of "Add_Ther_Comm" to the content of the regular text input
-      updatedValues.Add_Ther_Comm = response;
-    } else if (question === 'None') {
-      // If "None" is selected, set it to 1, and set all other options to 0
-      Object.keys(updatedValues).forEach(key => {
-        if (key === metaName || key === 'None') {
-          updatedValues[key] = isNoneSelected ? 0 : 1;
+  // this function is used for get a questions answer
+  function getAnswerTreatmentInfo(
+    mainAnswer,
+    questionIndex,
+    relatedQuestions,
+    relatedInd,
+    relatedAns,
+  ) {
+    setQuestionList(prevQuestions => {
+      const updatedQuestions = [...prevQuestions];
+      if (
+        mainAnswer &&
+        updatedQuestions[questionIndex]?.meta_name === 'Add_None_Ther'
+      ) {
+        // Uncheck "Add_None_Ther" checkbox when others are checked
+        updatedQuestions.forEach(que => {
+          if (que?.type === '8') {
+            selectedValues[que?.meta_name] = false; // Uncheck other checkboxes
+          }
+        });
+        selectedValues['Add_None_Ther'] = mainAnswer || false;
+        selectedValues['Add_Ther_Comm'] = '';
+      } else {
+        if (mainAnswer) {
+          // Uncheck "Add_None_Ther" when other checkboxes are checked
+          updatedQuestions.forEach(que => {
+            if (que?.type === '8' && (questionIndex === 6 || !que?.answer)) {
+              selectedValues[que?.meta_name] = false; // Uncheck other checkboxes
+            } else {
+              selectedValues['Add_None_Ther'] = false;
+            }
+          });
+          selectedValues[updatedQuestions[questionIndex]?.meta_name] =
+            mainAnswer;
         } else {
-          updatedValues[key] = 0;
+          selectedValues[updatedQuestions[questionIndex]?.meta_name] =
+            mainAnswer;
+          if (updatedQuestions[questionIndex]?.meta_name === 'Add_Other_Ther') {
+            setOtherResponse('');
+          }
+          if (!mainAnswer && !isUndefined(relatedQuestions)) {
+            let key =
+              relatedQuestions[relatedInd]?.metric_name ||
+              relatedQuestions[relatedInd]?.meta_name;
+            selectedValues[key] = relatedAns;
+          }
         }
-      });
+      }
 
-      // Update the state for selected questions and other related states
-      setSelectedValues(updatedValues);
-      setIsNoneSelected(!isNoneSelected);
-      setShowCustomResponse(false);
-      setResponse('');
-      setResponseError('');
-    } else {
-      // If a regular checkbox is selected, clear the "None" option
-      updatedValues['None'] = 0;
+      updatedQuestions[questionIndex] = {
+        ...updatedQuestions[questionIndex],
+        answer: mainAnswer,
+        error: false,
+      };
+      return updatedQuestions;
+    });
+  }
 
-      // Toggle the selected value between 1 and 0
-      updatedValues[metaName] = updatedValues[metaName] === 1 ? 0 : 1;
-
-      setSelectedQuestions(prevSelected => {
-        if (prevSelected.includes(id)) {
-          return prevSelected.filter(qId => qId !== id);
-        } else {
-          setIsNoneSelected(false);
-          setResponse('');
-          setResponseError('');
-          return [...prevSelected, id];
-        }
-      });
-    }
-
-    setSelectedValues(updatedValues);
-    const isAtLeastOneSelected = Object.values(updatedValues).some(
-      value => value === 1,
-    );
-    setIsAtLeastOneCheckboxSelected(isAtLeastOneSelected);
-  };
-
-  const [responseError, setResponseError] = useState('');
-
-  const validateForm = () => {
-    const selectedOptions = Object.values(selectedValues);
-
-    if (selectedOptions.every(value => value !== 1)) {
-      // No checkbox is selected, show an error message
-      Toast.show({
-        text1: 'Please select at least one checkbox.',
-        type: 'error',
-      });
+  // this function is used for validation
+  function treatmentInfoValidation() {
+    const error = { ...errObj };
+    let valid = questionList?.some(question => {
+      if (
+        question?.type === '8' &&
+        (question?.answer || !isEmpty(question?.answer))
+      ) {
+        return true;
+      }
       return false;
+    });
+
+    if (!valid) {
+      setErr('Please select at least one treatment');
     }
 
-    submitData();
-    return true; // At least one checkbox is selected, form is valid
-  };
+    if (selectedValues['Add_Other_Ther'] && isEmpty(otherResponse)) {
+      valid = false;
+      error.treatmentErr = true;
+      error.treatmentMsg = 'Please enter other treatment';
+    }
+
+    if (
+      !selectedValues['Add_None_Ther'] &&
+      isEmpty(selectedValues['Add_Ther_Comm'])
+    ) {
+      valid = false;
+      error.descriptionErr = true;
+      error.descriptionMsg = 'Please enter description';
+    }
+
+    setErrObj(error);
+
+    if (valid) {
+      submitData();
+    }
+  }
 
   const submitData = async () => {
     setLoader(true);
-    if (response.trim() === '') {
-      setResponseError('Please enter a description before submitting.');
-      return;
-    } else {
-      // Clear the validation error message if the input is valid
-      setResponseError('');
-    }
-
     let endPoints = BaseSetting.endpoints.createTreatmentInfo;
-    const dataObject = {
-      event_id: eventId,
-
-      Add_Ther: 2,
-      Add_Vest_Ther: selectedValues['Vestibular Therapy'] === 1 ? 1 : 0,
-      Add_Visi_Ther: selectedValues['Vision Therapy'] === 1 ? 1 : 0,
-      Add_Cogn_Ther:
-        selectedValues['Cognitive/Behavioral Therapy'] === 1 ? 1 : 0,
-      Add_Chir_Ther: selectedValues['Chiropractic'] === 1 ? 1 : 0,
-      Add_Other_Ther: otherResponse === '' ? 0 : otherResponse, // Use the value of otherResponse here
-      Add_None_Ther: selectedValues['None'] === 1 ? 1 : 0,
-      Add_Ther_Comm: response, // Use the value of response here
-      created_from: 'app',
-    };
-    console.log(
-      '🚀 ~ file: index.js:153 ~ submitData ~ dataObject:',
-      dataObject,
-    );
+    selectedValues['event_id'] = eventId;
+    selectedValues['created_from'] = 'app';
+    selectedValues['Add_Other_Ther'] = !isEmpty(otherResponse)
+      ? otherResponse
+      : false;
     try {
-      const resp = await getApiData(endPoints, 'POST', dataObject, {}, false);
-      console.log('🚀 ~ file: index.js:94 ~ submitData ~ resp:', resp);
+      const resp = await getApiData(
+        endPoints,
+        'POST',
+        selectedValues,
+        {},
+        false,
+      );
       if (resp?.status) {
         Toast.show({
           text1: resp?.message.toString(),
           type: 'success',
         });
+        if (data.symptom_info === 0) {
+          navigation.navigate('Symptom', {
+            event_id: data?.id,
+            otherData: data,
+          });
+        }
       } else {
         Toast.show({
           text1: resp?.message,
@@ -194,31 +231,7 @@ export default function ChangeInfo({ navigation, route }) {
       setLoader(false);
     }
   };
-  const handleSubmit = () => {
-    const selectedOptions = Object.values(selectedValues);
 
-    if (selectedOptions.every(value => value !== 1)) {
-      // No checkbox is selected, show an error message
-      Toast.show({
-        text1: 'Please select at least one checkbox.',
-        type: 'error',
-      });
-    } else if (response.trim() === '') {
-      setResponseError('Please enter a description before submitting.');
-    } else {
-      // Clear the validation error message if the input is valid
-      setResponseError('');
-      submitData(); // Submit data if validation passes
-
-      // Navigate to the 'Symptom' screen if data.symptom_info === 0
-      if (data.symptom_info === 0) {
-        navigation.navigate('Symptom', {
-          event_id: data?.id,
-          otherData: data,
-        });
-      }
-    }
-  };
   return (
     <View
       style={[
@@ -257,76 +270,120 @@ export default function ChangeInfo({ navigation, route }) {
             animating={true}
           />
         ) : (
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="handled"
-          >
-            <Text
-              style={[
-                styles.subtitleText,
-                { color: darkmode ? BaseColors.white : BaseColors.textColor },
-              ]}
+          <View style={styles.buttoncontainer}>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
             >
-              {questionList.length > 0 ? questionList[0].question : ''}
-            </Text>
-
-            <View style={styles.buttoncontainer}>
-              {questionList.slice(1).map(item => (
-                <View style={styles.row} key={item.id}>
-                  <CheckBox
-                    title={item.question}
-                    checked={
-                      item.question === 'Other'
-                        ? showCustomResponse
-                        : item.question === 'None'
-                        ? isNoneSelected
-                        : selectedQuestions.includes(item.id)
-                    }
-                    onPress={() => {
-                      if (item.question === 'Other') {
-                        setShowCustomResponse(!showCustomResponse);
-                      }
-                      if (item.question === 'None') {
-                        setIsNoneSelected(!isNoneSelected);
-                        setSelectedQuestions([]);
-                        setSelectedValues({ None: 1 });
-                        setShowCustomResponse(false);
-                      } else {
-                        handleCheckBoxToggle(item.id, item.question);
-                      }
-                    }}
-                  />
-                </View>
-              ))}
-              {showCustomResponse && (
-                <LabeledInput
-                  Label={'Please Describe Other'}
-                  LabledTextStyle={styles.textInput}
-                  placeholder="Enter your other response here"
-                  onChangeText={handleOtherResponseChange}
-                  value={otherResponse}
-                />
+              {!isEmpty(questionList) &&
+                isArray(questionList) &&
+                questionList.map((item, index) => (
+                  <View key={item.id}>
+                    {item?.type === '6' ? (
+                      <CText
+                        title={item.question}
+                        required
+                        style={{ marginBottom: 5 }}
+                        textColor={{
+                          color: darkmode
+                            ? BaseColors.white
+                            : BaseColors.textColor,
+                        }}
+                      />
+                    ) : item?.type === '8' ? (
+                      <View style={{ marginLeft: -15 }}>
+                        <CheckBox
+                          containerStyle={{
+                            borderRadius: 12,
+                          }}
+                          title={item.question}
+                          checked={selectedValues[item?.meta_name] || false}
+                          onPress={() => {
+                            setErrObj(errorObj);
+                            getAnswerTreatmentInfo(
+                              isUndefined(item?.answer) ||
+                                !selectedValues[item?.meta_name] ||
+                                selectedValues[item?.meta_name] === 'false'
+                                ? true
+                                : false,
+                              index,
+                            );
+                            setErr('');
+                          }}
+                        />
+                      </View>
+                    ) : null}
+                    {item?.meta_name === 'Add_None_Ther' && !isEmpty(err) ? (
+                      <Text style={styles.errorText}>{err}</Text>
+                    ) : (
+                      ''
+                    )}
+                    {item?.meta_name === 'Add_None_Ther' &&
+                      selectedValues['Add_Other_Ther'] && (
+                        <>
+                          <LabeledInput
+                            isRequired
+                            Label={'Other treatment'}
+                            LabledTextStyle={styles.textInput}
+                            placeholder="Please enter other treatment"
+                            onChangeText={handleOtherResponseChange}
+                            value={otherResponse}
+                          />
+                          {errObj.treatmentErr && (
+                            <Text style={styles.errorText}>
+                              {errObj.treatmentMsg}
+                            </Text>
+                          )}
+                        </>
+                      )}
+                    {!isNull(item?.related_questions) &&
+                      !isUndefined(item?.related_questions) &&
+                      !isEmpty(item?.related_questions) &&
+                      item?.related_questions?.map((rItem, ind) => {
+                        if (!selectedValues[item?.meta_name]) {
+                          return (
+                            <LabeledInput
+                              isRequired
+                              Label={rItem?.question}
+                              LabledTextStyle={styles.textInput}
+                              placeholder="Please enter description"
+                              onChangeText={text => {
+                                getAnswerTreatmentInfo(
+                                  item?.type === '8'
+                                    ? selectedValues[item?.meta_name] || false
+                                    : item?.answer,
+                                  index,
+                                  item?.related_questions,
+                                  ind,
+                                  text,
+                                );
+                                setErrObj({
+                                  ...errObj,
+                                  descriptionErr: false,
+                                  descriptionMsg: '',
+                                });
+                              }}
+                              value={selectedValues[rItem?.meta_name]}
+                            />
+                          );
+                        }
+                      })}
+                  </View>
+                ))}
+              {errObj.descriptionErr && (
+                <Text style={styles.errorText}>{errObj.descriptionMsg}</Text>
               )}
-              <LabeledInput
-                Label={'Please Describe'}
-                LabledTextStyle={styles.textInput}
-                placeholder="Enter your response here"
-                onChangeText={handleResponseChange}
-                value={response}
-              />
-              <Text style={styles.errorText}>{responseError}</Text>
-            </View>
-
+            </ScrollView>
             <View style={styles.btnContainer}>
               <Button
                 shape="round"
                 title={'Next'}
                 onPress={() => {
-                  handleSubmit();
+                  treatmentInfoValidation();
                 }}
               />
             </View>
-          </ScrollView>
+          </View>
         )}
       </KeyboardAvoidingView>
     </View>
