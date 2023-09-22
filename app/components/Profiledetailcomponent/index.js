@@ -27,7 +27,7 @@ import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import ImagePicker from 'react-native-image-crop-picker';
 import Authentication from '@redux/reducers/auth/actions';
 import Icon1 from 'react-native-vector-icons/Feather';
-import { getApiDataProgress } from '@utils/apiHelper';
+import { getApiData, getApiDataProgress } from '@utils/apiHelper';
 import { Images } from '@config';
 
 const errObj = {
@@ -113,14 +113,26 @@ const Profiledetailcomponent = (props, ref) => {
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
 
+  const getLatestData = async () => {
+    const endPoint = `${BaseSetting.endpoints.getPatient}?created_from=app`;
+    try {
+      const res = await getApiData(`${endPoint}`, 'GET');
+      if (res?.status) {
+        dispatch(setUserData(res?.data));
+      }
+    } catch (error) {
+      console.log('📌 ⏩ file: index.js:24 ⏩ LangListAPI ⏩ error:', error);
+    }
+  };
+
   useEffect(() => {
     setFirstName(userData?.firstname);
     setMiddleName(userData?.middlename);
     setLastName(userData?.lastname);
     setPatientPhone(userData?.phone);
     setPatientEmail(userData?.email);
-    setGuardianEmail(userData?.emergency_email);
-    setGuardianPhone(userData?.emergency_phone);
+    setGuardianEmail(userData?.guardian_email);
+    setGuardianPhone(userData?.guardian_phone);
     setBirthDate(moment(userData?.dob).format('MM-DD-YYYY'));
     setSexValue(
       userData?.sex == 0
@@ -314,9 +326,8 @@ const Profiledetailcomponent = (props, ref) => {
         'POST',
         data,
       );
-      // Check the status of the response.
       if (response?.status) {
-        dispatch(setUserData(response?.data));
+        getLatestData();
         if (tempRemove && isNull(selectedImage)) {
           const newUserData = {
             ...userData,

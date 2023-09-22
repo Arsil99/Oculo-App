@@ -148,13 +148,13 @@ export default function Profile({ navigation }) {
       id: '3',
       leftIcon: 'phone',
       title: 'Guardian phone',
-      righttitle: userData?.emergency_phone ? userData?.emergency_phone : '_',
+      righttitle: userData?.guardian_phone ? userData?.guardian_phone : '_',
     },
     {
       id: '4',
       leftIcon: 'envelope-o',
       title: 'Guardian email',
-      righttitle: userData?.emergency_email ? userData?.emergency_email : '_',
+      righttitle: userData?.guardian_email ? userData?.guardian_email : '_',
     },
   ];
 
