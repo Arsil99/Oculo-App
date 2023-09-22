@@ -9,6 +9,8 @@ import { BaseColors } from '@config/theme';
 const Assessment = ({ navigation, route }) => {
   const { darkmode, userData } = useSelector(state => state.auth);
   const data = route?.params?.otherData;
+  let provider_name =
+    userData?.provider_firstname + ' ' + userData?.provider_lastname;
 
   const navigatetoscreen = () => {
     if (data.digit_recall === 0) {
@@ -70,7 +72,7 @@ const Assessment = ({ navigation, route }) => {
     >
       <HeaderBar
         HeaderText={
-          data.treatment_info === 0
+          data?.treatment_info === 0
             ? 'Assessment 1'
             : data?.symptom_info === 0
             ? 'Assessment 2'
@@ -145,7 +147,11 @@ const Assessment = ({ navigation, route }) => {
                 },
               ]}
             >
-              {userData?.provider_name}
+              {userData?.provider_credentials
+                ? provider_name + ' ' + userData?.provider_credentials
+                : userData?.provider_title
+                ? userData?.provider_title + ' ' + provider_name
+                : provider_name}
             </Text>
           </View>
           <View>

@@ -13,6 +13,7 @@ import styles from './styles';
 import { useSelector } from 'react-redux';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { CheckBox } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 const ProfilehistoryButton = (props, ref) => {
   const { darkmode, userData } = useSelector(state => state.auth);
@@ -312,6 +313,8 @@ const ProfilehistoryButton = (props, ref) => {
               },
             ]}
           >
+            <Icon name="arrowright" size={20} color={BaseColors.secondary} />
+            &nbsp;
             {`${item.patient_question}`}
             <Text style={{ color: BaseColors.red, marginTop: -13 }}> *</Text>
           </Text>

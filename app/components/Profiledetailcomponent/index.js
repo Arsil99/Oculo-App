@@ -97,6 +97,7 @@ const Profiledetailcomponent = (props, ref) => {
   const genderdata = [
     { label: 'Male', value: 'Male' },
     { label: 'Female', value: 'Female' },
+    { label: 'Other', value: 'Other' },
   ];
   const dropdownItems = [
     { label: 'She/Her/Hers', value: '1=She/Her/Hers' },
@@ -140,7 +141,7 @@ const Profiledetailcomponent = (props, ref) => {
         : userData?.pronouns === '4'
         ? '4=Ze/Zir/Zirs'
         : userData?.pronouns === '5'
-        ? 'Ze/Hir/Hirs'
+        ? '5=Ze/Hir/Hirs'
         : null,
     );
     setValue(userData?.gender);
@@ -281,7 +282,7 @@ const Profiledetailcomponent = (props, ref) => {
 
     let data = {
       first_name: firstName,
-      middle_name: middleName,
+      middle_name: middleName ? middleName : '',
       last_name: lastName,
       dob: birthDate.replace(/\//g, '-'),
       phone: patientPhone,
@@ -425,7 +426,15 @@ const Profiledetailcomponent = (props, ref) => {
                   setSelectedImage(null);
                 }}
               >
-                {!(isNull(selectedImage) && tempRemove) && <Text>Remove</Text>}
+                {!(isNull(selectedImage) && tempRemove) && (
+                  <Text
+                    style={{
+                      color: darkmode ? BaseColors.white : BaseColors.black90,
+                    }}
+                  >
+                    Remove
+                  </Text>
+                )}
               </TouchableOpacity>
             )}
           </View>

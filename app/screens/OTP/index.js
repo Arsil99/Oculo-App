@@ -183,12 +183,8 @@ export default function OTP({ navigation, route }) {
     >
       <View style={{ alignItems: 'center' }}>
         <Image
-          source={Images.logo}
-          style={{
-            marginBottom: 20,
-            height: 55,
-            resizeMode: 'center',
-          }}
+          source={Images.updatedlogo}
+          style={{ marginBottom: 25, marginTop: -5 }}
           tintColor={BaseColors.primary}
         />
         <Text
