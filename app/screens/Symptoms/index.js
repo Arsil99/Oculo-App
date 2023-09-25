@@ -819,7 +819,12 @@ fixDurScreen	= t	Average fixation duration on screen
               <ActivityIndicator size={'large'} />
             </View>
           ) : (
-            <View>
+            <View
+              style={{
+                flexGrow: 1,
+                justifyContent: 'space-between',
+              }}
+            >
               {!takeBoolean ? (
                 <View>
                   <FlatList
@@ -1050,11 +1055,7 @@ fixDurScreen	= t	Average fixation duration on screen
                   })}
                 </View>
               ) : (
-                <View
-                  style={{
-                    height: BaseSetting.nHeight / 2,
-                  }}
-                >
+                <View>
                   {boolQuestion
                     ?.map((item, rowIndex) => {
                       const activeIndex = activeIndexes[rowIndex]; // Get the active index for this row
