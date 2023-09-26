@@ -297,39 +297,39 @@ fixDurScreen	= t	Average fixation duration on screen
       setNausea(updatedState);
     } else if (state === dizz) {
       setDizz(updatedState);
-    } else if ((state = blurred)) {
+    } else if (state === blurred) {
       setBlurred(updatedState);
-    } else if ((state = balance)) {
+    } else if (state === balance) {
       setBalance(updatedState);
-    } else if ((state = sensitiveLight)) {
+    } else if (state === sensitiveLight) {
       setSensitiveLight(updatedState);
-    } else if ((state = sensitiveNoise)) {
+    } else if (state === sensitiveNoise) {
       setSensitiveNoise(updatedState);
-    } else if ((state = feelingSlowed)) {
+    } else if (state === feelingSlowed) {
       setFeelingSlowed(updatedState);
-    } else if ((state = feelingLike)) {
+    } else if (state === feelingLike) {
       setFeelingLike(updatedState);
-    } else if ((state = feelRight)) {
+    } else if (state === feelRight) {
       setFeelRight(updatedState);
-    } else if ((state = difficultyCon)) {
+    } else if (state === difficultyCon) {
       setDifficultyCon(updatedState);
-    } else if ((state = difficultyRem)) {
+    } else if (state === difficultyRem) {
       setDifficultyRem(updatedState);
-    } else if ((state = low)) {
+    } else if (state === low) {
       setLow(updatedState);
-    } else if ((state = confusion)) {
+    } else if (state === confusion) {
       setConfusion(updatedState);
-    } else if ((state = draw)) {
+    } else if (state === draw) {
       setDraw(updatedState);
-    } else if ((state = emotional)) {
+    } else if (state === emotional) {
       setEmotional(updatedState);
-    } else if ((state = irritable)) {
+    } else if (state === irritable) {
       setIrritable(updatedState);
-    } else if ((state = sad)) {
+    } else if (state === sad) {
       setSad(updatedState);
-    } else if ((state = nervous)) {
+    } else if (state === nervous) {
       setNervous(updatedState);
-    } else if ((state = trouble)) {
+    } else if (state === trouble) {
       setTrouble(updatedState);
     }
   };
@@ -373,7 +373,7 @@ fixDurScreen	= t	Average fixation duration on screen
       });
     } else {
       let sliderObject = {};
-      if (updatedSymptomArray[index]) {
+      if (updatedSymptomArray[index]?.symptom === meta[index]) {
         // this logic for manage data if user again come to a particular tab
         const obj = { ...updatedSymptomArray[index] };
         sliderObject = { ...updatedSymptomArray[index] };
@@ -387,6 +387,18 @@ fixDurScreen	= t	Average fixation duration on screen
         }
       } else {
         sliderObject = {
+          fixAOI: Number(Math.floor(Math.random() * (1000 - 0)) + 0),
+          viewed:
+            Number(Math.floor(Math.random() * (10 - 0)) + 0) >
+            Number(Math.floor(Math.random() * (5 - 1)) + 1)
+              ? true
+              : false,
+          fixDurAOI: parseFloat(
+            (Math.random() * (1000.0 - 0.0) + 0.0).toFixed(2),
+          ),
+          fixScreen: Number(Math.floor(Math.random() * (20 - 0)) + 0),
+          totalFixDur: Number(Math.floor(Math.random() * (1000 - 0)) + 0),
+          fixDurScreen: Number(Math.floor(Math.random() * (1000 - 0)) + 0),
           symptom: meta[index - 1],
           initialScore: initValue,
           scoreChng: count,
@@ -497,7 +509,7 @@ fixDurScreen	= t	Average fixation duration on screen
   };
 
   const ResetValues = () => {
-    setCount(0);
+    setCount(1);
     setInitValue(0);
     setMilliseconds(0);
     setLastValue(0);
@@ -654,7 +666,7 @@ fixDurScreen	= t	Average fixation duration on screen
   }, [navigation]);
 
   // slider details state management
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(1);
   const [duration, setDuration] = useState(0);
   const [initValue, setInitValue] = useState(0);
   const [milliseconds, setMilliseconds] = useState(0);
@@ -674,7 +686,6 @@ fixDurScreen	= t	Average fixation duration on screen
   const handleValueChange = newValue => {
     setSliderValue(newValue);
     setLastValue(newValue - 2);
-    setCount(count + 1);
   };
 
   useEffect(() => {
@@ -853,7 +864,7 @@ fixDurScreen	= t	Average fixation duration on screen
                             },
                             styles.yesbutton,
                             {
-                              width: item.length < 12 ? 131 : item.length * 12,
+                              width: Number(150),
                             },
                           ]}
                           activeOpacity={
@@ -927,6 +938,7 @@ fixDurScreen	= t	Average fixation duration on screen
                                 thumbTintColor={BaseColors.white}
                                 style={styles.slider}
                                 step={1}
+                                onSlidingComplete={() => setCount(count + 1)}
                               />
                               {/* Marker Vertical Lines */}
                               <View style={styles.markerContainer}>
