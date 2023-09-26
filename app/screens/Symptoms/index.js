@@ -337,7 +337,6 @@ fixDurScreen	= t	Average fixation duration on screen
   // time count for each screen
 
   useEffect(() => {
-    setRevisit(revisit => revisit + 1);
     const intervalId = setInterval(() => {
       setDuration(duration => duration + 1);
     }, 1000);
@@ -351,6 +350,9 @@ fixDurScreen	= t	Average fixation duration on screen
 
   // this function for handle symptoms while change from tabs
   function symptomsChange(index) {
+    setCount(0);
+    setRevisit(0);
+    setDuration(0);
     setActiveButtonIndex(index);
     const nData = symptomArray[index];
     if (nData) {
@@ -373,15 +375,19 @@ fixDurScreen	= t	Average fixation duration on screen
       });
     } else {
       let sliderObject = {};
-      if (updatedSymptomArray[index]?.symptom === meta[index]) {
+      if (updatedSymptomArray[index]?.symptom === meta[index - 1]) {
         // this logic for manage data if user again come to a particular tab
         const obj = { ...updatedSymptomArray[index] };
         sliderObject = { ...updatedSymptomArray[index] };
-        sliderObject.durScreen = obj?.durScreen + duration;
+        sliderObject.durScreen = obj?.durScreen + duration * 1000;
         sliderObject.finalScore = lastValue;
         sliderObject.initialScore = obj?.finalScore;
-        sliderObject.pageRevisitIn = revisit;
-        sliderObject.scoreChng = count;
+        sliderObject.pageRevisitInt = sliderObject.pageRevisitInt
+          ? sliderObject.pageRevisitInt + 1
+          : revisit;
+        sliderObject.scoreChng = sliderObject.scoreChng
+          ? sliderObject.scoreChng + count
+          : count;
         if (sliderObject) {
           setSliderValue([sliderObject?.initialScore + 2]);
         }
@@ -403,7 +409,7 @@ fixDurScreen	= t	Average fixation duration on screen
           initialScore: initValue,
           scoreChng: count,
           finalScore: lastValue,
-          durScreen: duration,
+          durScreen: duration * 1000,
           pageRevisitInt: revisit,
         };
       }
@@ -509,7 +515,7 @@ fixDurScreen	= t	Average fixation duration on screen
   };
 
   const ResetValues = () => {
-    setCount(1);
+    setCount(0);
     setInitValue(0);
     setMilliseconds(0);
     setLastValue(0);
@@ -666,7 +672,7 @@ fixDurScreen	= t	Average fixation duration on screen
   }, [navigation]);
 
   // slider details state management
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState(0);
   const [duration, setDuration] = useState(0);
   const [initValue, setInitValue] = useState(0);
   const [milliseconds, setMilliseconds] = useState(0);
@@ -1165,6 +1171,9 @@ fixDurScreen	= t	Average fixation duration on screen
                     title={'Next'}
                     style={styles.signinbutton}
                     onPress={() => {
+                      setCount(0);
+                      setRevisit(0);
+                      setDuration(0);
                       handleSymptomChange(activeButtonIndex + 1);
                     }}
                   />
