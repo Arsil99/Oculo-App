@@ -61,7 +61,7 @@ const ImmediateRecallmain = ({ navigation, route }) => {
           <Text
             style={[
               styles.titleText,
-              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+              { color: darkmode ? BaseColors.white : BaseColors.textColor },
             ]}
           >
             Instructions
@@ -69,7 +69,7 @@ const ImmediateRecallmain = ({ navigation, route }) => {
           <Text
             style={[
               styles.titlesubText,
-              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+              { color: darkmode ? BaseColors.white : BaseColors.textColor },
             ]}
           >
             A list of numbers will appear on the screen. Remember these numbers.
@@ -81,7 +81,7 @@ const ImmediateRecallmain = ({ navigation, route }) => {
           <Text
             style={[
               styles.example,
-              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+              { color: darkmode ? BaseColors.white : BaseColors.textColor },
             ]}
           >
             Example:{'\n'}
@@ -89,7 +89,7 @@ const ImmediateRecallmain = ({ navigation, route }) => {
           <Text
             style={[
               styles.subText,
-              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+              { color: darkmode ? BaseColors.white : BaseColors.textColor },
             ]}
           >
             If you saw{'\n'} 1 2 3 {'\n'}
@@ -99,7 +99,7 @@ const ImmediateRecallmain = ({ navigation, route }) => {
           <Text
             style={[
               styles.example,
-              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+              { color: darkmode ? BaseColors.white : BaseColors.textColor },
             ]}
           >
             Example:

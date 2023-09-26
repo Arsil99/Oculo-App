@@ -811,7 +811,6 @@ fixDurScreen	= t	Average fixation duration on screen
         },
       ]}
     >
-      <StatusBar barStyle="dark-content" translucent={true} />
       <HeaderBar
         HeaderText={'Symptoms'}
         HeaderCenter
