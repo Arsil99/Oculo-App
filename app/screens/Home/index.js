@@ -98,7 +98,14 @@ export default function Home({ navigation }) {
 
       {/* ACTIVE TAB AREA */}
       {activeTab?.id === 'summary' ? (
-        <View style={styles.summaryArea}>
+        <View
+          style={[
+            styles.summaryArea,
+            {
+              backgroundColor: darkmode ? BaseColors.white20 : BaseColors.white,
+            },
+          ]}
+        >
           <View style={styles.container}>
             <SpiderWebChart />
             <View style={styles.summaryText}>

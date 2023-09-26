@@ -5,7 +5,6 @@ const IOS = Platform.OS === 'ios';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: BaseColors.white,
   },
   chart: {
     width: '90%',
