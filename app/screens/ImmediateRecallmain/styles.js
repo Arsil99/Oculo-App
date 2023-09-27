@@ -95,7 +95,7 @@ export default StyleSheet.create({
   },
   imgcontainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     marginTop: 30,
     marginHorizontal: 20,

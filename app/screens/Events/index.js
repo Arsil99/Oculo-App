@@ -144,7 +144,7 @@ export default function Events({ navigation }) {
                     4
                       ? null
                       : navigation.navigate(
-                          'Assessment',
+                          'EventDetails',
 
                           { event_id: item?.id, otherData: item },
                         )

@@ -47,7 +47,12 @@ const Dashboard = () => {
     );
   };
   return (
-    <View style={{ flex: 1 }}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: darkmode ? BaseColors.lightBlack : null,
+      }}
+    >
       <HeaderBar HeaderText={'Event Aug 3'} HeaderCenter leftText="Back" />
       <ScrollView
         contentContainerStyle={[
@@ -65,18 +70,18 @@ const Dashboard = () => {
           <Text
             style={[
               styles.headtext,
-              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+              { color: darkmode ? BaseColors.white : BaseColors.textColor },
             ]}
           >
             Headache
           </Text>
         </View>
         <View style={styles.subheaderContainer}>
-          <View>
+          <View style={styles.subheaderContainerr}>
             <Text
               style={[
                 styles.text,
-                { color: darkmode ? BaseColors.white : BaseColors.black90 },
+                { color: darkmode ? BaseColors.white : BaseColors.textColor },
               ]}
             >
               Baseline
@@ -89,7 +94,7 @@ const Dashboard = () => {
             <Text
               style={[
                 styles.text,
-                { color: darkmode ? BaseColors.white : BaseColors.black90 },
+                { color: darkmode ? BaseColors.white : BaseColors.textColor },
               ]}
             >
               Highest
@@ -100,7 +105,7 @@ const Dashboard = () => {
             <Text
               style={[
                 styles.text,
-                { color: darkmode ? BaseColors.white : BaseColors.black90 },
+                { color: darkmode ? BaseColors.white : BaseColors.textColor },
               ]}
             >
               Recent

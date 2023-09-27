@@ -39,7 +39,7 @@ const ImmediateRecallmain = ({ navigation, route }) => {
     >
       <HeaderBar
         HeaderText={'Digits Backwards'}
-        leftText={'Cancel'}
+        // leftText={'Cancel'}
         // leftBtnPress={() => {
         //   navigation.navigate('Events');
         // }}
@@ -109,11 +109,6 @@ const ImmediateRecallmain = ({ navigation, route }) => {
         <View style={styles.imgcontainer}>
           <Image
             source={Images.digit}
-            resizeMode="contain"
-            style={styles.img2}
-          />
-          <Image
-            source={Images.digitreverse}
             resizeMode="contain"
             style={styles.img2}
           />

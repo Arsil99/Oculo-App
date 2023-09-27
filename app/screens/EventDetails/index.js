@@ -8,7 +8,7 @@ import Milestones from '@components/Milestones';
 import { Images } from '@config';
 import CardList from '@components/CardList';
 import { useSelector } from 'react-redux';
-export default function EventDetails() {
+export default function EventDetails({ navigation }) {
   const { darkmode } = useSelector(state => state.auth);
   // OUTER TABS
   const switchOptions = [
@@ -126,7 +126,7 @@ export default function EventDetails() {
             </View>
           ) : (
             <View style={styles.detailsArea}>
-              <Milestones />
+              <Milestones navigation={navigation} />
             </View>
           )}
         </View>
@@ -143,17 +143,37 @@ export default function EventDetails() {
             <Text
               style={{
                 fontSize: 18,
+                fontWeight: '700',
                 marginVertical: 5,
-                color: darkmode ? BaseColors.white : BaseColors.black90,
+                color: darkmode ? BaseColors.white : BaseColors.black,
               }}
             >
-              Open Events
+              Assessment Due
             </Text>
             <CardList
-              image={Images.emoji1}
-              data={'March 30, 2000'}
-              status={'Completed'}
-              assessment={'Assessment 4/5'}
+              rightArrow={true}
+              image={Images.eventlogo}
+              data={'Assessment 2'}
+              status={'Subsequent Visit'}
+              assessment={'Event: Aug 03'}
+            />
+          </View>
+          <View style={{ paddingHorizontal: 15 }}>
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: '700',
+                marginVertical: 5,
+                color: darkmode ? BaseColors.white : BaseColors.black,
+              }}
+            >
+              Completed Assessments
+            </Text>
+            <CardList
+              image={Images.eventlogo}
+              data={'Assessment 1'}
+              status={'Initial Visit'}
+              assessment={'Event: July 28'}
             />
           </View>
         </View>

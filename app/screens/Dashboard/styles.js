@@ -8,9 +8,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
   },
   scrollcontainer: {
-    borderWidth: 1,
     flexGrow: 1,
-    marginTop: 1,
   },
   imageViewcenter: {
     marginTop: 20,
@@ -46,7 +44,7 @@ export default StyleSheet.create({
   },
   number: {
     fontSize: 20,
-    marginTop: 10,
+    marginTop: 5,
     lineHeight: 30,
     fontWeight: '700',
     fontFamily: BaseColors.bold,
@@ -88,6 +86,13 @@ export default StyleSheet.create({
     justifyContent: 'space-around',
     marginHorizontal: 20,
     marginTop: 30,
+  },
+  subheaderContainerr: {
+    height: 76,
+    width: 91,
+    backgroundColor: BaseColors.lightsky,
+    padding: 8,
+    borderRadius: 12,
   },
   flatlistcontainer: {
     flexDirection: 'row',
