@@ -64,7 +64,7 @@ export default function CardList({
                         styles.colorcontainer,
                         {
                           backgroundColor:
-                            status === 'Completed'
+                            status === 'Completed' || status === 'Initial Visit'
                               ? BaseColors.secondary
                               : BaseColors.lightorange,
                         },

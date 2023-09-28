@@ -70,17 +70,21 @@ const Symptom = ({ navigation, eventId, route }) => {
               { color: darkmode ? BaseColors.white : BaseColors.textColor },
             ]}
           >
-            Please report your symptom severity level, based on how you've felt
-            over the past 24 hours or since your last assessment, using the
-            provided scale for each symptom listed on the following screens.
+            Please report your symptom severity level based on how you typically
+            feel, using the provided scale.
           </Text>
           <Text
             style={[
-              styles.subtitleText,
+              styles.titlesubText,
               { color: darkmode ? BaseColors.white : BaseColors.textColor },
             ]}
           >
-            Your previous assessment value is shown on each symptom.
+            Please report your symptom severity level, based on how you feel at
+            this point, using the provided scale.{'\n'}
+            {'\n'}Please report your symptom severity level, based on how you've
+            felt over the past 24 hours or since your last assessment, using the
+            provided scale. Your most recent severity level is shown for each
+            symptom.{'\n'}
           </Text>
           <Text
             style={[

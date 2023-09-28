@@ -927,7 +927,7 @@ fixDurScreen	= t	Average fixation duration on screen
                                 },
                               ]}
                             >
-                              Report the severity level of:{' '}
+                              Please report the severity level of:{' '}
                               {patient_question[index]}
                             </Text>
                             <View style={styles.sliderMarker}>
