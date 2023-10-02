@@ -567,17 +567,21 @@ const ProfilehistoryButton = (props, ref) => {
           </View>
         ) : null}
 
-        {item.meta_name === 'None_Ther' && data['Other_Ther']
+        {item.meta_name === 'Other_Ther' && data['Other_Ther']
           ? // Render text input for type 2
             editHistory && (
               <>
                 <Text
                   style={{
-                    fontWeight: 'bold',
                     color: darkmode ? BaseColors.white : BaseColors.textColor,
                   }}
                 >
-                  Other treatment
+                  <Icon
+                    name="arrowright"
+                    size={20}
+                    color={BaseColors.secondary}
+                  />
+                  &nbsp; Other treatment
                   <Text style={{ color: BaseColors.red, marginTop: -13 }}>
                     {' '}
                     *
