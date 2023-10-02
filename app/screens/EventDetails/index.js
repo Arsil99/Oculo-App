@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import BaseSetting from '@config/setting';
 import { getApiData } from '@utils/apiHelper';
 import SpiderWebChart from '@components/SpiderWebChart';
+import { Slider } from '@miblanchard/react-native-slider';
 
 export default function EventDetails({ navigation, route }) {
   let eventId = route?.params?.event_id;
@@ -54,6 +55,11 @@ export default function EventDetails({ navigation, route }) {
       console.log('Error:', error);
     }
   };
+  const rangeLabels = ['Aug 03', 'Aug 07', 'Aug 14', 'Aug 15'];
+  const [sliderValue, setSliderValue] = useState(7);
+  const dateLabels = ['Aug 03', 'Aug 07', 'Aug 14', 'Aug 15'];
+
+  const rangeValues = [7, 8, 9, 10];
   return (
     <View
       style={[
@@ -134,6 +140,64 @@ export default function EventDetails({ navigation, route }) {
           {activeInTab.id === 'summary' ? (
             <View style={styles.spiderView}>
               <SpiderWebChart />
+              <Text style={styles.label}>Compare your assessments</Text>
+              {/* Add the Slider component here */}
+              <Slider
+                value={sliderValue} // Replace with your slider value (7, 8, 9, or 10)
+                minimumValue={7}
+                maximumValue={10}
+                step={1}
+                style={styles.slider}
+                trackMarks={[
+                  { label: '7', value: 7 },
+                  { label: '8', value: 8 },
+                  { label: '9', value: 9 },
+                  { label: '10', value: 10 },
+                ]}
+                thumbStyle={styles.thumbStyle} // Add the thumb style for elevation
+                thumbTintColor={BaseColors.white}
+                minimumTrackTintColor={BaseColors.primary}
+                maximumTrackTintColor={BaseColors.tabinActive}
+                onValueChange={value => {
+                  // Handle the slider value change here
+                  let selectedLabel = '';
+
+                  switch (value) {
+                    case 7:
+                      selectedLabel = 'Aug 03';
+                      break;
+                    case 8:
+                      selectedLabel = 'Aug 07';
+                      break;
+                    case 9:
+                      selectedLabel = 'Aug 14';
+                      break;
+                    case 10:
+                      selectedLabel = 'Aug 15';
+                      break;
+                    default:
+                      selectedLabel = ''; // Handle other values if needed
+                      break;
+                  }
+
+                  // Update the state or perform any necessary action with selectedLabel
+                }}
+              />
+
+              <View style={styles.rangeLabelsContainerr}>
+                <Text>7</Text>
+                <Text>8</Text>
+                <Text>9</Text>
+                <Text>10</Text>
+              </View>
+              {/* Display the range labels */}
+              <View style={styles.rangeLabelsContainer}>
+                {['Aug 03', 'Aug 07', 'Aug 14', 'Aug 15'].map(label => (
+                  <Text key={label} style={styles.rangeLabel}>
+                    {label}
+                  </Text>
+                ))}
+              </View>
             </View>
           ) : (
             <View style={styles.detailsArea}>
