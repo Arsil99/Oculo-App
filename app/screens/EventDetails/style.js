@@ -12,4 +12,9 @@ export default StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: BaseColors.lightBg,
   },
+  spiderView: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

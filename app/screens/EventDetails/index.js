@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './style';
 import HeaderBar from '@components/HeaderBar';
 import TabSwitch from '@components/TabSwitch';
@@ -8,7 +8,13 @@ import Milestones from '@components/Milestones';
 import { Images } from '@config';
 import CardList from '@components/CardList';
 import { useSelector } from 'react-redux';
-export default function EventDetails({ navigation }) {
+import BaseSetting from '@config/setting';
+import { getApiData } from '@utils/apiHelper';
+import SpiderWebChart from '@components/SpiderWebChart';
+
+export default function EventDetails({ navigation, route }) {
+  let eventId = route?.params?.event_id;
+  let patientId = route?.params?.otherData?.patient_id;
   const { darkmode } = useSelector(state => state.auth);
   // OUTER TABS
   const switchOptions = [
@@ -31,6 +37,23 @@ export default function EventDetails({ navigation }) {
     id: 'summary',
     name: 'Summary',
   });
+  const [graphData, setGraphData] = useState([]);
+  useEffect(() => {
+    getSummary();
+  }, []);
+  const getSummary = async () => {
+    const endPoint = `${BaseSetting.endpoints.spiderReport}?want_from=web&patient_id=${patientId}&event_id=${eventId}`;
+    try {
+      const res = await getApiData(`${endPoint}`, 'GET');
+      if (res?.status) {
+        setGraphData(res?.data);
+      } else {
+        setGraphData([]);
+      }
+    } catch (error) {
+      console.log('Error:', error);
+    }
+  };
   return (
     <View
       style={[
@@ -109,20 +132,8 @@ export default function EventDetails({ navigation }) {
             }}
           />
           {activeInTab.id === 'summary' ? (
-            <View
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Text
-                style={{
-                  marginVertical: 25,
-                  color: darkmode ? BaseColors.white : BaseColors.black90,
-                }}
-              >
-                Coming Soon ...
-              </Text>
+            <View style={styles.spiderView}>
+              <SpiderWebChart />
             </View>
           ) : (
             <View style={styles.detailsArea}>

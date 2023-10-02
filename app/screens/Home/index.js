@@ -107,7 +107,7 @@ export default function Home({ navigation }) {
           ]}
         >
           <View style={styles.container}>
-            <SpiderWebChart />
+            {/* <SpiderWebChart /> */}
             <View style={styles.summaryText}>
               <Text
                 style={[
