@@ -4,7 +4,6 @@ import { BaseColors } from '@config/theme';
 export default StyleSheet.create({
   main: {
     flex: 1,
-    // backgroundColor: BaseColors.white,
   },
   detailsArea: {
     width: '100%',
@@ -12,50 +11,33 @@ export default StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: BaseColors.lightBg,
   },
-  // spiderView: {
-  //   width: '100%',
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  // },
   spiderView: {
-    // Add styles for the container of SpiderWebChart and Slider
-    // Example:
-    marginBottom: 20, // Adjust the margin as needed
+    marginBottom: 20,
     marginHorizontal: 20,
   },
   slider: {
-    // Add styles for the Slider component
-    // Example:
     marginHorizontal: 20,
-    width: '80%', // Set the width as desired
-    alignSelf: 'center', // Center the slider horizontally
+    width: '80%',
+    alignSelf: 'center',
   },
   rangeLabelsContainer: {
-    // Add styles for the container of range labels
-    // Example:
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    marginTop: 8, // Adjust the marginTop as needed
+    marginTop: 8,
   },
   rangeLabelsContainerr: {
-    // Add styles for the container of range labels
-    // Example:
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 10,
   },
   rangeLabel: {
-    // Add styles for individual range labels
-    // Example:
     fontSize: 12,
     color: BaseColors.black90,
   },
   thumbStyle: {
-    // Add styles for the thumb (to apply elevation)
-    elevation: 4, // Adjust the elevation as needed
+    elevation: 4,
   },
-
   rangeValuesContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',

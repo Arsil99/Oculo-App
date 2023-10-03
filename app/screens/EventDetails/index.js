@@ -55,11 +55,9 @@ export default function EventDetails({ navigation, route }) {
       console.log('Error:', error);
     }
   };
-  const rangeLabels = ['Aug 03', 'Aug 07', 'Aug 14', 'Aug 15'];
-  const [sliderValue, setSliderValue] = useState(7);
-  const dateLabels = ['Aug 03', 'Aug 07', 'Aug 14', 'Aug 15'];
 
-  const rangeValues = [7, 8, 9, 10];
+  const [sliderValue, setSliderValue] = useState(7);
+
   return (
     <View
       style={[
@@ -141,7 +139,7 @@ export default function EventDetails({ navigation, route }) {
             <View style={styles.spiderView}>
               <SpiderWebChart />
               <Text style={styles.label}>Compare your assessments</Text>
-              {/* Add the Slider component here */}
+
               <Slider
                 value={sliderValue} // Replace with your slider value (7, 8, 9, or 10)
                 minimumValue={7}
@@ -154,7 +152,7 @@ export default function EventDetails({ navigation, route }) {
                   { label: '9', value: 9 },
                   { label: '10', value: 10 },
                 ]}
-                thumbStyle={styles.thumbStyle} // Add the thumb style for elevation
+                thumbStyle={styles.thumbStyle}
                 thumbTintColor={BaseColors.white}
                 minimumTrackTintColor={BaseColors.primary}
                 maximumTrackTintColor={BaseColors.tabinActive}
@@ -176,11 +174,9 @@ export default function EventDetails({ navigation, route }) {
                       selectedLabel = 'Aug 15';
                       break;
                     default:
-                      selectedLabel = ''; // Handle other values if needed
+                      selectedLabel = '';
                       break;
                   }
-
-                  // Update the state or perform any necessary action with selectedLabel
                 }}
               />
 
@@ -190,7 +186,7 @@ export default function EventDetails({ navigation, route }) {
                 <Text>9</Text>
                 <Text>10</Text>
               </View>
-              {/* Display the range labels */}
+
               <View style={styles.rangeLabelsContainer}>
                 {['Aug 03', 'Aug 07', 'Aug 14', 'Aug 15'].map(label => (
                   <Text key={label} style={styles.rangeLabel}>
