@@ -2,18 +2,15 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { RadarChart } from 'react-native-charts-wrapper';
 
-const SpiderWebChart = () => {
+const SpiderWebChart = ({ items }) => {
+  const length = items?.length;
+  const valuesArray = Array.from({ length }, () => ({ value: 1 }));
+  const dynamicObject = { values: valuesArray };
   const data = {
     dataSets: [
       {
-        values: [
-          { value: 0.6 },
-          { value: 0.8 },
-          { value: 0.7 },
-          { value: 0.5 },
-          { value: 0.9 },
-        ],
-        label: 'Dataset 1',
+        values: dynamicObject?.values,
+        label: 'Initial',
         config: {
           color: '#1F77B4',
           drawFilled: true,
@@ -26,18 +23,11 @@ const SpiderWebChart = () => {
   };
 
   const xAxis = {
-    valueFormatter: [
-      'Headache',
-      'Pressure in Head',
-      'Neck Pain',
-      'Nausea',
-      'Dizziness',
-    ],
+    valueFormatter: items,
     granularityEnabled: true,
     granularity: 1,
     drawGridLines: true,
   };
-
   return (
     <View style={styles.container}>
       <RadarChart

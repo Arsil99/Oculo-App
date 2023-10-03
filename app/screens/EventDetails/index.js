@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './style';
 import HeaderBar from '@components/HeaderBar';
 import TabSwitch from '@components/TabSwitch';
-import { BaseColors, BaseStyles, FontFamily } from '@config/theme';
+import { BaseColors } from '@config/theme';
 import Milestones from '@components/Milestones';
 import { Images } from '@config';
 import CardList from '@components/CardList';
@@ -12,13 +12,16 @@ import BaseSetting from '@config/setting';
 import { getApiData } from '@utils/apiHelper';
 import SpiderWebChart from '@components/SpiderWebChart';
 import { Slider } from '@miblanchard/react-native-slider';
-
+import { staticGraph } from '@config/staticData';
 export default function EventDetails({ navigation, route }) {
-  let eventId = route?.params?.patient_id;
+  const [graph, setGraph] = useState(staticGraph);
+  const [day, setDay] = useState([]);
+  const [month, setMonth] = useState([]);
+  const [spiderItems, setSpiderItems] = useState([]);
+  let eventId = route?.params?.id;
 
   let datas = route?.params;
 
-  let patientId = route?.params?.otherData?.patient_id;
   const { darkmode } = useSelector(state => state.auth);
   // OUTER TABS
   const switchOptions = [
@@ -46,7 +49,7 @@ export default function EventDetails({ navigation, route }) {
     getSummary();
   }, []);
   const getSummary = async () => {
-    const endPoint = `${BaseSetting.endpoints.spiderReport}?want_from=web&patient_id=${patientId}&event_id=${eventId}`;
+    const endPoint = `${BaseSetting.endpoints.spiderReport}?want_from=app&event_id=${eventId}`;
     try {
       const res = await getApiData(`${endPoint}`, 'GET');
       if (res?.status) {
@@ -60,6 +63,41 @@ export default function EventDetails({ navigation, route }) {
   };
 
   const [sliderValue, setSliderValue] = useState(10);
+  useEffect(() => {
+    let dayArr = [];
+    let monthArr = [];
+    graph?.forEach((item, index) => {
+      if (index > 0) {
+        dayArr.push(item?.date?.split('-')[0]);
+        monthArr.push(item?.date?.split('-')[1]);
+      }
+    });
+    setDay(dayArr);
+    setMonth(monthArr);
+  }, []);
+
+  const runSlider = value => {
+    const date = `${day[value]} - ${month[value]}`;
+    const selectedDate = date?.replace(/\s/g, '');
+
+    const dataObj = graph?.find(item => {
+      return item?.date === selectedDate;
+    });
+
+    // Key and values
+    const filteredData = Object?.keys(dataObj)
+      .slice(0, -2)
+      .reduce((acc, key) => {
+        if (dataObj[key] !== null) {
+          acc[key] = dataObj[key];
+        }
+        return acc;
+      }, {});
+
+    // Only keys
+    const keysArray = Object.keys(filteredData);
+    setSpiderItems(keysArray);
+  };
 
   return (
     <View
@@ -140,105 +178,59 @@ export default function EventDetails({ navigation, route }) {
           />
           {activeInTab.id === 'summary' ? (
             <View style={styles.spiderView}>
-              <SpiderWebChart />
+              <SpiderWebChart items={spiderItems} />
               <Text style={styles.label}>Compare your assessments</Text>
 
               <Slider
-                value={sliderValue} // Replace with your slider value (7, 8, 9, or 10)
-                minimumValue={7}
-                maximumValue={10}
+                value={sliderValue}
+                minimumValue={0}
+                maximumValue={Number(graph?.length) - 2}
                 step={1}
                 style={styles.slider}
                 trackMarks={[
-                  { label: '7', value: 7 },
-                  { label: '8', value: 8 },
-                  { label: '9', value: 9 },
-                  { label: '10', value: 10 },
+                  { label: '0', value: 0 },
+                  { label: '1', value: 1 },
+                  { label: '2', value: 2 },
+                  { label: '3', value: 3 },
+                  { label: '4', value: 4 },
                 ]}
                 thumbStyle={styles.thumbStyle}
                 thumbTintColor={BaseColors.white}
                 minimumTrackTintColor={BaseColors.primary}
                 maximumTrackTintColor={BaseColors.tabinActive}
                 onValueChange={value => {
-                  // Handle the slider value change here
-                  let selectedLabel = '';
-
-                  switch (value) {
-                    case 7:
-                      selectedLabel = 'Aug 03';
-                      break;
-                    case 8:
-                      selectedLabel = 'Aug 07';
-                      break;
-                    case 9:
-                      selectedLabel = 'Aug 14';
-                      break;
-                    case 10:
-                      selectedLabel = 'Aug 15';
-                      break;
-                    default:
-                      selectedLabel = '';
-                      break;
-                  }
+                  runSlider(value);
+                  setSliderValue(value);
                 }}
               />
               <View style={styles.markerContainer}>
-                {[7, 8, 9, 10].map(value => (
-                  <View
-                    style={[
-                      styles.marker,
-                      {
-                        backgroundColor: BaseColors.lightGrey,
-                      },
-                    ]}
-                    key={value.toString()}
-                  />
-                ))}
+                {graph
+                  ?.map((value, index) => (
+                    <View
+                      style={[
+                        styles.marker,
+                        {
+                          backgroundColor: BaseColors.lightGrey,
+                        },
+                      ]}
+                      key={index}
+                    />
+                  ))
+                  .slice(0, -1)}
               </View>
-              <View style={styles.rangeLabelsContainerr}>
-                <Text
-                  style={{
-                    color: BaseColors.secondary,
-                    fontFamily: FontFamily.bold,
-                    fontWeight: '700',
-                    fontSize: 12,
-                  }}
-                >
-                  Initial
-                </Text>
-                <Text
-                  style={{
-                    marginLeft: -18,
-                    fontSize: 12,
-                    fontWeight: '400',
-                    fontFamily: FontFamily.regular,
-                  }}
-                >
-                  8
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    fontWeight: '400',
-                    fontFamily: FontFamily.regular,
-                  }}
-                >
-                  9
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    fontWeight: '400',
-                    fontFamily: FontFamily.regular,
-                  }}
-                >
-                  10
-                </Text>
-              </View>
+
               {/* Display the range labels */}
               <View style={styles.rangeLabelsContainer}>
-                {['Aug 03', 'Aug 07', 'Aug 14', 'Aug 15'].map(label => (
-                  <Text key={label} style={styles.rangeLabel}>
+                {day?.map((label, index) => (
+                  <Text key={index} style={styles.rangeLabel}>
+                    {label}
+                  </Text>
+                ))}
+              </View>
+
+              <View style={styles.rangeLabelsContainer}>
+                {month?.map((label, index) => (
+                  <Text key={index} style={styles.rangeLabel}>
                     {label}
                   </Text>
                 ))}
