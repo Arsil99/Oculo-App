@@ -70,7 +70,7 @@ export default function Events({ navigation }) {
           <CardList
             rightArrow
             onPress={() => navigation.navigate('Callibration')}
-            image={Images.emoji1}
+            image={Images.manimage}
             data={'Mar 30 2000'}
             status={'Completed'}
             assessment={'Assessment 4/5'}
@@ -142,14 +142,10 @@ export default function Events({ navigation }) {
                       (item.digit_recall ?? 1) +
                       (item.treatment_info ?? 1) ===
                     4
-                      ? null
-                      : navigation.navigate(
-                          'EventDetails',
-
-                          { event_id: item?.id, otherData: item },
-                        )
+                      ? navigation.navigate('EventDetails', item)
+                      : navigation.navigate('EventDetails', item)
                   }
-                  image={Images.emoji1}
+                  image={Images.manimage}
                   data={item?.title}
                   status={`${
                     filled_count === total_count ? 'Completed' : 'Pending'

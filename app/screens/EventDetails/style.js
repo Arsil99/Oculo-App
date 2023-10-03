@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { BaseColors } from '@config/theme';
+import { BaseColors, FontFamily } from '@config/theme';
 
 export default StyleSheet.create({
   main: {
@@ -24,16 +24,18 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    marginTop: 8,
   },
   rangeLabelsContainerr: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 10,
+
+    marginTop: 2,
   },
   rangeLabel: {
-    fontSize: 12,
+    fontSize: 10,
     color: BaseColors.black90,
+    fontWeight: '300',
+    fontFamily: FontFamily.light,
   },
   thumbStyle: {
     elevation: 4,
@@ -61,5 +63,16 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     color: BaseColors.textColor,
+  },
+  markerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+    marginTop: -18,
+    zIndex: -10,
+  },
+  marker: {
+    height: 10,
+    width: 1,
   },
 });

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './style';
 import HeaderBar from '@components/HeaderBar';
 import TabSwitch from '@components/TabSwitch';
-import { BaseColors } from '@config/theme';
+import { BaseColors, BaseStyles, FontFamily } from '@config/theme';
 import Milestones from '@components/Milestones';
 import { Images } from '@config';
 import CardList from '@components/CardList';
@@ -14,7 +14,10 @@ import SpiderWebChart from '@components/SpiderWebChart';
 import { Slider } from '@miblanchard/react-native-slider';
 
 export default function EventDetails({ navigation, route }) {
-  let eventId = route?.params?.event_id;
+  let eventId = route?.params?.patient_id;
+
+  let datas = route?.params;
+
   let patientId = route?.params?.otherData?.patient_id;
   const { darkmode } = useSelector(state => state.auth);
   // OUTER TABS
@@ -56,7 +59,7 @@ export default function EventDetails({ navigation, route }) {
     }
   };
 
-  const [sliderValue, setSliderValue] = useState(7);
+  const [sliderValue, setSliderValue] = useState(10);
 
   return (
     <View
@@ -179,14 +182,60 @@ export default function EventDetails({ navigation, route }) {
                   }
                 }}
               />
-
-              <View style={styles.rangeLabelsContainerr}>
-                <Text>7</Text>
-                <Text>8</Text>
-                <Text>9</Text>
-                <Text>10</Text>
+              <View style={styles.markerContainer}>
+                {[7, 8, 9, 10].map(value => (
+                  <View
+                    style={[
+                      styles.marker,
+                      {
+                        backgroundColor: BaseColors.lightGrey,
+                      },
+                    ]}
+                    key={value.toString()}
+                  />
+                ))}
               </View>
-
+              <View style={styles.rangeLabelsContainerr}>
+                <Text
+                  style={{
+                    color: BaseColors.secondary,
+                    fontFamily: FontFamily.bold,
+                    fontWeight: '700',
+                    fontSize: 12,
+                  }}
+                >
+                  Initial
+                </Text>
+                <Text
+                  style={{
+                    marginLeft: -18,
+                    fontSize: 12,
+                    fontWeight: '400',
+                    fontFamily: FontFamily.regular,
+                  }}
+                >
+                  8
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontWeight: '400',
+                    fontFamily: FontFamily.regular,
+                  }}
+                >
+                  9
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontWeight: '400',
+                    fontFamily: FontFamily.regular,
+                  }}
+                >
+                  10
+                </Text>
+              </View>
+              {/* Display the range labels */}
               <View style={styles.rangeLabelsContainer}>
                 {['Aug 03', 'Aug 07', 'Aug 14', 'Aug 15'].map(label => (
                   <Text key={label} style={styles.rangeLabel}>
@@ -227,6 +276,9 @@ export default function EventDetails({ navigation, route }) {
               data={'Assessment 2'}
               status={'Subsequent Visit'}
               assessment={'Event: Aug 03'}
+              onPress={() => {
+                navigation.navigate('Assessment', datas);
+              }}
             />
           </View>
           <View style={{ paddingHorizontal: 15 }}>

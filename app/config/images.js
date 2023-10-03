@@ -34,6 +34,8 @@ export const Images = {
   arrowleft: require('../assets/Images/arrowleft.png'),
   arrowr: require('../assets/Images/arrowr.png'),
   eventlogo: require('../assets/Images/eventlogo.png'),
+  manimage: require('../assets/Images/manimage.png'),
+  emoji: require('../assets/Images/emoji.png'),
 
   digit: require('../assets/Images/digit.png'),
   digitreverse: require('../assets/Images/digitreverse.png'),

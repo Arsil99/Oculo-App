@@ -133,7 +133,7 @@ const Milestones = ({ navigation, route }) => {
                 {text}
               </Text>
             </View>
-            <Image source={Images.emoji1} resizeMode="contain" />
+            <Image source={Images.emoji} resizeMode="contain" />
           </View>
           <View style={styles.graphcontainer}>
             <Image
