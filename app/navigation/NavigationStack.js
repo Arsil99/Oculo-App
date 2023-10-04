@@ -49,6 +49,7 @@ import Comment from '@screens/Comment';
 import AuthenticationFactor from '@screens/Authentication';
 import Symptom from '@screens/Symptom';
 import Instructions from '@screens/Callibration/instructions';
+import Success from '@screens/Callibration/success';
 
 const intitialNotificationState = {
   notification: null,
@@ -277,6 +278,11 @@ function App() {
           <Stack.Screen
             name="CallibrationStart"
             component={CallibrationStart}
+            options={{ headerShown: false, gestureEnabled: false }}
+          />
+          <Stack.Screen
+            name="CallibrationSuccess"
+            component={Success}
             options={{ headerShown: false, gestureEnabled: false }}
           />
           <Stack.Screen
