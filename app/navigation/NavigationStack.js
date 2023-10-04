@@ -48,6 +48,7 @@ import ImmediateRecallmain from '@screens/ImmediateRecallmain';
 import Comment from '@screens/Comment';
 import AuthenticationFactor from '@screens/Authentication';
 import Symptom from '@screens/Symptom';
+import Instructions from '@screens/Callibration/instructions';
 
 const intitialNotificationState = {
   notification: null,
@@ -261,6 +262,11 @@ function App() {
           <Stack.Screen
             name="NotificationSettings"
             component={NotificationSettings}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="CalibrationInstruction"
+            component={Instructions}
             options={{ headerShown: false }}
           />
           <Stack.Screen

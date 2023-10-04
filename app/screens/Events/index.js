@@ -69,7 +69,7 @@ export default function Events({ navigation }) {
           </Text>
           <CardList
             rightArrow
-            onPress={() => navigation.navigate('Callibration')}
+            onPress={() => navigation.navigate('CalibrationInstruction')}
             image={Images.manimage}
             data={'Mar 30 2000'}
             status={'Completed'}
