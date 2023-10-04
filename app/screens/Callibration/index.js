@@ -21,20 +21,28 @@ import { BaseColors } from '@config/theme';
 import Button from '@components/Button';
 import {
   ET_DEFAULTS,
+  init,
   startEyePosTracking,
   stopEyePosTracking,
+  stopTracking,
+  validateLighting,
 } from '@utils/eyeTracking';
 import { EyeTracking } from '@components/EyeTracking';
 import { useFocusEffect } from '@react-navigation/native';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
 const { Value } = Animated;
+let lastEyeTrackEvent = null;
 
 export default function Callibration({ navigation }) {
   const cameraInitialized = useSharedValue(0); // 0 = No, 1 = Yes
   const eyePosition = useSharedValue(0); // -1 = above, 0 = inline, 1 = below
+  const [eyePosTrackingStatus, setEyePosTrackingStatus] = useState(false); // Instruction Text for user
+  const [eyeTrackingStatus, setEyeTrackingStatus] = useState(true); // Instruction Text for user
   const [isValidPosition, setValidPosition] = useState(false); // Instruction Text for user
   const [Instruction, setInstruction] = useState(ET_DEFAULTS.cali.DEF_MSG); // Instruction Text for user
   const [whiteLineY, setWhiteLineY] = React.useState(null); // To store White Line Y
+  const [validEventData, setValidEventData] = React.useState(null); // To store last event data
   const whiteLineRef = React.useRef(null);
   const [leftCirclePosition, setLeftCirclePosition] = React.useState(null);
   const [rightCirclePosition, setRightCirclePosition] = React.useState(null);
@@ -274,9 +282,11 @@ export default function Callibration({ navigation }) {
             }
           }
         }
+
         eyePosition.value = isValid ? 1 : 0;
         leftEyeAnimation.value = isValid ? 0 : 1;
         rightEyeAnimation.value = isValid ? 0 : 1;
+
         if (isValid !== isValidPosition) {
           setValidPosition(isValid);
         }
@@ -293,8 +303,51 @@ export default function Callibration({ navigation }) {
         trackListener,
       );
 
+      const eyeTrackigListener = event => {
+        if (lastEyeTrackEvent === null) {
+          lastEyeTrackEvent = event;
+          console.log('Last Eye Track Data: ===> Event', event);
+          const lightValidation = validateLighting(lastEyeTrackEvent.light);
+          if (
+            (lightValidation && lightValidation.status === 'Moderate') ||
+            lightValidation.status == 'Good'
+          ) {
+            setValidEventData(event);
+            Toast.hide();
+            Toast.show({
+              text1: lightValidation.message,
+              type: 'success',
+            });
+            stopTracking();
+            setTimeout(() => {
+              setEyeTrackingStatus(false);
+              cameraInitialized.value = 1;
+            }, 500);
+          } else {
+            Toast.hide();
+            Toast.show({
+              text1: lightValidation.message,
+              type: 'success',
+            });
+            setTimeout(() => {
+              console.log('Last Eye Track Data: ===> Setting to Null');
+              lastEyeTrackEvent = null;
+            }, 1000);
+          }
+        }
+        // console.log('eyeTrackingListener => ', event);
+      };
+
+      // Let's listen to Tracking Event
+      const eyeTrackingSubscription = DeviceEventEmitter.addListener(
+        'eyeTrackingEvent',
+        eyeTrackigListener,
+      );
+
       return () => {
         subscription.remove();
+        eyeTrackingSubscription.remove();
+        lastEyeTrackEvent = null;
       };
     }, [
       eyePosition,
@@ -309,6 +362,8 @@ export default function Callibration({ navigation }) {
       leftEyeAnimation,
       rightEyeAnimation,
       isValidPosition,
+      cameraInitialized,
+      setValidEventData,
     ]),
   );
 
@@ -319,22 +374,37 @@ export default function Callibration({ navigation }) {
       setTimeout(() => {
         console.log('On Cal Init Screen Init ===>');
         EyeTracking.showDebug(true);
-        startEyePosTracking();
-        cameraInitialized.value = 1;
+
+        // Let's start Eye Tracking to find Ambient Lighting
+        init();
+
         handleCircleLayout();
       }, 1000);
     });
 
     const unsubscribe = navigation.addListener('beforeRemove', e => {
       console.log('On Cal Init Screen Gone ===>');
-      stopEyePosTracking();
+      if (eyePosTrackingStatus) {
+        stopEyePosTracking();
+      }
+      if (eyeTrackingStatus) {
+        stopTracking();
+      }
       EyeTracking.showDebug(false);
     });
     return () => {
       focusSubscribe();
       unsubscribe();
     };
-  }, [navigation, cameraInitialized]);
+  }, [navigation, cameraInitialized, eyePosTrackingStatus, eyeTrackingStatus]);
+
+  // Let's check Ambient Lighting when user comes to the screen
+  React.useEffect(() => {
+    if (eyeTrackingStatus === false && eyePosTrackingStatus === false) {
+      setEyePosTrackingStatus(true);
+      startEyePosTracking();
+    }
+  }, [eyeTrackingStatus, eyePosTrackingStatus]);
 
   useEffect(() => {
     console.log('Button ===> is Valid ==> ', isValidPosition);
@@ -350,7 +420,7 @@ export default function Callibration({ navigation }) {
       {/* <Image source={Images?.callibrateImg} style={styles.imgStyle} /> */}
 
       <HeaderBar
-        HeaderText={'Callibration'}
+        HeaderText={'Camera Setup'}
         isTransperant
         HeaderCenter
         leftText="Cancel"
@@ -380,6 +450,7 @@ export default function Callibration({ navigation }) {
             alignItems: 'center',
             justifyContent: 'space-around',
             position: 'absolute',
+            opacity: eyeTrackingStatus ? 0 : 1,
           }}
         >
           <Image
@@ -394,7 +465,12 @@ export default function Callibration({ navigation }) {
             justifyContent: 'center',
           }}
         >
-          <View style={styles?.squareBorder}>
+          <View
+            style={[
+              styles?.squareBorder,
+              { opacity: eyeTrackingStatus ? 0 : 1 },
+            ]}
+          >
             {/* White line to let user know where he needs to align their eyes */}
             <View
               ref={whiteLineRef}
@@ -453,7 +529,11 @@ export default function Callibration({ navigation }) {
             </View>
           </View>
           <View style={{ width: '50%', flex: 0.5, justifyContent: 'flex-end' }}>
-            <Text style={styles?.bigtext}>{Instruction}</Text>
+            <Text style={styles?.bigtext}>
+              {eyeTrackingStatus
+                ? 'Analyzing Ambient Lighting Conditions'
+                : Instruction}
+            </Text>
           </View>
         </View>
         <Button
@@ -461,11 +541,13 @@ export default function Callibration({ navigation }) {
           onPress={() => {
             if (isValidPosition) {
               stopEyePosTracking();
-              navigation?.navigate('CallibrationStart');
+              navigation?.navigate('CallibrationStart', {
+                beginData: validEventData,
+              });
             }
           }}
-          title={'Get Started'}
-          style={styles.requestBtn}
+          title={'Begin Camera Setup'}
+          style={[styles.requestBtn, { opacity: eyeTrackingStatus ? 0 : 1 }]}
           disabled={!isValidPosition}
         />
       </View>
