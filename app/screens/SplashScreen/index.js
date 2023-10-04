@@ -54,15 +54,12 @@ const SplashScreen = ({ navigation }) => {
     }).start();
     setTimeout(() => {
       if (!isEmpty(userData)) {
+        getLatestData();
         navigation.replace('Home');
       } else {
         navigation.replace('Login');
       }
     }, 3000);
-  }, []);
-
-  useEffect(() => {
-    getLatestData();
   }, []);
 
   const getLatestData = async () => {
