@@ -43,4 +43,5 @@ export const Images = {
   post1_s1: require('../assets/Images/post1_s1.png'),
   post2_s1: require('../assets/Images/post2_s1.png'),
   post1_s2: require('../assets/Images/post1_s2.png'),
+  success: require('../assets/Images/success.png'),
 };

@@ -86,6 +86,20 @@ const styles = StyleSheet.create({
   },
   desc: { alignItems: 'center', width: '100%' },
   btnStyle: { width: '70%', borderRadius: 50, marginTop: 25 },
+  successOuter: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  successImg: {
+    height: 310,
+    width: 340,
+  },
+  successText: { fontSize: 16, marginVertical: 10 },
+  textOuter: {
+    marginVertical: 15,
+  },
 });
 
 export default styles;

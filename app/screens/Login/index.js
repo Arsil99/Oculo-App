@@ -219,6 +219,7 @@ const Login = ({ navigation }) => {
       } else {
         Toast.show({
           text1: resp?.message,
+          text2: resp?.notice,
           type: 'error',
         });
         setLoader(false);
