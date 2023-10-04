@@ -258,6 +258,9 @@ fixDurScreen	= t	Average fixation duration on screen
         },
       });
 
+      // Once the Upload is done, Let's take SS of new Step
+      captureSS();
+
       // Handle the response from the server
       console.log('Handle Assessment: Response from server:', response.data);
     } catch (error) {
@@ -528,29 +531,29 @@ fixDurScreen	= t	Average fixation duration on screen
     }
   }, [bgImageURI, dynamicDot]);
 
+  const captureSS = () => {
+    return new Promise((resolve, reject) => {
+      console.log('Sym Called ===> Capture SS');
+      captureScreen({
+        format: 'jpg',
+        quality: 0.7,
+      }).then(
+        uri => {
+          console.log('Sym Called ===> Capture SS Done');
+          // console.log('AOI XY Updated Image saved to', uri);
+          setBgImageURI(uri);
+          resolve(true);
+        },
+        error => {
+          console.error('AOI XY Updated Image Oops, snapshot failed', error);
+          resolve(false);
+        },
+      );
+    });
+  };
+
   // Let's call functions one by one
   useEffect(() => {
-    const captureSS = () => {
-      return new Promise((resolve, reject) => {
-        console.log('Sym Called ===> Capture SS');
-        captureScreen({
-          format: 'jpg',
-          quality: 0.7,
-        }).then(
-          uri => {
-            console.log('Sym Called ===> Capture SS Done');
-            // console.log('AOI XY Updated Image saved to', uri);
-            setBgImageURI(uri);
-            resolve(true);
-          },
-          error => {
-            console.error('AOI XY Updated Image Oops, snapshot failed', error);
-            resolve(false);
-          },
-        );
-      });
-    };
-
     const getViewMeasurements = async () => {
       return new Promise((resolve, reject) => {
         console.log('Sym Called ===> AOI XY Updated Component => ', aoiRef);

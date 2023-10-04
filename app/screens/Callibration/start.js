@@ -76,7 +76,9 @@ const emptyCalibrations = {
 
 let lastEyeTrackEvent = null;
 
-export default function CalibrationStart() {
+export default function CalibrationStart({ route }) {
+  const routeParams = route?.params;
+  console.log('Last Eye Track Data: ===> Routes ', routeParams);
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
   const { setCalibration, resetCalibration } = EyeTracking;
@@ -342,6 +344,11 @@ export default function CalibrationStart() {
         }
       }
 
+      // Let's add Begin Data to Object
+      if (routeParams && routeParams.beginData) {
+        CALIBRATED_POSITIONS.beginData = routeParams.beginData;
+      }
+
       if (!CALIBRATED_POSITIONS.WIDTH) {
         CALIBRATED_POSITIONS.viewWidth = viewWidth;
         CALIBRATED_POSITIONS.viewHeight = viewHeight;
@@ -356,7 +363,7 @@ export default function CalibrationStart() {
         console.log('startCalibration =>Navigating to other screen');
         setCaliStatus(false);
         handleNavigation('other');
-        navigation?.navigate('Symptoms' , { event_id: 126 });
+        navigation?.navigate('CallibrationSuccess');
         // Toast.show({
         //   text1: 'Calibrations Done Successfully!',
         //   type: 'success',

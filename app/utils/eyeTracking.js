@@ -35,6 +35,8 @@ export const ET_DEFAULTS = {
       align_left: 'Align your left eye with the circle.',
       align_right: 'Align your right eye with the circle.',
       success: 'Perfect! Stay still.',
+      light_invalid:
+        'Please ensure that the surrounding lighting conditions are adequate for accurate Eye Tracking.',
     },
   },
 };

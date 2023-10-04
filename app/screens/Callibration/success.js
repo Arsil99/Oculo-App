@@ -69,7 +69,9 @@ export default function Success() {
         <Button
           title={'Begin Assessment'}
           style={styles.btnStyle}
-          // onPress={handleClick}
+          onPress={() => {
+            navigation?.navigate('Symptoms' , { event_id: 126 });
+          }}
         />
       </View>
     </View>
