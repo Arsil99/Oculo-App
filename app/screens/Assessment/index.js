@@ -17,7 +17,7 @@ const Assessment = ({ navigation, route }) => {
     if (data.digit_recall === 0) {
       // Navigate to digit_recall screen
       navigation.navigate('ImmediateRecallmain', {
-        event_id: data?.patient_id,
+        event_id: data?.id,
         otherData: data,
       });
     } else if (data.digit_recall === 1) {
@@ -29,7 +29,7 @@ const Assessment = ({ navigation, route }) => {
     if (data.immediate_recall === 0) {
       // Navigate to immediate_recall screen
       navigation.navigate('ImmediateRecall', {
-        event_id: data?.patient_id,
+        event_id: data?.id,
         otherData: data,
       });
     } else if (data.immediate_recall === 1) {
@@ -41,7 +41,7 @@ const Assessment = ({ navigation, route }) => {
     if (data.symptom_info === 0) {
       // Navigate to symptoms screen
       navigation.navigate('Symptom', {
-        event_id: data?.patient_id,
+        event_id: data?.id,
         otherData: data,
       });
     } else if (data.symptom_info === 1) {
@@ -52,7 +52,7 @@ const Assessment = ({ navigation, route }) => {
     if (data.treatment_info === 0) {
       // Navigate to treatment_info screen
       navigation.navigate('ChangeInfo', {
-        event_id: data?.patient_id,
+        event_id: data?.id,
         otherData: data,
       });
     } else if (data.treatment_info === 1) {

@@ -31,7 +31,9 @@ export default function ChangeInfo({ navigation, route }) {
   const data = route?.params?.otherData;
   const { userData, darkmode } = useSelector(state => state.auth);
   const [selectedValues, setSelectedValues] = useState({});
+
   const eventId = route?.params?.event_id;
+
   const [response, setResponse] = useState('');
   const [loader, setLoader] = useState(true);
   const [questionList, setQuestionList] = useState([]);
@@ -204,6 +206,7 @@ export default function ChangeInfo({ navigation, route }) {
         {},
         false,
       );
+
       if (resp?.status) {
         Toast.show({
           text1: resp?.message.toString(),

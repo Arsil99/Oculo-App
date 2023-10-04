@@ -107,7 +107,7 @@ export default function EventDetails({ navigation, route }) {
       ]}
     >
       <HeaderBar
-        HeaderText={'Event Report (Aug 03)'}
+        HeaderText={`Event Report (${datas.title})`}
         HeaderCenter
         leftText="Back"
       />
@@ -145,7 +145,7 @@ export default function EventDetails({ navigation, route }) {
                   color: darkmode ? BaseColors.white : BaseColors.black90,
                 }}
               >
-                Intial Visit
+                xxxxxxxxxxxx
               </Text>
             </View>
             <View>
@@ -162,7 +162,7 @@ export default function EventDetails({ navigation, route }) {
                   color: darkmode ? BaseColors.white : BaseColors.black90,
                 }}
               >
-                Symptom Limited Activity
+                xxxxxxxxxxxxxxxxxxxxxx
               </Text>
             </View>
           </View>

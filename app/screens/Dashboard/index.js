@@ -120,10 +120,10 @@ const Dashboard = () => {
           <Image
             source={Images.graph}
             resizeMode="contain"
-            style={{ width: '90%' }}
+            style={{ width: '80%' }}
           />
         </View>
-        <FlatList
+        {/* <FlatList
           renderItem={renderItem}
           data={data}
           keyExtractor={item => item.index}
@@ -131,7 +131,7 @@ const Dashboard = () => {
           columnWrapperStyle={styles.columnwrapperstyle}
           numColumns={3}
           showsVerticalScrollIndicator={false}
-        />
+        /> */}
 
         <View style={styles.dotwithbordercontainer}>
           {planData.map((item, index) => {

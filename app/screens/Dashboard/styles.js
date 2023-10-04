@@ -114,9 +114,10 @@ export default StyleSheet.create({
     alignSelf: 'center',
   },
   dotwithbordercontainer: {
+    flex: 0.55,
     flexDirection: 'row',
     width: '80%',
-    alignItems: 'flex-start',
+    alignItems: 'flex-end',
     justifyContent: 'space-between',
     alignSelf: 'center',
     paddingBottom: 20,

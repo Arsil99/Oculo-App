@@ -203,6 +203,7 @@ export default function OTP({ navigation, route }) {
           }}
         >
           {medium === 'email' ? email : phone}
+          {from === 'forget' ? email : null}
         </Text>
       </View>
       <View style={{ height: 100, marginVertical: 25 }}>
