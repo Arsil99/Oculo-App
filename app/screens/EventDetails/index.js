@@ -12,12 +12,14 @@ import BaseSetting from '@config/setting';
 import { getApiData } from '@utils/apiHelper';
 import SpiderWebChart from '@components/SpiderWebChart';
 import { Slider } from '@miblanchard/react-native-slider';
-import { staticGraph } from '@config/staticData';
+import moment from 'moment';
+import { isArray, isEmpty } from 'lodash';
 export default function EventDetails({ navigation, route }) {
-  const [graph, setGraph] = useState(staticGraph);
+  const [graph, setGraph] = useState([]);
   const [day, setDay] = useState([]);
   const [month, setMonth] = useState([]);
   const [spiderItems, setSpiderItems] = useState([]);
+  const [sliderValue, setSliderValue] = useState(0);
   let eventId = route?.params?.id;
 
   let datas = route?.params;
@@ -44,7 +46,6 @@ export default function EventDetails({ navigation, route }) {
     id: 'summary',
     name: 'Summary',
   });
-  const [graphData, setGraphData] = useState([]);
   useEffect(() => {
     getSummary();
   }, []);
@@ -53,35 +54,32 @@ export default function EventDetails({ navigation, route }) {
     try {
       const res = await getApiData(`${endPoint}`, 'GET');
       if (res?.status) {
-        setGraphData(res?.data);
-      } else {
-        setGraphData([]);
+        setGraph(res?.data);
       }
     } catch (error) {
       console.log('Error:', error);
     }
   };
 
-  const [sliderValue, setSliderValue] = useState(10);
   useEffect(() => {
     let dayArr = [];
     let monthArr = [];
-    graph?.forEach((item, index) => {
-      if (index > 0) {
-        dayArr.push(item?.date?.split('-')[0]);
-        monthArr.push(item?.date?.split('-')[1]);
-      }
-    });
+    if (!isEmpty(graph) && isArray(graph)) {
+      graph?.forEach((item, index) => {
+        dayArr.push(moment(item?.date).format('DD-MMM')?.split('-')[0]);
+        monthArr.push(moment(item?.date).format('DD-MMM')?.split('-')[1]);
+      });
+    }
     setDay(dayArr);
     setMonth(monthArr);
-  }, []);
+  }, [graph]);
 
   const runSlider = value => {
     const date = `${day[value]} - ${month[value]}`;
     const selectedDate = date?.replace(/\s/g, '');
 
     const dataObj = graph?.find(item => {
-      return item?.date === selectedDate;
+      return moment(item?.date).format('DD-MMM') === selectedDate;
     });
 
     // Key and values
@@ -180,32 +178,35 @@ export default function EventDetails({ navigation, route }) {
             <View style={styles.spiderView}>
               <SpiderWebChart items={spiderItems} />
               <Text style={styles.label}>Compare your assessments</Text>
+              {!isEmpty(graph) && isArray(graph) ? (
+                <Slider
+                  value={sliderValue}
+                  minimumValue={0}
+                  maximumValue={graph?.length - 1}
+                  step={1}
+                  style={styles.slider}
+                  trackMarks={[
+                    { label: '0', value: 0 },
+                    { label: '1', value: 1 },
+                    { label: '2', value: 2 },
+                    { label: '3', value: 3 },
+                    { label: '4', value: 4 },
+                  ]}
+                  thumbStyle={styles.thumbStyle}
+                  thumbTintColor={BaseColors.white}
+                  minimumTrackTintColor={BaseColors.primary}
+                  maximumTrackTintColor={BaseColors.tabinActive}
+                  onValueChange={value => {
+                    runSlider(value);
+                    setSliderValue(value);
+                  }}
+                />
+              ) : null}
 
-              <Slider
-                value={sliderValue}
-                minimumValue={0}
-                maximumValue={Number(graph?.length) - 2}
-                step={1}
-                style={styles.slider}
-                trackMarks={[
-                  { label: '0', value: 0 },
-                  { label: '1', value: 1 },
-                  { label: '2', value: 2 },
-                  { label: '3', value: 3 },
-                  { label: '4', value: 4 },
-                ]}
-                thumbStyle={styles.thumbStyle}
-                thumbTintColor={BaseColors.white}
-                minimumTrackTintColor={BaseColors.primary}
-                maximumTrackTintColor={BaseColors.tabinActive}
-                onValueChange={value => {
-                  runSlider(value);
-                  setSliderValue(value);
-                }}
-              />
               <View style={styles.markerContainer}>
-                {graph
-                  ?.map((value, index) => (
+                {!isEmpty(graph) &&
+                  isArray(graph) &&
+                  graph?.map((value, index) => (
                     <View
                       style={[
                         styles.marker,
@@ -215,8 +216,7 @@ export default function EventDetails({ navigation, route }) {
                       ]}
                       key={index}
                     />
-                  ))
-                  .slice(0, -1)}
+                  ))}
               </View>
 
               {/* Display the range labels */}
