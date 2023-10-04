@@ -47,7 +47,7 @@ const HeaderBar = ({
             activeOpacity={isEmpty(leftText) ? 1 : BaseSetting.buttonOpacity}
             style={styles.imageCon}
             onPress={() => {
-              if (leftText === 'Back') {
+              if (leftText === 'Back' || leftText === 'Cancel') {
                 navigation.goBack();
               } else if (!isEmpty(leftText)) {
                 leftBtnPress && leftBtnPress();

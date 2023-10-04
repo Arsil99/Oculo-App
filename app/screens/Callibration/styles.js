@@ -1,4 +1,4 @@
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { BaseColors, FontFamily } from '@config/theme';
 import BaseSetting from '@config/setting';
 
@@ -51,8 +51,41 @@ const styles = StyleSheet.create({
     height: 10,
     borderRadius: 5,
     backgroundColor: BaseColors?.primaryBlue,
-    // marginHorizontal: 5,
   },
+  container: {
+    flex: 1,
+
+    paddingHorizontal: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  slide: {
+    height: BaseSetting.nHeight / 2.4,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  img: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  topIn: { alignItems: 'center', marginBottom: 25 },
+  title: { fontSize: 20, fontWeight: 'bold' },
+  miniTitle: { fontSize: 16 },
+  swipeCover: {
+    width: '100%',
+    height: BaseSetting.nHeight / 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  post1: { position: 'absolute', flexDirection: 'row' },
+  post2: {
+    position: 'absolute',
+    left: BaseSetting.nHeight / 30,
+    top: BaseSetting.nHeight / 8.5,
+  },
+  desc: { alignItems: 'center', width: '100%' },
+  btnStyle: { width: '70%', borderRadius: 50, marginTop: 25 },
 });
 
 export default styles;

@@ -36,7 +36,11 @@ export const Images = {
   eventlogo: require('../assets/Images/eventlogo.png'),
   manimage: require('../assets/Images/manimage.png'),
   emoji: require('../assets/Images/emoji.png'),
-
   digit: require('../assets/Images/digit.png'),
   digitreverse: require('../assets/Images/digitreverse.png'),
+  slide1: require('../assets/Images/slide1.png'),
+  slide2: require('../assets/Images/slide2.png'),
+  post1_s1: require('../assets/Images/post1_s1.png'),
+  post2_s1: require('../assets/Images/post2_s1.png'),
+  post1_s2: require('../assets/Images/post1_s2.png'),
 };
