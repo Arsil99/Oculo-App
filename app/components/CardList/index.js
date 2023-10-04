@@ -1,5 +1,7 @@
-import { View, Text, TouchableOpacity, Image } from 'react-native';
 import React from 'react';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
+import Icon1 from 'react-native-vector-icons/FontAwesome';
+import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/AntDesign';
 import PropTypes from 'prop-types';
 import styles from './styles';
@@ -7,8 +9,13 @@ import BaseSetting from '@config/setting';
 import { useSelector } from 'react-redux';
 import { BaseColors } from '@config/theme';
 import Animated, { FadeInDown } from 'react-native-reanimated';
+
 export default function CardList({
+  showClock, // Prop to control whether to show the clock icon
   image,
+  showmanIcon,
+  iconName,
+  backgroundColoricon,
   data,
   status,
   assessment,
@@ -16,6 +23,20 @@ export default function CardList({
   rightArrow,
 }) {
   const { darkmode } = useSelector(state => state.auth);
+  const ClockIcon = () => (
+    <View
+      style={[styles.iconContainer, { backgroundColor: backgroundColoricon }]}
+    >
+      <Icon1 name={iconName} size={30} color="white" />
+    </View>
+  );
+  const ManIcon = () => (
+    <View
+      style={[styles.iconContainer, { backgroundColor: backgroundColoricon }]}
+    >
+      <Icon2 name={iconName} size={30} color="white" />
+    </View>
+  );
   return (
     <Animated.View entering={FadeInDown}>
       <TouchableOpacity
@@ -32,9 +53,13 @@ export default function CardList({
       >
         <View style={styles.container}>
           <View style={styles.insideBox}>
-            <View>
-              <Image source={image} style={styles.imgStyle} />
-            </View>
+            {showClock ? (
+              <ClockIcon /> // Display the ClockIcon if showClock is true
+            ) : showmanIcon ? (
+              <ManIcon />
+            ) : (
+              <Image source={image} style={styles.imgStyle} /> // Display the image otherwise
+            )}
             <View style={{ marginHorizontal: 10 }}>
               <Text
                 style={{
@@ -128,12 +153,17 @@ export default function CardList({
 }
 
 CardList.propTypes = {
+  showClock: PropTypes.bool, // Prop to control whether to show the clock icon
   image: PropTypes.string,
   data: PropTypes.string,
   status: PropTypes.string,
   assessment: PropTypes.string,
+  onPress: PropTypes.func,
+  rightArrow: PropTypes.bool,
 };
+
 CardList.defaultProps = {
+  showClock: false, // Default to not show the clock icon
   assessment: '',
   status: '',
   image: '',

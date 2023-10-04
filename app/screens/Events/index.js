@@ -70,7 +70,9 @@ export default function Events({ navigation }) {
           <CardList
             rightArrow
             onPress={() => navigation.navigate('CalibrationInstruction')}
-            image={Images.manimage}
+            iconName="head-cog"
+            backgroundColoricon={BaseColors.primary}
+            showmanIcon={true}
             data={'Mar 30 2000'}
             status={'Completed'}
             assessment={'Assessment 4/5'}
@@ -127,6 +129,9 @@ export default function Events({ navigation }) {
               return (
                 <CardList
                   key={index}
+                  iconName="head-cog"
+                  backgroundColoricon={BaseColors.primary}
+                  showmanIcon={true}
                   rightArrow={
                     (item.symptom_info ?? 1) +
                       (item.immediate_recall ?? 1) +

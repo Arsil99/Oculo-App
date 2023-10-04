@@ -17,6 +17,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
   },
+  iconContainer: {
+    width: 50,
+    height: 50,
+    backgroundColor: BaseColors.darkorange,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   container: {
     width: '100%',
     height: 80,

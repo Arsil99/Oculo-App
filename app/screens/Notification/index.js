@@ -33,12 +33,16 @@ export default function Notification({ navigation }) {
           Today, Aug 11, 2025
         </Text>
         <CardList
-          image={Images.emoji1}
+          iconName="clock-o"
+          backgroundColoricon={BaseColors.darkorange}
+          showClock={true} // Display the clock icon
           data={'Assessments Due Today'}
           status={'Please fill the assessments'}
         />
         <CardList
-          image={Images.emoji1}
+          iconName="clock-o"
+          backgroundColoricon={BaseColors.darkorange}
+          showClock={true} // Display the clock icon
           data={'Assessments Due Today'}
           status={'Please fill the assessments'}
         />
