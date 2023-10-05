@@ -49,10 +49,9 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   errorTxt: {
-    color: '#FF0B1E',
+    color: BaseColors.red,
     paddingLeft: 5,
-    paddingBottom: 12,
-
+    marginTop: 5,
     fontFamily: FontFamily.regular,
     fontSize: 14,
   },

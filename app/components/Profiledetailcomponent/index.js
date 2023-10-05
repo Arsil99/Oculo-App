@@ -52,6 +52,8 @@ const errObj = {
 };
 
 const Profiledetailcomponent = (props, ref) => {
+  birthdateerror;
+  const [birthdateerror, setBirthdateerror] = useState(false);
   const { setUserData } = Authentication;
   const dispatch = useDispatch();
   const { onSuccess } = props;
@@ -171,14 +173,20 @@ const Profiledetailcomponent = (props, ref) => {
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
-    setDate(currentDate);
-    if (event?.type === 'set') {
-      setBirthDate(moment(currentDate).format('MM-DD-YYYY'));
-    }
 
-    // Reset the error state when a valid date is selected
-    setDateOfBirthErr(false);
-    setDateOfBirthErrMsg('');
+    const now = new Date();
+    if (currentDate > now) {
+      setDateOfBirthErr(true);
+      setDateOfBirthErrMsg('Date of birth cannot be in the future');
+      setBirthdateerror(true);
+    } else {
+      setDate(currentDate);
+      setBirthDate(moment(currentDate).format('MM-DD-YYYY'));
+
+      setDateOfBirthErr(false);
+      setDateOfBirthErrMsg('');
+      setBirthdateerror(false);
+    }
   };
 
   const showMode = currentMode => {
@@ -230,6 +238,13 @@ const Profiledetailcomponent = (props, ref) => {
       Valid = false;
       setDateOfBirthErr(true);
       setDateOfBirthErrMsg('Enter date of birth');
+    }
+    if (birthdateerror === true) {
+      Valid = false;
+      Toast.show({
+        text1: 'Date of birth cannot be in the future',
+        type: 'error',
+      });
     } else {
       setDateOfBirthErr(false);
       setDateOfBirthErrMsg('');
@@ -275,6 +290,7 @@ const Profiledetailcomponent = (props, ref) => {
       });
     }
     setErrObj(error);
+
     if (Valid) {
       onSuccess();
       dataToSend();

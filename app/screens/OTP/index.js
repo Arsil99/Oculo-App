@@ -26,7 +26,6 @@ export default function OTP({ navigation, route }) {
   const email = route?.params?.email || '';
   const phone = route?.params?.phone || '';
   const medium = route?.params?.medium || '';
-  console.log('🚀 ~ file: index.js:27 ~ OTP ~ medium:', medium);
   const password = route?.params?.password || '';
   const from = route?.params?.from || '';
   const [timer, setTimer] = useState(60);
@@ -184,8 +183,9 @@ export default function OTP({ navigation, route }) {
     >
       <View style={{ alignItems: 'center' }}>
         <Image
-          source={Images.updatedlogo}
-          style={{ marginBottom: 25, marginTop: -5 }}
+          source={Images.logo}
+          resizeMode="contain"
+          style={{ marginBottom: 10, height: 55 }}
           tintColor={BaseColors.primary}
         />
         <Text

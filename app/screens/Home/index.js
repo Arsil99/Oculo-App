@@ -143,7 +143,7 @@ export default function Home({ navigation }) {
         </View>
       ) : (
         <View style={styles.detailsArea}>
-          <Milestones />
+          <Milestones navigation={navigation} />
         </View>
       )}
     </View>
