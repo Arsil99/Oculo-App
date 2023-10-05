@@ -2,14 +2,18 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { RadarChart } from 'react-native-charts-wrapper';
 
-const SpiderWebChart = ({ items }) => {
-  const length = items?.length;
-  const valuesArray = Array.from({ length }, () => ({ value: 1 }));
-  const dynamicObject = { values: valuesArray };
+const SpiderWebChart = ({ items, bundle }) => {
+  const { assessment_id, date, ...newBundle } = bundle;
+  const keys = Object?.keys(newBundle); // Extract keys
+  const values = Object?.values(newBundle); // Extract values
+  const dataPoints = values.map((value, index) => ({
+    value,
+    label: keys[index],
+  }));
   const data = {
     dataSets: [
       {
-        values: dynamicObject?.values,
+        values: dataPoints,
         label: 'Initial',
         config: {
           color: '#1F77B4',

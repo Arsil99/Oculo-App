@@ -20,6 +20,7 @@ export default function EventDetails({ navigation, route }) {
   const [month, setMonth] = useState([]);
   const [spiderItems, setSpiderItems] = useState([]);
   const [sliderValue, setSliderValue] = useState(0);
+  const [wrapData, setWrapData] = useState([]);
   let eventId = route?.params?.id;
 
   let datas = route?.params;
@@ -92,8 +93,10 @@ export default function EventDetails({ navigation, route }) {
         return acc;
       }, {});
 
+    setWrapData(filteredData);
+
     // Only keys
-    const keysArray = Object.keys(filteredData);
+    const keysArray = Object?.keys(filteredData);
     setSpiderItems(keysArray);
   };
 
@@ -176,7 +179,7 @@ export default function EventDetails({ navigation, route }) {
           />
           {activeInTab.id === 'summary' ? (
             <View style={styles.spiderView}>
-              <SpiderWebChart items={spiderItems} />
+              <SpiderWebChart items={spiderItems} bundle={wrapData} />
               <Text style={styles.label}>Compare your assessments</Text>
               {!isEmpty(graph) && isArray(graph) ? (
                 <Slider
