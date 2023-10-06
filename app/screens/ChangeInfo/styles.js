@@ -89,4 +89,58 @@ export default StyleSheet.create({
     color: BaseColors.red,
     paddingBottom: 10,
   },
+  button: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginLeft: 10,
+  },
+  confirmationModalCenteredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: BaseColors.black50,
+  },
+  confirmationModalView: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    width: '80%',
+  },
+  confirmationModalTitleText: {
+    fontSize: 18,
+    color: BaseColors.textColor,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  confirmationModalText: {
+    color: BaseColors.textColor,
+    marginBottom: 20,
+  },
+  confirmmodaltitleText: {
+    marginBottom: 10,
+    fontSize: 20,
+    fontWeight: '700',
+    lineHeight: 30,
+    fontFamily: FontFamily.bold,
+    color: BaseColors.black,
+  },
+  confirmmodalText: {
+    color: BaseColors.textColor,
+    marginBottom: 20,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  confirmButton: {
+    backgroundColor: BaseColors.primary,
+  },
+  cancelButton: {
+    backgroundColor: BaseColors.secondary,
+  },
+  buttonText: {
+    color: BaseColors.white,
+    fontWeight: 'bold',
+  },
 });

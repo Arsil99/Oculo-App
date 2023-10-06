@@ -7,9 +7,12 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import {
   ActivityIndicator,
+  BackHandler,
   KeyboardAvoidingView,
+  Modal,
   Platform,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import { View, StatusBar, Text } from 'react-native';
 import { useSelector } from 'react-redux';
@@ -31,9 +34,9 @@ export default function ChangeInfo({ navigation, route }) {
   const data = route?.params?.otherData;
   const { userData, darkmode } = useSelector(state => state.auth);
   const [selectedValues, setSelectedValues] = useState({});
-
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const eventId = route?.params?.event_id;
-
+  const [confirmLoading, setConfirmLoading] = useState(false);
   const [response, setResponse] = useState('');
   const [loader, setLoader] = useState(true);
   const [questionList, setQuestionList] = useState([]);
@@ -235,6 +238,30 @@ export default function ChangeInfo({ navigation, route }) {
     }
   };
 
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      handleBackPress,
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
+  const handleBackPress = () => {
+    setShowConfirmation(true);
+    return true;
+  };
+
+  const handleCancel = () => {
+    setShowConfirmation(false);
+  };
+
+  const handleConfirm = () => {
+    navigation.navigate('Events');
+  };
+  const handleCancelPress = () => {
+    setShowConfirmation(true); // Show the confirmation modal when the cancel button is pressed
+  };
   return (
     <View
       style={[
@@ -250,9 +277,7 @@ export default function ChangeInfo({ navigation, route }) {
         HeaderText={'Treatment Information'}
         HeaderCenter
         leftText={'Cancel'}
-        leftBtnPress={() => {
-          navigation.navigate('Events');
-        }}
+        onCancelPress={handleBackPress} // Pass the function as a prop
       />
 
       <KeyboardAvoidingView
@@ -387,6 +412,68 @@ export default function ChangeInfo({ navigation, route }) {
               />
             </View>
           </View>
+        )}
+        {showConfirmation && (
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={showConfirmation}
+            onRequestClose={handleCancel}
+          >
+            <View style={styles.confirmationModalCenteredView}>
+              <View
+                style={[
+                  styles.confirmationModalView,
+                  {
+                    backgroundColor: darkmode
+                      ? BaseColors.textColor
+                      : BaseColors.white,
+                  },
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.confirmationModalTitleText,
+                    {
+                      color: darkmode ? BaseColors.white : BaseColors.black,
+                    },
+                  ]}
+                >
+                  Are you sure?
+                </Text>
+                <Text
+                  style={[
+                    styles.confirmationModalText,
+                    {
+                      color: darkmode ? BaseColors.white : BaseColors.black,
+                    },
+                  ]}
+                >
+                  You want to leave this screen?
+                </Text>
+                <View style={styles.modalButtons}>
+                  <TouchableOpacity
+                    style={[styles.button, styles.confirmButton]}
+                    onPress={handleConfirm}
+                    // disabled={confirmLoading}
+                  >
+                    {confirmLoading ? (
+                      <ActivityIndicator color="white" size="small" />
+                    ) : (
+                      <Text style={styles.buttonText}>Confirm</Text>
+                    )}
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={[styles.button, styles.cancelButton]}
+                    onPress={handleCancel}
+                  >
+                    <Text style={styles.buttonText}>Cancel</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
         )}
       </KeyboardAvoidingView>
     </View>

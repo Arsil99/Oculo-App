@@ -61,23 +61,7 @@ export default function EventDetails({ navigation, route }) {
       console.log('Error:', error);
     }
   };
-  const assessmentDueItems = datas.filter(
-    assessment =>
-      assessment.digit_recall === 0 ||
-      assessment.immediate_recall === 0 ||
-      assessment.symptom_info === 0 ||
-      assessment.treatment_info === 0,
-  );
 
-  const completedAssessmentItems = datas.filter(
-    assessment =>
-      assessment.digit_recall !== 0 &&
-      assessment.immediate_recall !== 0 &&
-      assessment.symptom_info !== 0 &&
-      assessment.treatment_info !== 0,
-  );
-
-  const shouldShowAssessmentDue = assessmentDueItems.length > 0;
   useEffect(() => {
     let dayArr = [];
     let monthArr = [];
@@ -266,54 +250,63 @@ export default function EventDetails({ navigation, route }) {
           style={{
             backgroundColor: darkmode
               ? BaseColors.lightBlack
-              : BaseColors.white,
+              : BaseColors.lightBg,
             flex: 1,
           }}
         >
-          <View style={{ paddingHorizontal: 15 }}>
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: '700',
-                marginVertical: 5,
-                color: darkmode ? BaseColors.white : BaseColors.black,
-              }}
-            >
-              {shouldShowAssessmentDue
-                ? 'Assessment Due'
-                : 'Completed Assessments'}
-            </Text>
-            {assessmentDueItems.map((assessment, index) => (
-              <CardList
-                key={index}
-                image={Images.eventlogo}
-                data={`Assessment ${index + 1}`}
-                status={assessment.assmt_type}
-                assessment={`Event: ${assessment.title}`}
-                onPress={() => {
-                  navigation.navigate('Assessment', assessment);
-                }}
-              />
-            ))}
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: '700',
-                marginVertical: 5,
-                color: darkmode ? BaseColors.white : BaseColors.black,
-              }}
-            >
-              Completed Assessments
-            </Text>
-            {completedAssessmentItems.map((assessment, index) => (
-              <CardList
-                key={index}
-                image={Images.eventlogo}
-                data={`Assessment ${index + 1}`}
-                status={assessment.assmt_type}
-                assessment={`Event: ${assessment.title}`}
-              />
-            ))}
+          <View style={{ paddingHorizontal: 15, marginTop: 25 }}>
+            {datas.digit_recall === 0 ||
+            datas.immediate_recall === 0 ||
+            datas.symptom_info === 0 ||
+            datas.treatment_info === 0 ? (
+              <View>
+                <Text
+                  style={{
+                    fontSize: 18,
+                    fontWeight: '700',
+                    marginVertical: 5,
+                    color: darkmode ? BaseColors.white : BaseColors.black,
+                  }}
+                >
+                  Assessment Due
+                </Text>
+                <CardList
+                  rightArrow={true}
+                  image={Images.eventlogo}
+                  data={'Assessment 2'}
+                  status={datas.assmt_type}
+                  assessment={`Event: ${datas.title}`}
+                  onPress={() => {
+                    navigation.navigate('Assessment', datas);
+                  }}
+                />
+              </View>
+            ) : null}
+
+            {datas.digit_recall === 1 ||
+            (datas.digit_recall === null && datas.immediate_recall === 1) ||
+            (datas.immediate_recall === null && datas.symptom_info === 1) ||
+            (datas.symptom_info === null && datas.treatment_info === 1) ||
+            datas.treatment_info === null ? (
+              <View>
+                <Text
+                  style={{
+                    fontSize: 18,
+                    fontWeight: '700',
+                    marginVertical: 5,
+                    color: darkmode ? BaseColors.white : BaseColors.black,
+                  }}
+                >
+                  Completed Assessments
+                </Text>
+                <CardList
+                  image={Images.eventlogo}
+                  data={'Assessment 1'}
+                  status={datas.assmt_type}
+                  assessment={`Event: ${datas.title}`}
+                />
+              </View>
+            ) : null}
           </View>
         </View>
       )}

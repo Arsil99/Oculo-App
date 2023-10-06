@@ -781,6 +781,16 @@ fixDurScreen	= t	Average fixation duration on screen
 
   const lastThreeSymptoms = [
     {
+      fixAOI: Number(Math.floor(Math.random() * (1000 - 0)) + 0),
+      viewed:
+        Number(Math.floor(Math.random() * (10 - 0)) + 0) >
+        Number(Math.floor(Math.random() * (5 - 1)) + 1)
+          ? true
+          : false,
+      fixDurAOI: parseFloat((Math.random() * (1000.0 - 0.0) + 0.0).toFixed(2)),
+      fixScreen: Number(Math.floor(Math.random() * (20 - 0)) + 0),
+      totalFixDur: Number(Math.floor(Math.random() * (1000 - 0)) + 0),
+      fixDurScreen: Number(Math.floor(Math.random() * (1000 - 0)) + 0),
       symptom: 'Physical_Activity',
       initialScore: false,
       scoreChng: 0,
@@ -789,6 +799,16 @@ fixDurScreen	= t	Average fixation duration on screen
       pageRevisitInt: 1,
     },
     {
+      fixAOI: Number(Math.floor(Math.random() * (1000 - 0)) + 0),
+      viewed:
+        Number(Math.floor(Math.random() * (10 - 0)) + 0) >
+        Number(Math.floor(Math.random() * (5 - 1)) + 1)
+          ? true
+          : false,
+      fixDurAOI: parseFloat((Math.random() * (1000.0 - 0.0) + 0.0).toFixed(2)),
+      fixScreen: Number(Math.floor(Math.random() * (20 - 0)) + 0),
+      totalFixDur: Number(Math.floor(Math.random() * (1000 - 0)) + 0),
+      fixDurScreen: Number(Math.floor(Math.random() * (1000 - 0)) + 0),
       symptom: 'Mental_Activity',
       initialScore: false,
       scoreChng: 0,
@@ -797,6 +817,16 @@ fixDurScreen	= t	Average fixation duration on screen
       pageRevisitInt: 1,
     },
     {
+      fixAOI: Number(Math.floor(Math.random() * (1000 - 0)) + 0),
+      viewed:
+        Number(Math.floor(Math.random() * (10 - 0)) + 0) >
+        Number(Math.floor(Math.random() * (5 - 1)) + 1)
+          ? true
+          : false,
+      fixDurAOI: parseFloat((Math.random() * (1000.0 - 0.0) + 0.0).toFixed(2)),
+      fixScreen: Number(Math.floor(Math.random() * (20 - 0)) + 0),
+      totalFixDur: Number(Math.floor(Math.random() * (1000 - 0)) + 0),
+      fixDurScreen: Number(Math.floor(Math.random() * (1000 - 0)) + 0),
       symptom: 'Feel_Perfect',
       initialScore: 1,
       scoreChng: 3,
@@ -1082,7 +1112,15 @@ fixDurScreen	= t	Average fixation duration on screen
 
                       return (
                         <View key={rowIndex}>
-                          <Text style={{ fontSize: 18, marginVertical: 5 }}>
+                          <Text
+                            style={{
+                              fontSize: 18,
+                              marginVertical: 5,
+                              color: darkmode
+                                ? BaseColors.white
+                                : BaseColors.textColor,
+                            }}
+                          >
                             {item}{' '}
                             <Text style={{ color: BaseColors.orange }}>*</Text>
                           </Text>
@@ -1147,14 +1185,40 @@ fixDurScreen	= t	Average fixation duration on screen
                       {inputQuestion?.map((item, index) => {
                         return (
                           <View>
-                            <Text style={{ fontSize: 18 }}>{item}</Text>
+                            <Text
+                              style={{
+                                fontSize: 18,
+                                color: darkmode
+                                  ? BaseColors.white
+                                  : BaseColors.textColor,
+                              }}
+                            >
+                              {item}
+                            </Text>
                             <LabeledInput
                               keyboardType={'numeric'}
                               value={text}
                               onChangeText={e => {
-                                setText(e <= 100 ? e : null);
-                                setPercentage(e <= 100 ? e : null);
-                                setTextErrObj({ error: false, msg: '' });
+                                if (e !== '') {
+                                  const numericValue = parseFloat(e);
+                                  if (
+                                    !isNaN(numericValue) &&
+                                    numericValue >= 0
+                                  ) {
+                                    setText(numericValue.toString()); // Accept valid input
+                                    setPercentage(numericValue.toString());
+                                    setTextErrObj({ error: false, msg: '' });
+                                  } else {
+                                    setTextErrObj({
+                                      error: true,
+                                      msg: 'Enter a valid number >= 0',
+                                    });
+                                  }
+                                } else {
+                                  setText(''); // Allow clearing the input
+                                  setPercentage('');
+                                  setTextErrObj({ error: false, msg: '' });
+                                }
                               }}
                               showError={textErrObj.error}
                               errorText={textErrObj.msg}

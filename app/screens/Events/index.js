@@ -148,8 +148,8 @@ export default function Events({ navigation }) {
                       (item.digit_recall ?? 1) +
                       (item.treatment_info ?? 1) ===
                     4
-                      ? navigation.navigate('EventDetails', eventDetails)
-                      : navigation.navigate('EventDetails', eventDetails)
+                      ? navigation.navigate('EventDetails', item)
+                      : navigation.navigate('EventDetails', item)
                   }
                   image={Images.manimage}
                   data={item?.createdAt}

@@ -16,6 +16,8 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
+    height: 90,
+    justifyContent: 'center',
   },
   iconContainer: {
     width: 50,

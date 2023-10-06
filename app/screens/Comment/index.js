@@ -6,7 +6,10 @@ import Button from '@components/Button';
 import BaseSetting from '@config/setting';
 import { getApiData } from '@utils/apiHelper';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { BaseColors } from '@config/theme';
+import { useSelector } from 'react-redux';
 const Comment = ({ navigation, route }) => {
+  const { darkmode } = useSelector(state => state.auth);
   const eventId = route?.params?.eventId;
   const [commentText, setCommentText] = useState('');
   async function commentPost() {
@@ -40,26 +43,59 @@ const Comment = ({ navigation, route }) => {
     }
   }
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[
+        styles.container,
+        {
+          backgroundColor: darkmode ? BaseColors.lightBlack : BaseColors.white,
+        },
+      ]}
+    >
       <HeaderBar HeaderText={'Symptoms'} HeaderCenter />
       <View style={styles.main}>
         <View style={styles.topTitle}>
-          <Text style={styles.titleOne}>Assessment Completed</Text>
-          <Text style={styles.titleTwo}>
+          <Text
+            style={[
+              styles.titleOne,
+              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+            ]}
+          >
+            Assessment Completed
+          </Text>
+          <Text
+            style={[
+              styles.titleTwo,
+              { color: darkmode ? BaseColors.white : BaseColors.black90 },
+            ]}
+          >
             Thank you for completing your subsequent visit assessment.
           </Text>
 
           <View style={styles.innerView}>
-            <Text style={styles.titleThree}>
+            <Text
+              style={[
+                styles.titleThree,
+                { color: darkmode ? BaseColors.white : BaseColors.black90 },
+              ]}
+            >
               Any additional comments you would like to share with your
               provider?
             </Text>
             <TextInput
               placeholder="Share your comments..."
-              style={styles.inputBar}
+              style={[
+                styles.inputBar,
+                {
+                  borderColor: darkmode ? BaseColors.white : BaseColors.black90,
+                  color: darkmode ? BaseColors.white : BaseColors.black90,
+                },
+              ]}
               value={commentText}
               multiline
               onChangeText={value => setCommentText(value)}
+              placeholderTextColor={
+                darkmode ? BaseColors.white : BaseColors.black90
+              }
             />
           </View>
         </View>

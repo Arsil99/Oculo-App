@@ -378,8 +378,6 @@ export default function Wordlist({ navigation, route }) {
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        <StatusBar barStyle="light-content" translucent={true} />
-
         {viewType === 'list' ? (
           <View
             style={{
