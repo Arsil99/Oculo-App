@@ -15,6 +15,7 @@ import NoData from '@components/NoData';
 export default function Events({ navigation }) {
   const { darkmode } = useSelector(state => state.auth);
   const [eventDetails, setEventDetails] = useState([]);
+
   const [loader, setLoader] = useState(true);
 
   // display the questions list
@@ -147,11 +148,11 @@ export default function Events({ navigation }) {
                       (item.digit_recall ?? 1) +
                       (item.treatment_info ?? 1) ===
                     4
-                      ? navigation.navigate('EventDetails', item)
-                      : navigation.navigate('EventDetails', item)
+                      ? navigation.navigate('EventDetails', eventDetails)
+                      : navigation.navigate('EventDetails', eventDetails)
                   }
                   image={Images.manimage}
-                  data={item?.title}
+                  data={item?.createdAt}
                   status={`${
                     filled_count === total_count ? 'Completed' : 'Pending'
                   }`}

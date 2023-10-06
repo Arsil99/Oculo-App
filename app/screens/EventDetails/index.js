@@ -61,7 +61,23 @@ export default function EventDetails({ navigation, route }) {
       console.log('Error:', error);
     }
   };
+  const assessmentDueItems = datas.filter(
+    assessment =>
+      assessment.digit_recall === 0 ||
+      assessment.immediate_recall === 0 ||
+      assessment.symptom_info === 0 ||
+      assessment.treatment_info === 0,
+  );
 
+  const completedAssessmentItems = datas.filter(
+    assessment =>
+      assessment.digit_recall !== 0 &&
+      assessment.immediate_recall !== 0 &&
+      assessment.symptom_info !== 0 &&
+      assessment.treatment_info !== 0,
+  );
+
+  const shouldShowAssessmentDue = assessmentDueItems.length > 0;
   useEffect(() => {
     let dayArr = [];
     let monthArr = [];
@@ -263,20 +279,22 @@ export default function EventDetails({ navigation, route }) {
                 color: darkmode ? BaseColors.white : BaseColors.black,
               }}
             >
-              Assessment Due
+              {shouldShowAssessmentDue
+                ? 'Assessment Due'
+                : 'Completed Assessments'}
             </Text>
-            <CardList
-              rightArrow={true}
-              image={Images.eventlogo}
-              data={'Assessment 2'}
-              status={'Subsequent Visit'}
-              assessment={'Event: Aug 03'}
-              onPress={() => {
-                navigation.navigate('Assessment', datas);
-              }}
-            />
-          </View>
-          <View style={{ paddingHorizontal: 15 }}>
+            {assessmentDueItems.map((assessment, index) => (
+              <CardList
+                key={index}
+                image={Images.eventlogo}
+                data={`Assessment ${index + 1}`}
+                status={assessment.assmt_type}
+                assessment={`Event: ${assessment.title}`}
+                onPress={() => {
+                  navigation.navigate('Assessment', assessment);
+                }}
+              />
+            ))}
             <Text
               style={{
                 fontSize: 18,
@@ -287,12 +305,15 @@ export default function EventDetails({ navigation, route }) {
             >
               Completed Assessments
             </Text>
-            <CardList
-              image={Images.eventlogo}
-              data={'Assessment 1'}
-              status={'Initial Visit'}
-              assessment={'Event: July 28'}
-            />
+            {completedAssessmentItems.map((assessment, index) => (
+              <CardList
+                key={index}
+                image={Images.eventlogo}
+                data={`Assessment ${index + 1}`}
+                status={assessment.assmt_type}
+                assessment={`Event: ${assessment.title}`}
+              />
+            ))}
           </View>
         </View>
       )}
