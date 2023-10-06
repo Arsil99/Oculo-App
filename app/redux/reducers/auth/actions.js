@@ -16,6 +16,7 @@ const actions = {
   SET_ACTIVE_CHAT_USER: 'SET_ACTIVE_CHAT_USER',
   SET_BIO_METRIC: 'SET_BIO_METRIC',
   SET_FCM_TOKEN: 'SET_FCM_TOKEN',
+  SET_REFRESH_TOKEN_EXPIRED: 'SET_REFRESH_TOKEN_EXPIRED',
 
   setUserData: data => {
     return dispatch =>
@@ -121,6 +122,11 @@ const actions = {
     dispatch({
       type: actions.SET_ACTIVE_CHAT_USER,
       activeChatUser,
+    }),
+  setRefreshTokenExpire: refreshTokenExpire => dispatch =>
+    dispatch({
+      type: actions.SET_REFRESH_TOKEN_EXPIRED,
+      refreshTokenExpire,
     }),
 };
 

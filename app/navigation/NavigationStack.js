@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useMemo, useReducer, useEffect } from 'react';
 import { Platform, Text, TextInput } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   NavigationContainer,
   DarkTheme,
@@ -50,6 +50,10 @@ import AuthenticationFactor from '@screens/Authentication';
 import Symptom from '@screens/Symptom';
 import Instructions from '@screens/Callibration/instructions';
 import Success from '@screens/Callibration/success';
+import _ from 'lodash';
+import moment from 'moment';
+import BaseSetting from '@config/setting';
+import { getApiData } from '@utils/apiHelper';
 
 const intitialNotificationState = {
   notification: null,
@@ -68,7 +72,13 @@ TextInput.defaultProps.allowFontScaling = false;
 
 function App() {
   const dispatch = useDispatch();
-  const { setBaseColor, setDarkmode } = AuthAction;
+  const {
+    setBaseColor,
+    setDarkmode,
+    setUserData,
+    setRefreshTokenExpire,
+    setAccessToken,
+  } = AuthAction;
 
   const [Notifystate, dispatchState] = useReducer(
     notificationReducer,
@@ -178,6 +188,52 @@ function App() {
   };
 
   const BottomTabsNavigator = () => {
+    const { userData, accessToken, refreshTokenExpire } = useSelector(
+      state => state.auth,
+    );
+
+    const ref_roken = !_.isEmpty(userData)
+      ? userData.refresh_token_expired_at
+      : '';
+    console.log('this : ', userData);
+    const todaysDate = moment().format();
+    console.log('ref. ', ref_roken);
+    if (ref_roken !== '' && !_.isUndefined(ref_roken)) {
+      const current_tm = new Date(todaysDate);
+      const expired_on = new Date(ref_roken);
+      console.log('current ====>>> ', current_tm);
+      console.log('expired ====>>> ', expired_on);
+      console.log('refreshTokenExpire ====>>> ', ref_roken);
+      console.log('uData ====>>> ', userData);
+      if (current_tm > expired_on && !_.isEmpty(accessToken)) {
+        RefreshTokenApiCall();
+      }
+    }
+    async function RefreshTokenApiCall() {
+      let endPoint = BaseSetting.endpoints.refreshToken;
+
+      try {
+        const data = { refreshToken: JSON.stringify(userData) };
+        const response = await getApiData(endPoint, 'POST', data, {}, false);
+        console.log('RESP API : ', JSON.stringify(response));
+        if (response?.status) {
+          console.log(
+            'RESPINSE NAV >>>  : ',
+            JSON.stringify(response?.data?.userData),
+          );
+          // setRefreshToken(response?.data?.refresh_token_expired_at);
+          dispatch(setAccessToken(response?.data?.auth_token));
+          dispatch(setRefreshTokenExpire(response?.refresh_token_expired_at));
+          const dataBundle = {
+            ...response?.data?.userData?.personal_info,
+            refresh_token_expired_at: response?.data?.refresh_token_expired_at,
+          };
+          dispatch(setUserData(dataBundle));
+        }
+      } catch (error) {
+        console.log('response ~ RefreshTokenApiCall', error);
+      }
+    }
     return (
       <Tab.Navigator
         initialRouteName={'HomeStackNavigator'}

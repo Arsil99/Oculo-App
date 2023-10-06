@@ -3,7 +3,7 @@ import styles from './styles';
 import { StatusBar, View, Image, Animated } from 'react-native';
 import { Images } from '@config';
 import { useDispatch, useSelector } from 'react-redux';
-import { isEmpty } from 'lodash';
+import _, { isEmpty } from 'lodash';
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Authentication from '@redux/reducers/auth/actions';
@@ -18,6 +18,11 @@ const SplashScreen = ({ navigation }) => {
   useEffect(() => {
     requestUserPermission();
   }, []);
+
+  const ref_token = !_.isEmpty(userData)
+    ? userData?.refresh_token_expired_at
+    : '';
+
   async function requestUserPermission() {
     const authStatus = await messaging().requestPermission();
     const enabled =
@@ -67,7 +72,12 @@ const SplashScreen = ({ navigation }) => {
     try {
       const res = await getApiData(`${endPoint}`, 'GET');
       if (res?.status) {
-        dispatch(setUserData(res?.data));
+        const updatedWithRefreshToken = {
+          ...res?.data,
+          refresh_token_expired_at: ref_token,
+        };
+
+        dispatch(setUserData(updatedWithRefreshToken));
       }
     } catch (error) {
       console.log('📌 ⏩ file: index.js:24 ⏩ LangListAPI ⏩ error:', error);

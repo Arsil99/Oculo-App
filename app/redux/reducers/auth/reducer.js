@@ -17,6 +17,7 @@ const initialState = {
   activeChatUser: null,
   isBiometric: false,
   fcmToken: '',
+  refreshTokenExpire: '',
 };
 
 export default function reducer(state = initialState, action) {
@@ -125,6 +126,11 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         activeChatUser: action.activeChatUser,
+      };
+    case types.SET_REFRESH_TOKEN_EXPIRED:
+      return {
+        ...state,
+        refreshTokenExpire: action.refreshTokenExpire,
       };
 
     default:

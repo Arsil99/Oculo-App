@@ -23,7 +23,8 @@ import { storeCredentials } from '@utils/CommonFunction';
 import * as Keychain from 'react-native-keychain';
 
 const Login = ({ navigation }) => {
-  const { setUserData, setAccessToken, setBiometric } = Authentication;
+  const { setUserData, setAccessToken, setBiometric, setRefreshTokenExpire } =
+    Authentication;
   const { isBiometric, darkmode, fcmToken } = useSelector(state => state.auth);
   const IOS = Platform.OS === 'ios';
   const emailRegex = BaseSetting?.emailRegex;
@@ -208,7 +209,12 @@ const Login = ({ navigation }) => {
             from === 'bio' ? id : email,
             from === 'bio' ? pass : password,
           );
-          dispatch(setUserData(resp?.data?.personal_info));
+          dispatch(setRefreshTokenExpire(resp?.data?.refresh_token_expired_at));
+          const dataBundle = {
+            ...resp?.data?.personal_info,
+            refresh_token_expired_at: resp?.data?.refresh_token_expired_at,
+          };
+          dispatch(setUserData(dataBundle));
           dispatch(setAccessToken(resp?.data?.auth_token));
           navigation.reset({
             routes: [{ name: 'Home' }],

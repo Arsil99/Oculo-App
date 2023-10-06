@@ -40,6 +40,7 @@ const BaseSetting = {
     enable2FA: '/patient/enable-2fa',
     getPatient: '/patient/get-patient',
     spiderReport: '/reports/spider-reports',
+    refreshToken: '/user/refresh-token',
   },
 
   geolocationOptions: {
