@@ -723,28 +723,6 @@ fixDurScreen	= t	Average fixation duration on screen
     setActiveIndexes(newActiveIndexes);
   };
 
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      handleBackPress,
-    );
-
-    return () => backHandler.remove();
-  }, []);
-
-  const handleBackPress = () => {
-    setShowConfirmation(true);
-    return true;
-  };
-
-  const handleCancel = () => {
-    setShowConfirmation(false);
-  };
-
-  const handleConfirm = () => {
-    navigation.navigate('Events');
-  };
-
   const checkNext = () => {
     if (validPhysical) {
       setDuration(1);
@@ -835,6 +813,28 @@ fixDurScreen	= t	Average fixation duration on screen
       pageRevisitInt: 1,
     },
   ];
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      handleBackPress,
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
+  const handleBackPress = () => {
+    setShowConfirmation(true);
+    return true;
+  };
+
+  const handleCancel = () => {
+    setShowConfirmation(false);
+  };
+
+  const handleConfirm = () => {
+    navigation.goBack();
+  };
   return (
     <View
       style={[
@@ -849,7 +849,7 @@ fixDurScreen	= t	Average fixation duration on screen
         HeaderCenter
         leftText="Cancel"
         leftBtnPress={() => {
-          handleBackPress();
+          navigation.goBack();
         }}
       />
       <ScrollView
@@ -1334,7 +1334,7 @@ fixDurScreen	= t	Average fixation duration on screen
                   <TouchableOpacity
                     style={[styles.button, styles.confirmButton]}
                     onPress={handleConfirm}
-                    // disabled={confirmLoading}
+                    disabled={confirmLoading}
                   >
                     {confirmLoading ? (
                       <ActivityIndicator color="white" size="small" />

@@ -335,7 +335,7 @@ export default function Wordlist({ navigation, route }) {
   };
 
   const handleConfirm = () => {
-    navigation.navigate('Events');
+    navigation.goBack();
   };
   useEffect(() => {
     let intervalId;
@@ -392,7 +392,7 @@ export default function Wordlist({ navigation, route }) {
               HeaderCenter
               leftText={'Cancel'}
               leftBtnPress={() => {
-                handleBackPress();
+                navigation.goBack();
               }}
             />
 
@@ -444,7 +444,7 @@ export default function Wordlist({ navigation, route }) {
               HeaderCenter
               leftText={'Cancel'}
               leftBtnPress={() => {
-                handleBackPress();
+                navigation.goBack();
               }}
             />
             <View
@@ -676,7 +676,7 @@ export default function Wordlist({ navigation, route }) {
                   <TouchableOpacity
                     style={[styles.button, styles.confirmButton]}
                     onPress={handleConfirm}
-                    // disabled={confirmLoading}
+                    disabled={confirmLoading}
                   >
                     {confirmLoading ? (
                       <ActivityIndicator color="white" size="small" />

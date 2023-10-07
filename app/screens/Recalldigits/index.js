@@ -280,7 +280,7 @@ export default function Recalldigits({ navigation, route }) {
   };
 
   const handleConfirm = () => {
-    navigation.navigate('Events');
+    navigation.goBack();
   };
   // Define an array of trial text based on digit length and position
   const trialTexts = [

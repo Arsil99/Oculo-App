@@ -283,11 +283,10 @@ export default function EventDetails({ navigation, route }) {
               </View>
             ) : null}
 
-            {datas.digit_recall === 1 ||
-            (datas.digit_recall === null && datas.immediate_recall === 1) ||
-            (datas.immediate_recall === null && datas.symptom_info === 1) ||
-            (datas.symptom_info === null && datas.treatment_info === 1) ||
-            datas.treatment_info === null ? (
+            {(datas.digit_recall === 1 || datas.digit_recall === null) &&
+            (datas.immediate_recall === 1 || datas.immediate_recall === null) &&
+            (datas.symptom_info === 1 || datas.symptom_info === null) &&
+            (datas.treatment_info === 1 || datas.treatment_info === null) ? (
               <View>
                 <Text
                   style={{

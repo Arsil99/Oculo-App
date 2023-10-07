@@ -237,7 +237,6 @@ export default function ChangeInfo({ navigation, route }) {
       setLoader(false);
     }
   };
-
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
@@ -257,10 +256,7 @@ export default function ChangeInfo({ navigation, route }) {
   };
 
   const handleConfirm = () => {
-    navigation.navigate('Events');
-  };
-  const handleCancelPress = () => {
-    setShowConfirmation(true); // Show the confirmation modal when the cancel button is pressed
+    navigation.goBack();
   };
   return (
     <View
@@ -277,7 +273,9 @@ export default function ChangeInfo({ navigation, route }) {
         HeaderText={'Treatment Information'}
         HeaderCenter
         leftText={'Cancel'}
-        onCancelPress={handleBackPress} // Pass the function as a prop
+        leftBtnPress={() => {
+          navigation.goBack();
+        }}
       />
 
       <KeyboardAvoidingView
@@ -455,7 +453,7 @@ export default function ChangeInfo({ navigation, route }) {
                   <TouchableOpacity
                     style={[styles.button, styles.confirmButton]}
                     onPress={handleConfirm}
-                    // disabled={confirmLoading}
+                    disabled={confirmLoading}
                   >
                     {confirmLoading ? (
                       <ActivityIndicator color="white" size="small" />

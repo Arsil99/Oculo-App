@@ -90,7 +90,6 @@ export default StyleSheet.create({
   subheaderContainerr: {
     height: 76,
     width: 91,
-    backgroundColor: BaseColors.lightsky,
     padding: 8,
     borderRadius: 12,
   },

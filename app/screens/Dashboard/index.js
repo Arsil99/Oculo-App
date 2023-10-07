@@ -77,11 +77,22 @@ const Dashboard = () => {
           </Text>
         </View>
         <View style={styles.subheaderContainer}>
-          <View style={styles.subheaderContainerr}>
+          <View
+            style={[
+              styles.subheaderContainerr,
+              {
+                backgroundColor: darkmode
+                  ? BaseColors.black70
+                  : BaseColors.lightsky,
+              },
+            ]}
+          >
             <Text
               style={[
                 styles.text,
-                { color: darkmode ? BaseColors.white : BaseColors.textColor },
+                {
+                  color: darkmode ? BaseColors.white : BaseColors.textColor,
+                },
               ]}
             >
               Baseline
