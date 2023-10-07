@@ -22,7 +22,7 @@ import { BaseColors } from '@config/theme';
 import BackgroundTimer from 'react-native-background-timer';
 
 export default function OTP({ navigation, route }) {
-  const { userData, darkmode } = useSelector(state => state.auth);
+  const { fcmToken, darkmode } = useSelector(state => state.auth);
   const email = route?.params?.email || '';
   const phone = route?.params?.phone || '';
   const medium = route?.params?.medium || '';
@@ -120,6 +120,7 @@ export default function OTP({ navigation, route }) {
       type: from === 'tfa' ? '2FA' : 'forgot-password',
       parameterType: medium === 'Email' ? 'email' : 'phone',
       otp: code,
+      uuid: fcmToken,
     };
     try {
       const resp = await getApiData(endPoints, 'POST', params, {}, false);
