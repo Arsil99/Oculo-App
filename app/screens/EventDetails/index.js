@@ -93,11 +93,29 @@ export default function EventDetails({ navigation, route }) {
         return acc;
       }, {});
 
-    setWrapData(filteredData);
+    const filteredObject = {};
+    for (const key in filteredData) {
+      if (filteredData[key] !== 0) {
+        filteredObject[key] = filteredData[key];
+      }
+    }
+
+    setWrapData(filteredObject);
 
     // Only keys
     const keysArray = Object?.keys(filteredData);
-    setSpiderItems(keysArray);
+
+    //remove unwanted 2 keys
+    const elementsToRemove = ['assessment_id', 'date'];
+    const finalItems = keysArray.filter(
+      element => !elementsToRemove.includes(element),
+    );
+
+    const matchingValues = finalItems.filter(key =>
+      filteredObject.hasOwnProperty(key),
+    );
+
+    setSpiderItems(matchingValues);
   };
 
   return (

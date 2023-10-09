@@ -10,10 +10,14 @@ const SpiderWebChart = ({ items, bundle }) => {
     value,
     label: keys[index],
   }));
+
+  const filteredDataPoints = dataPoints.filter(
+    item => item.value !== 0 && item.value !== null,
+  );
   const data = {
     dataSets: [
       {
-        values: dataPoints,
+        values: filteredDataPoints,
         label: 'Initial',
         config: {
           color: '#1F77B4',
