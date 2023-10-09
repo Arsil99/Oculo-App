@@ -301,7 +301,7 @@ export default function Wordlist({ navigation, route }) {
               event_id: eventId,
               otherData: data,
             })
-          : navigation.navigate('Events');
+          : navigation.navigate('Comment');
         Toast.show({
           text1: response?.message.toString(),
           type: 'success',

@@ -501,7 +501,15 @@ fixDurScreen	= t	Average fixation duration on screen
               event_id: eventId,
               otherData: data,
             })
-          : null;
+          : data.digit_recall === 0
+          ? navigation.navigate('Recalldigits', {
+              event_id: eventId,
+              otherData: data,
+            })
+          : navigation.navigate('Comment', {
+              event_id: eventId,
+              otherData: data,
+            });
         Toast.show({
           text1: response?.message.toString(),
           type: 'success',

@@ -1,5 +1,5 @@
-import { View, Text, SafeAreaView, TextInput } from 'react-native';
-import React, { useState } from 'react';
+import { View, Text, SafeAreaView, TextInput, BackHandler } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
 import Button from '@components/Button';
@@ -42,6 +42,18 @@ const Comment = ({ navigation, route }) => {
       console.log('error while posting comment =======>>>', error);
     }
   }
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      handleBackPress,
+    );
+
+    return () => backHandler.remove();
+  }, []);
+  const handleBackPress = () => {
+    navigation.navigate('Events');
+    return true;
+  };
   return (
     <SafeAreaView
       style={[
