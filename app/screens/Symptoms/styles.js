@@ -59,12 +59,21 @@ export default StyleSheet.create({
   },
   boldText: {
     marginTop: 30,
-    fontWeight: '700',
+    fontWeight: '400',
     fontSize: 17,
-    lineHeight: 30,
+    lineHeight: 24,
+    fontFamily: FontFamily.regular,
+    color: BaseColors.textColor,
+    marginBottom: 20,
+  },
+  boldTextsymptom: {
+    fontWeight: '700',
+    fontSize: 24,
+    lineHeight: 32,
     fontFamily: FontFamily.bold,
     color: BaseColors.textColor,
     marginBottom: 30,
+    textAlign: 'center',
   },
   slider: {
     marginHorizontal: 20,

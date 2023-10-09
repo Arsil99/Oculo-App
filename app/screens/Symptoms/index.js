@@ -964,11 +964,22 @@ fixDurScreen	= t	Average fixation duration on screen
                                 {
                                   color: darkmode
                                     ? BaseColors.white
-                                    : BaseColors.black90,
+                                    : BaseColors.textColor,
                                 },
                               ]}
                             >
                               Please report the severity level of:{' '}
+                            </Text>
+                            <Text
+                              style={[
+                                styles.boldTextsymptom,
+                                {
+                                  color: darkmode
+                                    ? BaseColors.white
+                                    : BaseColors.textColor,
+                                },
+                              ]}
+                            >
                               {patient_question[index]}
                             </Text>
                             <View style={styles.sliderMarker}>
