@@ -15,6 +15,7 @@ import { Slider } from '@miblanchard/react-native-slider';
 import moment from 'moment';
 import { isArray, isEmpty } from 'lodash';
 export default function EventDetails({ navigation, route }) {
+  const eventType = route?.params?.event_type;
   const [graph, setGraph] = useState([]);
   const [day, setDay] = useState([]);
   const [month, setMonth] = useState([]);
@@ -166,7 +167,7 @@ export default function EventDetails({ navigation, route }) {
                   color: darkmode ? BaseColors.white : BaseColors.black90,
                 }}
               >
-                xxxxxxxxxxxx
+                {eventType}
               </Text>
             </View>
             <View>

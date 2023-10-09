@@ -142,17 +142,9 @@ export default function Events({ navigation }) {
                       ? true
                       : true
                   }
-                  onPress={() =>
-                    (item.symptom_info ?? 1) +
-                      (item.immediate_recall ?? 1) +
-                      (item.digit_recall ?? 1) +
-                      (item.treatment_info ?? 1) ===
-                    4
-                      ? navigation.navigate('EventDetails', item)
-                      : navigation.navigate('EventDetails', item)
-                  }
+                  onPress={() => navigation.navigate('EventDetails', item)}
                   image={Images.manimage}
-                  data={item?.createdAt}
+                  data={item?.title}
                   status={`${
                     filled_count === total_count ? 'Completed' : 'Pending'
                   }`}
