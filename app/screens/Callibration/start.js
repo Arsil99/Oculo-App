@@ -53,11 +53,11 @@ Animatable.initializeRegistryWithDefinitions({
 let positionArray = {};
 let lastPosition = 'CENTER';
 let CALIBRATED_POSITIONS = {
-  CENTER: { x: [], y: [] },
-  TL: { x: [], y: [] },
-  TR: { x: [], y: [] },
-  BR: { x: [], y: [] },
-  BL: { x: [], y: [] },
+  CENTER: { x: [], y: [], allPoints: [] },
+  TL: { x: [], y: [], allPoints: [] },
+  TR: { x: [], y: [], allPoints: [] },
+  BR: { x: [], y: [], allPoints: [] },
+  BL: { x: [], y: [], allPoints: [] },
 };
 let ViewHeight = 0;
 let ViewWidth = 0;
@@ -137,6 +137,7 @@ export default function CalibrationStart({ route }) {
         // Let's log X and Y for Calibration
         if (TRACK_EYES) {
           // Adding Eye Gaze X and Y to the Array of Calibrated Data
+          CALIBRATED_POSITIONS[lastPosition].allPoints.push(event);
           CALIBRATED_POSITIONS[lastPosition].x.push(event.centerEyeLookAtPoint.x);
           CALIBRATED_POSITIONS[lastPosition].y.push(event.centerEyeLookAtPoint.y);
         }
