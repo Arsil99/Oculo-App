@@ -94,9 +94,9 @@ export default function Events({ navigation }) {
             eventDetails?.map((item, index) => {
               let filled_count =
                 Number(
-                  item.symptom_info &&
-                    !isNull(item.symptom_info) &&
-                    item.symptom_info == 1
+                  item.symptom_inventory &&
+                    !isNull(item.symptom_inventory) &&
+                    item.symptom_inventory == 1
                     ? 1
                     : 0,
                 ) +
@@ -123,7 +123,7 @@ export default function Events({ navigation }) {
                 );
 
               let total_count =
-                Number(isNumber(item.symptom_info) ?? 1) +
+                Number(isNumber(item.symptom_inventory) ?? 1) +
                 Number(isNumber(item.immediate_recall) ?? 1) +
                 Number(isNumber(item.digit_recall) ?? 1) +
                 Number(isNumber(item.treatment_info) ?? 1);
@@ -134,7 +134,7 @@ export default function Events({ navigation }) {
                   backgroundColoricon={BaseColors.primary}
                   showmanIcon={true}
                   rightArrow={
-                    (item.symptom_info ?? 1) +
+                    (item.symptom_inventory ?? 1) +
                       (item.immediate_recall ?? 1) +
                       (item.digit_recall ?? 1) +
                       (item.treatment_info ?? 1) ===

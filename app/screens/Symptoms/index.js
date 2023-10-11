@@ -48,7 +48,7 @@ const Symptoms = ({ navigation, route }) => {
   const data = route?.params?.otherData;
   const { darkmode } = useSelector(state => state.auth);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const eventId = data?.id;
+  const eventId = data?.event_id;
 
   const [activeButtonIndex, setActiveButtonIndex] = useState(0);
 

@@ -9,25 +9,25 @@ import { BaseColors } from '@config/theme';
 const Assessment = ({ navigation, route }) => {
   const { darkmode, userData } = useSelector(state => state.auth);
   const data = route?.params;
-
   let provider_name =
     userData?.provider_firstname + ' ' + userData?.provider_lastname;
 
   const navigatetoscreen = () => {
     navigation.navigate(
-      data.treatment_info === 0
+      data.details?.treatment_info === 0
         ? 'ChangeInfo'
-        : data.symptom_info === 0
+        : data.details?.symptom_inventory === 0
         ? 'Symptom'
-        : data.immediate_recall === 0
+        : data.details?.immediate_recall === 0
         ? 'ImmediateRecall'
-        : data.digit_recall === 0
+        : data.details?.digit_recall === 0
         ? 'ImmediateRecallmain'
         : null,
       {
-        event_id: data?.id,
-        otherData: data,
+        event_id: data?.details?.event_id,
+        otherData: data?.details,
         sourceScreen: 'Assessment',
+        id: data?.details?.id,
       },
     );
   };
@@ -45,7 +45,7 @@ const Assessment = ({ navigation, route }) => {
         HeaderText={
           data?.treatment_info === 0
             ? 'Assessment 1'
-            : data?.symptom_info === 0
+            : data?.symptom_inventory === 0
             ? 'Assessment 2'
             : data?.immediate_recall === 0
             ? 'Assessment 3'
@@ -99,7 +99,7 @@ const Assessment = ({ navigation, route }) => {
                 },
               ]}
             >
-              {data?.title}
+              {data?.details?.event_title}
             </Text>
           </View>
           <View>
@@ -147,7 +147,7 @@ const Assessment = ({ navigation, route }) => {
                 },
               ]}
             >
-              {data?.assmt_type}
+              {data?.details?.assessment_type}
             </Text>
           </View>
           <View>

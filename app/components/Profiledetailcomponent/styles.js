@@ -14,6 +14,29 @@ export default StyleSheet.create({
     width: fullWidth,
     zIndex: 2,
   },
+  modalContainer: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  mainModal: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    width: '100%',
+  },
+  imgText: { fontSize: 15, marginLeft: 5, color: BaseColors.primary },
+  imgType: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  devider: {
+    borderBottomWidth: 1,
+    borderColor: BaseColors.black50,
+    marginVertical: 15,
+  },
   topBorder: { borderTopLeftRadius: 12, borderTopRightRadius: 12 },
   otherBorder: {
     borderTopWidth: 0.7,

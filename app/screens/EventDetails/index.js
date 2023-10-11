@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import styles from './style';
 import HeaderBar from '@components/HeaderBar';
@@ -119,6 +119,22 @@ export default function EventDetails({ navigation, route }) {
     setSpiderItems(matchingValues);
   };
 
+  // assments list
+  const [listOfAssessments, setListOfAssessments] = useState([]);
+  useEffect(() => {
+    getAssessments();
+  }, []);
+  const getAssessments = async () => {
+    const endPoint = `${BaseSetting.endpoints.eventDetails}?event_id=${eventId}`;
+    try {
+      const res = await getApiData(`${endPoint}`, 'GET');
+      if (res?.status) {
+        setListOfAssessments(res?.data);
+      }
+    } catch (error) {
+      console.log('Error:', error);
+    }
+  };
   return (
     <View
       style={[
@@ -276,7 +292,7 @@ export default function EventDetails({ navigation, route }) {
           <View style={{ paddingHorizontal: 15, marginTop: 25 }}>
             {datas.digit_recall === 0 ||
             datas.immediate_recall === 0 ||
-            datas.symptom_info === 0 ||
+            datas.symptom_inventory === 0 ||
             datas.treatment_info === 0 ? (
               <View>
                 <Text
@@ -304,7 +320,8 @@ export default function EventDetails({ navigation, route }) {
 
             {(datas.digit_recall === 1 || datas.digit_recall === null) &&
             (datas.immediate_recall === 1 || datas.immediate_recall === null) &&
-            (datas.symptom_info === 1 || datas.symptom_info === null) &&
+            (datas.symptom_inventory === 1 ||
+              datas.symptom_inventory === null) &&
             (datas.treatment_info === 1 || datas.treatment_info === null) ? (
               <View>
                 <Text
@@ -326,6 +343,25 @@ export default function EventDetails({ navigation, route }) {
               </View>
             ) : null}
           </View>
+          <ScrollView style={{ paddingHorizontal: 15 }}>
+            {!isEmpty(listOfAssessments) &&
+              listOfAssessments?.assessments?.map((item, index) => {
+                return (
+                  <CardList
+                    key={index}
+                    image={Images.eventlogo}
+                    data={item.details.assess_num}
+                    status={item.details.assessment_type}
+                    assessment={`Date: ${item.details.date.split(',')[0]}`}
+                    onPress={() => {
+                      item['details']['event_title'] =
+                        listOfAssessments.event_details.title;
+                      navigation.navigate('Assessment', item);
+                    }}
+                  />
+                );
+              })}
+          </ScrollView>
         </View>
       )}
     </View>

@@ -215,9 +215,9 @@ export default function ChangeInfo({ navigation, route }) {
           text1: resp?.message.toString(),
           type: 'success',
         });
-        if (data.symptom_info === 0) {
+        if (data.symptom_inventory === 0) {
           navigation.navigate('Symptom', {
-            event_id: data?.id,
+            event_id: eventId,
             otherData: data,
           });
         }

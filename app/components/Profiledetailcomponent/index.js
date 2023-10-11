@@ -26,9 +26,9 @@ import BaseSetting from '@config/setting';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import ImagePicker from 'react-native-image-crop-picker';
 import Authentication from '@redux/reducers/auth/actions';
-import Icon1 from 'react-native-vector-icons/Feather';
 import { getApiData, getApiDataProgress } from '@utils/apiHelper';
 import { Images } from '@config';
+import { Modal } from 'react-native';
 
 const errObj = {
   firstNameErr: false,
@@ -371,15 +371,31 @@ const Profiledetailcomponent = (props, ref) => {
     }
   };
 
-  const handleImagePicker = async () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const handleGalleryImage = async () => {
+    setModalVisible(false);
     await ImagePicker.openPicker({
       width: 300,
       height: 400,
       cropping: true,
       cropperCircleOverlay: true,
       cropperToolbarTitle: 'Crop your profile picture',
-
       freeStyleCropEnabled: true,
+    })
+      .then(image => {
+        setSelectedImage(image);
+      })
+      .catch(error => {
+        console.log('ImagePicker Error: ', error);
+      });
+  };
+
+  const handleCameraImage = async () => {
+    setModalVisible(false);
+    await ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true,
     })
       .then(image => {
         setSelectedImage(image);
@@ -443,7 +459,7 @@ const Profiledetailcomponent = (props, ref) => {
               </View>
             )}
             <TouchableOpacity
-              onPress={handleImagePicker}
+              onPress={() => setModalVisible(true)}
               activeOpacity={BaseSetting.buttonOpacity}
               style={styles.imagePickerButton}
             >
@@ -767,6 +783,33 @@ const Profiledetailcomponent = (props, ref) => {
             errorText={ErrObj.g_emailErrMsg}
           />
         </View>
+      </View>
+      <View style={styles.mainModal}>
+        <Modal animationType="slide" transparent={true} visible={modalVisible}>
+          <TouchableOpacity
+            activeOpacity={1}
+            style={styles.modalContainer}
+            onPress={() => setModalVisible(false)}
+          >
+            <View style={styles.modalContent}>
+              <TouchableOpacity
+                onPress={handleCameraImage}
+                style={styles.imgType}
+              >
+                <Icon name="camera" size={25} color={BaseColors.primary} />
+                <Text style={styles.imgText}>Take a picture</Text>
+              </TouchableOpacity>
+              <View style={styles.devider} />
+              <TouchableOpacity
+                onPress={handleGalleryImage}
+                style={styles.imgType}
+              >
+                <Icon name="picture" size={25} color={BaseColors.primary} />
+                <Text style={styles.imgText}>Choose from gallery</Text>
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
+        </Modal>
       </View>
     </View>
   );
