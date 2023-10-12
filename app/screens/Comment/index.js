@@ -10,7 +10,7 @@ import { BaseColors } from '@config/theme';
 import { useSelector } from 'react-redux';
 const Comment = ({ navigation, route }) => {
   const { darkmode } = useSelector(state => state.auth);
-  const eventId = route?.params?.eventId;
+  const eventId = route?.params?.event_id;
   const [commentText, setCommentText] = useState('');
   async function commentPost() {
     try {

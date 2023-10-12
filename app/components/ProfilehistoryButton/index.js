@@ -77,14 +77,18 @@ const ProfilehistoryButton = (props, ref) => {
   }
 
   const QuestionListAPI = async () => {
-    const endPoint = `${BaseSetting.endpoints.question}?patient_id=${userData?.id}&type=app`;
+    const endPoint = `${BaseSetting.endpoints.question}?type=app`;
     try {
       const res = await getApiData(`${endPoint}`, 'GET');
       if (res?.status) {
         setQuestionList(res?.data);
         setInitialData(res?.data);
       } else {
-        setQuestionList([]);
+        Toast.show({
+          text1: res?.message,
+          type: 'error',
+        });
+        Toast.setQuestionList([]);
       }
       setLoader(false);
     } catch (error) {

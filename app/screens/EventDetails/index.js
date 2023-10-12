@@ -15,7 +15,7 @@ import { Slider } from '@miblanchard/react-native-slider';
 import moment from 'moment';
 import { isArray, isEmpty } from 'lodash';
 export default function EventDetails({ navigation, route }) {
-  const eventType = route?.params?.event_type;
+  const eventType = route?.params?.event_name;
   const [graph, setGraph] = useState([]);
   const [day, setDay] = useState([]);
   const [month, setMonth] = useState([]);
@@ -76,6 +76,8 @@ export default function EventDetails({ navigation, route }) {
     setMonth(monthArr);
   }, [graph]);
 
+  const [init, setInit] = useState();
+
   const runSlider = value => {
     const date = `${day[value]} - ${month[value]}`;
     const selectedDate = date?.replace(/\s/g, '');
@@ -84,15 +86,18 @@ export default function EventDetails({ navigation, route }) {
       return moment(item?.date).format('DD-MMM') === selectedDate;
     });
 
+    let init = dataObj['initial'];
     // Key and values
-    const filteredData = Object?.keys(dataObj)
-      .slice(0, -2)
-      .reduce((acc, key) => {
-        if (dataObj[key] !== null) {
-          acc[key] = dataObj[key];
-        }
-        return acc;
-      }, {});
+    const keysToProcess = init
+      ? Object.keys(dataObj).slice(0, -1)
+      : Object.keys(dataObj);
+    setInit(init);
+    const filteredData = keysToProcess.reduce((acc, key) => {
+      if (dataObj[key] !== null) {
+        acc[key] = dataObj[key];
+      }
+      return acc;
+    }, {});
 
     const filteredObject = {};
     for (const key in filteredData) {
@@ -108,15 +113,20 @@ export default function EventDetails({ navigation, route }) {
 
     //remove unwanted 2 keys
     const elementsToRemove = ['assessment_id', 'date'];
-    const finalItems = keysArray.filter(
-      element => !elementsToRemove.includes(element),
+    const finalItems = keysArray?.filter(
+      element => !elementsToRemove?.includes(element),
     );
 
-    const matchingValues = finalItems.filter(key =>
-      filteredObject.hasOwnProperty(key),
+    const matchingValues = finalItems?.filter(key =>
+      filteredObject?.hasOwnProperty(key),
     );
 
-    setSpiderItems(matchingValues);
+    // data showing like label (0)
+    const formattedLabels = matchingValues.map(
+      label => `${label} [${filteredObject[label]}]`,
+    );
+    console.log(formattedLabels);
+    setSpiderItems(formattedLabels);
   };
 
   // assments list
@@ -200,7 +210,7 @@ export default function EventDetails({ navigation, route }) {
                   color: darkmode ? BaseColors.white : BaseColors.black90,
                 }}
               >
-                xxxxxxxxxxxxxxxxxxxxxx
+                xxxxx
               </Text>
             </View>
           </View>
@@ -214,7 +224,11 @@ export default function EventDetails({ navigation, route }) {
           />
           {activeInTab.id === 'summary' ? (
             <View style={styles.spiderView}>
-              <SpiderWebChart items={spiderItems} bundle={wrapData} />
+              <SpiderWebChart
+                items={spiderItems}
+                bundle={wrapData}
+                initial={init}
+              />
               <Text style={styles.label}>Compare your assessments</Text>
               {!isEmpty(graph) && isArray(graph) ? (
                 <Slider
