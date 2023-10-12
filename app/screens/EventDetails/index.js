@@ -21,6 +21,7 @@ export default function EventDetails({ navigation, route }) {
   const [month, setMonth] = useState([]);
   const [spiderItems, setSpiderItems] = useState([]);
   const [sliderValue, setSliderValue] = useState(0);
+  const [defaultGraph, setDefaultGraph] = useState();
   const [wrapData, setWrapData] = useState([]);
   let eventId = route?.params?.id;
 
@@ -56,6 +57,29 @@ export default function EventDetails({ navigation, route }) {
     try {
       const res = await getApiData(`${endPoint}`, 'GET');
       if (res?.status) {
+        // Key and values
+        const keysToProcess = Object.keys(
+          res?.data.find(item => item.initial === true),
+        ).slice(0, -1);
+
+        setInit(init);
+        const filteredData = keysToProcess.reduce((acc, key) => {
+          if (res?.data.find(item => item.initial === true)[key] !== null) {
+            acc[key] = res?.data.find(item => item.initial === true)[key];
+          }
+          return acc;
+        }, {});
+
+        const filteredObject = {};
+        for (const key in filteredData) {
+          if (filteredData[key] !== 0) {
+            filteredObject[key] = filteredData[key];
+          }
+        }
+        // Remove the properties
+        delete filteredObject.assessment_id;
+        delete filteredObject.date;
+        setDefaultGraph(filteredObject);
         setGraph(res?.data);
       }
     } catch (error) {
@@ -228,6 +252,7 @@ export default function EventDetails({ navigation, route }) {
                 items={spiderItems}
                 bundle={wrapData}
                 initial={init}
+                defaultGraph={defaultGraph}
               />
               <Text style={styles.label}>Compare your assessments</Text>
               {!isEmpty(graph) && isArray(graph) ? (
