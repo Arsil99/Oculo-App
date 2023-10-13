@@ -23,6 +23,9 @@ export default function EventDetails({ navigation, route }) {
   const [sliderValue, setSliderValue] = useState(0);
   const [defaultGraph, setDefaultGraph] = useState();
   const [wrapData, setWrapData] = useState([]);
+  const [completedData, setCompletedData] = useState([]);
+  const [pendingData, setPendingData] = useState([]);
+  const [missedData, setMissedData] = useState([]);
   let eventId = route?.params?.id;
 
   let datas = route?.params;
@@ -163,11 +166,67 @@ export default function EventDetails({ navigation, route }) {
     try {
       const res = await getApiData(`${endPoint}`, 'GET');
       if (res?.status) {
+        const dueArray = [];
+        const completedArray = [];
+        const missingArray = [];
+        res?.data?.assessments?.map((item, index) => {
+          if (item.details?.status === 'Completed') {
+            completedArray.push(item);
+          } else if (item.details?.status === 'Pending') {
+            dueArray.push(item);
+          } else if (item.details?.status === 'Missed') {
+            missingArray.push(item);
+          }
+        });
+        setPendingData(dueArray);
+        setCompletedData(completedArray);
+        setMissedData(missingArray);
         setListOfAssessments(res?.data);
       }
     } catch (error) {
       console.log('Error:', error);
     }
+  };
+
+  // list optimization
+  const AssessmentList = ({
+    data,
+    title,
+    darkmode,
+    navigation,
+    eventTitle,
+  }) => {
+    return (
+      <>
+        {!isEmpty(data) && (
+          <Text
+            style={[
+              styles.assessmentTag,
+              { color: darkmode ? BaseColors.white : BaseColors.black },
+            ]}
+          >
+            {title}
+          </Text>
+        )}
+        {!isEmpty(data) &&
+          data?.map((item, index) => (
+            <CardList
+              key={index}
+              image={Images.eventlogo}
+              data={item.details.assess_num}
+              status={item.details.assessment_type}
+              rightArrow={title !== 'Assessment Completed' ? true : false}
+              assessment={`Date: ${item.details.date.split(',')[0]}`}
+              onPress={() => {
+                title !== 'Assessment Completed'
+                  ? ((item['details']['event_title'] = eventTitle),
+                    navigation.navigate('Assessment', item))
+                  : null;
+              }}
+            />
+          ))}
+      </>
+    );
   };
   return (
     <View
@@ -328,78 +387,30 @@ export default function EventDetails({ navigation, route }) {
             flex: 1,
           }}
         >
-          <View style={{ paddingHorizontal: 15, marginTop: 25 }}>
-            {datas.digit_recall === 0 ||
-            datas.immediate_recall === 0 ||
-            datas.symptom_inventory === 0 ||
-            datas.treatment_info === 0 ? (
-              <View>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    fontWeight: '700',
-                    marginVertical: 5,
-                    color: darkmode ? BaseColors.white : BaseColors.black,
-                  }}
-                >
-                  Assessment Due
-                </Text>
-                <CardList
-                  rightArrow={true}
-                  image={Images.eventlogo}
-                  data={'Assessment 2'}
-                  status={datas.assmt_type}
-                  assessment={`Event: ${datas.title}`}
-                  onPress={() => {
-                    navigation.navigate('Assessment', datas);
-                  }}
-                />
-              </View>
-            ) : null}
-
-            {(datas.digit_recall === 1 || datas.digit_recall === null) &&
-            (datas.immediate_recall === 1 || datas.immediate_recall === null) &&
-            (datas.symptom_inventory === 1 ||
-              datas.symptom_inventory === null) &&
-            (datas.treatment_info === 1 || datas.treatment_info === null) ? (
-              <View>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    fontWeight: '700',
-                    marginVertical: 5,
-                    color: darkmode ? BaseColors.white : BaseColors.black,
-                  }}
-                >
-                  Completed Assessments
-                </Text>
-                <CardList
-                  image={Images.eventlogo}
-                  data={'Assessment 1'}
-                  status={datas.assmt_type}
-                  assessment={`Event: ${datas.title}`}
-                />
-              </View>
-            ) : null}
-          </View>
           <ScrollView style={{ paddingHorizontal: 15 }}>
-            {!isEmpty(listOfAssessments) &&
-              listOfAssessments?.assessments?.map((item, index) => {
-                return (
-                  <CardList
-                    key={index}
-                    image={Images.eventlogo}
-                    data={item.details.assess_num}
-                    status={item.details.assessment_type}
-                    assessment={`Date: ${item.details.date.split(',')[0]}`}
-                    onPress={() => {
-                      item['details']['event_title'] =
-                        listOfAssessments.event_details.title;
-                      navigation.navigate('Assessment', item);
-                    }}
-                  />
-                );
-              })}
+            <AssessmentList
+              data={pendingData}
+              title="Assessment Pending"
+              darkmode={darkmode}
+              navigation={navigation}
+              eventTitle={listOfAssessments?.event_details?.title}
+            />
+
+            <AssessmentList
+              data={completedData}
+              title="Assessment Completed"
+              darkmode={darkmode}
+              navigation={navigation}
+              eventTitle={listOfAssessments?.event_details?.title}
+            />
+
+            <AssessmentList
+              data={missedData}
+              title="Assessment Missed"
+              darkmode={darkmode}
+              navigation={navigation}
+              eventTitle={listOfAssessments?.event_details?.title}
+            />
           </ScrollView>
         </View>
       )}

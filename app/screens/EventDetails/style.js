@@ -71,6 +71,7 @@ export default StyleSheet.create({
     marginTop: -18,
     zIndex: -10,
   },
+  assessmentTag: { fontSize: 18, fontWeight: '700', marginVertical: 5 },
   marker: {
     height: 10,
     width: 1,
