@@ -76,4 +76,68 @@ export default StyleSheet.create({
     height: 10,
     width: 1,
   },
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    padding: 20,
+    justifyContent: 'space-between', // Add space between items
+  },
+  eventContainer: {
+    borderWidth: 1,
+    width: '48%', // Two items side by side with a small gap
+
+    marginVertical: 5,
+    borderColor: BaseColors.lightGrey,
+    height: 90,
+    padding: 10,
+    borderRadius: 12,
+    shadowColor: BaseColors.black,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+  },
+  eventName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10, // Add margin below event name
+  },
+  itemContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingRight: 5,
+    alignItems: 'center',
+  },
+  textt: {
+    // color: BaseColors.textColor,
+    fontFamily: FontFamily.regular,
+    fontWeight: '400',
+    fontSize: 14,
+    lineHeight: 22,
+  },
+  dateValueContainer: {},
+  dateText: {
+    flex: 1,
+  },
+  valueText: {},
+  gradientBackground: {
+    height: 10,
+    borderWidth: 1,
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+  },
+  iconContainer: {
+    width: 30,
+    height: 30,
+    backgroundColor: BaseColors.primary,
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

@@ -1,4 +1,12 @@
-import { View, Text, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  ActivityIndicator,
+  Image,
+  TouchableOpacity,
+  processColor,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import styles from './style';
 import HeaderBar from '@components/HeaderBar';
@@ -13,6 +21,9 @@ import { getApiData } from '@utils/apiHelper';
 import SpiderWebChart from '@components/SpiderWebChart';
 import { Slider } from '@miblanchard/react-native-slider';
 import moment from 'moment';
+import { LineChart } from 'react-native-charts-wrapper';
+import Icon from 'react-native-vector-icons/AntDesign';
+import Icon2 from 'react-native-vector-icons/AntDesign';
 import { isArray, isEmpty } from 'lodash';
 export default function EventDetails({ navigation, route }) {
   const eventType = route?.params?.event_name;
@@ -26,6 +37,8 @@ export default function EventDetails({ navigation, route }) {
   const [completedData, setCompletedData] = useState([]);
   const [pendingData, setPendingData] = useState([]);
   const [missedData, setMissedData] = useState([]);
+  const [loader, setLoader] = useState(true);
+  const [eventDetail, setEventDetail] = useState([]);
   let eventId = route?.params?.id;
 
   let datas = route?.params;
@@ -228,6 +241,218 @@ export default function EventDetails({ navigation, route }) {
       </>
     );
   };
+
+  // DETAIL TAB RELATED CODE
+  useEffect(() => {
+    ChartData();
+  }, []);
+
+  const ChartData = async () => {
+    setLoader(true);
+    const endPoint = `${BaseSetting.endpoints.zigzagReports}?want_from=app&event_id=${eventId}&metric_name=Headache`;
+    try {
+      const res = await getApiData(`${endPoint}`, 'GET');
+
+      if (res?.status) {
+        setEventDetail(res?.data);
+      } else {
+        setEventDetail([]);
+      }
+      setLoader(false);
+    } catch (error) {
+      console.log('🚀 ~ file: index.js:156 ~ ChartData ~ error:', error);
+      setLoader(false);
+    }
+  };
+  const convertDataForChart = data => {
+    const chartData = {
+      dataSets: [],
+    };
+
+    for (const [eventType, eventData] of Object.entries(data)) {
+      const dataSet = {
+        label: eventType,
+        values: eventData.map(item => item.value),
+
+        config: {
+          color: processColor(BaseColors.primary),
+          drawValues: false,
+          drawCircles: false,
+          lineWidth: 2,
+          drawCubicInterpolation: true,
+          circleRadius: 5,
+          circleColor: '#fff',
+          circleHoleColor: '#ff0000',
+          drawFilled: true,
+          fillColor: '#ff000080',
+          fillAlpha: 0.5,
+        },
+      };
+
+      chartData.dataSets.push(dataSet);
+    }
+
+    return chartData;
+  };
+
+  const eventDetails = {
+    Headache: [
+      {
+        date: 'Oct 8',
+        value: 2,
+      },
+      {
+        date: 'Oct 9',
+        value: 0,
+      },
+      {
+        date: 'Oct 11',
+        value: 0,
+      },
+      {
+        date: 'Oct 12',
+        prev_value: 0,
+        value: 1,
+      },
+    ],
+    Neck_Pain: [
+      {
+        date: 'Oct 8',
+        value: 4,
+      },
+      {
+        date: 'Oct 9',
+        value: 0,
+      },
+      {
+        date: 'Oct 11',
+        value: 0,
+      },
+      {
+        date: 'Oct 12',
+        prev_value: 4,
+        value: 2,
+      },
+    ],
+  };
+
+  const chartData = convertDataForChart(eventDetail);
+  chartData.dataSets.forEach(dataset => {
+    dataset.config.label = ''; // or null
+  });
+
+  const CommonLineChart = ({ eventName, data }) => {
+    return (
+      <View
+        style={{
+          flex: 1,
+          marginLeft: -15,
+          alignItems: 'flex-start',
+          justifyContent: 'center',
+        }}
+      >
+        <LineChart
+          data={convertDataForChart({ [eventName]: data })}
+          drawValues={false}
+          drawCircles={false}
+          xAxis={{ drawLabels: false, drawGridLines: false, enabled: false }}
+          yAxisLeft={{ drawLabels: false, drawGridLines: false }}
+          chartDescription={{ text: '' }}
+          legend={{ enabled: false }}
+          style={{ width: 131, height: 60 }}
+          drawXAxis={false}
+          yAxisRight={null}
+          drawYAxis={false}
+          drawGridBackground={false}
+          yAxis={{
+            left: {
+              granularity: 6,
+              drawLabels: false, // Hide labels on the y-axis
+              drawGridLines: false, // Hide grid lines on the y-axis
+              drawYAxis: false,
+              enabled: false,
+            },
+            right: {
+              enabled: false,
+              drawGridLines: false, // Hide grid lines on the y-axis
+              drawYAxis: false,
+            },
+          }}
+          chartConfig={{
+            drawGridBackground: false,
+          }}
+        />
+      </View>
+    );
+  };
+  function getSymptomIconComponent(symptomName) {
+    const symptomIcons = {
+      Headache: 'eye',
+      Press_Head: 'eye',
+      Neck_Pain: 'eye',
+      Nausea: 'eye',
+      Dizziness: 'dizzy',
+      Vis_Prob: 'eye',
+      Balance: 'eye',
+      Sens_Light: 'eye',
+      Sens_Noise: 'eye',
+      Slow: 'eye',
+      Foggy: 'eye',
+      Not_Right: 'closecircleo',
+      Diff_Concen: 'eye',
+      Diff_Rem: 'eye',
+      Fatigue: 'eye',
+      Confused: 'eye',
+      Drowsy: 'eye',
+      Emotional: 'eye',
+      Irritable: 'eye',
+      SadDep: 'sad-eye',
+      Nerv_Anx: 'eye',
+      Trouble_Sleep: 'eye',
+    };
+
+    const iconName = symptomIcons[symptomName];
+
+    if (iconName) {
+      if (iconName === 'dizzy') {
+        return (
+          <Image
+            source={Images.dizzy}
+            style={{ width: 14, height: 14, tintColor: BaseColors.white }}
+          />
+        );
+      } else {
+        return <Icon name={iconName} size={14} color="white" />;
+      }
+    } else {
+      return null;
+    }
+  }
+  const calculateArrow = (prevValue, value) => {
+    const diff = value - prevValue;
+    return diff >= 0 ? 'caretup' : 'caretdown';
+  };
+  const calculateIconColor = (prevValue, value) => {
+    const diff = Math.abs(value - prevValue);
+
+    if (diff === 0) {
+      return BaseColors.black400;
+    } else if (diff === 1) {
+      return BaseColors.primaryBlue300;
+    } else if (diff === 2) {
+      return BaseColors.primaryBlue400;
+    } else if (diff === 3) {
+      return BaseColors.primaryBlue500;
+    } else if (diff === 4) {
+      return BaseColors.primaryBlue600;
+    } else if (diff === 5) {
+      return BaseColors.primaryBlue700;
+    } else if (diff === 6) {
+      return BaseColors.primaryBlue900;
+    } else {
+      return BaseColors.black400;
+    }
+  };
   return (
     <View
       style={[
@@ -372,9 +597,86 @@ export default function EventDetails({ navigation, route }) {
                 ))}
               </View>
             </View>
+          ) : loader === false ? (
+            <ScrollView style={{ height: 500 }}>
+              <View style={styles.container}>
+                {Object.keys(eventDetail).map(eventName => (
+                  <TouchableOpacity
+                    key={eventName}
+                    style={styles.eventContainer}
+                    onPress={() => {
+                      navigation.navigate('Dashboard', {
+                        eventName: eventName,
+                        eventData: eventDetail[eventName],
+                      });
+                    }}
+                    activeOpacity={BaseSetting.buttonOpacity}
+                  >
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <View style={{ height: 45, width: 90 }}>
+                        <Text
+                          style={[
+                            styles.textt,
+                            {
+                              color: darkmode
+                                ? BaseColors.white
+                                : BaseColors.black90,
+                            },
+                          ]}
+                        >
+                          {eventName}
+                        </Text>
+                      </View>
+                      <View style={styles.iconContainer}>
+                        {getSymptomIconComponent(eventName)}
+                      </View>
+                    </View>
+
+                    <CommonLineChart
+                      eventName={eventName}
+                      data={eventDetail[eventName]}
+                    />
+
+                    {eventDetail[eventName]
+                      .filter(
+                        item =>
+                          item.prev_value !== undefined &&
+                          item.value !== undefined,
+                      )
+                      .map(item => (
+                        <View key={item.date} style={styles.itemContainer}>
+                          <Icon2
+                            name={calculateArrow(item.prev_value, item.value)}
+                            size={14}
+                            color={calculateIconColor(
+                              item.prev_value,
+                              item.value,
+                            )}
+                          />
+                        </View>
+                      ))}
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </ScrollView>
           ) : (
-            <View style={styles.detailsArea}>
-              <Milestones navigation={navigation} />
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                top: BaseSetting.nHeight / 5,
+              }}
+            >
+              <ActivityIndicator
+                size={'large'}
+                color={BaseColors.primary}
+                animating={true}
+              />
             </View>
           )}
         </View>

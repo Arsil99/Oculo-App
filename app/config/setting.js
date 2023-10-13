@@ -42,6 +42,7 @@ const BaseSetting = {
     spiderReport: '/reports/spider-reports',
     refreshToken: '/user/refresh-token',
     eventDetails: '/event/details',
+    zigzagReports: '/reports/zig-zag-reports',
   },
 
   geolocationOptions: {

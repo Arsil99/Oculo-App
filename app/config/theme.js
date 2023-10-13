@@ -32,7 +32,7 @@ export const BaseColors = {
   textGrey: '#484848',
   textSecondary: '#858585',
   backgroundColor: '#F6F6F6',
-  lightGrey: '#585858',
+  lightGrey: '#EAEBF2',
   inputBorder: '#C1C1C1',
   white: '#ffffff',
   whiteSmoke: '#F1F1F1',
@@ -57,6 +57,13 @@ export const BaseColors = {
   black70: '#00000070',
   black80: '#00000080',
   black90: '#00000090',
+  primaryBlue900: '#1C3E63',
+  primaryBlue700: '#2C609B',
+  primaryBlue600: '#3778C2',
+  primaryBlue500: '#5F93CE',
+  primaryBlue400: '#7FA9D8',
+  primaryBlue300: '#99BAE0',
+  black400: '#B6B7B9',
 };
 
 export const DarkBaseColor = {
@@ -71,6 +78,7 @@ export const DarkBaseColor = {
   darkorange: '#F1886D',
   lightorange: '#F4A08A',
   lightsky: '#F6F9FC',
+  lightGrey: '#EAEBF2',
   textGrey: '#7A838E',
   btnBlue: '#61C9D3',
   alertRed: '#FF0B1E',
@@ -109,6 +117,13 @@ export const DarkBaseColor = {
   white: '#000000',
   whiteSmoke: '#F1F1F1',
   black: '#ffffff',
+  primaryBlue900: '#1C3E63',
+  primaryBlue700: '#2C609B',
+  primaryBlue600: '#3778C2',
+  primaryBlue500: '#5F93CE',
+  primaryBlue400: '#7FA9D8',
+  primaryBlue300: '#99BAE0',
+  black400: '#B6B7B9',
 };
 
 export const BaseStyles = {
