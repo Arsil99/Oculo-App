@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { RadarChart } from 'react-native-charts-wrapper';
 
 const SpiderWebChart = ({ items, bundle, initial, defaultGraph }) => {
@@ -27,7 +27,6 @@ const SpiderWebChart = ({ items, bundle, initial, defaultGraph }) => {
     item => item.value !== 0 && item.value !== null,
   );
 
-
   const xAxis = {
     valueFormatter: items,
     granularityEnabled: true,
@@ -37,7 +36,7 @@ const SpiderWebChart = ({ items, bundle, initial, defaultGraph }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <TouchableWithoutFeedback style={styles.container}>
       <RadarChart
         style={styles.chart}
         data={
@@ -90,8 +89,9 @@ const SpiderWebChart = ({ items, bundle, initial, defaultGraph }) => {
         xAxis={xAxis}
         yAxis={{ valueFormatter: [], left: { axisMinimum: 0 } }}
         legend={{ enabled: true }}
+        chartDescription={{ text: '' }}
       />
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 

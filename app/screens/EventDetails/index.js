@@ -228,10 +228,16 @@ export default function EventDetails({ navigation, route }) {
               image={Images.eventlogo}
               data={item.details.assess_num}
               status={item.details.assessment_type}
-              rightArrow={title !== 'Assessment Completed' ? true : false}
+              rightArrow={
+                title !== 'Completed Assessments' &&
+                title !== 'Assessment Missed'
+                  ? true
+                  : false
+              }
               assessment={`Date: ${item.details.date.split(',')[0]}`}
               onPress={() => {
-                title !== 'Assessment Completed'
+                title !== 'Completed Assessments' &&
+                title !== 'Assessment Missed'
                   ? ((item['details']['event_title'] = eventTitle),
                     navigation.navigate('Assessment', item))
                   : null;
@@ -705,7 +711,7 @@ export default function EventDetails({ navigation, route }) {
           <ScrollView style={{ paddingHorizontal: 15 }}>
             <AssessmentList
               data={pendingData}
-              title="Assessment Pending"
+              title="Assessment Due"
               darkmode={darkmode}
               navigation={navigation}
               eventTitle={listOfAssessments?.event_details?.title}
@@ -713,7 +719,7 @@ export default function EventDetails({ navigation, route }) {
 
             <AssessmentList
               data={completedData}
-              title="Assessment Completed"
+              title="Completed Assessments"
               darkmode={darkmode}
               navigation={navigation}
               eventTitle={listOfAssessments?.event_details?.title}
