@@ -650,14 +650,27 @@ export default function EventDetails({ navigation, route }) {
                       )
                       .map(item => (
                         <View key={item.date} style={styles.itemContainer}>
-                          <Icon2
-                            name={calculateArrow(item.prev_value, item.value)}
-                            size={14}
-                            color={calculateIconColor(
-                              item.prev_value,
-                              item.value,
-                            )}
-                          />
+                          <Text
+                            style={{
+                              color: calculateIconColor(
+                                item.prev_value,
+                                item.value,
+                              ),
+                              marginRight: 3,
+                            }}
+                          >
+                            {Math.abs(item.prev_value - item.value)}
+                          </Text>
+                          <View style={{ marginTop: 2 }}>
+                            <Icon2
+                              name={calculateArrow(item.prev_value, item.value)}
+                              size={10}
+                              color={calculateIconColor(
+                                item.prev_value,
+                                item.value,
+                              )}
+                            />
+                          </View>
                         </View>
                       ))}
                   </TouchableOpacity>

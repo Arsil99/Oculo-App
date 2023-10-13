@@ -1,51 +1,63 @@
-import { View, Text, TouchableOpacity, FlatList } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  processColor,
+} from 'react-native';
 import React from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import styles from './styles';
 import { Image } from 'react-native';
 import { Images } from '@config';
-import { BaseColors } from '@config/theme';
+import { BaseColors, FontFamily } from '@config/theme';
 import { useState } from 'react';
 import HeaderBar from '@components/HeaderBar';
 import BaseSetting from '@config/setting';
 import { useSelector } from 'react-redux';
+import { LineChart } from 'react-native-charts-wrapper';
 
-const Dashboard = () => {
+const Dashboard = ({ route }) => {
+  const data = route.params.eventData;
+  const Header = route.params.eventName;
   const { darkmode } = useSelector(state => state.auth);
   const [activeIndex, setActiveIndex] = useState(0);
-  const data = [
-    { color: BaseColors.secondary, name: 'None' },
-    { color: BaseColors.mild, name: 'Mild' },
-    { color: BaseColors.moderate, name: 'Moderate' },
-    { color: BaseColors.Intense, name: 'Severe' },
-    { color: BaseColors.Severe, name: 'Intense' },
-  ];
 
   const planData = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-  const renderItem = ({ item }) => {
-    return (
-      <View style={styles.flatlistcontainer}>
-        <View style={styles.flatlistmaincontainer}>
-          <View
-            style={[
-              {
-                backgroundColor: item.color,
-              },
-              styles.colorcontainer,
-            ]}
-          />
-          <Text
-            style={[
-              styles.lighttext,
-              { color: darkmode ? BaseColors.white : BaseColors.black90 },
-            ]}
-          >
-            {item.name}
-          </Text>
-        </View>
-      </View>
-    );
+
+  const transformDataForChart = data => {
+    const datasets = Object.keys(data).map(key => {
+      const values = data.map(entry => {
+        return { y: entry.value || 0 };
+      });
+      const colors = [BaseColors.primary, BaseColors.primary];
+      const circleRadius = 5;
+
+      return {
+        values,
+        config: {
+          color: processColor(colors[0]),
+          drawValues: false,
+          circleColor: processColor(colors[1]),
+          filled: true,
+          drawCircles: true,
+          circleHoleColor: processColor(colors[1]),
+          circleRadius: circleRadius,
+        },
+      };
+    });
+
+    return datasets;
   };
+
+  const uniqueDates = Array.from(
+    new Set(
+      Object.values(data)
+        .flat()
+        .map(entry => entry.date),
+    ),
+  );
+
   return (
     <View
       style={{
@@ -73,7 +85,7 @@ const Dashboard = () => {
               { color: darkmode ? BaseColors.white : BaseColors.textColor },
             ]}
           >
-            Headache
+            {Header}
           </Text>
         </View>
         <View style={styles.subheaderContainer}>
@@ -127,22 +139,61 @@ const Dashboard = () => {
           </View>
         </View>
 
-        <View style={styles.imageViewcenter}>
-          <Image
-            source={Images.graph}
-            resizeMode="contain"
-            style={{ width: '80%' }}
-          />
+        <View>
+          <View
+            style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+          >
+            <Text
+              style={{
+                transform: [{ rotate: '-90deg' }],
+                left: -5,
+                position: 'absolute',
+                fontWeight: '400',
+                fontFamily: FontFamily.regular,
+                color: BaseColors.black,
+              }}
+            >
+              Severity
+            </Text>
+            <LineChart
+              style={{ width: 330, height: 275 }}
+              data={{
+                dataSets: transformDataForChart(data),
+              }}
+              chartDescription={{ text: '' }}
+              xAxis={{
+                valueFormatter: uniqueDates,
+                position: 'BOTTOM',
+                granularityEnabled: true,
+                granularity: 1,
+                avoidFirstLastClipping: true,
+                drawGridLines: false,
+
+                contentInset: {
+                  left: 10,
+                  right: 10,
+                  top: 10,
+                  bottom: 0,
+                },
+              }}
+              yAxis={{
+                left: {
+                  granularity: 1,
+                  axisMinimum: 0,
+                  axisMaximum: 6,
+                  label: 'Severity', // Set the label for the left y-axis
+                },
+                right: {
+                  enabled: false,
+                  drawGridLines: false, // Hide grid lines on the y-axis
+                },
+              }}
+              chartConfig={{
+                drawGridBackground: false,
+              }}
+            />
+          </View>
         </View>
-        {/* <FlatList
-          renderItem={renderItem}
-          data={data}
-          keyExtractor={item => item.index}
-          contentContainerStyle={styles.listContainer}
-          columnWrapperStyle={styles.columnwrapperstyle}
-          numColumns={3}
-          showsVerticalScrollIndicator={false}
-        /> */}
 
         <View style={styles.dotwithbordercontainer}>
           {planData.map((item, index) => {

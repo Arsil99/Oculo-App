@@ -122,4 +122,23 @@ export default StyleSheet.create({
     paddingBottom: 20,
   },
   columnwrapperstyle: { width: '100%' },
+  customXAxisContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 5,
+    marginTop: 5,
+  },
+
+  customXAxisLabel: {
+    alignItems: 'center',
+  },
+
+  customXAxisLabelText: {
+    fontSize: 12,
+  },
+
+  customVerticalLine: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
 });
