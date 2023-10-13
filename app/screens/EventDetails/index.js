@@ -606,7 +606,7 @@ export default function EventDetails({ navigation, route }) {
           ) : loader === false ? (
             <ScrollView style={{ height: 500 }}>
               <View style={styles.container}>
-                {Object.keys(eventDetail).map(eventName => (
+                {Object.keys(eventDetail).map((eventName, index) => (
                   <TouchableOpacity
                     key={eventName}
                     style={styles.eventContainer}
@@ -614,6 +614,9 @@ export default function EventDetails({ navigation, route }) {
                       navigation.navigate('Dashboard', {
                         eventName: eventName,
                         eventData: eventDetail[eventName],
+                        title: datas.title,
+                        eventDetail: eventDetail,
+                        dotnumber: index,
                       });
                     }}
                     activeOpacity={BaseSetting.buttonOpacity}

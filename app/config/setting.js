@@ -1,6 +1,6 @@
 import { Dimensions } from 'react-native';
 const devMode = __DEV__;
-const baseUrl = !devMode
+const baseUrl = devMode
   ? 'http://192.168.0.156:5000/v1'
   : 'https://api.oculo.app/v1';
 

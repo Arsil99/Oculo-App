@@ -18,23 +18,32 @@ import { useSelector } from 'react-redux';
 import { LineChart } from 'react-native-charts-wrapper';
 
 const Dashboard = ({ route }) => {
-  const data = route.params.eventData;
+  const indexnumber = route.params.dotnumber;
+  const dotdata = route.params.eventDetail;
+  const eventNames = Object?.keys(dotdata);
+  const title = route.params.title;
   const Header = route.params.eventName;
+
   const { darkmode } = useSelector(state => state.auth);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(indexnumber);
 
-  const planData = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+  const transformDataForChart = (dotdata, activeIndex) => {
+    const activeKey = Object.keys(dotdata)[activeIndex];
+    const activeData = dotdata[activeKey];
 
-  const transformDataForChart = data => {
-    const datasets = Object.keys(data).map(key => {
-      const values = data.map(entry => {
-        return { y: entry.value || 0 };
-      });
-      const colors = [BaseColors.primary, BaseColors.primary];
-      const circleRadius = 5;
-
+    const datasets = activeData.map(entry => {
+      const value = entry.value || 0;
       return {
-        values,
+        y: value,
+      };
+    });
+
+    const colors = [BaseColors.primary, BaseColors.primary];
+    const circleRadius = 5;
+
+    return [
+      {
+        values: datasets,
         config: {
           color: processColor(colors[0]),
           drawValues: false,
@@ -44,19 +53,39 @@ const Dashboard = ({ route }) => {
           circleHoleColor: processColor(colors[1]),
           circleRadius: circleRadius,
         },
-      };
-    });
-
-    return datasets;
+      },
+    ];
   };
 
   const uniqueDates = Array.from(
     new Set(
-      Object.values(data)
+      Object.values(dotdata)
         .flat()
         .map(entry => entry.date),
     ),
   );
+  function getNumberColor(number) {
+    switch (number) {
+      case 0:
+        return BaseColors.primaryBlue300;
+      case 1:
+        return BaseColors.primaryBlue400;
+      case 2:
+        return BaseColors.primaryBlue500;
+      case 3:
+        return BaseColors.primaryBlue600;
+      case 4:
+        return BaseColors.primaryBlue700;
+      case 5:
+        return BaseColors.primaryBlue900;
+      default:
+        return BaseColors.black400;
+    }
+  }
+
+  const handleDotPress = index => {
+    setActiveIndex(index);
+  };
 
   return (
     <View
@@ -65,7 +94,7 @@ const Dashboard = ({ route }) => {
         backgroundColor: darkmode ? BaseColors.lightBlack : null,
       }}
     >
-      <HeaderBar HeaderText={'Event Aug 3'} HeaderCenter leftText="Back" />
+      <HeaderBar HeaderText={`Event ${title}`} HeaderCenter leftText="Back" />
       <ScrollView
         contentContainerStyle={[
           styles.scrollcontainer,
@@ -85,7 +114,7 @@ const Dashboard = ({ route }) => {
               { color: darkmode ? BaseColors.white : BaseColors.textColor },
             ]}
           >
-            {Header}
+            {` ${eventNames[activeIndex]}`}
           </Text>
         </View>
         <View style={styles.subheaderContainer}>
@@ -109,9 +138,7 @@ const Dashboard = ({ route }) => {
             >
               Baseline
             </Text>
-            <Text style={[styles.number, { color: BaseColors.secondary }]}>
-              3
-            </Text>
+            <Text style={[styles.number, { color: getNumberColor(3) }]}>3</Text>
           </View>
           <View>
             <Text
@@ -122,7 +149,7 @@ const Dashboard = ({ route }) => {
             >
               Highest
             </Text>
-            <Text style={[styles.number, { color: BaseColors.Severe }]}>5</Text>
+            <Text style={[styles.number, { color: getNumberColor(5) }]}>5</Text>
           </View>
           <View>
             <Text
@@ -133,9 +160,7 @@ const Dashboard = ({ route }) => {
             >
               Recent
             </Text>
-            <Text style={[styles.number, { color: BaseColors.Intense }]}>
-              4
-            </Text>
+            <Text style={[styles.number, { color: getNumberColor(4) }]}>4</Text>
           </View>
         </View>
 
@@ -158,7 +183,7 @@ const Dashboard = ({ route }) => {
             <LineChart
               style={{ width: 330, height: 275 }}
               data={{
-                dataSets: transformDataForChart(data),
+                dataSets: transformDataForChart(dotdata, activeIndex),
               }}
               chartDescription={{ text: '' }}
               xAxis={{
@@ -168,7 +193,6 @@ const Dashboard = ({ route }) => {
                 granularity: 1,
                 avoidFirstLastClipping: true,
                 drawGridLines: false,
-
                 contentInset: {
                   left: 10,
                   right: 10,
@@ -181,11 +205,11 @@ const Dashboard = ({ route }) => {
                   granularity: 1,
                   axisMinimum: 0,
                   axisMaximum: 6,
-                  label: 'Severity', // Set the label for the left y-axis
+                  label: 'Severity',
                 },
                 right: {
                   enabled: false,
-                  drawGridLines: false, // Hide grid lines on the y-axis
+                  drawGridLines: false,
                 },
               }}
               chartConfig={{
@@ -194,59 +218,62 @@ const Dashboard = ({ route }) => {
             />
           </View>
         </View>
-
-        <View style={styles.dotwithbordercontainer}>
-          {planData.map((item, index) => {
-            return (
-              <TouchableOpacity
-                activeOpacity={BaseSetting.buttonOpacity}
-                onPress={() => {
-                  setActiveIndex(index);
-                }}
-                style={[
-                  {
-                    borderColor:
-                      activeIndex === index
-                        ? BaseColors.primary
-                        : BaseColors.black20,
-                  },
-                  styles.row,
-                ]}
-              >
-                <View
+        <ScrollView
+          horizontal
+          contentContainerStyle={{
+            marginHorizontal: 20,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <View style={styles.dotwithbordercontainer}>
+            {Object.keys(dotdata).map((key, index) => {
+              return (
+                <TouchableOpacity
+                  key={key}
+                  activeOpacity={BaseSetting.buttonOpacity}
                   onPress={() => {
-                    setActiveIndex(index);
+                    handleDotPress(index);
                   }}
                   style={[
                     {
-                      borderWidth: activeIndex === index ? 1 : null,
                       borderColor:
                         activeIndex === index
                           ? BaseColors.primary
                           : BaseColors.black20,
                     },
-                    styles.dot,
+                    styles.row,
                   ]}
                 >
                   <View
-                    onPress={() => {
-                      setActiveIndex(index);
-                    }}
                     style={[
-                      styles.round,
                       {
-                        backgroundColor:
+                        borderWidth: activeIndex === index ? 1 : null,
+                        borderColor:
                           activeIndex === index
                             ? BaseColors.primary
-                            : '#B6B7B9',
+                            : BaseColors.black20,
                       },
+                      styles.dot,
                     ]}
-                  />
-                </View>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
+                  >
+                    <View
+                      style={[
+                        styles.round,
+                        {
+                          backgroundColor:
+                            activeIndex === index
+                              ? BaseColors.primary
+                              : '#B6B7B9',
+                        },
+                      ]}
+                    />
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </ScrollView>
       </ScrollView>
     </View>
   );
