@@ -3,16 +3,48 @@ import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { RadarChart } from 'react-native-charts-wrapper';
 
 const SpiderWebChart = ({ items, bundle, initial, defaultGraph }) => {
-  const { assessment_id, date, ...newBundle } = bundle;
-  const keys = Object?.keys(newBundle);
-  const values = Object?.values(newBundle);
-  const dataPoints = values.map((value, index) => ({
-    value,
-    label: keys[index],
+  const values_C = Object?.values(bundle);
+
+  // initial setup
+  const dataPointsI = values_C?.map((value, index) => ({
+    label: value.label,
+    initial_value: value.initial_value,
   }));
 
-  const filteredDataPoints = dataPoints.filter(
-    item => item.value !== 0 && item.value !== null,
+  const resultInit = dataPointsI?.reduce((acc, item) => {
+    acc[item.label] = item.initial_value;
+    return acc;
+  }, {});
+
+  // current setup
+  const dataPointsC = values_C?.map((value, index) => ({
+    label: value.label,
+    curr_value: value.curr_value,
+  }));
+
+  const result_Curr = dataPointsC?.reduce((acc, item) => {
+    acc[item.label] = item.curr_value;
+    return acc;
+  }, {});
+
+  const newArrInit = [];
+  newArrInit.push(resultInit);
+
+  const newArrCurr = [];
+  newArrCurr.push(result_Curr);
+
+  const transformedDataInit = Object?.entries(newArrInit[0]).map(
+    ([label, value]) => ({
+      value,
+      label,
+    }),
+  );
+
+  const transformedDataCurr = Object?.entries(newArrCurr[0]).map(
+    ([label, value]) => ({
+      value,
+      label,
+    }),
   );
 
   // default data
@@ -27,12 +59,14 @@ const SpiderWebChart = ({ items, bundle, initial, defaultGraph }) => {
     item => item.value !== 0 && item.value !== null,
   );
 
+  const item = Object?.keys(items).map(key => `${key} [${items[key]}]`);
+
   const xAxis = {
-    valueFormatter: items,
+    valueFormatter: item,
     granularityEnabled: true,
     granularity: 1,
     drawGridLines: true,
-    textSize: 9,
+    textSize: 10,
   };
 
   return (
@@ -44,7 +78,7 @@ const SpiderWebChart = ({ items, bundle, initial, defaultGraph }) => {
             ? {
                 dataSets: [
                   {
-                    values: filteredDataPoints,
+                    values: filteredDataPointsD,
                     label: 'Initial',
                     config: {
                       drawFilled: true,
@@ -60,7 +94,7 @@ const SpiderWebChart = ({ items, bundle, initial, defaultGraph }) => {
             : {
                 dataSets: [
                   {
-                    values: filteredDataPoints,
+                    values: transformedDataCurr,
                     config: {
                       color: 0x006400,
                       drawFilled: true,
@@ -72,7 +106,7 @@ const SpiderWebChart = ({ items, bundle, initial, defaultGraph }) => {
                     },
                   },
                   {
-                    values: filteredDataPointsD,
+                    values: transformedDataInit,
                     label: 'Initial',
                     config: {
                       drawFilled: true,
@@ -80,7 +114,7 @@ const SpiderWebChart = ({ items, bundle, initial, defaultGraph }) => {
                       fillAlpha: 100,
                       drawHighlightIndicators: false,
                       valueTextSize: 0,
-                      lineWidth: 3,
+                      lineWidth: 1,
                     },
                   },
                 ],

@@ -146,27 +146,45 @@ export default function EventDetails({ navigation, route }) {
       }
     }
 
-    setWrapData(filteredObject);
+    const result = Object.entries(filteredData).map(([label, value]) => ({
+      label,
+      value: value.curr_value,
+    }));
 
-    // Only keys
-    const keysArray = Object?.keys(filteredData);
-
-    //remove unwanted 2 keys
-    const elementsToRemove = ['assessment_id', 'date'];
-    const finalItems = keysArray?.filter(
-      element => !elementsToRemove?.includes(element),
+    const filteredData1 = result.filter(
+      item => item.label !== 'assessment_id' && item.label !== 'date',
     );
 
-    const matchingValues = finalItems?.filter(key =>
-      filteredObject?.hasOwnProperty(key),
+    // Create a new array in the desired format
+    const transformedData = Object?.entries(filteredData)?.map(
+      ([key, value]) => {
+        if (key === 'assessment_id' || key === 'date') {
+          return { [key]: value };
+        } else {
+          return {
+            label: key,
+            initial_value: value.initial_value,
+            curr_value: value.curr_value,
+          };
+        }
+      },
+    );
+    delete transformedData.assessment_id;
+    delete transformedData.date;
+
+    // Filter out "date" and "assessment_id"
+    const newBundle = transformedData.filter(
+      item => !item.date && !item.assessment_id,
     );
 
-    // data showing like label (0)
-    const formattedLabels = matchingValues.map(
-      label => `${label} [${filteredObject[label]}]`,
-    );
-    console.log(formattedLabels);
-    setSpiderItems(formattedLabels);
+    setWrapData(newBundle);
+
+    const convertedData = filteredData1.reduce((result, item) => {
+      result[item.label] = item.value;
+      return result;
+    }, {});
+
+    setSpiderItems(convertedData);
   };
 
   // assments list
