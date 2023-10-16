@@ -115,7 +115,7 @@ export default StyleSheet.create({
   dotwithbordercontainer: {
     flex: 0.55,
     flexDirection: 'row',
-    maxWidth: '100%',
+    Width: '100%',
     overflow: 'scroll',
     alignItems: 'flex-end',
     justifyContent: 'space-between',

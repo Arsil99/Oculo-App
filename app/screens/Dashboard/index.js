@@ -266,6 +266,7 @@ const Dashboard = ({ route }) => {
                         activeIndex === index
                           ? BaseColors.primary
                           : BaseColors.black20,
+                      margin: 4,
                     },
                     styles.row,
                   ]}
