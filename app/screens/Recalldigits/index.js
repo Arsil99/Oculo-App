@@ -22,9 +22,10 @@ import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { useSelector } from 'react-redux';
 
 export default function Recalldigits({ navigation, route }) {
+  const DATA = route?.params?.otherData;
+  const eventId = DATA?.event_id;
   const { darkmode } = useSelector(state => state.auth);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const eventId = route?.params?.event_id;
   const [loader, setLoader] = useState(true);
   const [questionList, setQuestionList] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);

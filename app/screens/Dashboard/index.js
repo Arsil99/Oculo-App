@@ -4,9 +4,10 @@ import {
   TouchableOpacity,
   FlatList,
   processColor,
+  ScrollView,
 } from 'react-native';
 import React from 'react';
-import { ScrollView } from 'react-native-gesture-handler';
+
 import styles from './styles';
 import { Image } from 'react-native';
 import { Images } from '@config';
@@ -23,7 +24,6 @@ const Dashboard = ({ route }) => {
   const eventNames = Object?.keys(dotdata);
   const title = route.params.title;
   const Header = route.params.eventName;
-
   const { darkmode } = useSelector(state => state.auth);
   const [activeIndex, setActiveIndex] = useState(indexnumber);
 
@@ -86,6 +86,31 @@ const Dashboard = ({ route }) => {
   const handleDotPress = index => {
     setActiveIndex(index);
   };
+  const currentEventName = eventNames[activeIndex];
+  const eventDescriptions = {
+    Headache: 'Headache',
+    Press_Head: 'Pressure in Head',
+    Neck_Pain: 'Neck Pain',
+    Nausea: 'Nausea',
+    Dizziness: 'Dizziness',
+    Vis_Prob: 'Blurred Vision/Vision',
+    Balance: 'Balance Problem',
+    Sens_Light: 'Sensitivity to Light',
+    Sens_Noise: 'Sensitivity to Noise',
+    Slow: 'Feeling Slowed Down',
+    Foggy: 'Feeling like a Fog',
+    Not_Right: "Don't Feel Right",
+    Diff_Concen: 'Difficulty Concentrating',
+    Diff_Rem: 'Difficulty Remembering',
+    Fatigue: 'Fatigue / Low Energy',
+    Confused: 'Confusion',
+    Drowsy: 'Drowsiness',
+    Emotional: 'More Emotional',
+    Irritable: 'Irritability',
+    SadDep: 'Sadness',
+    Nerv_Anx: 'Nervous / Anxiousness',
+    Trouble_Sleep: 'Trouble Falling Asleep',
+  };
 
   return (
     <View
@@ -114,7 +139,7 @@ const Dashboard = ({ route }) => {
               { color: darkmode ? BaseColors.white : BaseColors.textColor },
             ]}
           >
-            {` ${eventNames[activeIndex]}`}
+            {` ${eventDescriptions[currentEventName]}`}
           </Text>
         </View>
         <View style={styles.subheaderContainer}>
@@ -171,7 +196,7 @@ const Dashboard = ({ route }) => {
             <Text
               style={{
                 transform: [{ rotate: '-90deg' }],
-                left: -5,
+                left: 1,
                 position: 'absolute',
                 fontWeight: '400',
                 fontFamily: FontFamily.regular,
@@ -181,7 +206,7 @@ const Dashboard = ({ route }) => {
               Severity
             </Text>
             <LineChart
-              style={{ width: 330, height: 275 }}
+              style={{ width: 320, height: 275 }}
               data={{
                 dataSets: transformDataForChart(dotdata, activeIndex),
               }}

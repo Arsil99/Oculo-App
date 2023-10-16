@@ -26,7 +26,7 @@ import { Toast } from 'react-native-toast-message/lib/src/Toast';
 export default function Wordlist({ navigation, route }) {
   const DATA = route?.params?.otherData;
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const eventId = route?.params?.event_id;
+  const eventId = DATA?.event_id;
   const { darkmode } = useSelector(state => state.auth);
   const [isListening, setIsListening] = useState(false);
   const [recognizedText, setRecognizedText] = useState('');

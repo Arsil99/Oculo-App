@@ -19,7 +19,7 @@ export default StyleSheet.create({
   },
   headtext: {
     fontSize: 24,
-    marginTop: 10,
+    marginTop: 5,
     lineHeight: 32,
     fontWeight: '700',
     fontFamily: BaseColors.bold,
@@ -85,7 +85,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     marginHorizontal: 20,
-    marginTop: 30,
+    marginVertical: 20,
   },
   subheaderContainerr: {
     height: 76,
@@ -115,11 +115,13 @@ export default StyleSheet.create({
   dotwithbordercontainer: {
     flex: 0.55,
     flexDirection: 'row',
-    width: '80%',
+    maxWidth: '100%',
+    overflow: 'scroll',
     alignItems: 'flex-end',
     justifyContent: 'space-between',
     alignSelf: 'center',
     paddingBottom: 20,
+    marginHorizontal: 25,
   },
   columnwrapperstyle: { width: '100%' },
   customXAxisContainer: {
