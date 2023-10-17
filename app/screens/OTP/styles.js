@@ -7,7 +7,6 @@ const styles = StyleSheet.create({
     backgroundColor: BaseColors.lightBg,
     flex: 1,
     padding: 30,
-    justifyContent: 'center',
   },
   borderStyleBase: {
     width: 30,

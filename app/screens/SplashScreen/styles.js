@@ -11,6 +11,6 @@ export default StyleSheet.create({
     justifyContent: 'center',
   },
   img: {
-    width: nWidth / 1.5,
+    height: 55,
   },
 });

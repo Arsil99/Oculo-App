@@ -116,7 +116,7 @@ const ForgetPassword = ({ navigation }) => {
           <Image
             source={Images.logo}
             resizeMode="contain"
-            style={{ width: BaseSetting.nWidth / 1.5 }}
+            style={{ height: 55 }}
             tintColor={BaseColors.primary}
           />
         </View>

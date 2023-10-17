@@ -191,12 +191,17 @@ const Dashboard = ({ route }) => {
 
         <View>
           <View
-            style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginHorizontal: 10,
+            }}
           >
             <Text
               style={{
                 transform: [{ rotate: '-90deg' }],
-                left: 1,
+                left: -10,
                 position: 'absolute',
                 fontWeight: '400',
                 fontFamily: FontFamily.regular,
@@ -206,7 +211,7 @@ const Dashboard = ({ route }) => {
               Severity
             </Text>
             <LineChart
-              style={{ width: 320, height: 275 }}
+              style={{ width: BaseSetting.nWidth - 70, height: 275 }}
               data={{
                 dataSets: transformDataForChart(dotdata, activeIndex),
               }}
@@ -227,6 +232,8 @@ const Dashboard = ({ route }) => {
               }}
               yAxis={{
                 left: {
+                  drawAxisLine: false, // Hide the Y-axis line, but keep the label
+                  // ...other left Y-axis configurations
                   granularity: 1,
                   axisMinimum: 0,
                   axisMaximum: 6,

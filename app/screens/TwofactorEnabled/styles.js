@@ -8,12 +8,14 @@ export default StyleSheet.create({
     paddingHorizontal: 20,
   },
   logoView: {
-    flex: 0.5,
+    flex: 0.35,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
+    marginTop: 10,
   },
   imgContainer: {
-    justifyContent: 'center',
+    flex: 0.4,
+    justifyContent: 'flex-end',
     alignItems: 'center',
   },
   imgStyle: { height: 150, width: 150 },

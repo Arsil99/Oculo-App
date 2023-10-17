@@ -182,32 +182,45 @@ export default function OTP({ navigation, route }) {
         },
       ]}
     >
-      <View style={{ alignItems: 'center' }}>
+      <View
+        style={{
+          justifyContent: 'center',
+          flex: 0.55,
+          alignItems: 'center',
+        }}
+      >
         <Image
           source={Images.logo}
           resizeMode="contain"
           style={{ marginBottom: 10, height: 55 }}
           tintColor={BaseColors.primary}
         />
-        <Text
-          style={{
-            fontSize: 18,
-            color: darkmode ? BaseColors.white : BaseColors.black90,
-          }}
-        >
-          Code has sent to
-        </Text>
-        <Text
-          style={{
-            fontSize: 18,
-            color: darkmode ? BaseColors.white : BaseColors.black90,
-          }}
-        >
-          {medium === 'email' ? email : phone}
-          {from === 'forget' ? email : null}
-        </Text>
       </View>
+
       <View style={{ height: 100, marginVertical: 25 }}>
+        <View
+          style={{
+            alignItems: 'center',
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 18,
+              color: darkmode ? BaseColors.white : BaseColors.black90,
+            }}
+          >
+            Code has sent to
+          </Text>
+          <Text
+            style={{
+              fontSize: 18,
+              color: darkmode ? BaseColors.white : BaseColors.black90,
+            }}
+          >
+            {medium === 'email' ? email : phone}
+            {from === 'forget' ? email : null}
+          </Text>
+        </View>
         <OTPInputView
           pinCount={6}
           editable

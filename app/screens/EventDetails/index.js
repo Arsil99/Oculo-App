@@ -631,7 +631,7 @@ export default function EventDetails({ navigation, route }) {
               </View>
             </ScrollView>
           ) : loader === false ? (
-            <ScrollView style={{ height: 500 }}>
+            <ScrollView style={{ height: BaseSetting.nHeight / 1.5 }}>
               <View style={styles.container}>
                 {Object.keys(eventDetail).map((eventName, index) => (
                   <TouchableOpacity
