@@ -59,14 +59,42 @@ const SpiderWebChart = ({ items, bundle, initial, defaultGraph }) => {
     item => item.value !== 0 && item.value !== null,
   );
 
-  const item = Object?.keys(items).map(key => `${key} [${items[key]}]`);
+  const item = Object?.keys(items).map(key => `${key} ${items[key]}`);
+  const itemReplacements = {
+    Press_Head: 'Pressure in Head',
+    Neck_Pain: 'Neck Pain',
+    Vis_Prob: 'Vision',
+    Balance: 'Balance Problem',
+    Sens_Light: 'Sensitivity to Light',
+    Sens_Noise: 'Sensitivity to Noise',
+    Slow: 'Feeling Slowed Down',
+    Foggy: 'Feeling like a Fog',
+    Not_Right: 'Dont Feel Right',
+    Diff_Concen: 'Concentrating',
+    Diff_Rem: 'Remembering',
+    Confused: 'Confusion',
+    Drowsy: 'Drowsiness',
+    Irritable: 'Irritability',
+    SadDep: 'Sadness',
+    Nerv_Anx: 'Nervous',
+    Trouble_Sleep: 'Trouble Falling Asleep',
+  };
+
+  const updatedData = item?.map(item => {
+    for (const key in itemReplacements) {
+      if (item.startsWith(key)) {
+        return item.replace(key, itemReplacements[key]);
+      }
+    }
+    return item;
+  });
 
   const xAxis = {
-    valueFormatter: item,
+    valueFormatter: updatedData,
     granularityEnabled: true,
     granularity: 1,
     drawGridLines: true,
-    textSize: 10,
+    textSize: 7,
   };
 
   return (
@@ -96,13 +124,13 @@ const SpiderWebChart = ({ items, bundle, initial, defaultGraph }) => {
                   {
                     values: transformedDataCurr,
                     config: {
-                      color: 0x006400,
                       drawFilled: true,
+                      color: 0x006400,
                       fillColor: 0x006400,
                       fillAlpha: 100,
                       drawHighlightIndicators: false,
                       valueTextSize: 0,
-                      lineWidth: 3,
+                      lineWidth: 2,
                     },
                   },
                   {
@@ -114,7 +142,7 @@ const SpiderWebChart = ({ items, bundle, initial, defaultGraph }) => {
                       fillAlpha: 100,
                       drawHighlightIndicators: false,
                       valueTextSize: 0,
-                      lineWidth: 1,
+                      lineWidth: 2,
                     },
                   },
                 ],

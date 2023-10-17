@@ -96,7 +96,10 @@ export default function EventDetails({ navigation, route }) {
         delete filteredObject.assessment_id;
         delete filteredObject.date;
         setDefaultGraph(filteredObject);
-        setGraph(res?.data);
+        const newObj = res?.data.filter(
+          item => !item.hasOwnProperty('initial'),
+        );
+        setGraph(newObj);
       }
     } catch (error) {
       console.log('Error:', error);
@@ -555,72 +558,78 @@ export default function EventDetails({ navigation, route }) {
             }}
           />
           {activeInTab.id === 'summary' ? (
-            <View style={styles.spiderView}>
-              <SpiderWebChart
-                items={spiderItems}
-                bundle={wrapData}
-                initial={init}
-                defaultGraph={defaultGraph}
-              />
-              <Text style={styles.label}>Compare your assessments</Text>
-              {!isEmpty(graph) && isArray(graph) ? (
-                <Slider
-                  value={sliderValue}
-                  minimumValue={0}
-                  maximumValue={graph?.length - 1}
-                  step={1}
-                  style={styles.slider}
-                  trackMarks={[
-                    { label: '0', value: 0 },
-                    { label: '1', value: 1 },
-                    { label: '2', value: 2 },
-                    { label: '3', value: 3 },
-                    { label: '4', value: 4 },
-                  ]}
-                  thumbStyle={styles.thumbStyle}
-                  thumbTintColor={BaseColors.white}
-                  minimumTrackTintColor={BaseColors.primary}
-                  maximumTrackTintColor={BaseColors.tabinActive}
-                  onValueChange={value => {
-                    runSlider(value);
-                    setSliderValue(value);
-                  }}
+            <ScrollView
+              style={{
+                height: BaseSetting.nHeight / 1.5,
+              }}
+            >
+              <View style={styles.spiderView}>
+                <SpiderWebChart
+                  items={spiderItems}
+                  bundle={wrapData}
+                  initial={init}
+                  defaultGraph={defaultGraph}
                 />
-              ) : null}
+                <Text style={styles.label}>Compare your assessments</Text>
+                {!isEmpty(graph) && isArray(graph) ? (
+                  <Slider
+                    value={sliderValue}
+                    minimumValue={0}
+                    maximumValue={graph?.length - 1}
+                    step={1}
+                    style={styles.slider}
+                    trackMarks={[
+                      { label: '0', value: 0 },
+                      { label: '1', value: 1 },
+                      { label: '2', value: 2 },
+                      { label: '3', value: 3 },
+                      { label: '4', value: 4 },
+                    ]}
+                    thumbStyle={styles.thumbStyle}
+                    thumbTintColor={BaseColors.white}
+                    minimumTrackTintColor={BaseColors.primary}
+                    maximumTrackTintColor={BaseColors.tabinActive}
+                    onValueChange={value => {
+                      runSlider(value);
+                      setSliderValue(value);
+                    }}
+                  />
+                ) : null}
 
-              <View style={styles.markerContainer}>
-                {!isEmpty(graph) &&
-                  isArray(graph) &&
-                  graph?.map((value, index) => (
-                    <View
-                      style={[
-                        styles.marker,
-                        {
-                          backgroundColor: BaseColors.lightGrey,
-                        },
-                      ]}
-                      key={index}
-                    />
+                <View style={styles.markerContainer}>
+                  {!isEmpty(graph) &&
+                    isArray(graph) &&
+                    graph?.map((value, index) => (
+                      <View
+                        style={[
+                          styles.marker,
+                          {
+                            backgroundColor: BaseColors.lightGrey,
+                          },
+                        ]}
+                        key={index}
+                      />
+                    ))}
+                </View>
+
+                {/* Display the range labels */}
+                <View style={styles.rangeLabelsContainer}>
+                  {day?.map((label, index) => (
+                    <Text key={index} style={styles.rangeLabel}>
+                      {label}
+                    </Text>
                   ))}
-              </View>
+                </View>
 
-              {/* Display the range labels */}
-              <View style={styles.rangeLabelsContainer}>
-                {day?.map((label, index) => (
-                  <Text key={index} style={styles.rangeLabel}>
-                    {label}
-                  </Text>
-                ))}
+                <View style={styles.rangeLabelsContainer}>
+                  {month?.map((label, index) => (
+                    <Text key={index} style={styles.rangeLabel}>
+                      {label}
+                    </Text>
+                  ))}
+                </View>
               </View>
-
-              <View style={styles.rangeLabelsContainer}>
-                {month?.map((label, index) => (
-                  <Text key={index} style={styles.rangeLabel}>
-                    {label}
-                  </Text>
-                ))}
-              </View>
-            </View>
+            </ScrollView>
           ) : loader === false ? (
             <ScrollView style={{ height: 500 }}>
               <View style={styles.container}>
