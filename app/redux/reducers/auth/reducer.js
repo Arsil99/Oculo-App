@@ -18,6 +18,7 @@ const initialState = {
   isBiometric: false,
   fcmToken: '',
   refreshTokenExpire: '',
+  eventListData: '',
 };
 
 export default function reducer(state = initialState, action) {
@@ -131,6 +132,11 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         refreshTokenExpire: action.refreshTokenExpire,
+      };
+    case types.SET_EVENT_LIST_DATA:
+      return {
+        ...state,
+        eventListData: action.eventListData,
       };
 
     default:

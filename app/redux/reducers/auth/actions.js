@@ -17,6 +17,7 @@ const actions = {
   SET_BIO_METRIC: 'SET_BIO_METRIC',
   SET_FCM_TOKEN: 'SET_FCM_TOKEN',
   SET_REFRESH_TOKEN_EXPIRED: 'SET_REFRESH_TOKEN_EXPIRED',
+  SET_EVENT_LIST_DATA: 'SET_EVENT_LIST_DATA',
 
   setUserData: data => {
     return dispatch =>
@@ -127,6 +128,11 @@ const actions = {
     dispatch({
       type: actions.SET_REFRESH_TOKEN_EXPIRED,
       refreshTokenExpire,
+    }),
+  setEventListData: eventListData => dispatch =>
+    dispatch({
+      type: actions.SET_EVENT_LIST_DATA,
+      eventListData,
     }),
 };
 

@@ -4,18 +4,21 @@ import styles from './styles';
 import CardList from '@components/CardList';
 import { Images } from '@config';
 import HeaderBar from '@components/HeaderBar';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { BaseColors } from '@config/theme';
 import BaseSetting from '@config/setting';
 import { isEmpty, isArray, isNumber, isNull } from 'lodash';
 import { getApiData } from '@utils/apiHelper';
 import { ScrollView } from 'react-native-gesture-handler';
 import NoData from '@components/NoData';
-
+import NetInfo from '@react-native-community/netinfo';
+import Authentication from '@redux/reducers/auth/actions';
+import { Alert } from 'react-native';
 export default function Events({ navigation }) {
-  const { darkmode } = useSelector(state => state.auth);
+  const { setEventListData } = Authentication;
+  const dispatch = useDispatch();
+  const { darkmode, eventListData } = useSelector(state => state.auth);
   const [eventDetails, setEventDetails] = useState([]);
-
   const [loader, setLoader] = useState(true);
 
   // display the questions list
@@ -24,9 +27,11 @@ export default function Events({ navigation }) {
     try {
       const res = await getApiData(`${endPoint}`, 'GET');
       if (res?.status) {
+        dispatch(setEventListData(res?.data?.events));
         setEventDetails(res?.data?.events);
         setLoader(false);
       }
+      setLoader(false);
     } catch (error) {
       console.log('📌 ⏩ file: index.js:24 ⏩ LangListAPI ⏩ error:', error);
     }
@@ -39,10 +44,19 @@ export default function Events({ navigation }) {
 
     return unsubscribe;
   }, [navigation]);
+
   useEffect(() => {
-    // Call EventListData when the component mounts initially.
     EventListData();
+    checkInternetConnection();
   }, []);
+
+  const checkInternetConnection = async () => {
+    const state = await NetInfo.fetch();
+    if (!state.isConnected) {
+      Alert.alert('No Internet', 'Please check your network settings');
+      setEventDetails(eventListData);
+    }
+  };
 
   return (
     <View style={{ flexGrow: 1 }}>
