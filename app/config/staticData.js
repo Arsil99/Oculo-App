@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 export const items = [
@@ -14,9 +15,9 @@ export const switchOptions = [
 export const settings = [
   {
     id: '1',
-    leftIcon: 'smile-o',
-    title: 'Login With Face Id',
-    slug: 'face_id',
+    leftIcon: Platform.OS === 'ios' ? 'smile-o' : 'finger-print',
+    title: `Login With ${Platform.OS === 'ios' ? 'Face ID' : 'Touch ID'}`,
+    slug: Platform.OS === 'ios' ? 'face_id' : 'touch_id',
     switch: true,
   },
   {

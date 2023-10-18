@@ -38,19 +38,22 @@ const Dashboard = ({ route }) => {
       };
     });
 
-    const colors = [BaseColors.primary, BaseColors.primary];
-    const circleRadius = 5;
+    // Map the colors dynamically based on severity levels
+    const colors = activeData.map(entry => getNumberColor(entry.value));
+
+    const circleRadius = 5.5;
 
     return [
       {
         values: datasets,
         config: {
-          color: processColor(colors[0]),
+          color: processColor(BaseColors.primary), // Line color
           drawValues: false,
-          circleColor: processColor(colors[1]),
+          circleColors: colors.map(color => processColor(color)), // Dot colors
           filled: true,
           drawCircles: true,
-          circleHoleColor: processColor(colors[1]),
+          circleHoleColor: colors.map(color => processColor(color)), // Set the circle hole color to match dot color
+          circleHoleRadius: 1,
           circleRadius: circleRadius,
         },
       },

@@ -418,6 +418,8 @@ export default function Profile({ navigation }) {
                 tabPress={item => {
                   if (item?.slug === 'dark_theme' || item.slug === 'face_id') {
                     return null;
+                  } else if (item?.slug === 'Touch ID') {
+                    // Handle 'Touch ID' case
                   } else if (item?.slug === 'sign_out') {
                     setShowSignOutConfirmation(true); // Show the confirmation modal
                   } else {

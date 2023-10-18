@@ -357,8 +357,8 @@ export default function EventDetails({ navigation, route }) {
       },
       {
         date: 'Oct 12',
-        prev_value: 4,
-        value: 2,
+        prev_value: 12,
+        value: 6,
       },
     ],
   };
@@ -457,7 +457,7 @@ export default function EventDetails({ navigation, route }) {
   }
   const calculateArrow = (prevValue, value) => {
     const diff = value - prevValue;
-    return diff >= 0 ? 'caretup' : 'caretdown';
+    return diff > 0 ? 'caretup' : diff < 0 ? 'caretdown' : null;
   };
   const calculateIconColor = (prevValue, value) => {
     const diff = Math.abs(value - prevValue);
@@ -479,6 +479,31 @@ export default function EventDetails({ navigation, route }) {
     } else {
       return BaseColors.black400;
     }
+  };
+
+  const eventDescriptions = {
+    Headache: 'Headache',
+    Press_Head: 'Pressure in Head',
+    Neck_Pain: 'Neck Pain',
+    Nausea: 'Nausea',
+    Dizziness: 'Dizziness',
+    Vis_Prob: 'Blurred Vision/Vision',
+    Balance: 'Balance Problem',
+    Sens_Light: 'Sensitivity to Light',
+    Sens_Noise: 'Sensitivity to Noise',
+    Slow: 'Feeling Slowed Down',
+    Foggy: 'Feeling like a Fog',
+    Not_Right: "Don't Feel Right",
+    Diff_Concen: 'Difficulty Concentrating',
+    Diff_Rem: 'Difficulty Remembering',
+    Fatigue: 'Fatigue / Low Energy',
+    Confused: 'Confusion',
+    Drowsy: 'Drowsiness',
+    Emotional: 'More Emotional',
+    Irritable: 'Irritability',
+    SadDep: 'Sadness',
+    Nerv_Anx: 'Nervous / Anxiousness',
+    Trouble_Sleep: 'Trouble Falling Asleep',
   };
   return (
     <View
@@ -654,7 +679,7 @@ export default function EventDetails({ navigation, route }) {
                         justifyContent: 'space-between',
                       }}
                     >
-                      <View style={{ height: 45, width: 90 }}>
+                      <View style={{ height: 60, width: 100 }}>
                         <Text
                           style={[
                             styles.textt,
@@ -665,7 +690,7 @@ export default function EventDetails({ navigation, route }) {
                             },
                           ]}
                         >
-                          {eventName}
+                          {`${eventDescriptions[eventName]}`}
                         </Text>
                       </View>
                       <View style={styles.iconContainer}>

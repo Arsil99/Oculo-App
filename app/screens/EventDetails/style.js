@@ -89,7 +89,7 @@ export default StyleSheet.create({
 
     marginVertical: 5,
     borderColor: BaseColors.lightGrey,
-    height: 90,
+    height: 100,
     padding: 10,
     borderRadius: 12,
     shadowColor: BaseColors.black,
