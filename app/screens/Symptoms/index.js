@@ -111,6 +111,7 @@ const Symptoms = ({ navigation, route }) => {
   const [validPhysical, setValidPhysical] = useState(false);
   const [vaildMental, setValidMental] = useState(false);
   const [timer, setTimer] = useState([0, 0, 0]);
+
   const stateArray = [
     head,
     pressureHead,
@@ -341,7 +342,7 @@ fixDurScreen	= t	Average fixation duration on screen
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setDuration(duration => duration + 1);
+      setDuration(duration => duration + 1000);
     }, 1000);
 
     return () => {
@@ -382,7 +383,7 @@ fixDurScreen	= t	Average fixation duration on screen
         // this logic for manage data if user again come to a particular tab
         const obj = { ...updatedSymptomArray[index] };
         sliderObject = { ...updatedSymptomArray[index] };
-        sliderObject.durScreen = obj?.durScreen + duration * 1000;
+        sliderObject.durScreen = obj?.durScreen + duration;
         sliderObject.finalScore = lastValue;
         sliderObject.initialScore = obj?.finalScore;
         sliderObject.pageRevisitInt = sliderObject.pageRevisitInt
@@ -412,7 +413,7 @@ fixDurScreen	= t	Average fixation duration on screen
           initialScore: initValue,
           scoreChng: count,
           finalScore: lastValue,
-          durScreen: duration * 1000,
+          durScreen: duration,
           pageRevisitInt: revisit,
         };
       }
