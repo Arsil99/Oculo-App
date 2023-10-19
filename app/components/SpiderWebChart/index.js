@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import React from 'react';
 import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { RadarChart } from 'react-native-charts-wrapper';
@@ -89,13 +90,26 @@ const SpiderWebChart = ({ items, bundle, initial, defaultGraph }) => {
     return item;
   });
 
+  const mainItems = [];
+  updatedData?.map((item, index) => {
+    if (item.includes(null)) {
+      mainItems.push(item.replace(null, filteredDataPointsD[index]?.value));
+    }
+  });
   const xAxis = {
-    valueFormatter: updatedData,
+    valueFormatter: !isEmpty(mainItems) ? mainItems : updatedData,
     granularityEnabled: true,
     granularity: 1,
     drawGridLines: true,
-    textSize: 7,
+    textSize: 8,
   };
+  const nullToZero = Object?.values(transformedDataCurr);
+
+  nullToZero?.map((item, index) => {
+    if (item.value == null) {
+      item.value = filteredDataPointsD[index]?.value;
+    }
+  });
 
   return (
     <TouchableWithoutFeedback style={styles.container}>
@@ -114,7 +128,6 @@ const SpiderWebChart = ({ items, bundle, initial, defaultGraph }) => {
                       fillAlpha: 100,
                       drawHighlightIndicators: false,
                       valueTextSize: 0,
-                      lineWidth: 3,
                     },
                   },
                 ],
@@ -130,7 +143,6 @@ const SpiderWebChart = ({ items, bundle, initial, defaultGraph }) => {
                       fillAlpha: 100,
                       drawHighlightIndicators: false,
                       valueTextSize: 0,
-                      lineWidth: 2,
                     },
                   },
                   {
@@ -139,10 +151,8 @@ const SpiderWebChart = ({ items, bundle, initial, defaultGraph }) => {
                     config: {
                       drawFilled: true,
                       fillColor: 0x00ffff,
-                      fillAlpha: 100,
                       drawHighlightIndicators: false,
                       valueTextSize: 0,
-                      lineWidth: 2,
                     },
                   },
                 ],
