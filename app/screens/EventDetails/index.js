@@ -1,18 +1,9 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  ActivityIndicator,
-  Image,
-  TouchableOpacity,
-  processColor,
-} from 'react-native';
+import { View, Text, ScrollView, ActivityIndicator, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import styles from './style';
 import HeaderBar from '@components/HeaderBar';
 import TabSwitch from '@components/TabSwitch';
 import { BaseColors } from '@config/theme';
-import Milestones from '@components/Milestones';
 import { Images } from '@config';
 import CardList from '@components/CardList';
 import { useSelector } from 'react-redux';
@@ -21,9 +12,8 @@ import { getApiData } from '@utils/apiHelper';
 import SpiderWebChart from '@components/SpiderWebChart';
 import { Slider } from '@miblanchard/react-native-slider';
 import moment from 'moment';
-import { LineChart } from 'react-native-charts-wrapper';
 import Icon from 'react-native-vector-icons/AntDesign';
-import Icon2 from 'react-native-vector-icons/AntDesign';
+import EventDetailComponent from '@components/EventDetailComponent';
 import { isArray, isEmpty } from 'lodash';
 export default function EventDetails({ navigation, route }) {
   const eventType = route?.params?.event_name;
@@ -291,127 +281,7 @@ export default function EventDetails({ navigation, route }) {
       setLoader(false);
     }
   };
-  const convertDataForChart = data => {
-    const chartData = {
-      dataSets: [],
-    };
 
-    for (const [eventType, eventData] of Object.entries(data)) {
-      const dataSet = {
-        label: eventType,
-        values: eventData.map(item => item.value),
-
-        config: {
-          color: processColor(BaseColors.primary),
-          drawValues: false,
-          drawCircles: false,
-          lineWidth: 2,
-          drawCubicInterpolation: true,
-          circleRadius: 5,
-          circleColor: '#fff',
-          circleHoleColor: '#ff0000',
-          drawFilled: true,
-          fillColor: '#ff000080',
-          fillAlpha: 0.5,
-        },
-      };
-
-      chartData.dataSets.push(dataSet);
-    }
-
-    return chartData;
-  };
-
-  const eventDetails = {
-    Headache: [
-      {
-        date: 'Oct 8',
-        value: 2,
-      },
-      {
-        date: 'Oct 9',
-        value: 0,
-      },
-      {
-        date: 'Oct 11',
-        value: 0,
-      },
-      {
-        date: 'Oct 12',
-        prev_value: 0,
-        value: 1,
-      },
-    ],
-    Neck_Pain: [
-      {
-        date: 'Oct 8',
-        value: 4,
-      },
-      {
-        date: 'Oct 9',
-        value: 0,
-      },
-      {
-        date: 'Oct 11',
-        value: 0,
-      },
-      {
-        date: 'Oct 12',
-        prev_value: 12,
-        value: 6,
-      },
-    ],
-  };
-
-  const chartData = convertDataForChart(eventDetail);
-  chartData.dataSets.forEach(dataset => {
-    dataset.config.label = ''; // or null
-  });
-
-  const CommonLineChart = ({ eventName, data }) => {
-    return (
-      <View
-        style={{
-          flex: 1,
-          marginLeft: -15,
-          alignItems: 'flex-start',
-          justifyContent: 'center',
-        }}
-      >
-        <LineChart
-          data={convertDataForChart({ [eventName]: data })}
-          drawValues={false}
-          drawCircles={false}
-          xAxis={{ drawLabels: false, drawGridLines: false, enabled: false }}
-          yAxisLeft={{ drawLabels: false, drawGridLines: false }}
-          chartDescription={{ text: '' }}
-          legend={{ enabled: false }}
-          style={{ width: 131, height: 60 }}
-          drawXAxis={false}
-          yAxisRight={null}
-          drawYAxis={false}
-          drawGridBackground={false}
-          yAxis={{
-            left: {
-              granularity: 6,
-              drawLabels: false, // Hide labels on the y-axis
-              drawGridLines: false, // Hide grid lines on the y-axis
-              drawYAxis: false,
-              enabled: false,
-            },
-            right: {
-              enabled: false,
-              drawGridLines: false, // Hide grid lines on the y-axis
-              drawYAxis: false,
-            },
-          }}
-          chartConfig={{
-            drawGridBackground: false,
-          }}
-        />
-      </View>
-    );
-  };
   function getSymptomIconComponent(symptomName) {
     const symptomIcons = {
       Headache: 'eye',
@@ -656,88 +526,16 @@ export default function EventDetails({ navigation, route }) {
               </View>
             </ScrollView>
           ) : loader === false ? (
-            <ScrollView style={{ height: BaseSetting.nHeight / 1.5 }}>
-              <View style={styles.container}>
-                {Object.keys(eventDetail).map((eventName, index) => (
-                  <TouchableOpacity
-                    key={eventName}
-                    style={styles.eventContainer}
-                    onPress={() => {
-                      navigation.navigate('Dashboard', {
-                        eventName: eventName,
-                        eventData: eventDetail[eventName],
-                        title: datas.title,
-                        eventDetail: eventDetail,
-                        dotnumber: index,
-                      });
-                    }}
-                    activeOpacity={BaseSetting.buttonOpacity}
-                  >
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      <View style={{ height: 60, width: 100 }}>
-                        <Text
-                          style={[
-                            styles.textt,
-                            {
-                              color: darkmode
-                                ? BaseColors.white
-                                : BaseColors.black90,
-                            },
-                          ]}
-                        >
-                          {`${eventDescriptions[eventName]}`}
-                        </Text>
-                      </View>
-                      <View style={styles.iconContainer}>
-                        {getSymptomIconComponent(eventName)}
-                      </View>
-                    </View>
-
-                    <CommonLineChart
-                      eventName={eventName}
-                      data={eventDetail[eventName]}
-                    />
-
-                    {eventDetail[eventName]
-                      .filter(
-                        item =>
-                          item.prev_value !== undefined &&
-                          item.value !== undefined,
-                      )
-                      .map(item => (
-                        <View key={item.date} style={styles.itemContainer}>
-                          <Text
-                            style={{
-                              color: calculateIconColor(
-                                item.prev_value,
-                                item.value,
-                              ),
-                              marginRight: 3,
-                            }}
-                          >
-                            {Math.abs(item.prev_value - item.value)}
-                          </Text>
-                          <View style={{ marginTop: 2 }}>
-                            <Icon2
-                              name={calculateArrow(item.prev_value, item.value)}
-                              size={10}
-                              color={calculateIconColor(
-                                item.prev_value,
-                                item.value,
-                              )}
-                            />
-                          </View>
-                        </View>
-                      ))}
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </ScrollView>
+            <EventDetailComponent
+              eventDetail={eventDetail}
+              datas={datas}
+              navigation={navigation}
+              darkmode={darkmode}
+              eventDescriptions={eventDescriptions}
+              getSymptomIconComponent={getSymptomIconComponent}
+              calculateIconColor={calculateIconColor}
+              calculateArrow={calculateArrow}
+            />
           ) : (
             <View
               style={{
