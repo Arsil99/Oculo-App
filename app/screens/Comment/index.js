@@ -1,4 +1,15 @@
-import { View, Text, SafeAreaView, TextInput, BackHandler } from 'react-native';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  TextInput,
+  BackHandler,
+  TouchableWithoutFeedback,
+  Keyboard,
+  TouchableOpacity,
+  ActivityIndicator,
+  Modal,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import styles from './styles';
 import HeaderBar from '@components/HeaderBar';
@@ -9,6 +20,10 @@ import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { BaseColors } from '@config/theme';
 import { useSelector } from 'react-redux';
 const Comment = ({ navigation, route }) => {
+  const DATA = route?.params?.otherData;
+
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
   const { darkmode } = useSelector(state => state.auth);
   const eventId = route?.params?.event_id || route?.params?.eventId;
   const [commentText, setCommentText] = useState('');
@@ -50,9 +65,22 @@ const Comment = ({ navigation, route }) => {
 
     return () => backHandler.remove();
   }, []);
+
   const handleBackPress = () => {
-    navigation.navigate('Events');
+    setShowConfirmation(true);
     return true;
+  };
+
+  const handleCancel = () => {
+    setShowConfirmation(false);
+  };
+
+  const handleConfirm = () => {
+    navigation.navigate('Events');
+  };
+
+  const dismissKeyboard = () => {
+    Keyboard.dismiss();
   };
   return (
     <SafeAreaView
@@ -63,60 +91,125 @@ const Comment = ({ navigation, route }) => {
         },
       ]}
     >
-      <HeaderBar HeaderText={'Symptoms'} HeaderCenter />
-      <View style={styles.main}>
-        <View style={styles.topTitle}>
-          <Text
-            style={[
-              styles.titleOne,
-              { color: darkmode ? BaseColors.white : BaseColors.black90 },
-            ]}
-          >
-            Assessment Completed
-          </Text>
-          <Text
-            style={[
-              styles.titleTwo,
-              { color: darkmode ? BaseColors.white : BaseColors.black90 },
-            ]}
-          >
-            Thank you for completing your subsequent visit assessment.
-          </Text>
-
-          <View style={styles.innerView}>
+      <HeaderBar HeaderText={'Comment'} HeaderCenter />
+      <TouchableWithoutFeedback onPress={dismissKeyboard}>
+        <View style={styles.main}>
+          <View style={styles.topTitle}>
             <Text
               style={[
-                styles.titleThree,
+                styles.titleOne,
                 { color: darkmode ? BaseColors.white : BaseColors.black90 },
               ]}
             >
-              Any additional comments you would like to share with your
-              provider?
+              Assessment Completed
             </Text>
-            <TextInput
-              placeholder="Share your comments..."
+            <Text
               style={[
-                styles.inputBar,
-                {
-                  borderColor: darkmode ? BaseColors.white : BaseColors.black90,
-                  color: darkmode ? BaseColors.white : BaseColors.black90,
-                },
+                styles.titleTwo,
+                { color: darkmode ? BaseColors.white : BaseColors.black90 },
               ]}
-              value={commentText}
-              multiline
-              onChangeText={value => setCommentText(value)}
-              placeholderTextColor={
-                darkmode ? BaseColors.white : BaseColors.black90
-              }
-            />
-          </View>
-        </View>
+            >
+              Thank you for completing your subsequent visit assessment.
+            </Text>
 
-        <View />
-        <View style={styles.doneBtn}>
-          <Button shape="round" title={'Done'} onPress={commentPost} />
+            <View style={styles.innerView}>
+              <Text
+                style={[
+                  styles.titleThree,
+                  { color: darkmode ? BaseColors.white : BaseColors.black90 },
+                ]}
+              >
+                Any additional comments you would like to share with your
+                provider?
+              </Text>
+              <TextInput
+                placeholder="Share your comments..."
+                style={[
+                  styles.inputBar,
+                  {
+                    borderColor: darkmode
+                      ? BaseColors.white
+                      : BaseColors.black90,
+                    color: darkmode ? BaseColors.white : BaseColors.black90,
+                  },
+                ]}
+                value={commentText}
+                multiline
+                onChangeText={value => setCommentText(value)}
+                placeholderTextColor={
+                  darkmode ? BaseColors.white : BaseColors.black90
+                }
+              />
+            </View>
+          </View>
+          <View />
+          <View style={styles.doneBtn}>
+            <Button shape="round" title={'Done'} onPress={commentPost} />
+          </View>
+          {showConfirmation && (
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={showConfirmation}
+              onRequestClose={handleCancel}
+            >
+              <View style={styles.confirmationModalCenteredView}>
+                <View
+                  style={[
+                    styles.confirmationModalView,
+                    {
+                      backgroundColor: darkmode
+                        ? BaseColors.textColor
+                        : BaseColors.white,
+                    },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.confirmationModalTitleText,
+                      {
+                        color: darkmode ? BaseColors.white : BaseColors.black,
+                      },
+                    ]}
+                  >
+                    Are you sure?
+                  </Text>
+                  <Text
+                    style={[
+                      styles.confirmationModalText,
+                      {
+                        color: darkmode ? BaseColors.white : BaseColors.black,
+                      },
+                    ]}
+                  >
+                    You want to leave this screen?
+                  </Text>
+                  <View style={styles.modalButtons}>
+                    <TouchableOpacity
+                      style={[styles.button, styles.confirmButton]}
+                      onPress={handleConfirm}
+                      disabled={confirmLoading}
+                    >
+                      {confirmLoading ? (
+                        <ActivityIndicator color="white" size="small" />
+                      ) : (
+                        <Text style={styles.buttonText}>Confirm</Text>
+                      )}
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      style={[styles.button, styles.cancelButton]}
+                      onPress={handleCancel}
+                    >
+                      <Text style={styles.buttonText}>Cancel</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </Modal>
+          )}
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 };

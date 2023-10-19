@@ -325,10 +325,7 @@ export default function EventDetails({ navigation, route }) {
       return null;
     }
   }
-  const calculateArrow = (prevValue, value) => {
-    const diff = value - prevValue;
-    return diff > 0 ? 'caretup' : diff < 0 ? 'caretdown' : null;
-  };
+
   const calculateIconColor = (prevValue, value) => {
     const diff = Math.abs(value - prevValue);
 
@@ -385,7 +382,7 @@ export default function EventDetails({ navigation, route }) {
       ]}
     >
       <HeaderBar
-        HeaderText={`Event Report (${datas.title})`}
+        HeaderText={`Event Report (${datas.title || datas.event_title})`}
         HeaderCenter
         leftText="Back"
       />
@@ -534,7 +531,6 @@ export default function EventDetails({ navigation, route }) {
               eventDescriptions={eventDescriptions}
               getSymptomIconComponent={getSymptomIconComponent}
               calculateIconColor={calculateIconColor}
-              calculateArrow={calculateArrow}
             />
           ) : (
             <View

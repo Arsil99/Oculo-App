@@ -231,7 +231,7 @@ export default function Recalldigits({ navigation, route }) {
           text1: response?.message,
           type: 'success',
         });
-        navigation.navigate('Comment', { eventId: eventId });
+        navigation.navigate('Comment', { eventId: eventId, otherData: DATA });
       } else {
         Toast.show({
           text1: response?.message,

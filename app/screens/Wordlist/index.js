@@ -299,9 +299,12 @@ export default function Wordlist({ navigation, route }) {
         DATA.digit_recall === 0
           ? navigation.navigate('ImmediateRecallmain', {
               event_id: eventId,
-              otherData: data,
+              otherData: DATA,
             })
-          : navigation.navigate('Comment');
+          : navigation.navigate('Comment', {
+              event_id: eventId,
+              otherData: DATA,
+            });
         Toast.show({
           text1: response?.message.toString(),
           type: 'success',

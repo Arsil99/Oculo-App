@@ -20,7 +20,6 @@ function EventDetailComponent({
   eventDescriptions,
   getSymptomIconComponent,
   calculateIconColor,
-  calculateArrow,
 }) {
   const convertDataForChart = data => {
     const chartData = {
@@ -86,6 +85,10 @@ function EventDetailComponent({
       </View>
     );
   };
+  const calculateArrow = (prevValue, value) => {
+    const diff = value - prevValue;
+    return diff > 0 ? 'caretup' : diff < 0 ? 'caretdown' : 'equal';
+  };
   return (
     <ScrollView style={{ height: BaseSetting.nHeight / 1.5 }}>
       <View style={styles.container}>
@@ -148,11 +151,27 @@ function EventDetailComponent({
                     {Math.abs(item.prev_value - item.value)}
                   </Text>
                   <View style={{ marginTop: 2 }}>
-                    <Icon2
-                      name={calculateArrow(item.prev_value, item.value)}
-                      size={10}
-                      color={calculateIconColor(item.prev_value, item.value)}
-                    />
+                    {calculateArrow(item.prev_value, item.value) === 'equal' ? (
+                      // Use a Text component to display the equal sign
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          color: calculateIconColor(
+                            item.prev_value,
+                            item.value,
+                          ),
+                        }}
+                      >
+                        =
+                      </Text>
+                    ) : (
+                      // Use AntDesign icons for other cases
+                      <Icon2
+                        name={calculateArrow(item.prev_value, item.value)}
+                        size={10}
+                        color={calculateIconColor(item.prev_value, item.value)}
+                      />
+                    )}
                   </View>
                 </View>
               ))}
