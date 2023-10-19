@@ -21,6 +21,7 @@ import { BaseColors } from '@config/theme';
 import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
 import { storeCredentials } from '@utils/CommonFunction';
 import * as Keychain from 'react-native-keychain';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const Login = ({ navigation }) => {
   const { setUserData, setAccessToken, setBiometric, setRefreshTokenExpire } =
@@ -107,7 +108,7 @@ const Login = ({ navigation }) => {
                 const { publicKey } = resultObject;
                 if (publicKey) {
                   setTimeout(() => {
-                    // checkSignature();
+                    checkSignature();
                   }, 400);
                 }
               })
@@ -428,7 +429,18 @@ const Login = ({ navigation }) => {
               >
                 <Image source={Images.faceid} resizeMode="contain" />
               </TouchableOpacity>
-            ) : null}
+            ) : (
+              isBiometric && (
+                <TouchableOpacity
+                  activeOpacity={BaseSetting.buttonOpacity}
+                  onPress={() => {
+                    checkBiometrics();
+                  }}
+                >
+                  <Icon name="finger-print" size={30} style={styles.fingIcon} />
+                </TouchableOpacity>
+              )
+            )}
           </View>
         </View>
       </ScrollView>

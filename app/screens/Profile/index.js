@@ -406,7 +406,7 @@ export default function Profile({ navigation }) {
           <ScrollView showsHorizontalScrollIndicator={false}>
             <View style={styles.cardOuter}>
               <InfoCard
-                data={IOS ? settings : settings.slice(1)}
+                data={settings}
                 mainTitle={'Settings'}
                 SwitchChange={(item, v) => {
                   item.slug === 'dark_theme'

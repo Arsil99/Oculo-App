@@ -24,11 +24,20 @@ export default StyleSheet.create({
   btnContainer: {
     justifyContent: 'space-between',
     flexDirection: 'row',
+    alignItems: 'center',
     // backgroundColor: "pink",
     marginTop: 40,
   },
   img: {
     marginTop: 30,
     height: 55,
+  },
+
+  fingIcon: {
+    marginLeft: 20,
+    backgroundColor: BaseColors.primary,
+    padding: 8,
+    borderRadius: 50,
+    color: BaseColors.white,
   },
 });
