@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Image } from 'react-native';
 import Icon1 from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/AntDesign';
+import Icon3 from 'react-native-vector-icons/FontAwesome5';
 import PropTypes from 'prop-types';
 import styles from './styles';
 import BaseSetting from '@config/setting';
@@ -15,6 +16,7 @@ export default function CardList({
   image,
   showmanIcon,
   iconName,
+  othericons,
   backgroundColoricon,
   data,
   status,
@@ -28,6 +30,13 @@ export default function CardList({
       style={[styles.iconContainer, { backgroundColor: backgroundColoricon }]}
     >
       <Icon1 name={iconName} size={30} color="white" />
+    </View>
+  );
+  const Othericon = () => (
+    <View
+      style={[styles.iconContainer, { backgroundColor: backgroundColoricon }]}
+    >
+      <Icon3 name={iconName} size={20} color="white" />
     </View>
   );
   const ManIcon = () => (
@@ -55,6 +64,8 @@ export default function CardList({
           <View style={styles.insideBox}>
             {showClock ? (
               <ClockIcon /> // Display the ClockIcon if showClock is true
+            ) : othericons ? (
+              <Othericon />
             ) : showmanIcon ? (
               <ManIcon />
             ) : (

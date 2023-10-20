@@ -18,17 +18,19 @@ export default StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    padding: 20,
+    padding: 15,
     justifyContent: 'space-between',
   },
   eventContainer: {
     borderWidth: 1,
     width: '48%', // Two items side by side with a small gap
-    marginVertical: 5,
+    marginVertical: 6,
     borderColor: BaseColors.lightGrey,
     height: 100,
     padding: 10,
     borderRadius: 12,
+    elevation: 3,
+
     shadowColor: BaseColors.black,
     shadowOffset: {
       width: 0,

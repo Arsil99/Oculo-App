@@ -258,7 +258,10 @@ export default function EventDetails({ navigation, route }) {
           data?.map((item, index) => (
             <CardList
               key={index}
-              image={Images.eventlogo}
+              iconName="tasks"
+              backgroundColoricon={BaseColors.primary}
+              othericons
+              tasks
               data={item.details.assess_num}
               status={item.details.assessment_type}
               rightArrow={

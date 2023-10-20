@@ -73,16 +73,18 @@ const Dashboard = ({ route }) => {
   function getNumberColor(number) {
     switch (number) {
       case 0:
-        return BaseColors.primaryBlue300;
+        return BaseColors.black400;
       case 1:
-        return BaseColors.primaryBlue400;
+        return BaseColors.primaryBlue300;
       case 2:
-        return BaseColors.primaryBlue500;
+        return BaseColors.primaryBlue400;
       case 3:
-        return BaseColors.primaryBlue600;
+        return BaseColors.primaryBlue500;
       case 4:
-        return BaseColors.primaryBlue700;
+        return BaseColors.primaryBlue600;
       case 5:
+        return BaseColors.primaryBlue700;
+      case 6:
         return BaseColors.primaryBlue900;
       default:
         return BaseColors.black400;

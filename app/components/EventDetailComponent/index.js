@@ -95,7 +95,14 @@ function EventDetailComponent({
         {Object.keys(eventDetail).map((eventName, index) => (
           <TouchableOpacity
             key={eventName}
-            style={styles.eventContainer}
+            style={[
+              styles.eventContainer,
+              {
+                backgroundColor: darkmode
+                  ? BaseColors.lightBlack
+                  : BaseColors.white,
+              },
+            ]}
             onPress={() => {
               navigation.navigate('Dashboard', {
                 eventName: eventName,
