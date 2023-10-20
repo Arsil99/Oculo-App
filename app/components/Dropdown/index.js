@@ -30,7 +30,6 @@ export default function Dropdown(props) {
       placeholderStyle={{
         fontFamily: FontFamily.regular,
         fontSize: 14,
-        textTransform: 'capitalize',
         marginRight: 3,
         color: BaseColors.black60,
       }}

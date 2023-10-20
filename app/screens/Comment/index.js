@@ -22,6 +22,7 @@ import { useSelector } from 'react-redux';
 const Comment = ({ navigation, route }) => {
   const DATA = route?.params?.otherData;
 
+  const event_title = DATA.event_title;
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const { darkmode } = useSelector(state => state.auth);
@@ -46,7 +47,7 @@ const Comment = ({ navigation, route }) => {
           text1: response?.message.toString(),
           type: 'success',
         });
-        navigation.navigate('Events');
+        navigation.navigate('EventDetails', event_title);
       } else {
         Toast.show({
           text1: response?.message,
@@ -76,7 +77,7 @@ const Comment = ({ navigation, route }) => {
   };
 
   const handleConfirm = () => {
-    navigation.navigate('Events');
+    navigation.navigate('EventDetails', event_title);
   };
 
   const dismissKeyboard = () => {

@@ -142,7 +142,7 @@ const TwofactorEnabled = ({ navigation }) => {
               items={items}
               open={open}
               setOpen={setOpen}
-              placeholder="Please select 2FA medium"
+              placeholder="Please Select 2FA Medium"
               value={value}
               setValue={setValue}
               onOpen={() => setError(false)}

@@ -1217,6 +1217,7 @@ fixDurScreen	= t	Average fixation duration on screen
                             </Text>
                             <LabeledInput
                               keyboardType={'numeric'}
+                              maxLength={4}
                               value={text}
                               onChangeText={e => {
                                 if (e !== '') {

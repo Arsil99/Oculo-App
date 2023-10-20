@@ -25,6 +25,7 @@ import { isArray, isEmpty, isNull } from 'lodash';
 import Modal from 'react-native-modal';
 
 export default function EventDetails({ navigation, route }) {
+  const event_title = route?.params;
   const eventType = route?.params?.event_name;
   const [graph, setGraph] = useState([]);
   const [day, setDay] = useState([]);
@@ -410,7 +411,7 @@ export default function EventDetails({ navigation, route }) {
       ]}
     >
       <HeaderBar
-        HeaderText={`Event Report (${datas.title || datas.event_title})`}
+        HeaderText={`Event Report (${datas.title || event_title})`}
         HeaderCenter
         leftText="Back"
       />
@@ -490,7 +491,17 @@ export default function EventDetails({ navigation, route }) {
                   initial={init}
                   defaultGraph={defaultGraph}
                 />
-                <Text style={styles.label}>Compare your assessments</Text>
+                <Text
+                  style={[
+                    styles.label,
+                    {
+                      color: darkmode ? BaseColors.white : BaseColors.textColor,
+                    },
+                  ]}
+                >
+                  Compare your assessments
+                </Text>
+
                 {!isEmpty(graph) && isArray(graph) ? (
                   <Slider
                     value={sliderValue}
@@ -535,7 +546,17 @@ export default function EventDetails({ navigation, route }) {
                 {/* Display the range labels */}
                 <View style={styles.rangeLabelsContainer}>
                   {day?.map((label, index) => (
-                    <Text key={index} style={styles.rangeLabel}>
+                    <Text
+                      key={index}
+                      style={[
+                        styles.rangeLabel,
+                        {
+                          color: darkmode
+                            ? BaseColors.white
+                            : BaseColors.black90,
+                        },
+                      ]}
+                    >
                       {label}
                     </Text>
                   ))}
@@ -543,7 +564,17 @@ export default function EventDetails({ navigation, route }) {
 
                 <View style={styles.rangeLabelsContainer}>
                   {month?.map((label, index) => (
-                    <Text key={index} style={styles.rangeLabel}>
+                    <Text
+                      key={index}
+                      style={[
+                        styles.rangeLabel,
+                        {
+                          color: darkmode
+                            ? BaseColors.white
+                            : BaseColors.black90,
+                        },
+                      ]}
+                    >
                       {label}
                     </Text>
                   ))}

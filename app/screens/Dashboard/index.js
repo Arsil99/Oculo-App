@@ -37,12 +37,15 @@ const Dashboard = ({ route }) => {
         y: value,
       };
     });
-
+    const textColor = darkmode ? BaseColors.white : BaseColors.black;
     // Map the colors dynamically based on severity levels
     const colors = activeData.map(entry => getNumberColor(entry.value));
 
     const circleRadius = 5.5;
-
+    const chartConfig = {
+      xAxisTextColor: processColor(textColor), // Set the X-axis label color
+      /* ... other chartConfig properties ... */
+    };
     return [
       {
         values: datasets,
@@ -208,7 +211,7 @@ const Dashboard = ({ route }) => {
                 position: 'absolute',
                 fontWeight: '400',
                 fontFamily: FontFamily.regular,
-                color: BaseColors.black,
+                color: darkmode ? BaseColors.white : BaseColors.black,
               }}
             >
               Severity
@@ -232,6 +235,9 @@ const Dashboard = ({ route }) => {
                   top: 10,
                   bottom: 0,
                 },
+                textColor: processColor(
+                  darkmode ? BaseColors.white : BaseColors.black,
+                ), // Set the X-axis label color
               }}
               yAxis={{
                 left: {
@@ -241,6 +247,9 @@ const Dashboard = ({ route }) => {
                   axisMinimum: 0,
                   axisMaximum: 6,
                   label: 'Severity',
+                  textColor: processColor(
+                    darkmode ? BaseColors.white : BaseColors.black,
+                  ), // Set the X-axis label color
                 },
                 right: {
                   enabled: false,
