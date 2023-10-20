@@ -140,4 +140,24 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  modal: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  button: {
+    marginTop: 20,
+    padding: 10,
+    borderRadius: 5,
+    width: '45%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

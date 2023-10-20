@@ -1,4 +1,11 @@
-import { View, Text, ScrollView, ActivityIndicator, Image } from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  ActivityIndicator,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import styles from './style';
 import HeaderBar from '@components/HeaderBar';
@@ -14,7 +21,9 @@ import { Slider } from '@miblanchard/react-native-slider';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/AntDesign';
 import EventDetailComponent from '@components/EventDetailComponent';
-import { isArray, isEmpty } from 'lodash';
+import { isArray, isEmpty, isNull } from 'lodash';
+import Modal from 'react-native-modal';
+
 export default function EventDetails({ navigation, route }) {
   const eventType = route?.params?.event_name;
   const [graph, setGraph] = useState([]);
@@ -29,6 +38,7 @@ export default function EventDetails({ navigation, route }) {
   const [missedData, setMissedData] = useState([]);
   const [loader, setLoader] = useState(true);
   const [eventDetail, setEventDetail] = useState([]);
+  const [isModalVisible, setModalVisible] = useState(false);
   let eventId = route?.params?.id;
 
   let datas = route?.params;
@@ -75,6 +85,17 @@ export default function EventDetails({ navigation, route }) {
           }
           return acc;
         }, {});
+        const today = moment(new Date()).format('YYYY-MM-DD');
+
+        const dateObj = res?.data?.filter(item => item.date === today);
+
+        delete dateObj[0].assessment_id;
+        delete dateObj[0].date;
+
+        for (const item of dateObj) {
+          setModalVisible(isNull(Object.values(item)[0]?.curr_value));
+          break;
+        }
 
         const filteredObject = {};
         for (const key in filteredData) {
@@ -372,6 +393,13 @@ export default function EventDetails({ navigation, route }) {
     Nerv_Anx: 'Nervous / Anxiousness',
     Trouble_Sleep: 'Trouble Falling Asleep',
   };
+
+  const handleattempt = () => {
+    setModalVisible(false);
+    pendingData[0]['details']['event_title'] =
+      listOfAssessments?.event_details?.title;
+    navigation.navigate('Assessment', pendingData[0]);
+  };
   return (
     <View
       style={[
@@ -520,6 +548,60 @@ export default function EventDetails({ navigation, route }) {
                     </Text>
                   ))}
                 </View>
+              </View>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: 'red',
+                }}
+              >
+                <Modal
+                  isVisible={isModalVisible}
+                  style={styles.modal}
+                  animationIn="slideInUp"
+                  animationOut="slideOutDown"
+                  animationInTiming={500}
+                  animationOutTiming={500}
+                  backdropTransitionInTiming={500}
+                  backdropTransitionOutTiming={500}
+                >
+                  <View style={styles.modalContent}>
+                    <Text style={{ fontSize: 80 }}>👩‍⚕️</Text>
+                    <Text>Hi 👋 Your today's Assessment is incomplete. </Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        width: '80%',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <TouchableOpacity
+                        style={[
+                          styles.button,
+                          { borderWidth: 1, borderColor: BaseColors.secondary },
+                        ]}
+                        onPress={() => setModalVisible(false)}
+                      >
+                        <Text style={{ color: BaseColors.secondary }}>
+                          Skip now
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={[
+                          styles.button,
+                          {
+                            backgroundColor: BaseColors.secondary,
+                          },
+                        ]}
+                        onPress={() => handleattempt()}
+                      >
+                        <Text style={{ color: BaseColors.white }}>Attempt</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </Modal>
               </View>
             </ScrollView>
           ) : loader === false ? (
