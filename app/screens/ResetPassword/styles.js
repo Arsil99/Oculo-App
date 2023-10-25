@@ -4,7 +4,7 @@ import { BaseColors, FontFamily } from '@config/theme';
 const IOS = Platform.OS === 'ios';
 export default StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
   },
   contentView: {
     flex: 0.35,
