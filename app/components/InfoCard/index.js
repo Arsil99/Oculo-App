@@ -9,7 +9,22 @@ import Icon2 from 'react-native-vector-icons/FontAwesome';
 import { Switch } from 'react-native-gesture-handler';
 import { isNull } from 'lodash';
 import { Images } from '@config';
-
+import {
+  SvgCalendar,
+  SvgChangePassword,
+  SvgDark,
+  SvgEmail,
+  SvgGender,
+  SvgNotification,
+  SvgPhone,
+  SvgPrivacy,
+  SvgPronouns,
+  SvgSex,
+  SvgSignout,
+  SvgTerms,
+  SvgTwoFactor,
+  SvgUser,
+} from '@components/SVG_Bundle';
 const InfoCard = props => {
   const { userData } = useSelector(state => {
     return state.auth;
@@ -21,6 +36,47 @@ const InfoCard = props => {
   const noProfilePic =
     isNull(userData.profile_pic) || userData.profile_pic === undefined;
 
+  const renderLeftIcon = title => {
+    switch (title) {
+      case 'Two Factor Authentication':
+        return <SvgTwoFactor />;
+      case 'Change Password':
+        return <SvgChangePassword />;
+      case 'Notifications Settings':
+        return <SvgNotification />;
+      case 'Dark Theme':
+        return <SvgDark />;
+      case 'Sign Out':
+        return <SvgSignout />;
+      case 'Terms of Services':
+        return <SvgTerms />;
+      case 'Privacy Policy':
+        return <SvgPrivacy />;
+      case 'First Name':
+        return <SvgUser />;
+      case 'Middle Name':
+        return <SvgUser />;
+      case 'Last Name':
+        return <SvgUser />;
+      case 'Date of Birth':
+        return <SvgCalendar />;
+      case 'Gender':
+        return <SvgGender />;
+      case 'Pronouns':
+        return <SvgPronouns />;
+      case 'Sex':
+        return <SvgSex />;
+      case 'Patient Phone':
+        return <SvgPhone />;
+      case 'Patient Email':
+        return <SvgEmail />;
+      case 'Guardian phone':
+        return <SvgPhone />;
+      case 'Guardian email':
+        return <SvgEmail />;
+      default:
+    }
+  };
   return (
     <View
       style={[
@@ -109,11 +165,7 @@ const InfoCard = props => {
                       color={darkmode ? BaseColors.white : BaseColors.black90}
                     />
                   ) : (
-                    <Icon2
-                      name={item.leftIcon}
-                      size={15}
-                      color={darkmode ? BaseColors.white : BaseColors.black90}
-                    />
+                    renderLeftIcon(item?.title)
                   )}
                 </View>
                 <View>
