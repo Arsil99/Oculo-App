@@ -338,11 +338,13 @@ fixDurScreen	= t	Average fixation duration on screen
     }
   };
 
-  // time count for each screen
-
   useEffect(() => {
+    const startTime = new Date().getTime(); // Get the current timestamp when the useEffect starts.
+
     const intervalId = setInterval(() => {
-      setDuration(duration => duration + 1000);
+      const currentTime = new Date().getTime(); // Get the current timestamp.
+      const elapsedMilliseconds = currentTime - startTime; // Calculate the elapsed time in milliseconds.
+      setDuration(elapsedMilliseconds); // Update the duration with the elapsed time.
     }, 1000);
 
     return () => {
@@ -686,6 +688,8 @@ fixDurScreen	= t	Average fixation duration on screen
   // slider details state management
   const [count, setCount] = useState(0);
   const [duration, setDuration] = useState(0);
+  console.log('🚀 ~ file: index.js:693 ~ Symptoms ~ duration:', duration);
+
   const [initValue, setInitValue] = useState(0);
   const [milliseconds, setMilliseconds] = useState(0);
   const [lastValue, setLastValue] = useState(0);

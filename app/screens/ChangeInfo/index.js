@@ -12,6 +12,7 @@ import {
   Modal,
   Platform,
   ScrollView,
+  TextInput,
   TouchableOpacity,
 } from 'react-native';
 import { View, StatusBar, Text } from 'react-native';
@@ -347,7 +348,19 @@ export default function ChangeInfo({ navigation, route }) {
                     {item?.meta_name === 'Add_None_Ther' &&
                       selectedValues['Add_Other_Ther'] && (
                         <>
-                          <LabeledInput
+                          <TextInput
+                            style={[
+                              styles.inputBar,
+                              {
+                                borderColor: darkmode
+                                  ? BaseColors.white
+                                  : BaseColors.black30,
+                                color: darkmode
+                                  ? BaseColors.white
+                                  : BaseColors.textColor,
+                              },
+                            ]}
+                            multiline
                             isRequired
                             Label={'Other treatment'}
                             LabledTextStyle={styles.textInput}
@@ -368,7 +381,19 @@ export default function ChangeInfo({ navigation, route }) {
                       item?.related_questions?.map((rItem, ind) => {
                         if (!selectedValues[item?.meta_name]) {
                           return (
-                            <LabeledInput
+                            <TextInput
+                              multiline
+                              style={[
+                                styles.inputBar,
+                                {
+                                  borderColor: darkmode
+                                    ? BaseColors.white
+                                    : BaseColors.black30,
+                                  color: darkmode
+                                    ? BaseColors.white
+                                    : BaseColors.textColor,
+                                },
+                              ]}
                               isRequired
                               Label={rItem?.question}
                               LabledTextStyle={styles.textInput}

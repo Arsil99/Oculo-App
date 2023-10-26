@@ -206,7 +206,7 @@ export default function Recalldigits({ navigation, route }) {
             text1: 'Data submitted successfully.',
             type: 'success',
           });
-          navigation.navigate('Events');
+          navigation.navigate('Comment', { eventId: eventId, otherData: DATA });
         }
       }
     }

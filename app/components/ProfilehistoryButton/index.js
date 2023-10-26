@@ -6,7 +6,13 @@ import { getApiData } from '@utils/apiHelper';
 import { isArray, isEmpty, isNumber, isUndefined } from 'lodash';
 import React, { forwardRef, useEffect, useImperativeHandle } from 'react';
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+  TextInput,
+} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useIsFocused } from '@react-navigation/native';
 import styles from './styles';
@@ -456,20 +462,21 @@ const ProfilehistoryButton = (props, ref) => {
         ) : item.meta_name === 'Other_Med_Hx_Comm' ? (
           // Render text input for type 2
           editHistory ? (
-            <LabeledInput
+            <TextInput
+              multiline
               placeholder="Enter your response here"
               value={item?.answer?.toString() || ''}
               onChangeText={text => {
                 // Handle text input change
                 getAnswer(text, index);
               }}
-              style={{
-                borderWidth: 1,
-                // borderColor: 'gray',
-                padding: 8,
-                marginVertical: 5,
-                borderRadius: 5,
-              }}
+              style={[
+                styles.inputBar,
+                {
+                  borderColor: darkmode ? BaseColors.white : BaseColors.black30,
+                  color: darkmode ? BaseColors.white : BaseColors.textColor,
+                },
+              ]}
             />
           ) : (
             <Text
@@ -483,20 +490,23 @@ const ProfilehistoryButton = (props, ref) => {
           // Render another text input for type 3
           editHistory ? (
             <>
-              <LabeledInput
+              <TextInput
+                multiline
                 placeholder="Enter your response here"
                 value={item.answer?.toString()}
                 onChangeText={text => {
                   getAnswer(text, index);
                   setErrObj({ ...errObj, descErr: false, descMg: '' });
                 }}
-                style={{
-                  borderWidth: 1,
-                  borderColor: 'gray',
-                  padding: 8,
-                  marginVertical: 5,
-                  borderRadius: 5,
-                }}
+                style={[
+                  styles.inputBar,
+                  {
+                    borderColor: darkmode
+                      ? BaseColors.white
+                      : BaseColors.black30,
+                    color: darkmode ? BaseColors.white : BaseColors.textColor,
+                  },
+                ]}
               />
               {errObj.descErr ? (
                 <Text
@@ -591,20 +601,23 @@ const ProfilehistoryButton = (props, ref) => {
                     *
                   </Text>
                 </Text>
-                <LabeledInput
+                <TextInput
+                  multiline
                   placeholder="Enter other treatment"
                   value={other.toString()}
                   onChangeText={text => {
                     setOther(text);
                     setErrObj({ ...errObj, otherErr: false, otherMsg: '' });
                   }}
-                  style={{
-                    borderWidth: 1,
-                    borderColor: 'gray',
-                    padding: 8,
-                    marginVertical: 5,
-                    borderRadius: 5,
-                  }}
+                  style={[
+                    styles.inputBar,
+                    {
+                      borderColor: darkmode
+                        ? BaseColors.white
+                        : BaseColors.black30,
+                      color: darkmode ? BaseColors.white : BaseColors.textColor,
+                    },
+                  ]}
                 />
                 {/* other treatment error message */}
                 {errObj.otherErr ? (

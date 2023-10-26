@@ -30,6 +30,15 @@ export default StyleSheet.create({
     shadowRadius: 2.22,
     elevation: 3,
   },
+  inputBar: {
+    marginTop: 20,
+    borderWidth: 1,
+    borderColor: BaseColors.black30,
+    borderRadius: 15,
+    height: 150,
+    padding: 15,
+    textAlignVertical: 'top',
+  },
   titleTextcontainer: {
     alignItems: 'flex-start',
     marginHorizontal: 20,

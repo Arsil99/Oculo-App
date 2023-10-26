@@ -59,7 +59,7 @@ export default StyleSheet.create({
   buttoncontainer: {
     flexGrow: 1,
     paddingHorizontal: 10,
-    paddingBottom: 10,
+    paddingBottom: 20,
     paddingTop: 10,
   },
 
@@ -82,12 +82,22 @@ export default StyleSheet.create({
     borderColor: BaseColors.black20,
   },
   btnContainer: {
+    marginTop: 10,
     justifyContent: 'flex-end',
     // height: windowHeight / 4.2,
   },
   errorText: {
     color: BaseColors.red,
     paddingBottom: 10,
+  },
+  inputBar: {
+    marginTop: 20,
+    borderWidth: 1,
+    borderColor: BaseColors.black30,
+    borderRadius: 15,
+    height: 150,
+    padding: 15,
+    textAlignVertical: 'top',
   },
   button: {
     paddingVertical: 10,
