@@ -40,6 +40,7 @@ export default function EventDetails({ navigation, route }) {
   const [loader, setLoader] = useState(true);
   const [eventDetail, setEventDetail] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [dataAvailable, setDataAvailable] = useState(true);
   let eventId = route?.params?.id;
 
   let datas = route?.params;
@@ -74,6 +75,7 @@ export default function EventDetails({ navigation, route }) {
     try {
       const res = await getApiData(`${endPoint}`, 'GET');
       if (res?.status) {
+        setDataAvailable(!isEmpty(res?.data));
         // Key and values
         const keysToProcess = Object.keys(
           res?.data.find(item => item.initial === true),
@@ -132,7 +134,6 @@ export default function EventDetails({ navigation, route }) {
   }, [graph]);
 
   const [init, setInit] = useState();
-
   const runSlider = value => {
     const date = `${day[value]} - ${month[value]}`;
     const selectedDate = date?.replace(/\s/g, '');
@@ -140,7 +141,6 @@ export default function EventDetails({ navigation, route }) {
     const dataObj = graph?.find(item => {
       return moment(item?.date).format('DD-MMM') === selectedDate;
     });
-
     let init = dataObj['initial'];
     // Key and values
     const keysToProcess = init
@@ -487,156 +487,180 @@ export default function EventDetails({ navigation, route }) {
                 height: BaseSetting.nHeight / 1.5,
               }}
             >
-              <View style={styles.spiderView}>
-                <SpiderWebChart
-                  items={spiderItems}
-                  bundle={wrapData}
-                  initial={init}
-                  defaultGraph={defaultGraph}
-                />
-                <Text
-                  style={[
-                    styles.label,
-                    {
-                      color: darkmode ? BaseColors.white : BaseColors.textColor,
-                    },
-                  ]}
-                >
-                  Compare your assessments
-                </Text>
+              {dataAvailable ? (
+                <>
+                  <View style={styles.spiderView}>
+                    <SpiderWebChart
+                      items={spiderItems}
+                      bundle={wrapData}
+                      initial={init}
+                      defaultGraph={defaultGraph}
+                    />
+                    <Text
+                      style={[
+                        styles.label,
+                        {
+                          color: darkmode
+                            ? BaseColors.white
+                            : BaseColors.textColor,
+                        },
+                      ]}
+                    >
+                      Compare your assessments
+                    </Text>
 
-                {!isEmpty(graph) && isArray(graph) ? (
-                  <Slider
-                    value={sliderValue}
-                    minimumValue={0}
-                    maximumValue={graph?.length - 1}
-                    step={1}
-                    style={styles.slider}
-                    trackMarks={[
-                      { label: '0', value: 0 },
-                      { label: '1', value: 1 },
-                      { label: '2', value: 2 },
-                      { label: '3', value: 3 },
-                      { label: '4', value: 4 },
-                    ]}
-                    thumbStyle={styles.thumbStyle}
-                    thumbTintColor={BaseColors.white}
-                    minimumTrackTintColor={BaseColors.primary}
-                    maximumTrackTintColor={BaseColors.tabinActive}
-                    onValueChange={value => {
-                      runSlider(value);
-                      setSliderValue(value);
-                    }}
-                  />
-                ) : null}
-
-                <View style={styles.markerContainer}>
-                  {!isEmpty(graph) &&
-                    isArray(graph) &&
-                    graph?.map((value, index) => (
-                      <View
-                        style={[
-                          styles.marker,
-                          {
-                            backgroundColor: BaseColors.lightGrey,
-                          },
+                    {!isEmpty(graph) && isArray(graph) ? (
+                      <Slider
+                        value={sliderValue}
+                        minimumValue={0}
+                        maximumValue={graph?.length - 1}
+                        step={1}
+                        style={styles.slider}
+                        trackMarks={[
+                          { label: '0', value: 0 },
+                          { label: '1', value: 1 },
+                          { label: '2', value: 2 },
+                          { label: '3', value: 3 },
+                          { label: '4', value: 4 },
                         ]}
-                        key={index}
+                        thumbStyle={styles.thumbStyle}
+                        thumbTintColor={BaseColors.white}
+                        minimumTrackTintColor={BaseColors.primary}
+                        maximumTrackTintColor={BaseColors.tabinActive}
+                        onValueChange={value => {
+                          runSlider(value);
+
+                          setSliderValue(value);
+                        }}
                       />
-                    ))}
-                </View>
+                    ) : null}
 
-                {/* Display the range labels */}
-                <View style={styles.rangeLabelsContainer}>
-                  {day?.map((label, index) => (
-                    <Text
-                      key={index}
-                      style={[
-                        styles.rangeLabel,
-                        {
-                          color: darkmode
-                            ? BaseColors.white
-                            : BaseColors.black90,
-                        },
-                      ]}
-                    >
-                      {label}
-                    </Text>
-                  ))}
-                </View>
+                    <View style={styles.markerContainer}>
+                      {!isEmpty(graph) &&
+                        isArray(graph) &&
+                        graph?.map((value, index) => (
+                          <View
+                            style={[
+                              styles.marker,
+                              {
+                                backgroundColor: BaseColors.lightGrey,
+                              },
+                            ]}
+                            key={index}
+                          />
+                        ))}
+                    </View>
 
-                <View style={styles.rangeLabelsContainer}>
-                  {month?.map((label, index) => (
-                    <Text
-                      key={index}
-                      style={[
-                        styles.rangeLabel,
-                        {
-                          color: darkmode
-                            ? BaseColors.white
-                            : BaseColors.black90,
-                        },
-                      ]}
-                    >
-                      {label}
-                    </Text>
-                  ))}
-                </View>
-              </View>
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: 'red',
-                }}
-              >
-                <Modal
-                  isVisible={isModalVisible}
-                  style={styles.modal}
-                  animationIn="slideInUp"
-                  animationOut="slideOutDown"
-                  animationInTiming={500}
-                  animationOutTiming={500}
-                  backdropTransitionInTiming={500}
-                  backdropTransitionOutTiming={500}
-                >
-                  <View style={styles.modalContent}>
-                    <Text style={{ fontSize: 80 }}>👩‍⚕️</Text>
-                    <Text>Hi 👋 Your today's Assessment is incomplete. </Text>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        width: '80%',
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      <TouchableOpacity
-                        style={[
-                          styles.button,
-                          { borderWidth: 1, borderColor: BaseColors.secondary },
-                        ]}
-                        onPress={() => setModalVisible(false)}
-                      >
-                        <Text style={{ color: BaseColors.secondary }}>
-                          Skip now
+                    {/* Display the range labels */}
+                    <View style={styles.rangeLabelsContainer}>
+                      {day?.map((label, index) => (
+                        <Text
+                          key={index}
+                          style={[
+                            styles.rangeLabel,
+                            {
+                              color: darkmode
+                                ? BaseColors.white
+                                : BaseColors.black90,
+                            },
+                          ]}
+                        >
+                          {label}
                         </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={[
-                          styles.button,
-                          {
-                            backgroundColor: BaseColors.secondary,
-                          },
-                        ]}
-                        onPress={() => handleattempt()}
-                      >
-                        <Text style={{ color: BaseColors.white }}>Attempt</Text>
-                      </TouchableOpacity>
+                      ))}
+                    </View>
+
+                    <View style={styles.rangeLabelsContainer}>
+                      {month?.map((label, index) => (
+                        <Text
+                          key={index}
+                          style={[
+                            styles.rangeLabel,
+                            {
+                              color: darkmode
+                                ? BaseColors.white
+                                : BaseColors.black90,
+                            },
+                          ]}
+                        >
+                          {label}
+                        </Text>
+                      ))}
                     </View>
                   </View>
-                </Modal>
-              </View>
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: 'red',
+                    }}
+                  >
+                    <Modal
+                      isVisible={isModalVisible}
+                      style={styles.modal}
+                      animationIn="slideInUp"
+                      animationOut="slideOutDown"
+                      animationInTiming={500}
+                      animationOutTiming={500}
+                      backdropTransitionInTiming={500}
+                      backdropTransitionOutTiming={500}
+                    >
+                      <View style={styles.modalContent}>
+                        <Text style={{ fontSize: 80 }}>👩‍⚕️</Text>
+                        <Text>
+                          Hi 👋 Your today's Assessment is incomplete.{' '}
+                        </Text>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            width: '80%',
+                            justifyContent: 'space-between',
+                          }}
+                        >
+                          <TouchableOpacity
+                            style={[
+                              styles.button,
+                              {
+                                borderWidth: 1,
+                                borderColor: BaseColors.secondary,
+                              },
+                            ]}
+                            onPress={() => setModalVisible(false)}
+                          >
+                            <Text style={{ color: BaseColors.secondary }}>
+                              Skip now
+                            </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            style={[
+                              styles.button,
+                              {
+                                backgroundColor: BaseColors.secondary,
+                              },
+                            ]}
+                            onPress={() => handleattempt()}
+                          >
+                            <Text style={{ color: BaseColors.white }}>
+                              Attempt
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </Modal>
+                  </View>
+                </>
+              ) : (
+                <Text
+                  style={{
+                    marginVertical: BaseSetting.nHeight / 4,
+                    textAlign: 'center',
+                    fontSize: 21,
+                  }}
+                >
+                  Data not available
+                </Text>
+              )}
             </ScrollView>
           ) : loader === false ? (
             <EventDetailComponent
