@@ -341,16 +341,16 @@ fixDurScreen	= t	Average fixation duration on screen
   useEffect(() => {
     const startTime = new Date().getTime(); // Get the current timestamp when the useEffect starts.
 
-    const intervalId = setInterval(() => {
+    const intervalIds = setInterval(() => {
       const currentTime = new Date().getTime(); // Get the current timestamp.
       const elapsedMilliseconds = currentTime - startTime; // Calculate the elapsed time in milliseconds.
       setDuration(elapsedMilliseconds); // Update the duration with the elapsed time.
     }, 1000);
 
     return () => {
-      clearInterval(intervalId);
+      clearInterval(intervalIds);
     };
-  }, []);
+  }, [activeButtonIndex]);
 
   const [revisit, setRevisit] = useState(0);
 
