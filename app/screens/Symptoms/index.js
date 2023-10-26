@@ -467,7 +467,17 @@ fixDurScreen	= t	Average fixation duration on screen
         error: true,
         msg: 'Please enter percentage',
       });
+    } else {
+      const percentages = parseFloat(text);
+      if (percentages > 100) {
+        valid = false;
+        setTextErrObj({
+          error: true,
+          msg: 'Percentage cannot be more than 100%',
+        });
+      }
     }
+
     if (activeIndexes.length === checkValid) {
       setValidBool(true);
     } else {
@@ -1221,7 +1231,7 @@ fixDurScreen	= t	Average fixation duration on screen
                             </Text>
                             <LabeledInput
                               keyboardType={'numeric'}
-                              maxLength={4}
+                              maxLength={3}
                               value={text}
                               onChangeText={e => {
                                 if (e !== '') {
