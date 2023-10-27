@@ -171,7 +171,6 @@ export default function Profile({ navigation }) {
     try {
       rnBiometrics.isSensorAvailable().then(resultObject => {
         const { available, biometryType } = resultObject;
-
         if (available && biometryType === BiometryTypes.TouchID) {
           console.log('TouchID is supported');
           authenticate();
@@ -183,6 +182,12 @@ export default function Profile({ navigation }) {
           authenticate();
         } else {
           console.log('Biometrics not supported');
+          if (Platform.OS !== 'ios') {
+            Toast.show({
+              type: 'error',
+              text1: 'Please turn on and add your device fingerprint',
+            });
+          }
           authenticate();
         }
       });
@@ -230,7 +235,6 @@ export default function Profile({ navigation }) {
         text1: 'Please turn on and add your device fingerprint',
       });
       console.log(error);
-      // moveToParticularPage();
     }
   };
 
@@ -253,14 +257,10 @@ export default function Profile({ navigation }) {
       })
       .catch(err => {
         console.log('Err----', err);
-        if (Platform.OS === 'ios') {
-          Toast.show({
-            type: 'error',
-            text1: 'Please try again by reopen the app',
-          });
-        } else {
-          // moveToParticularPage();
-        }
+        Toast.show({
+          type: 'error',
+          text1: 'Please try again by reopen the app',
+        });
       });
   };
 
@@ -413,7 +413,7 @@ export default function Profile({ navigation }) {
                     ? dispatch(setDarkmode(v))
                     : item.slug === 'face_id' && v
                     ? checkBiometrics()
-                    : dispatch(setBiometric(v));
+                    : checkBiometrics();
                 }}
                 tabPress={item => {
                   if (

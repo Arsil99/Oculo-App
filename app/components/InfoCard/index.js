@@ -152,7 +152,7 @@ const InfoCard = props => {
             >
               <View style={styles.cardContainer}>
                 <View style={styles.innerCard}>
-                  {item?.title === 'Login With Touch ID' ? (
+                  {item?.title === 'Login With Fingerprint' ? (
                     <Icon1
                       name={item.leftIcon}
                       size={15}

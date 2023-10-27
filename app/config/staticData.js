@@ -16,7 +16,7 @@ export const settings = [
   {
     id: '1',
     leftIcon: Platform.OS === 'ios' ? 'smile-o' : 'finger-print',
-    title: `Login With ${Platform.OS === 'ios' ? 'Face ID' : 'Finger Print'}`,
+    title: `Login With ${Platform.OS === 'ios' ? 'Face ID' : 'Fingerprint'}`,
     slug: Platform.OS === 'ios' ? 'face_id' : 'touch_id',
     switch: true,
   },
