@@ -19,6 +19,7 @@ export default function Events({ navigation }) {
   const dispatch = useDispatch();
   const { darkmode, eventListData } = useSelector(state => state.auth);
   const [eventDetails, setEventDetails] = useState([]);
+  const [closedEvents, setClosedEvents] = useState([]);
   const [loader, setLoader] = useState(true);
 
   // display the questions list
@@ -27,6 +28,13 @@ export default function Events({ navigation }) {
     try {
       const res = await getApiData(`${endPoint}`, 'GET');
       if (res?.status) {
+        const closedArray = [];
+        res?.data?.events?.map((item, index) => {
+          if (item.status != 1) {
+            closedArray.push(item);
+          }
+        });
+        setClosedEvents(closedArray);
         dispatch(setEventListData(res?.data?.events));
         setEventDetails(res?.data?.events);
         setLoader(false);
@@ -169,6 +177,36 @@ export default function Events({ navigation }) {
           ) : (
             <NoData title={'Events are not available'} />
           )}
+
+          {!isEmpty(closedEvents) && isArray(closedEvents) && (
+            <Text
+              style={{
+                fontSize: 18,
+                marginVertical: 5,
+                color: darkmode ? BaseColors.white : BaseColors.black90,
+              }}
+            >
+              Closed Events
+            </Text>
+          )}
+
+          {!isEmpty(closedEvents) && isArray(closedEvents)
+            ? closedEvents?.map((item, index) => {
+                return (
+                  <CardList
+                    key={index}
+                    iconName="head-cog"
+                    backgroundColoricon={BaseColors.primary}
+                    showmanIcon={true}
+                    rightArrow
+                    onPress={() => navigation.navigate('EventDetails', item)}
+                    image={Images.manimage}
+                    data={item?.title}
+                    status={'Event Closed'}
+                  />
+                );
+              })
+            : null}
         </View>
       </ScrollView>
     </View>
