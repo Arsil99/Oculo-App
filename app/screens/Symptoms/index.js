@@ -381,19 +381,15 @@ fixDurScreen	= t	Average fixation duration on screen
       });
     } else {
       let sliderObject = {};
-      if (updatedSymptomArray[index]?.symptom === meta[index - 1]) {
+      if (updatedSymptomArray[index - 1]?.symptom === meta[index - 1]) {
         // this logic for manage data if user again come to a particular tab
-        const obj = { ...updatedSymptomArray[index] };
-        sliderObject = { ...updatedSymptomArray[index] };
+        const obj = { ...updatedSymptomArray[index - 1] };
+        sliderObject = { ...updatedSymptomArray[index - 1] };
         sliderObject.durScreen = obj?.durScreen + duration;
         sliderObject.finalScore = lastValue;
         sliderObject.initialScore = obj?.finalScore;
-        sliderObject.pageRevisitInt = sliderObject.pageRevisitInt
-          ? sliderObject.pageRevisitInt + 1
-          : revisit;
-        sliderObject.scoreChng = sliderObject.scoreChng
-          ? sliderObject.scoreChng + count
-          : count;
+        sliderObject.pageRevisitInt = obj.pageRevisitInt + 1;
+        sliderObject.scoreChng = obj.scoreChng + count;
         if (sliderObject) {
           setSliderValue([sliderObject?.initialScore + 2]);
         }
